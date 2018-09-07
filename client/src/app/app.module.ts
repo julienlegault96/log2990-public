@@ -5,11 +5,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { AppComponent } from "./app.component";
 
 import { AppRoutingModule } from ".//app-routing.module";
-import { GameListComponent } from './game-list-menu/game-list/game-list.component';
-import { GameCardComponent } from './game-list-menu/game-card/game-card.component';
-import { LeaderboardComponent } from './game-list-menu/leaderboard/leaderboard.component';
+import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
+import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
+import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
+import { GestionaireUtilisateurComponent } from "./utilisateur/gestionaire-utilisateur/gestionaire-utilisateur.component";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { ChronoComponent } from "./game/chrono/chrono.component";
         GameCardComponent,
         LeaderboardComponent,
         SoloGameComponent,
-        ChronoComponent
+        ChronoComponent,
+        GestionaireUtilisateurComponent
     ],
     imports: [
         BrowserModule,
