@@ -10,6 +10,7 @@ import { GameCardComponent } from "./game-list-menu/game-card/game-card.componen
 import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
+import { FormsModule } from "@angular/forms";
 import { GestionaireUtilisateurComponent } from "./utilisateur/gestionaire-utilisateur/gestionaire-utilisateur.component";
 
 @NgModule({
@@ -25,7 +26,8 @@ import { GestionaireUtilisateurComponent } from "./utilisateur/gestionaire-utili
     imports: [
         BrowserModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FormsModule
     ],
     providers: [],
     bootstrap: [AppComponent]
