@@ -1,0 +1,24 @@
+<h4>
+    {{ game.title }}
+</h4>
+
+<div>
+    {{ game.imageUrl }}
+</div>
+
+<div *ngFor="let leaderboard of game.leaderboards">
+    <!-- {{leaderboard | json}} -->
+    <app-leaderboard [leaderboard]="leaderboard"></app-leaderboard>
+</div>
+
+<div>
+    <button>
+        Jouer en solo
+    </button>
+</div>
+
+<div>
+    <button>
+        Créer une partie
+    </button>
+</div>
