@@ -8,7 +8,7 @@ import { utilisateur } from "../utilisateur";
 })
 export class GestionaireUtilisateurComponent implements OnInit {
   utilisateurBidon: utilisateur = {
-    nom : "bidon"
+    nom : "mr.bidon"
   }
   constructor() { }
 
