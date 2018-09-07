@@ -12,6 +12,8 @@ import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
 import { FormsModule } from "@angular/forms";
 import { UserComponent } from "./User/user-component/user.component";
+import { GestionaireUtilisateurComponent } from './utilisateur/gestionaire-utilisateur/gestionaire-utilisateur.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -20,7 +22,8 @@ import { UserComponent } from "./User/user-component/user.component";
         LeaderboardComponent,
         SoloGameComponent,
         ChronoComponent,
-        UserComponent
+        UserComponent,
+        GestionaireUtilisateurComponent
     ],
     imports: [
         BrowserModule,
