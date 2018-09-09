@@ -11,6 +11,8 @@ import { Game } from '../../../../../common/game/game';
 export class GamesComponent implements OnInit {
 
     public games: Game[];
+    public singleViewGames: Game[];
+    public doubleViewGames: Game[];
 
     constructor(private gameService: GameService) { }
 
@@ -21,6 +23,14 @@ export class GamesComponent implements OnInit {
     getGames(): void {
         this.gameService.getGames()
             .subscribe(games => this.games = games);
+    }
+
+    getSingleViewGames(): void {
+
+    }
+
+    getDoubleViewGames(): void {
+        
     }
 
 }

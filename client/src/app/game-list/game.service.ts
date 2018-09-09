@@ -45,4 +45,12 @@ export class GameService {
         //         catchError(this.handleError('getGames', []))
         //     );
     }
+
+    getSingleViewGames(): Observable<Game[]> {
+        return new Observable<Game[]>();
+    }
+
+    getDoubleViewGames(): Observable<Game[]> {
+        return new Observable<Game[]>();
+    }
 }
