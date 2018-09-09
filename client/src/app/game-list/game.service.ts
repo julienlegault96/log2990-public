@@ -4,7 +4,7 @@ import { Game } from '../../../../common/game/game';
 import { Leaderboard } from '../../../../common/game/leaderboard';
 
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 // import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -12,9 +12,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GameService {
 
-    private gamesUrl = 'api/games';  // URL to web api
+    // private gamesUrl = 'api/games';  // URL to web api
 
-    constructor(private http: HttpClient) { }
+    // constructor(private http: HttpClient) { }
+    constructor() { }
 
     getGames(): Observable<Game[]> {
         let game = new Game();
