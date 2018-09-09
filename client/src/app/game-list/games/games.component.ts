@@ -10,7 +10,6 @@ import { Game } from '../../../../../common/game/game';
 })
 export class GamesComponent implements OnInit {
 
-    public games: Game[];
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
 
@@ -21,16 +20,18 @@ export class GamesComponent implements OnInit {
     }
 
     getGames(): void {
-        this.gameService.getGames()
-            .subscribe(games => this.games = games);
+        this.getSingleViewGames();
+        this.getDoubleViewGames();
     }
 
     getSingleViewGames(): void {
-
+        this.gameService.getSingleViewGames()
+            .subscribe(games => this.singleViewGames = games);
     }
 
     getDoubleViewGames(): void {
-        
+        this.gameService.getDoubleViewGames()
+            .subscribe(games => this.doubleViewGames = games);
     }
 
 }

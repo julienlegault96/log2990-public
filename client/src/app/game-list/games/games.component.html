@@ -1,3 +1,12 @@
-<div *ngFor="let game of games">
-    <app-game [game]="game"></app-game>
+<div class="row">
+    <div class="col">
+        <div *ngFor="let game of singleViewGames">
+            <app-game [game]="game"></app-game>
+        </div>
+    </div>
+    <div class="col">
+        <div *ngFor="let game of doubleViewGames">
+            <app-game [game]="game"></app-game>
+        </div>
+    </div>
 </div>

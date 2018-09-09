@@ -17,7 +17,7 @@ export class GameService {
     // constructor(private http: HttpClient) { }
     constructor() { }
 
-    getGames(): Observable<Game[]> {
+    getSingleViewGames(): Observable<Game[]> {
         let game = new Game();
         game.title = "test";
         game.imageUrl = "url123.txt";
@@ -46,11 +46,27 @@ export class GameService {
         //     );
     }
 
-    getSingleViewGames(): Observable<Game[]> {
-        return new Observable<Game[]>();
-    }
-
     getDoubleViewGames(): Observable<Game[]> {
-        return new Observable<Game[]>();
+        let game = new Game();
+        game.title = "test";
+        game.imageUrl = "url123.txt";
+
+        let tempLeaderboard = new Leaderboard();
+        tempLeaderboard.title = "solo";
+        tempLeaderboard.times = [12, 46, 36];
+        game.leaderboards = new Array();
+        game.leaderboards.push(tempLeaderboard);
+
+        tempLeaderboard = new Leaderboard();
+        tempLeaderboard.title = "1v1";
+        tempLeaderboard.times = [35, 57, 92];
+        game.leaderboards.push(tempLeaderboard);
+
+        let games = new Array(game);
+
+        game.title = "beaioj";
+
+        games.push(game);
+        return of(games);
     }
 }
