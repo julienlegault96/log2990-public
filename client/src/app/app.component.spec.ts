@@ -8,6 +8,7 @@ import { AbstractServerService } from "./abstract-server.service";
 import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
 import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
+import { FormsModule } from "@angular/forms";
 
 describe("AppComponent", () => {
     beforeEach(async(() => {
@@ -19,9 +20,7 @@ describe("AppComponent", () => {
                 LeaderboardComponent,
                 UserComponent
             ],
-            imports: [
-                HttpClientModule,
-            ],
+            imports: [HttpClientModule, FormsModule],
             providers: [AbstractServerService]
         }).compileComponents();
     }));
