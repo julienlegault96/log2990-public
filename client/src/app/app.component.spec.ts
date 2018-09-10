@@ -2,7 +2,7 @@
 // tslint:disable:no-floating-promises pour le before each
 import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
-
+import { UserComponent } from "./User/user-component/user.component";
 import { AppComponent } from "./app.component";
 import { AbstractServerService } from "./abstract-server.service";
 import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
@@ -16,7 +16,8 @@ describe("AppComponent", () => {
                 AppComponent,
                 GameListComponent,
                 GameCardComponent,
-                LeaderboardComponent
+                LeaderboardComponent,
+                UserComponent
             ],
             imports: [
                 HttpClientModule,
