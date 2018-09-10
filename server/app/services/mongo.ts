@@ -1,5 +1,17 @@
 import { injectable } from "inversify";
-import { MongoClient, Db, InsertWriteOpResult, FilterQuery, UpdateWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
+import {
+    MongoClient,
+    Db,
+    FilterQuery,
+    InsertWriteOpResult,
+    InsertOneWriteOpResult,
+    UpdateWriteOpResult,
+    DeleteWriteOpResultObject
+} from "mongodb";
+
+export enum Collections {
+    Games = "Games"
+}
 
 @injectable()
 export class Mongo {
@@ -17,7 +29,7 @@ export class Mongo {
         this.db = this.client.db(this.dbName);
     }
 
-    public async findDocuments<Type>(collectionName: string, query: { [key: string]: any } = {}): Promise<Type[]> {
+    public async findDocuments<Type>(collectionName: Collections, query: { [key: string]: any } = {}): Promise<Type[]> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -26,7 +38,16 @@ export class Mongo {
         return await collection.find<Type>(query).toArray();
     }
 
-    public async insertDocuments<Type>(collectionName: string, docs: Type[]): Promise<InsertWriteOpResult> {
+    public async insertDocument<Type>(collectionName: Collections, doc: Type): Promise<InsertOneWriteOpResult> {
+        if (!this.client || !this.client.isConnected) {
+            await this.connect();
+        }
+
+        const collection = this.db.collection(collectionName);
+        return await collection.insertOne(doc);
+    }
+
+    public async insertDocuments<Type>(collectionName: Collections, docs: Type[]): Promise<InsertWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -35,7 +56,7 @@ export class Mongo {
         return await collection.insertMany(docs);
     }
 
-    public async updateDocument<Type>(collectionName: string, update: Type, filter: FilterQuery<Type> = {}): Promise<UpdateWriteOpResult> {
+    public async updateDocument<Type>(collectionName: Collections, update: Type, filter: FilterQuery<Type> = {}): Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -44,7 +65,7 @@ export class Mongo {
         return await collection.updateOne(filter, update);
     }
 
-    public async  removeDocument<Type>(collectionName: string, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
+    public async  removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
