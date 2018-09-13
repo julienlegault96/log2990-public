@@ -4,14 +4,20 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
+import { JeuSoloComponent } from './jeu-solo/jeu-solo.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { ChronometreComponent } from './chronometre/chronometre.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    JeuSoloComponent,
+    ChronometreComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [BasicService],
   bootstrap: [AppComponent]
