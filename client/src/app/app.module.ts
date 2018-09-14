@@ -4,9 +4,9 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
-import { JeuSoloComponent } from './jeu-solo/jeu-solo.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { ChronometreComponent } from './chronometre/chronometre.component';
+import { JeuSoloComponent } from "./jeu/jeu-solo/jeu-solo.component";
+import { AppRoutingModule } from ".//app-routing.module";
+import { ChronometreComponent } from "./jeu/chronometre/chronometre.component";
 
 @NgModule({
   declarations: [

@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import { JeuSoloComponent }      from './jeu-solo/jeu-solo.component';
+import { JeuSoloComponent } from "./jeu/jeu-solo/jeu-solo.component";
 
 const routes: Routes = [
-  { path: 'jeuSolo', component: JeuSoloComponent }
+  { path: "jeuSolo", component: JeuSoloComponent }
 ];
 
 @NgModule({
