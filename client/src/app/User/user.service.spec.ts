@@ -42,7 +42,7 @@ describe("UserService", () => {
         expect(UserService.prototype.validateUsernameLength("1234567890abcdefghij")).toBe(true);
     });
 
-    it("should accept names with 21 caracters", () => {
+    it("should reject names with 21 caracters", () => {
         expect(UserService.prototype.validateUsernameLength("1234567890abcdefghijK")).toBe(false);
     });
 
