@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { JeuSoloComponent } from "./jeu/jeu-solo/jeu-solo.component";
+import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 
 const routes: Routes = [
-  { path: "jeuSolo", component: JeuSoloComponent }
+  { path: "soloGame", component: SoloGameComponent }
 ];
 
 @NgModule({
