@@ -5,10 +5,10 @@ import { GameCardComponent } from '../game-card/game-card.component';
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
 import { GameService } from '../game.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Game } from '../../../../../common/game/game';
+import { Game, GameType } from '../../../../../common/game/game';
 import { TestHelper } from '../../../test.helper';
 
-describe('GamesComponent', () => {
+describe('GameListComponent', () => {
     let component: GameListComponent;
     let fixture: ComponentFixture<GameListComponent>;
     // tslint:disable-next-line:no-any Used to mock the http call
@@ -17,7 +17,6 @@ describe('GamesComponent', () => {
 
 
     beforeEach(() => {
-
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
         gameService = new GameService(httpClientSpy);
 
@@ -35,12 +34,42 @@ describe('GamesComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should filter', fakeAsync(() => {
-        const expectedGames: Game[] = [
+    it('should filter games', fakeAsync(() => {
+        const returnedGames: Game[] = [
             {
-                "type": 1,
+                "type": GameType.DoubleView,
                 "title": "DoubleViewGame 1",
-                "imageUrl": ["https://www.techworm.net/wp-content/uploads/2018/03/google-is-shutting-down-URL-shortner-service-Goo.gl_.png"],
+                "imageUrl": ["double-view-game-1.bmp"],
+                "leaderboards": [
+                    {
+                        "title": "Solo",
+                        "times": [54, 66, 89]
+                    },
+                    {
+                        "title": "One versus One",
+                        "times": [33, 144, 200]
+                    }
+                ]
+            },
+            {
+                "type": GameType.DoubleView,
+                "title": "DoubleViewGame 2",
+                "imageUrl": ["double-view-game-2.bmp"],
+                "leaderboards": [
+                    {
+                        "title": "Solo",
+                        "times": [54, 66, 89]
+                    },
+                    {
+                        "title": "One versus One",
+                        "times": [33, 144, 200]
+                    }
+                ]
+            },
+            {
+                "type": GameType.SingleView,
+                "title": "SingleViewGame 1",
+                "imageUrl": ["single-view-game-1.bmp"],
                 "leaderboards": [
                     {
                         "title": "Solo",
@@ -54,14 +83,22 @@ describe('GamesComponent', () => {
             }
         ];
 
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedGames));
+        httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
         fixture.detectChanges(); //force onInit()
 
         tick(); // flush the component's setTimeout()
- 
+
         fixture.detectChanges(); // update errorMessage within setTimeout()
-        
-        expect(component.doubleViewGames.length).toEqual(1);
+
+        expect(component.singleViewGames.length).toEqual(1);
+        for (let i = 0; i < component.singleViewGames.length; i++) {
+            expect(component.singleViewGames[0].type).toEqual(GameType.SingleView);
+        }
+
+        expect(component.doubleViewGames.length).toEqual(2);
+        for (let i = 0; i < component.doubleViewGames.length; i++) {
+            expect(component.doubleViewGames[0].type).toEqual(GameType.DoubleView);
+        }
 
     }));
 });

@@ -1,6 +1,6 @@
 import { GameService } from './game.service';
 
-import { Game } from "../../../../common/game/game";
+import { Game, GameType } from "../../../../common/game/game";
 import { TestHelper } from "../../test.helper";
 
 // tslint:disable-next-line:no-any Used to mock the http call
@@ -14,9 +14,9 @@ describe('GameService', () => {
     });
 
     it("should return expected message (HttpClient called once)", () => {
-        const expectedGames: Game[] = [
+        const returnedGames: Game[] = [
             {
-                "type": 1,
+                "type": GameType.DoubleView,
                 "title": "DoubleViewGame 1",
                 "imageUrl": ["https://www.techworm.net/wp-content/uploads/2018/03/google-is-shutting-down-URL-shortner-service-Goo.gl_.png"],
                 "leaderboards": [
@@ -32,13 +32,13 @@ describe('GameService', () => {
             }
         ];
 
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedGames));
+        httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
 
         // check the content of the mocked call
         gameService.getGames().subscribe(
             (games: Game[]) => {
                 expect(games).toEqual(jasmine.any([]));
-                expect(games).toEqual(expectedGames, "games check");
+                expect(games).toEqual(returnedGames, "games check");
             },
             fail
         );
