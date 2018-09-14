@@ -1,11 +1,24 @@
-<h2> {{currentUser.name}}</h2>>
+<div class="col-sm-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <div class="input-group mb-3">
 
-<div>
-  <label>nom:
-    <input [(ngModel)]="currentUser.name" placeholder="MrBidon">
-    <button class="clear" (click)="submit()"> submit </button>
-  </label>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Nom:</span>
+                    </div>
+
+                    <input [(ngModel)]="currentUser.name" type="text" class="form-control" placeholder="MrBidon">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"(click)="submit()"> soumettre </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <h5>Utilisateurs connectés: </h5>
+            <span *ngFor="let user of users" class="badge badge-pill badge-primary">  {{user.name}} </span>
+        </div>
+    </div>
 </div>
-
-<h2>Current existing users are:</h2>
-<li *ngFor="let user of users"> <span> {{user.name}} </span></li>
