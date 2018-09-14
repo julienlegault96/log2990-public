@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Game } from '../../../../../common/game/game';
-// import { Leaderboard } from '../../../../../common/leaderboard';
 
 @Component({
     selector: 'app-game',
@@ -10,7 +9,7 @@ import { Game } from '../../../../../common/game/game';
 })
 export class GameComponent implements OnInit {
 
-    @Input() game: Game;
+    @Input() public game: Game;
 
     constructor() { }
     

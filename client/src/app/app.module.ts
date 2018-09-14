@@ -17,7 +17,7 @@ import { LeaderboardComponent } from './game-list/leaderboard/leaderboard.compon
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [BasicService],
   bootstrap: [AppComponent]
