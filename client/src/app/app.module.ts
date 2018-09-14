@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from "./app.component";
-
 import { AppRoutingModule } from ".//app-routing.module";
 import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
