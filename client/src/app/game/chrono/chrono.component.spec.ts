@@ -23,8 +23,13 @@ describe('ChronoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('temps devrait debuter a 0',
-    () => {
+  it('should start at 0',
+     () => {
       expect(component.time).toBe(0);
-    });
+  });
+
+  it('should write 00:00 at start',
+     () => {
+      expect(component.printedTime).toBe("00:00");
+  });
 });

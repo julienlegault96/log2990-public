@@ -11,7 +11,7 @@ export class ChronoComponent implements OnInit {
   public time: number;
   private startTime: Date;
   private endTime: Date;
-  private printedTime: String;
+  public printedTime: String;
   private timer: number;
   private verrouTimer: boolean;
   constructor() {
