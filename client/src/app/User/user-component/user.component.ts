@@ -12,9 +12,12 @@ export class UserComponent implements OnInit {
     name : "MrBidon"
   };
 
+  public users: User[];
+
   public constructor(private userService: UserService) { }
 
   public ngOnInit(): void {
+    this.userService.getUsernames().subscribe((incommingUsers: User[]) => (this.users = incommingUsers));
   }
 
   public validateUsername(): boolean  {
