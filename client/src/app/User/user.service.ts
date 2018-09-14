@@ -22,9 +22,14 @@ export class UserService {
     }
 
     public submitUsername(username: string): void {
-        this.validateUsername(username)
-        && this.validateUsernameLength(username)
-        ? alert("valid name") : alert("invalid name");
+        let errorString: string = "";
+        if (!this.validateUsername(username)){
+            errorString += "\nseul des caractères alphanumériques sont acceptés.";
+        }
+        if (!this.validateUsernameLength(username)){
+            errorString += "\nle nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
+        }
+        errorString.length === 0 ? alert("nom valide") : alert("nom invalide" + errorString);
     }
 
     public getUsernames(): Observable<User[]> {
