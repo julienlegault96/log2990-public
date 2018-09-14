@@ -17,8 +17,8 @@ export class UserService {
     }
 
     public validateUsernameLength(username: string): boolean {
-        return (username.length > UserService.minUsername
-                    && username.length < UserService.maxUsername) ? true : false;
+        return (username.length >= UserService.minUsername
+                    && username.length <= UserService.maxUsername) ? true : false;
     }
 
     public submitUsername(username: string): void {
