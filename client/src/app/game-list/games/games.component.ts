@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GameService } from '../game.service';
-import { Game } from '../../../../../common/game/game';
+import { Game, GameType } from '../../../../../common/game/game';
 
 @Component({
     selector: 'app-games',
@@ -20,18 +20,11 @@ export class GamesComponent implements OnInit {
     }
 
     getGames(): void {
-        this.getSingleViewGames();
-        this.getDoubleViewGames();
-    }
-
-    getSingleViewGames(): void {
-        this.gameService.getSingleViewGames()
-            .subscribe(games => this.singleViewGames = games);
-    }
-
-    getDoubleViewGames(): void {
-        this.gameService.getDoubleViewGames()
-            .subscribe(games => this.doubleViewGames = games);
+        this.gameService.getGames()
+            .subscribe((games: Game[]) => {
+                this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
+                this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+            });
     }
 
 }

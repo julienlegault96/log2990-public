@@ -9,8 +9,8 @@ import { Message } from "../../../common/communication/message";
 @Injectable()
 export class BasicService {
 
-    private readonly BASE_URL: string = "http://localhost:3000/";
-    public constructor(private http: HttpClient) { }
+    protected readonly BASE_URL: string = "http://localhost:3000/";
+    public constructor(protected http: HttpClient) { }
 
     public basicGet(): Observable<Message> {
 
@@ -19,7 +19,7 @@ export class BasicService {
         );
     }
 
-    private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
+    protected handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
 
         return (error: Error): Observable<T> => {
             return of(result as T);
