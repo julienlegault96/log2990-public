@@ -11,11 +11,8 @@ export class UserComponent implements OnInit {
   public currentUser: User = {
     name : "MrBidon"
   };
-<<<<<<< HEAD
 
   public users: User[];
-=======
->>>>>>> added a test for userservice for receiving existing users
 
   public constructor(private userService: UserService) { }
 
@@ -26,9 +23,4 @@ export class UserComponent implements OnInit {
   public validateUsername(): boolean  {
      return this.userService.validateUsername(this.currentUser.name);
   }
-
-  public validateUsername(): boolean  {
-     return this.userService.validateUsername(this.currentUser.name);
-  }
-
 }
