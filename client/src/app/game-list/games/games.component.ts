@@ -15,16 +15,22 @@ export class GamesComponent implements OnInit {
 
     constructor(private gameService: GameService) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.getGames();
     }
 
-    getGames(): void {
+    private getGames(): void {
         this.gameService.getGames()
             .subscribe((games: Game[]) => {
-                this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
-                this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+                this.filterGames(games);
+                
+                            console.log(this.doubleViewGames);
+                            console.log(this.singleViewGames);
             });
     }
 
+    private filterGames(games: Game[]) {
+        this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
+        this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+    }
 }

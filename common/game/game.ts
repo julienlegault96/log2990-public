@@ -5,7 +5,7 @@ export enum GameType {
     DoubleView = 1
 }
 
-export class Game {
+export class Game { //TODO : faire une interface
     type: GameType;
     title: string;
     imageUrl: string[];

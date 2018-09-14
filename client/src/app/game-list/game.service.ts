@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
 import { Game } from '../../../../common/game/game';
@@ -12,11 +12,7 @@ import { BasicService } from '../basic.service';
 
 export class GameService extends BasicService {
 
-    private gamesUrl = this.BASE_URL + 'games';  // URL to web api
-
-    public constructor(http: HttpClient) {
-        super(http);
-     }
+    private readonly gamesUrl = this.BASE_URL + 'games';  // URL to web api
 
     getGames(): Observable<Game[]> {
         return this.http.get<Game[]>(this.gamesUrl).pipe(
