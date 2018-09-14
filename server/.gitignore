@@ -11,6 +11,7 @@ npm-debug.log
 
 # Code Coverage Folder
 coverage/
+.nyc_output/
 
 ##Typescrit compilation ##
 
