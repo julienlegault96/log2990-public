@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
@@ -22,6 +22,10 @@ export class GameService extends BasicService {
         return this.http.get<Game[]>(this.gamesUrl).pipe(
             catchError(this.handleError<Game[]>("getGames"))
         );
+    }
+
+    isJoinable(game: Game): Observable<boolean> {
+        return of(false);
     }
 
 }

@@ -13,14 +13,12 @@ export class BasicService {
     public constructor(protected http: HttpClient) { }
 
     public basicGet(): Observable<Message> {
-
         return this.http.get<Message>(this.BASE_URL).pipe(
             catchError(this.handleError<Message>("basicGet"))
         );
     }
 
     protected handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
-
         return (error: Error): Observable<T> => {
             return of(result as T);
         };

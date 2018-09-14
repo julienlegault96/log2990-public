@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Game } from '../../../../../common/game/game';
+import { GameService } from '../game.service';
 
 @Component({
     selector: 'app-game',
@@ -10,10 +11,13 @@ import { Game } from '../../../../../common/game/game';
 export class GameComponent implements OnInit {
 
     @Input() public game: Game;
+    public isJoinable: boolean;
 
-    constructor() { }
-    
+    constructor(private gameService: GameService) { }
+
     ngOnInit() {
+        this.gameService.isJoinable(this.game)
+            .subscribe(isJoinable => this.isJoinable = isJoinable);
     }
 
 }
