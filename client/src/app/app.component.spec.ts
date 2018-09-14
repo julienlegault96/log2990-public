@@ -4,13 +4,19 @@ import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
+import { SoloGameComponent } from "./game/solo-game/solo-game.component";
+import { ChronoComponent } from "./game/chrono/chrono.component";
+
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        SoloGameComponent,
+        ChronoComponent
       ],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, RouterTestingModule],
       providers: [BasicService]
     }).compileComponents();
   }));

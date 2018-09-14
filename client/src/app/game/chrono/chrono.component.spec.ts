@@ -22,4 +22,9 @@ describe('ChronoComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('temps devrait debuter a 0',
+    () => {
+      expect(component.time).toBe(0);
+    });
 });

@@ -1,14 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SoloGameComponent } from './solo-game.component';
+import { SoloGameComponent } from "./solo-game.component";
+import { ChronoComponent} from "../chrono/chrono.component"
 
-describe('SoloGameComponent', () => {
+describe("SoloGameComponent", () => {
   let component: SoloGameComponent;
   let fixture: ComponentFixture<SoloGameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SoloGameComponent ]
+      declarations: [ SoloGameComponent,
+        ChronoComponent ]
     })
     .compileComponents();
   }));
@@ -19,7 +21,7 @@ describe('SoloGameComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
