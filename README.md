@@ -1,6 +1,9 @@
 # Log2990
 Projet généré avec [Angular CLI](https://github.com/angular/angular-cli) version 1.3.2.
 
+## Mise à jour du répertoire de l'école
+Pour mettre à jour le répertoire de l'école, lancer le shell script `./git_push_school.sh`
+
 ## Développement du client
 Pour lancer le client, il suffit d'exécuter: `ng serve`. Vous pouvez ensuite naviger à `http://localhost:4200/`. L'application va se relancer automatiquement si vous modifier le code source de celle-ci.
 
