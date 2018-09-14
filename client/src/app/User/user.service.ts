@@ -30,10 +30,10 @@ export class UserService {
 
     public submitUsername(username: string): void {
         let errorString: string = "";
-        if (!this.verifyAlphanumericSymbols(username)){
+        if (!this.verifyAlphanumericSymbols(username)) {
             errorString += "\n- Seul des caractères alphanumériques sont acceptés.";
         }
-        if (!this.verifyUsernameLength(username)){
+        if (!this.verifyUsernameLength(username)) {
             errorString += "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
         }
         errorString.length === 0 ? alert("Nom valide") : alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
