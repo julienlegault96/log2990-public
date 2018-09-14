@@ -22,7 +22,7 @@ export class UserService {
     }
 
     public submitUsername(username: string): void {
-        this.validateUsername(username) ? "" : "";
+        // this.validateUsername(username) ? "" : "";
     }
 
     public getUsernames(): Observable<User[]> {

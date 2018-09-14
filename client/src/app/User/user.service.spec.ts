@@ -1,7 +1,6 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { USERS } from "./mock-users";
+
 import { UserService } from "./user.service";
-import { User } from "./user";
 
 describe("UserService", () => {
     beforeEach(() => {
@@ -26,12 +25,8 @@ describe("UserService", () => {
         expect(UserService.prototype.validateUsername("#@%&*()^^$++{}////")).toBe(false);
     });
 
-    it("should fetch the existing usernames", () => {
-        // setting up fixtures
-        let receivedUsers: User[] = [];
-        UserService.prototype.getUsernames().subscribe((users: User[]) => receivedUsers = users );
-        // test
-        expect(receivedUsers).toBe(USERS);
+    it("should reject names with alphanumeric and non alphanumeric caraters", () => {
+        expect(UserService.prototype.validateUsername("sdelv&$#@(asdv")).toBe(false);
     });
 
 });
