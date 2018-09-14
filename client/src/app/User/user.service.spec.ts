@@ -26,24 +26,16 @@ describe("UserService", () => {
         expect(UserService.prototype.validateUsername("#@%&*()^^$++{}////")).toBe(false);
     });
 
-    it("should reject empty names ", () => {
-        expect(UserService.prototype.validateUsernameLength("")).toBe(false);
-    });
-
     it("should accept names with 1 caracter", () => {
-        expect(UserService.prototype.validateUsernameLength("H")).toBe(true);
-    });
-
-    it("should accept names with 10 caracters", () => {
-        expect(UserService.prototype.validateUsernameLength("12345AbcDde")).toBe(true);
+        expect(UserService.prototype.validateUsername("H")).toBe(true);
     });
 
     it("should accept names with 20 caracters", () => {
-        expect(UserService.prototype.validateUsernameLength("1234567890abcdefghij")).toBe(true);
+        expect(UserService.prototype.validateUsername("1234567890abcdefghij")).toBe(true);
     });
 
     it("should reject names with 21 caracters", () => {
-        expect(UserService.prototype.validateUsernameLength("1234567890abcdefghijK")).toBe(false);
+        expect(UserService.prototype.validateUsername("1234567890abcdefghijK")).toBe(false);
     });
 
     it("should reject names with non alphanumeric and alphanumeric characters", () => {

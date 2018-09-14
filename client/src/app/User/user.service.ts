@@ -13,23 +13,28 @@ export class UserService {
     private constructor() { }
 
     public validateUsername(username: string): boolean {
+        return this.verifyAlphanumericSymbols(username)
+                && this.verifyUsernameLength(username);
+    }
+
+    private verifyAlphanumericSymbols(username: string): boolean {
         return username.match(UserService.validationRegEx) ? true : false;
     }
 
-    public validateUsernameLength(username: string): boolean {
+    private verifyUsernameLength(username: string): boolean {
         return (username.length >= UserService.minUsername
                     && username.length <= UserService.maxUsername) ? true : false;
     }
 
     public submitUsername(username: string): void {
         let errorString: string = "";
-        if (!this.validateUsername(username)){
-            errorString += "\nseul des caractères alphanumériques sont acceptés.";
+        if (!this.verifyAlphanumericSymbols(username)){
+            errorString += "\n- Seul des caractères alphanumériques sont acceptés.";
         }
-        if (!this.validateUsernameLength(username)){
-            errorString += "\nle nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
+        if (!this.verifyUsernameLength(username)){
+            errorString += "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
         }
-        errorString.length === 0 ? alert("nom valide") : alert("nom invalide" + errorString);
+        errorString.length === 0 ? alert("Nom valide") : alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
     }
 
     public getUsernames(): Observable<User[]> {
