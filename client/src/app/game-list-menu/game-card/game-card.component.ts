@@ -5,10 +5,10 @@ import { GameService } from '../game.service';
 
 @Component({
     selector: 'app-game',
-    templateUrl: './game.component.html',
-    styleUrls: ['./game.component.css']
+    templateUrl: './game-card.component.html',
+    styleUrls: ['./game-card.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameCardComponent implements OnInit {
 
     @Input() public game: Game;
     public isJoinable: boolean;

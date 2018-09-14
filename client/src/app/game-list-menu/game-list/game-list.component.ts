@@ -5,10 +5,10 @@ import { Game, GameType } from '../../../../../common/game/game';
 
 @Component({
     selector: 'app-games',
-    templateUrl: './games.component.html',
-    styleUrls: ['./games.component.css']
+    templateUrl: './game-list.component.html',
+    styleUrls: ['./game-list.component.css']
 })
-export class GamesComponent implements OnInit {
+export class GameListComponent implements OnInit {
 
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
@@ -23,9 +23,6 @@ export class GamesComponent implements OnInit {
         this.gameService.getGames()
             .subscribe((games: Game[]) => {
                 this.filterGames(games);
-                
-                            console.log(this.doubleViewGames);
-                            console.log(this.singleViewGames);
             });
     }
 

@@ -4,16 +4,16 @@ import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
-import { GamesComponent } from "./game-list/games/games.component";
-import { GameComponent } from "./game-list/game/game.component";
-import { LeaderboardComponent } from "./game-list/leaderboard/leaderboard.component";
+import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
+import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
+import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
 describe("AppComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
-                GamesComponent,
-                GameComponent,
+                GameListComponent,
+                GameCardComponent,
                 LeaderboardComponent
             ],
             imports: [
