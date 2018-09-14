@@ -26,6 +26,10 @@ describe("UserService", () => {
         expect(UserService.prototype.validateUsername("#@%&*()^^$++{}////")).toBe(false);
     });
 
+    it("should reject names with non alphanumeric and alphanumeric characters", () => {
+        expect(UserService.prototype.validateUsername("#@%ait96)^^ab467/")).toBe(false);
+    });
+
     it("should accept names with 1 caracter", () => {
         expect(UserService.prototype.validateUsername("H")).toBe(true);
     });
