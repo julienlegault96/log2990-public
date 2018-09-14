@@ -1,7 +1,11 @@
-<h2> {{mockUser.nom}}</h2>>
+<h2> {{currentUser.nom}}</h2>>
 
 <div>
   <label>nom:
-    <input [(ngModel)]="mockUser.nom" placeholder="Mr.Bidon">
+    <input [(ngModel)]="currentUser.nom" placeholder="MrBidon">
+    <button class="clear" (click)="userService.submit()"> submit </button>
   </label>
 </div>
+
+<h2>Current existing users are:</h2>
+<li *ngFor="let user of users"></li>
