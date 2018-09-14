@@ -21,6 +21,12 @@ export class UserComponent implements OnInit {
   }
 
   public validateUsername(): boolean  {
-     return this.userService.validateUsername(this.currentUser.name);
+     return this.userService.validateUsername(this.currentUser.name)
+        && this.userService.validateUsernameLength(this.currentUser.name);
+  }
+
+  public submit(): void {
+      this.userService.submitUsername(this.currentUser.name);
+      this.currentUser.name = "";
   }
 }

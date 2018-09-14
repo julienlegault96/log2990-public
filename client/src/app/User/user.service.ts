@@ -22,7 +22,9 @@ export class UserService {
     }
 
     public submitUsername(username: string): void {
-        // this.validateUsername(username) ? "" : "";
+        this.validateUsername(username)
+        && this.validateUsernameLength(username)
+        ? alert("valid name") : alert("invalid name");
     }
 
     public getUsernames(): Observable<User[]> {
