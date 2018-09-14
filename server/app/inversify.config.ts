@@ -5,7 +5,7 @@ import { Server } from "./server";
 import { Application } from "./app";
 import { Routes } from "./routes";
 import { Mongo } from "./services/mongo";
-import { Games } from "./routes/index";
+import { Games } from "./routes/games";
 
 const container: Container = new Container();
 

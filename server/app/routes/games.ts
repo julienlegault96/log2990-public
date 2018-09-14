@@ -11,16 +11,23 @@ export class Games {
     public constructor(@inject(Types.Mongo) private mongo: Mongo) { }
 
     public async getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
-        var response = await this.mongo.findDocuments<Game>(Collections.Games);
+        let response = await this.mongo.findDocuments<Game>(Collections.Games);
         res.status(200).send(JSON.stringify(response));
     }
 
     public async addGame(req: Request, res: Response, next: NextFunction): Promise<void> {
-        var response = await this.mongo.insertDocument<Game>(Collections.Games, JSON.parse(req.body));
-        if (response.result.ok) {
-            res.sendStatus(200);
-        } else {
-            res.status(500).send("Failed to insert game into Mongo");
+        try {
+            let game: Game = Object.assign(new Game, req.body);
+            let response = await this.mongo.insertDocument<Game>(Collections.Games, game);
+
+            if (response.result.ok) {
+                res.sendStatus(200);
+            } else {
+                res.status(500).send("Failed to insert game into Mongo");
+            }
+        }
+        catch (e) {
+            res.status(400).send("Game provided does not follow the valid format");
         }
     }
 }

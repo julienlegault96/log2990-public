@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import { Router, Request, Response, NextFunction } from "express";
 
 import Types from "./types";
-import { Games } from "./routes/index";
+import { Games } from "./routes/games";
 
 @injectable()
 export class Routes {
