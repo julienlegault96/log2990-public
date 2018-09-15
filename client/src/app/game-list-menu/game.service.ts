@@ -1,23 +1,51 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-// import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
 
 import { Game } from '../../../../common/game/game';
-import { BasicService } from '../basic.service';
+import { AbstractServerService } from '../abstract-server.service';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class GameService extends BasicService {
-
-    private readonly serviceUrl = this.BASE_URL + 'games';  // URL to web api
+export class GameService extends AbstractServerService {
 
     getGames(): Observable<Game[]> {
-        return this.http.get<Game[]>(this.serviceUrl).pipe(
-            catchError(this.handleError<Game[]>("getGames"))
-        );
+        // this.addGame();
+        return this.getRequest<Game[]>('games', 'getGames');
+        // return this.http.get<Game[]>(this.getUrl('games')).pipe(
+        //     catchError(this.handleError<Game[]>("getGames"))
+        // );
+    }
+
+    addGame(): void {
+        const newGame = {
+            type: 0,
+            title: "SingleViewGame 2",
+            imageUrl: [
+                "single-view-game-2-1.bmp",
+                "single-view-game-2-2.bmp"
+            ],
+            leaderboards: [
+                {
+                    title: "Solo",
+                    times: [
+                        14,
+                        16,
+                        19
+                    ]
+                },
+                {
+                    title: "1 vs 1",
+                    times: [
+                        10,
+                        15,
+                        17
+                    ]
+                }
+            ]
+        }
+        this.postRequest<Game>('games', newGame, 'addGame');
     }
 
     isJoinable(game: Game): Observable<boolean> {

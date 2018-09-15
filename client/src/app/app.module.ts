@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
-import { BasicService } from "./basic.service";
+// import { AbstractServerService } from "./abstract-server.service";
 import { HttpClientModule } from "@angular/common/http";
 import { GameListComponent } from './game-list-menu/game-list/game-list.component';
 import { GameCardComponent } from './game-list-menu/game-card/game-card.component';
@@ -19,7 +19,7 @@ import { LeaderboardComponent } from './game-list-menu/leaderboard/leaderboard.c
     BrowserModule,
     HttpClientModule,
   ],
-  providers: [BasicService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,7 +2,7 @@
 // tslint:disable:no-floating-promises pour le before each
 import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
-import { BasicService } from "./basic.service";
+import { AbstractServerService } from "./abstract-server.service";
 import { HttpClientModule } from "@angular/common/http";
 import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
@@ -19,7 +19,7 @@ describe("AppComponent", () => {
             imports: [
                 HttpClientModule,
             ],
-            providers: [BasicService]
+            providers: [AbstractServerService]
         }).compileComponents();
     }));
     it("should create the app", async(() => {
