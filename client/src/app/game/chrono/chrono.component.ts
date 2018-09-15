@@ -1,30 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-chrono',
-  templateUrl: './chrono.component.html',
-  styleUrls: ['./chrono.component.css']
+  selector: "app-chrono",
+  templateUrl: "./chrono.component.html",
+  styleUrls: ["./chrono.component.css"]
 })
 
 export class ChronoComponent implements OnInit {
-  readonly MINUTES_IN_HOUR: number = 60;
+  private readonly MINUTES_IN_HOUR: number = 60;
+  //
+  private readonly LIMIT_TO_ADD_ZERO: number = 10;
   public time: number;
   private startTime: Date;
   private endTime: Date;
   public printedTime: String;
   private timer: number;
   private verrouTimer: boolean;
-  constructor() {
+  public constructor() {
     this.time = 0;
     this.printedTime = "00:00";
     this.verrouTimer = false;
   }
-  start(): void {
-    if(!this.verrouTimer){
+  public start(): void {
+    if (!this.verrouTimer) {
       this.startTime = new Date();
       this.timer = window.setInterval(() => {
         this.calculate();
-      }, 1);
+      },                              1);
       this.verrouTimer = true;
     }
   }
@@ -42,18 +44,18 @@ export class ChronoComponent implements OnInit {
     minutes = diff.getMinutes() + (diff.getUTCHours() * this.MINUTES_IN_HOUR);
 
     this.printedTime = "";
-    this.printedTime += minutes < 10 ? '0' + minutes + ":" : minutes + ":";
-    this.printedTime += seconds < 10 ? '0' + seconds : '' + seconds;
+    this.printedTime += minutes < this.LIMIT_TO_ADD_ZERO ? "0" + minutes + ":" : minutes + ":";
+    this.printedTime += seconds < this.LIMIT_TO_ADD_ZERO ? "0" + seconds : "" + seconds;
   }
 
-  stop() {
-    if(this.verrouTimer){
+  public stop(): void {
+    if (this.verrouTimer) {
       clearInterval(this.timer);
       this.verrouTimer = false;
     }
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
   }
 
 }
