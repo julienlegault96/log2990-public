@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { Game } from '../../../../common/game/game';
 import { AbstractServerService } from '../abstract-server.service';
+
+import { Game } from '../../../../common/game/game';
 
 @Injectable({
     providedIn: 'root'
@@ -11,11 +12,7 @@ import { AbstractServerService } from '../abstract-server.service';
 export class GameService extends AbstractServerService {
 
     getGames(): Observable<Game[]> {
-        // this.addGame();
         return this.getRequest<Game[]>('games', 'getGames');
-        // return this.http.get<Game[]>(this.getUrl('games')).pipe(
-        //     catchError(this.handleError<Game[]>("getGames"))
-        // );
     }
 
     addGame(): void {

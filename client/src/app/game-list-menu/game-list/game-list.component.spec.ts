@@ -1,13 +1,14 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
+import { TestHelper } from '../../../test.helper';
 import { GameListComponent } from './game-list.component';
 import { GameCardComponent } from '../game-card/game-card.component';
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
 import { GameService } from '../game.service';
-import { HttpClientModule } from '@angular/common/http';
+
 import { Game } from '../../../../../common/game/game';
 import { GameType } from '../../../../../common/game/game-type';
-import { TestHelper } from '../../../test.helper';
 
 describe('GameListComponent', () => {
     let component: GameListComponent;
@@ -15,7 +16,6 @@ describe('GameListComponent', () => {
     // tslint:disable-next-line:no-any Used to mock the http call
     let httpClientSpy: any;
     let gameService: GameService;
-
 
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
@@ -38,54 +38,54 @@ describe('GameListComponent', () => {
     it('should filter games', fakeAsync(() => {
         const returnedGames: Game[] = [
             {
-                "type": GameType.DoubleView,
-                "title": "DoubleViewGame 1",
-                "imageUrl": ["double-view-game-1.bmp"],
-                "leaderboards": [
+                type: GameType.DoubleView,
+                title: "DoubleViewGame 1",
+                imageUrl: ["double-view-game-1.bmp"],
+                leaderboards: [
                     {
-                        "title": "Solo",
-                        "times": [54, 66, 89]
+                        title: "Solo",
+                        times: [54, 66, 89]
                     },
                     {
-                        "title": "One versus One",
-                        "times": [33, 144, 200]
+                        title: "One versus One",
+                        times: [33, 144, 200]
                     }
                 ]
             },
             {
-                "type": GameType.DoubleView,
-                "title": "DoubleViewGame 2",
-                "imageUrl": ["double-view-game-2.bmp"],
-                "leaderboards": [
+                type: GameType.DoubleView,
+                title: "DoubleViewGame 2",
+                imageUrl: ["double-view-game-2.bmp"],
+                leaderboards: [
                     {
-                        "title": "Solo",
-                        "times": [54, 66, 89]
+                        title: "Solo",
+                        times: [54, 66, 89]
                     },
                     {
-                        "title": "One versus One",
-                        "times": [33, 144, 200]
+                        title: "One versus One",
+                        times: [33, 144, 200]
                     }
                 ]
             },
             {
-                "type": GameType.SingleView,
-                "title": "SingleViewGame 1",
-                "imageUrl": ["single-view-game-1.bmp"],
-                "leaderboards": [
+                type: GameType.SingleView,
+                title: "SingleViewGame 1",
+                imageUrl: ["single-view-game-1.bmp"],
+                leaderboards: [
                     {
-                        "title": "Solo",
-                        "times": [54, 66, 89]
+                        title: "Solo",
+                        times: [54, 66, 89]
                     },
                     {
-                        "title": "One versus One",
-                        "times": [33, 144, 200]
+                        title: "One versus One",
+                        times: [33, 144, 200]
                     }
                 ]
             }
         ];
 
         httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
-        fixture.detectChanges(); //force onInit()
+        fixture.detectChanges(); // force onInit()
 
         tick(); // flush the component's setTimeout()
 

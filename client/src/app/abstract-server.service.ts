@@ -6,12 +6,12 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export abstract class AbstractServerService {
 
-    protected readonly serverUrl: string = 'http://localhost:3000/';
+    protected readonly serverHost: string = 'http://localhost:3000/';
 
     public constructor(protected http: HttpClient) { }
 
     protected getUrl(serverUri: string): string {
-        return this.serverUrl + serverUri;
+        return this.serverHost + serverUri;
     }
 
     protected getRequest<T>(serverUri: string, request: string): Observable<T> {
@@ -25,6 +25,7 @@ export abstract class AbstractServerService {
         const options = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         };
+        
         return this.http.post<T>(this.getUrl(serverUri), body, options).pipe(
             catchError(this.handleError(request))
         );
