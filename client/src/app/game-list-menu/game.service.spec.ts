@@ -1,6 +1,7 @@
 import { GameService } from './game.service';
 
-import { Game, GameType } from "../../../../common/game/game";
+import { Game } from "../../../../common/game/game";
+import { GameType } from '../../../../common/game/game-type';
 import { TestHelper } from "../../test.helper";
 
 // tslint:disable-next-line:no-any Used to mock the http call
@@ -18,7 +19,7 @@ describe('GameService', () => {
             {
                 "type": GameType.DoubleView,
                 "title": "DoubleViewGame 1",
-                "imageUrl": ["https://www.techworm.net/wp-content/uploads/2018/03/google-is-shutting-down-URL-shortner-service-Goo.gl_.png"],
+                "imageUrl": ["double-view-game-1.bmp"],
                 "leaderboards": [
                     {
                         "title": "Solo",

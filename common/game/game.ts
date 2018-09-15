@@ -1,11 +1,7 @@
+import { GameType } from './game-type';
 import { Leaderboard } from './leaderboard';
 
-export enum GameType {
-    SingleView = 0,
-    DoubleView = 1
-}
-
-export class Game { //TODO : faire une interface
+export class Game {
     type: GameType;
     title: string;
     imageUrl: string[];

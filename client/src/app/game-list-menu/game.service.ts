@@ -12,10 +12,10 @@ import { BasicService } from '../basic.service';
 
 export class GameService extends BasicService {
 
-    private readonly gamesUrl = this.BASE_URL + 'games';  // URL to web api
+    private readonly serviceUrl = this.BASE_URL + 'games';  // URL to web api
 
     getGames(): Observable<Game[]> {
-        return this.http.get<Game[]>(this.gamesUrl).pipe(
+        return this.http.get<Game[]>(this.serviceUrl).pipe(
             catchError(this.handleError<Game[]>("getGames"))
         );
     }

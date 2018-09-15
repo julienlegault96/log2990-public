@@ -5,7 +5,8 @@ import { GameCardComponent } from '../game-card/game-card.component';
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
 import { GameService } from '../game.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Game, GameType } from '../../../../../common/game/game';
+import { Game } from '../../../../../common/game/game';
+import { GameType } from '../../../../../common/game/game-type';
 import { TestHelper } from '../../../test.helper';
 
 describe('GameListComponent', () => {
