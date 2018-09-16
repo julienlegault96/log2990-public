@@ -15,7 +15,10 @@ export class GameListComponent implements OnInit {
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
 
-    constructor(private gameService: GameService) { }
+    constructor(private gameService: GameService) {
+        this.singleViewGames = new Array();
+        this.doubleViewGames = new Array();
+    }
 
     public ngOnInit() {
         this.getGames();
