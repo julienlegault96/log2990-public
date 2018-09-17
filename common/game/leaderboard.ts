@@ -1,4 +1,9 @@
+class Score {
+    username: string;
+    time: number;
+}
+
 export class Leaderboard {
     title: string;
-    times: number[];
+    scores: Score[];
 }

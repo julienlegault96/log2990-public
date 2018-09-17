@@ -44,11 +44,37 @@ describe('GameListComponent', () => {
                 leaderboards: [
                     {
                         title: "Solo",
-                        times: [54, 66, 89]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 54
+                            }, 
+                            {
+                                username: "test2",
+                                time: 66
+                            }, 
+                            {
+                                username: "test3",
+                                time: 89
+                            }
+                        ]
                     },
                     {
                         title: "One versus One",
-                        times: [33, 144, 200]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 33
+                            }, 
+                            {
+                                username: "test2",
+                                time: 14
+                            },
+                            {
+                                username: "test3",
+                                time: 24
+                            }
+                        ]
                     }
                 ]
             },
@@ -59,11 +85,37 @@ describe('GameListComponent', () => {
                 leaderboards: [
                     {
                         title: "Solo",
-                        times: [54, 66, 89]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 54
+                            }, 
+                            {
+                                username: "test2",
+                                time: 66
+                            }, 
+                            {
+                                username: "test3",
+                                time: 89
+                            }
+                        ]
                     },
                     {
                         title: "One versus One",
-                        times: [33, 144, 200]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 33
+                            }, 
+                            {
+                                username: "test2",
+                                time: 14
+                            },
+                            {
+                                username: "test3",
+                                time: 23
+                            }
+                        ]
                     }
                 ]
             },
@@ -74,11 +126,36 @@ describe('GameListComponent', () => {
                 leaderboards: [
                     {
                         title: "Solo",
-                        times: [54, 66, 89]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 54
+                            }, 
+                            {
+                                username: "test2",
+                                time: 66
+                            }, 
+                            {
+                                username: "test3",
+                                time: 89
+                            }]
                     },
                     {
                         title: "One versus One",
-                        times: [33, 144, 200]
+                        scores: [
+                            {
+                                username: "test",
+                                time: 33
+                            }, 
+                            {
+                                username: "test2",
+                                time: 14
+                            },
+                            {
+                                username: "test3",
+                                time: 24
+                            }
+                        ]
                     }
                 ]
             }

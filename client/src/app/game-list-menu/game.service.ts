@@ -26,18 +26,36 @@ export class GameService extends AbstractServerService {
             leaderboards: [
                 {
                     title: "Solo",
-                    times: [
-                        14,
-                        16,
-                        19
+                    scores: [
+                        {
+                            username: "test",
+                            time: 14
+                        },
+                        {
+                            username: "test2",
+                            time: 16
+                        },
+                        {
+                            username: "test3",
+                            time: 19
+                        }
                     ]
                 },
                 {
                     title: "1 vs 1",
-                    times: [
-                        10,
-                        15,
-                        17
+                    scores: [
+                        {
+                            username: "test",
+                            time: 10
+                        },
+                        {
+                            username: "test2",
+                            time: 15
+                        },
+                        {
+                            username: "test3",
+                            time: 17
+                        }
                     ]
                 }
             ]
