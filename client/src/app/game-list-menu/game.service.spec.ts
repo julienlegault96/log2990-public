@@ -27,7 +27,7 @@ describe('GameService', () => {
                             {
                                 username: "test",
                                 time: 54
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 66
@@ -44,14 +44,14 @@ describe('GameService', () => {
                             {
                                 username: "test",
                                 time: 33
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 14
                             },
                             {
                                 username: "test3",
-                                time:  24
+                                time: 24
                             }
                         ]
                     }

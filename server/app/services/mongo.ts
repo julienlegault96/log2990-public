@@ -65,7 +65,7 @@ export class Mongo {
         return await collection.updateOne(filter, update);
     }
 
-    public async  removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
+    public async removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }

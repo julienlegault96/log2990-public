@@ -25,7 +25,7 @@ export abstract class AbstractServerService {
         const options = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         };
-        
+
         return this.http.post<T>(this.getUrl(serverUri), body, options).pipe(
             catchError(this.handleError(request))
         );

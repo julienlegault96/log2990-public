@@ -8,17 +8,17 @@ import { GameCardComponent } from './game-list-menu/game-card/game-card.componen
 import { LeaderboardComponent } from './game-list-menu/leaderboard/leaderboard.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GameListComponent,
-    GameCardComponent,
-    LeaderboardComponent,
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        GameListComponent,
+        GameCardComponent,
+        LeaderboardComponent,
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

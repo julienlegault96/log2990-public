@@ -48,11 +48,11 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 54
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 66
-                            }, 
+                            },
                             {
                                 username: "test3",
                                 time: 89
@@ -65,7 +65,7 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 33
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 14
@@ -89,11 +89,11 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 54
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 66
-                            }, 
+                            },
                             {
                                 username: "test3",
                                 time: 89
@@ -106,7 +106,7 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 33
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 14
@@ -130,11 +130,11 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 54
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 66
-                            }, 
+                            },
                             {
                                 username: "test3",
                                 time: 89
@@ -146,7 +146,7 @@ describe('GameListComponent', () => {
                             {
                                 username: "test",
                                 time: 33
-                            }, 
+                            },
                             {
                                 username: "test2",
                                 time: 14
