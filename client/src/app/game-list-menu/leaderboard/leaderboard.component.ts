@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 
-import { Leaderboard } from '../../../../../common/game/leaderboard';
+import { Leaderboard } from "../../../../../common/game/leaderboard";
 
 @Component({
-    selector: 'app-leaderboard',
-    templateUrl: './leaderboard.component.html',
-    styleUrls: ['./leaderboard.component.css']
+    selector: "app-leaderboard",
+    templateUrl: "./leaderboard.component.html",
+    styleUrls: ["./leaderboard.component.css"]
 })
 export class LeaderboardComponent implements OnInit {
 
