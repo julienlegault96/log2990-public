@@ -7,6 +7,13 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
+import { UserComponent } from "./User/user-component/user.component";
+import { AppComponent } from "./app.component";
+import { AbstractServerService } from "./abstract-server.service";
+import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
+import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
+import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
+import { FormsModule } from "@angular/forms";
 
 describe("AppComponent", () => {
   beforeEach(async(() => {
@@ -14,20 +21,19 @@ describe("AppComponent", () => {
       declarations: [
         AppComponent,
         SoloGameComponent,
-        ChronoComponent
+        ChronoComponent,
+		GameListComponent,
+        GameCardComponent,
+        LeaderboardComponent,
+        UserComponent
       ],
-      imports: [HttpClientModule, RouterTestingModule],
-      providers: [BasicService]
+      imports: [HttpClientModule, RouterTestingModule, FormsModule],
+      providers: [AbstractServerService]
     }).compileComponents();
   }));
   it("should create the app", async(() => {
     const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent);
     const app: any = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'client'`, async(() => {
-    const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent);
-    const app: any = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual("LOG2990");
   }));
 });

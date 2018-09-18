@@ -1,0 +1,10 @@
+<h5 class="text-center">
+    {{ leaderboard.title }}
+</h5>
+
+<ol class="mb-4">
+    <li *ngFor="let score of leaderboard.scores">
+        00:{{ score.time }}
+        {{ score.username }}
+    </li>
+</ol>
