@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { catchError } from 'rxjs/operators';
+import { catchError } from "rxjs/operators";
 
 @Injectable()
 export abstract class AbstractServerService {
 
-    protected readonly serverHost: string = 'http://localhost:3000/';
+    protected readonly serverHost: string = "http://localhost:3000/";
 
     public constructor(protected http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export abstract class AbstractServerService {
     // Pas encore fonctionnel
     protected postRequest<T>(serverUri: string, body: T, request: string): Observable<{} | T> {
         const options = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
         };
 
         return this.http.post<T>(this.getUrl(serverUri), body, options).pipe(
