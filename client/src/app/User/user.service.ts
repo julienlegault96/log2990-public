@@ -9,7 +9,7 @@ import { USERS } from "./mock-users";
 export class UserService {
     private static minUsername: number = 1;
     private static maxUsername: number = 20;
-    // DISCLAIMER: regex provenant de https://stackoverflow.com/a/389022
+     // Disclaimer: cette expretion régulaire a été prise de https://stackoverflow.com/a/389022
     private static validationRegEx: RegExp = /^[a-zA-Z0-9]+$/i;
 
     private constructor() { }

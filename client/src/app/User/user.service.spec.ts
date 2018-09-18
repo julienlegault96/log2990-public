@@ -42,10 +42,6 @@ describe("UserService", () => {
         expect(UserService.prototype.validateUsername("1234567890abcdefghijK")).toBe(false);
     });
 
-    it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(UserService.prototype.validateUsername("#@%ait96)^^$5467/")).toBe(false);
-    });
-
     it("should fetch the existing usernames", () => {
         // setting up fixtures
         let receivedUsers: User[] = [];
