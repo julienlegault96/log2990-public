@@ -9,14 +9,14 @@ import { USERS } from "./mock-users";
 export class UserService {
     private static minUsername: number = 1;
     private static maxUsername: number = 20;
-     // Disclaimer: cette expretion régulaire a été prise de https://stackoverflow.com/a/389022
+    // Disclaimer: cette expretion régulaire a été prise de https://stackoverflow.com/a/389022
     private static validationRegEx: RegExp = /^[a-zA-Z0-9]+$/i;
 
     private constructor() { }
 
     public validateUsername(username: string): boolean {
         return this.verifyAlphanumericSymbols(username)
-                && this.verifyUsernameLength(username);
+            && this.verifyUsernameLength(username);
     }
 
     private verifyAlphanumericSymbols(username: string): boolean {
@@ -25,7 +25,7 @@ export class UserService {
 
     private verifyUsernameLength(username: string): boolean {
         return (username.length >= UserService.minUsername
-                    && username.length <= UserService.maxUsername) ? true : false;
+            && username.length <= UserService.maxUsername) ? true : false;
     }
 
     public submitUsername(username: string): void {

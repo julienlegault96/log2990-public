@@ -11,14 +11,16 @@
                     <input [(ngModel)]="currentUser.name" type="text" class="form-control" placeholder="MrBidon">
 
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"(click)="submit()"> soumettre </button>
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="submit()">
+                            soumettre 
+                        </button>
                     </div>
 
                 </div>
             </div>
 
             <h5>Utilisateurs connectés: </h5>
-            <span *ngFor="let user of users" class="badge badge-pill badge-primary mr-2">  {{user.name}} </span>
+            <span *ngFor="let user of users" class="badge badge-pill badge-primary mr-2"> {{user.name}} </span>
         </div>
     </div>
 </div>
