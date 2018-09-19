@@ -39,7 +39,6 @@ export class Routes {
             "/users",
             (req: Request, res: Response, next: NextFunction) => this.users.removeUser(req, res, next)
             );
-    
 
         return router;
     }

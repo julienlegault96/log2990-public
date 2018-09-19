@@ -15,7 +15,7 @@ export class GameService extends AbstractServerService {
         return this.getRequest<Game[]>("games", "getGames");
     }
 
-    addGame(): void {
+    public addGame(): void {
         const newGame = {
             type: 0,
             title: "SingleViewGame 2",
@@ -59,11 +59,11 @@ export class GameService extends AbstractServerService {
                     ]
                 }
             ]
-        }
+        };
         this.postRequest<Game>("games", newGame, "addGame");
     }
 
-    isJoinable(game: Game): Observable<boolean> {
+    public isJoinable(game: Game): Observable<boolean> {   
         return of(false);
     }
 
