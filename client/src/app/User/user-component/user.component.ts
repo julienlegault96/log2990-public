@@ -17,12 +17,17 @@ export class UserComponent implements OnInit {
     public constructor(private userService: UserService) { }
 
     public ngOnInit(): void {
-        this.userService.getUsernames().subscribe((incommingUsers: User[]) => (this.users = incommingUsers));
+        this.getUsers();
     }
 
     public validateUsername(): boolean {
         return this.userService.validateUsername(this.currentUser.name);
     }
+
+    private getUsers(): void {
+        this.userService.getUsernames()
+            .subscribe((newUsers: User[]) => { this.users = newUsers; });
+        }
 
     public submit(): void {
         this.userService.submitUsername(this.currentUser.name);
