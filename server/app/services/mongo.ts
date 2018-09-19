@@ -10,7 +10,8 @@ import {
 } from "mongodb";
 
 export enum Collections {
-    Games = "Games"
+    Games = "Games",
+    Users = "Users"
 }
 
 @injectable()
