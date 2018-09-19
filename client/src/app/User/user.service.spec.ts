@@ -1,6 +1,6 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { User } from "./user";
-import { USERS } from "./mock-users";
+import { User } from "../../../../common/user/user";
+import { USERS } from "../../../../common/user/mock-users";
 import { UserService } from "./user.service";
 
 describe("UserService", () => {
