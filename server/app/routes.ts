@@ -35,6 +35,11 @@ export class Routes {
             "/users",
             (req: Request, res: Response, next: NextFunction) => this.users.addUser(req, res, next)
             );
+        router.delete(
+            "/users",
+            (req: Request, res: Response, next: NextFunction) => this.users.removeUser(req, res, next)
+            );
+    
 
         return router;
     }

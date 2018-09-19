@@ -5,7 +5,7 @@ import Types from "../types";
 import { User } from "../../../common/user/user";
 import { CODES } from "../../../common/communication/response-codes";
 import { Mongo, Collections } from "../services/mongo";
-import { InsertOneWriteOpResult } from "mongodb";
+import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 
 @injectable()
 export class Users {
@@ -25,10 +25,25 @@ export class Users {
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
             } else {
-                res.status(CODES.FAILED_INSERT).send("Failed to insert user into Mongo");
+                res.status(CODES.SERVER_ERROR).send("Failed to insert user into Mongo");
             }
         } catch (e) {
-            res.status(CODES.INVALID_FORMAT).send("User provided does not follow the valid format");
+            res.status(CODES.BAD_REQUEST).send("User provided does not follow the valid format");
+        }
+    }
+
+    public async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const user: User = Object.assign(new User, req.body);
+            const response: DeleteWriteOpResultObject = await this.mongo.removeDocument<User>(Collections.Users, user);
+
+            if (response.result.ok) {
+                res.sendStatus(CODES.OK);
+            } else {
+                res.status(CODES.SERVER_ERROR).send("Failed to remove user from Mongo");
+            }
+        } catch (e) {
+            res.status(CODES.BAD_REQUEST).send("User provided does not follow the valid format");
         }
     }
 }

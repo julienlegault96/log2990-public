@@ -24,10 +24,10 @@ export class Games {
             if (response.result.ok) {
                 res.status(CODES.OK).send();
             } else {
-                res.status(CODES.FAILED_INSERT).send("Failed to insert game into Mongo");
+                res.status(CODES.SERVER_ERROR).send("Failed to insert game into Mongo");
             }
         } catch (e) {
-            res.status(CODES.INVALID_FORMAT).send("Game provided does not follow the valid format");
+            res.status(CODES.BAD_REQUEST).send("Game provided does not follow the valid format");
         }
     }
 }

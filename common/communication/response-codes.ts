@@ -3,6 +3,6 @@
  */
 export class CODES {
     public static OK: number = 200;
-    public static INVALID_FORMAT: number = 400;
-    public static FAILED_INSERT: number = 500;
+    public static BAD_REQUEST: number = 400;
+    public static SERVER_ERROR: number = 500;
 }
