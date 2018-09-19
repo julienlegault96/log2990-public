@@ -1,12 +1,21 @@
 import { TestBed, inject } from "@angular/core/testing";
+import { TestHelper } from "../../test.helper";
 import { User } from "../../../../common/user/user";
 import { USERS } from "../../../../common/user/mock-users";
 import { UserService } from "./user.service";
+import { HttpClientModule } from "@angular/common/http";
+
+// tslint:disable-next-line:no-any Used to mock the http call
+let httpClientSpy: any;
+let userservice: UserService;
 
 describe("UserService", () => {
     beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
+        userservice = new UserService(httpClientSpy);
         TestBed.configureTestingModule({
-            providers: [UserService]
+            providers: [UserService],
+            imports: [HttpClientModule]
         });
     });
 
@@ -15,38 +24,51 @@ describe("UserService", () => {
     }));
 
     it("should reject empty names", () => {
-        expect(UserService.prototype.validateUsername("")).toBe(false);
+        expect(userservice.validateUsername("")).toBe(false);
     });
 
     it("should accept alphanumeric names", () => {
-        expect(UserService.prototype.validateUsername("qawsedrftyhuji12345")).toBe(true);
+        expect(userservice.validateUsername("qawsedrftyhuji12345")).toBe(true);
     });
 
     it("should reject non alphanumeric names", () => {
-        expect(UserService.prototype.validateUsername("#@%&*()^^$++{}////")).toBe(false);
+        expect(userservice.validateUsername("#@%&*()^^$++{}////")).toBe(false);
     });
 
     it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(UserService.prototype.validateUsername("#@%ait96)^^ab467/")).toBe(false);
+        expect(userservice.validateUsername("#@%ait96)^^ab467/")).toBe(false);
     });
 
     it("should accept names with 1 caracter", () => {
-        expect(UserService.prototype.validateUsername("H")).toBe(true);
+        expect(userservice.validateUsername("H")).toBe(true);
     });
 
     it("should accept names with 20 caracters", () => {
-        expect(UserService.prototype.validateUsername("1234567890abcdefghij")).toBe(true);
+        expect(userservice.validateUsername("1234567890abcdefghij")).toBe(true);
     });
 
     it("should reject names with 21 caracters", () => {
-        expect(UserService.prototype.validateUsername("1234567890abcdefghijK")).toBe(false);
+        expect(userservice.validateUsername("1234567890abcdefghijK")).toBe(false);
     });
 
     it("should fetch the existing usernames", () => {
         // setting up fixtures
         let receivedUsers: User[] = [];
-        UserService.prototype.getUsernames().subscribe((users: User[]) => receivedUsers = users);
+        userservice.getUsernames().subscribe((users: User[]) => receivedUsers = users);
         // test
         expect(receivedUsers).toBe(USERS);
+
+        httpClientSpy.get.and.returnValue(TestHelper.asyncData(USERS));
+
+        // check the content of the mocked call
+        userservice.getUsernames().subscribe(
+            (users: User[]) => {
+                expect(users).toEqual(jasmine.any([]));
+                expect(users).toEqual(USERS, "users check");
+            },
+            fail
+        );
+        // check if only one call was made
+        expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
     });
 });
