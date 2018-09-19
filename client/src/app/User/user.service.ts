@@ -1,18 +1,17 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { User } from "../../../../common/user/user";
-import { USERS } from "../../../../common/user/mock-users";
+import { AbstractServerService } from "../abstract-server.service";
 
 @Injectable({
     providedIn: "root"
 })
-export class UserService {
+
+export class UserService extends AbstractServerService {
     private static minUsername: number = 1;
     private static maxUsername: number = 20;
     // Disclaimer: cette expretion régulaire a été prise de https://stackoverflow.com/a/389022
     private static validationRegEx: RegExp = /^[a-zA-Z0-9]+$/i;
-
-    private constructor() { }
 
     public validateUsername(username: string): boolean {
         return this.verifyAlphanumericSymbols(username)
@@ -40,6 +39,13 @@ export class UserService {
     }
 
     public getUsernames(): Observable<User[]> {
-        return of(USERS);
+        return this.getRequest<User[]>("users", "getUsers");
+    }
+
+    public addUsername(username: string): void {
+        const newUser: User = {
+            name: username
+        };
+        this.postRequest<User>("users", newUser, "addUser");
     }
 }
