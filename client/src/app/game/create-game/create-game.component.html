@@ -3,20 +3,52 @@
 </button>
 
 <div class="modal fade" id="create-game-modal">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Créer un jeu à point de vue simple</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="form-group">
+                    <label>Nom du jeu *</label>
+                    <input type="text" [(ngModel)]="name" class="form-control" placeholder="Entrez un nom" required>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>1. Image non modifiée *</label>
+                            <div class="custom-file">
+                                <input [(ngModel)]="rawImage" type="file" class="custom-file-input" id="raw-image" (change)="updateRawImageMessage()" required>
+                                <label class="custom-file-label" for="raw-image">
+                                    {{ this.rawImageMessage }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group">
+                            <label>2. Image modifiée *</label>
+                            <div class="custom-file">
+                                <input [(ngModel)]="modifiedImage" type="file" class="custom-file-input" id="modified-image" (change)="updateModifiedImageMessage()" required>
+                                <label class="custom-file-label" for="modified-image">
+                                    {{ this.modifiedImageMessage }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="float-right">
+                    <button type="button" class="btn btn-success" (click)="submit()">
+                        Soumettre
+                    </button>
+                </div>
+                <div class="clearfix"></div>
             </div>
         </div>
     </div>
