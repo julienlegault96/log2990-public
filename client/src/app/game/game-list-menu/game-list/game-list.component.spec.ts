@@ -1,14 +1,14 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
-import { TestHelper } from '../../../test.helper';
+import { TestHelper } from '../../../../test.helper';
 import { GameListComponent } from './game-list.component';
 import { GameCardComponent } from '../game-card/game-card.component';
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
-import { GameService } from '../game.service';
+import { GameService } from '../../../services/game.service';
 
-import { Game } from '../../../../../common/game/game';
-import { GameType } from '../../../../../common/game/game-type';
+import { Game } from '../../../../../../common/game/game';
+import { GameType } from '../../../../../../common/game/game-type';
 
 describe('GameListComponent', () => {
     let component: GameListComponent;
