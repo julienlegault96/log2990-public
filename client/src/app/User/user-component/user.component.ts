@@ -25,12 +25,12 @@ export class UserComponent implements OnInit {
     }
 
     private getUsers(): void {
-        this.userService.getUsers()
-            .subscribe((newUsers: User[]) => { this.users = newUsers; });
+        this.userService.getUsers().subscribe((newUsers: User[]) => { this.users = newUsers; });
         }
 
     public submit(): void {
         this.userService.submitUsername(this.currentUser.name);
         this.currentUser.name = "";
+        this.getUsers();
     }
 }
