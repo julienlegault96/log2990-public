@@ -1,8 +1,9 @@
+import { TestBed, inject } from "@angular/core/testing";
+import { TestHelper } from "../../test.helper";
 import { GameService } from "./game.service";
-
 import { Game } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
-import { TestHelper } from "../../test.helper";
+import { HttpClientModule } from "@angular/common/http";
 
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpy: any;
@@ -12,7 +13,15 @@ describe("GameService", () => {
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
         gameService = new GameService(httpClientSpy);
+        TestBed.configureTestingModule({
+            providers: [GameService],
+            imports: [HttpClientModule]
+        });
     });
+
+    it("should be created", inject([GameService], (service: GameService) => {
+        expect(service).toBeTruthy();
+    }));
 
     it("should return expected message (HttpClient called once)", () => {
         const returnedGames: Game[] = [
