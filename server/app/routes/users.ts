@@ -5,7 +5,7 @@ import Types from "../types";
 import { User } from "../../../common/user/user";
 import { CODES } from "../../../common/communication/response-codes";
 import { Mongo, Collections } from "../services/mongo";
-import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
+import { InsertOneWriteOpResult, DeleteWriteOpResultObject, FilterQuery } from "mongodb";
 
 @injectable()
 export class Users {
@@ -20,7 +20,8 @@ export class Users {
     public async addUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const user: User = Object.assign(new User, req.body);
-            const response: InsertOneWriteOpResult = await this.mongo.insertDocument<User>(Collections.Users, user);
+            const response: InsertOneWriteOpResult =
+                await this.mongo.insertDocument<User>(Collections.Users, user);
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
@@ -34,8 +35,9 @@ export class Users {
 
     public async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = Object.assign(new User, req.body);
-            const response: DeleteWriteOpResultObject = await this.mongo.removeDocument<User>(Collections.Users, user);
+            const userFilter: FilterQuery<User> = {$where: Object.assign(new User, req.body) };
+            const response: DeleteWriteOpResultObject = 
+                await this.mongo.removeDocument<User>(Collections.Users, userFilter);
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
