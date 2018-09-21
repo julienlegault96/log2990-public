@@ -9,18 +9,16 @@ import { CreateGameService } from './create-game.service';
 })
 export class CreateGameComponent implements OnInit {
 
-    public name: String;
-    public rawImage: File;
-    public modifiedImage: File;
+    public name: String = "";
+    private rawImage: File;
+    private modifiedImage: File;
 
     public rawImageMessage: string;
     public modifiedImageMessage: string;
     
-    private createGameService: CreateGameService;
-
-    constructor(createGameService: CreateGameService) {
-        this.rawImageMessage = "Choisir un fichier";
-        this.modifiedImageMessage = "Choisir un fichier";
+    constructor(private createGameService: CreateGameService) {
+        this.updateRawImageMessage();
+        this.updateModifiedImageMessage();
     }
 
     ngOnInit() {
@@ -31,35 +29,55 @@ export class CreateGameComponent implements OnInit {
             alert("Erreur(s) dans le formulaire");
             return;
         }
-
+        this.createGameService.submit(this.name, this.getImageList());
     }
 
-    private isValidInputList(): boolean {
-        return this.isValidName()
-            && this.isValidInputImageList();
+    public setRawImage(event: Event):void {
+        let target: any | null = event.target;
+        if (this.isValidImageTarget(target)) {
+            this.rawImage = target.files[0];
+            this.updateRawImageMessage(this.rawImage.name);
+        }
+        else {
+            this.updateRawImageMessage();
+        }
     }
 
-    private isValidName(): boolean {
-        return this.name
-            && this.name.length >= 1
-            && this.name.length <= 20;
+    public setModifiedImage(event: Event):void {
+        let target: any | null = event.target;
+        if (this.isValidImageTarget(target)) {
+            this.modifiedImage = target.files[0];
+            this.updateModifiedImageMessage(this.modifiedImage.name);
+        }
+        else {
+            this.updateModifiedImageMessage();
+        }
     }
 
-    private isValidInputImageList(): boolean {
-        return this.isValidImage(this.rawImage)
-            && this.isValidImage(this.modifiedImage);
+    public isValidName(event: Event): boolean {
+        return this.name.length <= this.createGameService.getNameMaxLength();
     }
 
-    private isValidImage(image: File): boolean {
-        return String(image).indexOf(".bmp") != -1;
+    private isValidImageTarget(target: any) {
+        return target != null 
+            && target.files 
+            && target.files.length > 0;
     }
 
-    public updateRawImageMessage(): void {
-        this.rawImageMessage = "Fichier sélectionné";
+    private isValidInputList(): Boolean {
+        return this.createGameService.isValidInputList(this.name, this.getImageList());
     }
 
-    public updateModifiedImageMessage(): void {
-        this.modifiedImageMessage = "Fichier sélectionné";
+    private getImageList(): File[] {
+        return Array(this.rawImage, this.modifiedImage);
+    }
+
+    private updateRawImageMessage(filename?: string): void {
+        this.rawImageMessage = (filename ? filename : "Choisir un fichier");
+    }
+
+    private updateModifiedImageMessage(filename?: string): void {
+        this.modifiedImageMessage = (filename ? filename : "Choisir un fichier");
     }
 
 }
