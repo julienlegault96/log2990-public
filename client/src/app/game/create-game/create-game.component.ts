@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CreateGameService } from './create-game.service';
+import { CreateGameService } from '../../services/create-game.service';
 
 @Component({
     selector: 'app-create-game',
