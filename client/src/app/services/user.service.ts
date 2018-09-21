@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../../../../common/user/user";
-import { AbstractServerService, Endpoints } from "../services/abstract-server.service";
+import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 @Injectable({
     providedIn: "root"
