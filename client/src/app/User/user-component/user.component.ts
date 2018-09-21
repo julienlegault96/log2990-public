@@ -25,7 +25,7 @@ export class UserComponent implements OnInit {
     }
 
     private getUsers(): void {
-        this.userService.getUsernames()
+        this.userService.getUsers()
             .subscribe((newUsers: User[]) => { this.users = newUsers; });
         }
 

@@ -56,7 +56,7 @@ describe("UserService", () => {
         httpClientSpy.get.and.returnValue(TestHelper.asyncData(USERS));
 
         // check the content of the mocked call
-        userservice.getUsernames().subscribe(
+        userservice.getUsers().subscribe(
             (users: User[]) => {
                 expect(users).toEqual(jasmine.any([]));
                 expect(users).toEqual(USERS, "users check");

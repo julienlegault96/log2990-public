@@ -38,11 +38,11 @@ export class UserService extends AbstractServerService {
         errorString.length === 0 ? alert("Nom valide") : alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
     }
 
-    public getUsernames(): Observable<User[]> {
+    public getUsers(): Observable<User[]> {
         return this.getRequest<User[]>("users", "getUsers");
     }
 
-    public addUsername(username: string): void {
+    public addUser(username: string): void {
         const newUser: User = {
             name: username
         };
