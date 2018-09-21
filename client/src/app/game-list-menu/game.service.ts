@@ -18,6 +18,7 @@ export class GameService extends AbstractServerService {
     addGame(): void {
         const newGame = {
             type: 0,
+            _id: 0,
             title: "SingleViewGame 2",
             imageUrl: [
                 "single-view-game-2-1.bmp",
@@ -67,4 +68,8 @@ export class GameService extends AbstractServerService {
         return of(false);
     }
 
+    public resetLeaderboard(toUpdate: Game): void {
+        let res = this.putRequest<Game>('reset', toUpdate, 'resetLeaderboard');
+        console.log(res);
+    }
 }

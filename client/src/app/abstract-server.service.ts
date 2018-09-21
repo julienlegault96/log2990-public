@@ -22,11 +22,21 @@ export abstract class AbstractServerService {
 
     // Pas encore fonctionnel
     protected postRequest<T>(serverUri: string, body: T, request: string): Observable<{} | T> {
-        const options = {
+        const options: {} = {
             headers: new HttpHeaders({ "Content-Type": "application/json" })
         };
 
         return this.http.post<T>(this.getUrl(serverUri), body, options).pipe(
+            catchError(this.handleError(request))
+        );
+    }
+
+    protected putRequest<T>(serverUri: string, body: T, request: string): Observable<{} | T>{
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
+        };
+        console.log(this.getUrl(serverUri));
+        return this.http.put<T>(this.getUrl(serverUri), body, options).pipe(
             catchError(this.handleError(request))
         );
     }

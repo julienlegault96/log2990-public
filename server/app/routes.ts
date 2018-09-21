@@ -16,6 +16,8 @@ export class Routes {
             (req: Request, res: Response, next: NextFunction) => this.games.getGames(req, res, next));
         router.post("/games",
             (req: Request, res: Response, next: NextFunction) => this.games.addGame(req, res, next));
+        router.put("/reset",
+            (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next));
 
         return router;
     }
