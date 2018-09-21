@@ -53,11 +53,6 @@ describe("UserService", () => {
 
     it("should fetch the existing usernames", () => {
         // setting up fixtures
-        let receivedUsers: User[] = [];
-        userservice.getUsernames().subscribe((users: User[]) => receivedUsers = users);
-        // test
-        expect(receivedUsers).toBe(USERS);
-
         httpClientSpy.get.and.returnValue(TestHelper.asyncData(USERS));
 
         // check the content of the mocked call
