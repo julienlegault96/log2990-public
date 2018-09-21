@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 
-import { Leaderboard } from "../../../../../common/game/leaderboard";
+import { Leaderboard } from "../../../../../../common/game/leaderboard";
 
 @Component({
     selector: "app-leaderboard",

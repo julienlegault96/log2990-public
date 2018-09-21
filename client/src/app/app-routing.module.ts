@@ -3,7 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { UserComponent } from "./User/user-component/user.component";
-import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
+import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
 
 const routes: Routes = [
     { path: "soloGame", component: SoloGameComponent },
