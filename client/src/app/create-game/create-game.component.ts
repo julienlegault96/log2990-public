@@ -18,4 +18,12 @@ export class CreateGameComponent implements OnInit {
     ngOnInit() {
     }
 
+    public updateRawImageMessage(): void {
+        this.rawImageMessage = "Fichier sélectionné";
+    }
+
+    public updateModifiedImageMessage(): void {
+        this.modifiedImageMessage = "Fichier sélectionné";
+    }
+
 }

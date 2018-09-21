@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label>1. Image non modifiée *</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="raw-image" required>
+                                <input type="file" class="custom-file-input" id="raw-image" (change)="updateRawImageMessage()" required>
                                 <label class="custom-file-label" for="raw-image">
                                     {{ this.rawImageMessage }}
                                 </label>
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label>2. Image modifiée *</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="modified-image" required>
+                                <input type="file" class="custom-file-input" id="modified-image" (change)="updateModifiedImageMessage()" required>
                                 <label class="custom-file-label" for="modified-image">
                                     {{ this.modifiedImageMessage }}
                                 </label>
