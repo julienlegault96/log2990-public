@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 
 @Injectable()
 export abstract class AbstractServerService {
@@ -52,6 +52,7 @@ export abstract class AbstractServerService {
         };
 
         return this.http.post<T>(this.getUrl(serverEndpoint), body, options).pipe(
+            tap(),
             catchError(this.handleError)
         );
     }

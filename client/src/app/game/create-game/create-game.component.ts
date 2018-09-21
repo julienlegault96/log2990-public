@@ -19,7 +19,6 @@ export class CreateGameComponent implements OnInit {
     public constructor(private createGameService: CreateGameService) {
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
-        console.log(this.createGameService);
     }
 
     public ngOnInit(): void {
