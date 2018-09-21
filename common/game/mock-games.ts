@@ -1,6 +1,8 @@
 import { Game } from "./game";
 import { GameType } from "./game-type";
 
+export const SINGLE_VIEW_GAME_COUNT: Number = 1;
+export const DOUBLE_VIEW_GAME_COUNT: Number = 2;
 export const GAMES: Game[] = [
     {
         type: GameType.DoubleView,

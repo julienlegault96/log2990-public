@@ -2,7 +2,7 @@ import { TestBed, inject } from "@angular/core/testing";
 import { TestHelper } from "../../test.helper";
 import { GameService } from "./game.service";
 import { Game } from "../../../../common/game/game";
-import { GameType } from "../../../../common/game/game-type";
+import { GAMES } from "../../../../common/game/mock-games";
 import { HttpClientModule } from "@angular/common/http";
 
 // tslint:disable-next-line:no-any Used to mock the http call
@@ -24,57 +24,13 @@ describe("GameService", () => {
     }));
 
     it("should return expected message (HttpClient called once)", () => {
-        const returnedGames: Game[] = [
-            {
-                "type": GameType.DoubleView,
-                "title": "DoubleViewGame 1",
-                "imageUrl": ["double-view-game-1.bmp"],
-                "leaderboards": [
-                    {
-                        "title": "Solo",
-                        "scores": [
-                            {
-                                username: "test",
-                                time: 54
-                            },
-                            {
-                                username: "test2",
-                                time: 66
-                            },
-                            {
-                                username: "test3",
-                                time: 89
-                            }
-                        ]
-                    },
-                    {
-                        "title": "One versus One",
-                        "scores": [
-                            {
-                                username: "test",
-                                time: 33
-                            },
-                            {
-                                username: "test2",
-                                time: 14
-                            },
-                            {
-                                username: "test3",
-                                time: 24
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
+        httpClientSpy.get.and.returnValue(TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
         gameService.getGames().subscribe(
             (games: Game[]) => {
                 expect(games).toEqual(jasmine.any([]));
-                expect(games).toEqual(returnedGames, "games check");
+                expect(games).toEqual(GAMES, "games check");
             },
             fail
         );

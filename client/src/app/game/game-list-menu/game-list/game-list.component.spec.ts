@@ -7,8 +7,8 @@ import { GameCardComponent } from "../game-card/game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
 import { GameService } from "../../../services/game.service";
 
-import { Game } from "../../../../../../common/game/game";
 import { GameType } from "../../../../../../common/game/game-type";
+import { GAMES, SINGLE_VIEW_GAME_COUNT, DOUBLE_VIEW_GAME_COUNT } from "../../../../../../common/game/mock-games";
 
 describe("GameListComponent", () => {
     let component: GameListComponent;
@@ -36,146 +36,26 @@ describe("GameListComponent", () => {
     });
 
     it("should filter games", fakeAsync(() => {
-        const returnedGames: Game[] = [
-            {
-                type: GameType.DoubleView,
-                title: "DoubleViewGame 1",
-                imageUrl: ["double-view-game-1.bmp"],
-                leaderboards: [
-                    {
-                        title: "Solo",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 54
-                            },
-                            {
-                                username: "test2",
-                                time: 66
-                            },
-                            {
-                                username: "test3",
-                                time: 89
-                            }
-                        ]
-                    },
-                    {
-                        title: "One versus One",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 33
-                            },
-                            {
-                                username: "test2",
-                                time: 14
-                            },
-                            {
-                                username: "test3",
-                                time: 24
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: GameType.DoubleView,
-                title: "DoubleViewGame 2",
-                imageUrl: ["double-view-game-2.bmp"],
-                leaderboards: [
-                    {
-                        title: "Solo",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 54
-                            },
-                            {
-                                username: "test2",
-                                time: 66
-                            },
-                            {
-                                username: "test3",
-                                time: 89
-                            }
-                        ]
-                    },
-                    {
-                        title: "One versus One",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 33
-                            },
-                            {
-                                username: "test2",
-                                time: 14
-                            },
-                            {
-                                username: "test3",
-                                time: 23
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: GameType.SingleView,
-                title: "SingleViewGame 1",
-                imageUrl: ["single-view-game-1.bmp"],
-                leaderboards: [
-                    {
-                        title: "Solo",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 54
-                            },
-                            {
-                                username: "test2",
-                                time: 66
-                            },
-                            {
-                                username: "test3",
-                                time: 89
-                            }]
-                    },
-                    {
-                        title: "One versus One",
-                        scores: [
-                            {
-                                username: "test",
-                                time: 33
-                            },
-                            {
-                                username: "test2",
-                                time: 14
-                            },
-                            {
-                                username: "test3",
-                                time: 24
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
+        // set retrieved data onInit as the mocked data
+        httpClientSpy.get.and.returnValue(TestHelper.asyncData(GAMES));
 
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
-        fixture.detectChanges(); // force onInit()
+        // force onInit()
+        fixture.detectChanges();
 
-        tick(); // flush the component's setTimeout()
+        // flush the component's setTimeout()
+        tick();
 
-        fixture.detectChanges(); // update errorMessage within setTimeout()
+        // update errorMessage within setTimeout()
+        fixture.detectChanges();
 
-        expect(component.singleViewGames.length).toEqual(1);
-        for (let i = 0; i < component.singleViewGames.length; i++) {
-            expect(component.singleViewGames[0].type).toEqual(GameType.SingleView);
+        expect(component.singleViewGames.length).toEqual(SINGLE_VIEW_GAME_COUNT);
+        for (const singleViewGame of component.singleViewGames) {
+            expect(singleViewGame.type).toEqual(GameType.SingleView);
         }
 
-        expect(component.doubleViewGames.length).toEqual(2);
-        for (let i = 0; i < component.doubleViewGames.length; i++) {
-            expect(component.doubleViewGames[0].type).toEqual(GameType.DoubleView);
+        expect(component.doubleViewGames.length).toEqual(DOUBLE_VIEW_GAME_COUNT);
+        for (const doubleViewGame of component.doubleViewGames) {
+            expect(doubleViewGame.type).toEqual(GameType.DoubleView);
         }
 
     }));
