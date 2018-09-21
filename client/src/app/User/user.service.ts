@@ -19,12 +19,12 @@ export class UserService extends AbstractServerService {
     }
 
     private verifyAlphanumericSymbols(username: string): boolean {
-        return username.match(UserService.validationRegEx) ? true : false;
+        return Boolean(username.match(UserService.validationRegEx));
     }
 
     private verifyUsernameLength(username: string): boolean {
-        return (username.length >= UserService.minUsername
-            && username.length <= UserService.maxUsername) ? true : false;
+        return Boolean(username.length >= UserService.minUsername
+                        && username.length <= UserService.maxUsername);
     }
 
     public submitUsername(username: string): void {
