@@ -15,12 +15,12 @@ export class GameListComponent implements OnInit {
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
 
-    constructor(private gameService: GameService) {
+    public constructor(private gameService: GameService) {
         this.singleViewGames = new Array();
         this.doubleViewGames = new Array();
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.getGames();
     }
 
@@ -31,7 +31,7 @@ export class GameListComponent implements OnInit {
             });
     }
 
-    private filterGames(games: Game[]) {
+    private filterGames(games: Game[]): void {
         this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
         this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
     }

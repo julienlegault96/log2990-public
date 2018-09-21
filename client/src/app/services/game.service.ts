@@ -5,9 +5,7 @@ import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 import { Game } from "../../../../common/game/game";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable()
 export class GameService extends AbstractServerService {
 
     public getGames(): Observable<Game[]> {
