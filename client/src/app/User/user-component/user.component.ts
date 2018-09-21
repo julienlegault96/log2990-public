@@ -9,7 +9,7 @@ import { UserService } from "../../services/user.service";
 })
 export class UserComponent implements OnInit {
     public currentUser: User = {
-        name: "MrBidon"
+        _id: "MrBidon"
     };
 
     public users: User[];
@@ -21,7 +21,7 @@ export class UserComponent implements OnInit {
     }
 
     public validateUsername(): boolean {
-        return this.userService.validateUsername(this.currentUser.name);
+        return this.userService.validateUsername(this.currentUser._id);
     }
 
     private getUsers(): void {
@@ -29,8 +29,8 @@ export class UserComponent implements OnInit {
         }
 
     public submit(): void {
-        this.userService.submitUsername(this.currentUser.name);
-        this.currentUser.name = "";
+        this.userService.submitUsername(this.currentUser._id);
+        this.currentUser._id = "";
         this.getUsers();
     }
 }

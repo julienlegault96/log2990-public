@@ -50,7 +50,7 @@ export class UserService extends AbstractServerService {
 
     public addUser(username: string): void {
         const newUser: User = {
-            name: username
+            _id: username
         };
         this.postRequest<User>(Endpoints.Users, newUser);
     }
