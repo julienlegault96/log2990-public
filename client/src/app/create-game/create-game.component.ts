@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateGameComponent implements OnInit {
 
+    public rawImageMessage: string;
+    public modifiedImageMessage: string;
 
-
-    constructor() { }
+    constructor() {
+        this.rawImageMessage = "Choisir un fichier";
+        this.modifiedImageMessage = "Choisir un fichier";
+    }
 
     ngOnInit() {
     }
