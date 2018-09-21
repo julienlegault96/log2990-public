@@ -1,74 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { CreateGameService } from '../../services/create-game.service';
+import { CreateGameService } from "../../services/create-game.service";
 
 @Component({
-    selector: 'app-create-game',
-    templateUrl: './create-game.component.html',
-    styleUrls: ['./create-game.component.css']
+    selector: "app-create-game",
+    templateUrl: "./create-game.component.html",
+    styleUrls: ["./create-game.component.css"]
 })
 export class CreateGameComponent implements OnInit {
 
-    public name: String = "";
-    private rawImage: File;
-    private modifiedImage: File;
+    public name: string = "";
+    private rawImage: File | null;
+    private modifiedImage: File | null;
 
     public rawImageMessage: string;
     public modifiedImageMessage: string;
-    
-    constructor(private createGameService: CreateGameService) {
+
+    public constructor(private createGameService: CreateGameService) {
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
+        console.log(this.createGameService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
     }
 
     public submit(): void {
         if (!this.isValidInputList()) {
             alert("Erreur(s) dans le formulaire");
+
             return;
         }
-        this.createGameService.submit(this.name, this.getImageList());
+        const imageList: Array<File> = this.getImageList().map((elem: File | null) => elem as File);
+        this.createGameService.submit(this.name, imageList);
     }
 
-    public setRawImage(event: Event):void {
-        let target: any | null = event.target;
+    public setRawImage(event: Event): void {
+        const target: HTMLInputElement = event.target as HTMLInputElement;
         if (this.isValidImageTarget(target)) {
-            this.rawImage = target.files[0];
-            this.updateRawImageMessage(this.rawImage.name);
+            this.rawImage = target.files ? target.files[0] : null;
         }
-        else {
-            this.updateRawImageMessage();
-        }
+        this.updateRawImageMessage(this.rawImage ? this.rawImage.name : undefined);
     }
 
-    public setModifiedImage(event: Event):void {
-        let target: any | null = event.target;
+    public setModifiedImage(event: Event): void {
+        const target: HTMLInputElement = event.target as HTMLInputElement;
         if (this.isValidImageTarget(target)) {
-            this.modifiedImage = target.files[0];
-            this.updateModifiedImageMessage(this.modifiedImage.name);
+            this.modifiedImage = target.files ? target.files[0] : null;
         }
-        else {
-            this.updateModifiedImageMessage();
-        }
+        this.updateModifiedImageMessage(this.modifiedImage ? this.modifiedImage.name : undefined);
     }
 
     public isValidName(event: Event): boolean {
+        // console.log(this.createGameService);
         return this.name.length <= this.createGameService.getNameMaxLength();
     }
 
-    private isValidImageTarget(target: any) {
-        return target != null 
-            && target.files 
+    private isValidImageTarget(target: HTMLInputElement): boolean {
+        return target != null
+            && target.files != null
             && target.files.length > 0;
     }
 
     private isValidInputList(): Boolean {
-        return this.createGameService.isValidInputList(this.name, this.getImageList());
+        if (this.getImageList().some((elem: File | null) => elem === null)) {
+            return false;
+        }
+        const imageList: Array<File> = this.getImageList().map((elem: File | null) => elem as File);
+
+        return this.createGameService.isValidInputList(this.name, imageList);
     }
 
-    private getImageList(): File[] {
+    private getImageList(): Array<File | null> {
         return Array(this.rawImage, this.modifiedImage);
     }
 

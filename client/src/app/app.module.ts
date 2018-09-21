@@ -11,7 +11,9 @@ import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
 import { FormsModule } from "@angular/forms";
 import { UserComponent } from "./User/user-component/user.component";
-import { CreateGameComponent } from './game/create-game/create-game.component';
+import { CreateGameComponent } from "./game/create-game/create-game.component";
+import { GameService } from "./services/game.service";
+import { CreateGameService } from "./services/create-game.service";
 
 @NgModule({
     declarations: [
@@ -30,7 +32,10 @@ import { CreateGameComponent } from './game/create-game/create-game.component';
         AppRoutingModule,
         FormsModule
     ],
-    providers: [],
+    providers: [
+        GameService,
+        CreateGameService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
