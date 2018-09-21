@@ -7,10 +7,10 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
 import { UserComponent } from "./User/user-component/user.component";
-import { AbstractServerService } from "./abstract-server.service";
-import { GameListComponent } from "./game-list-menu/game-list/game-list.component";
-import { GameCardComponent } from "./game-list-menu/game-card/game-card.component";
-import { LeaderboardComponent } from "./game-list-menu/leaderboard/leaderboard.component";
+import { AbstractServerService } from "./services/abstract-server.service";
+import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
+import { GameCardComponent } from "./game/game-list-menu/game-card/game-card.component";
+import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderboard.component";
 import { FormsModule } from "@angular/forms";
 
 describe("AppComponent", () => {
