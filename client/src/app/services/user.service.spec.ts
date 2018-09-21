@@ -66,5 +66,4 @@ describe("UserService", () => {
         // check if only one call was made
         expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
     });
-
 });

@@ -23,8 +23,8 @@ export class UserService extends AbstractServerService {
     }
 
     private verifyUsernameLength(username: string): boolean {
-        return Boolean(username.length >= UserService.minUsername
-                        && username.length <= UserService.maxUsername);
+        return username.length >= UserService.minUsername
+            && username.length <= UserService.maxUsername;
     }
 
     public submitUsername(username: string): void {
