@@ -25,7 +25,7 @@ export class Application {
     private config(): void {
         // Middlewares configuration
         this.app.use(logger("dev"));
-        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.json({ limit: 10000 }));
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
         this.app.use(express.static(path.join(__dirname, "../client")));
