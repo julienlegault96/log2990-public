@@ -29,13 +29,20 @@ export class UserService extends AbstractServerService {
 
     public submitUsername(username: string): void {
         let errorString: string = "";
+
         if (!this.verifyAlphanumericSymbols(username)) {
             errorString += "\n- Seul des caractères alphanumériques sont acceptés.";
         }
         if (!this.verifyUsernameLength(username)) {
             errorString += "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
         }
-        errorString.length === 0 ? alert("Nom valide") : alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
+
+        if (errorString.length === 0) {
+            this.addUser(username);
+            alert("Nom valide");
+        } else {
+            alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
+        }
     }
 
     public getUsers(): Observable<User[]> {

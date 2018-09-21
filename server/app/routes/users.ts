@@ -17,7 +17,7 @@ export class Users {
         res.status(CODES.OK).send(JSON.stringify(response));
     }
 
-    public async add(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async addUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const user: User = Object.assign(new User, req.body);
             const response: InsertOneWriteOpResult = await this.mongo.insertDocument<User>(Collections.Users, user);
