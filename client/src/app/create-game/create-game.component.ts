@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CreateGameService } from './create-game.service';
+
 @Component({
     selector: 'app-create-game',
     templateUrl: './create-game.component.html',
@@ -13,8 +15,10 @@ export class CreateGameComponent implements OnInit {
 
     public rawImageMessage: string;
     public modifiedImageMessage: string;
+    
+    private createGameService: CreateGameService;
 
-    constructor() {
+    constructor(createGameService: CreateGameService) {
         this.rawImageMessage = "Choisir un fichier";
         this.modifiedImageMessage = "Choisir un fichier";
     }
