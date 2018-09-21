@@ -14,7 +14,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nom du jeu *</label>
-                    <input type="text" class="form-control" placeholder="Entrez un nom" required>
+                    <input type="text" [(ngModel)]="name" class="form-control" placeholder="Entrez un nom" required>
                 </div>
 
                 <div class="row">
@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label>1. Image non modifiée *</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="raw-image" (change)="updateRawImageMessage()" required>
+                                <input [(ngModel)]="rawImage" type="file" class="custom-file-input" id="raw-image" (change)="updateRawImageMessage()" required>
                                 <label class="custom-file-label" for="raw-image">
                                     {{ this.rawImageMessage }}
                                 </label>
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label>2. Image modifiée *</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="modified-image" (change)="updateModifiedImageMessage()" required>
+                                <input [(ngModel)]="modifiedImage" type="file" class="custom-file-input" id="modified-image" (change)="updateModifiedImageMessage()" required>
                                 <label class="custom-file-label" for="modified-image">
                                     {{ this.modifiedImageMessage }}
                                 </label>
@@ -44,7 +44,9 @@
                 </div>
 
                 <div class="float-right">
-                    <button type="button" class="btn btn-success">Soumettre</button>
+                    <button type="button" class="btn btn-success" (click)="submit()">
+                        Soumettre
+                    </button>
                 </div>
                 <div class="clearfix"></div>
             </div>
