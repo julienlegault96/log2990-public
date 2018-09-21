@@ -7,6 +7,7 @@ import { Leaderboard } from "../../../../../../common/game/leaderboard";
     templateUrl: "./leaderboard.component.html",
     styleUrls: ["./leaderboard.component.css"]
 })
+
 export class LeaderboardComponent implements OnInit {
 
     @Input() public leaderboard: Leaderboard;

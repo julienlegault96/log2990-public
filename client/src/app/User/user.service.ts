@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../../../../common/user/user";
-import { AbstractServerService } from "../abstract-server.service";
+import { AbstractServerService, Endpoints } from "../services/abstract-server.service";
 
 @Injectable({
     providedIn: "root"
@@ -10,7 +10,7 @@ import { AbstractServerService } from "../abstract-server.service";
 export class UserService extends AbstractServerService {
     private static minUsername: number = 1;
     private static maxUsername: number = 20;
-    // Disclaimer: cette expretion régulaire a été prise de https://stackoverflow.com/a/389022
+    // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
     private static validationRegEx: RegExp = /^[a-zA-Z0-9]+$/i;
 
     public validateUsername(username: string): boolean {
@@ -45,13 +45,13 @@ export class UserService extends AbstractServerService {
     }
 
     public getUsers(): Observable<User[]> {
-        return this.getRequest<User[]>("users", "getUsers");
+        return this.getRequest<User[]>(Endpoints.Users);
     }
 
     public addUser(username: string): void {
         const newUser: User = {
             name: username
         };
-        this.postRequest<User>("users", newUser, "addUser");
+        this.postRequest<User>(Endpoints.Users, newUser);
     }
 }

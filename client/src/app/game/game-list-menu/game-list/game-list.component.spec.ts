@@ -48,12 +48,12 @@ describe("GameListComponent", () => {
         // update errorMessage within setTimeout()
         fixture.detectChanges();
 
-        expect(component.singleViewGames.length).toEqual(SINGLE_VIEW_GAME_COUNT);
+        expect(component.singleViewGames.length).toEqual(SINGLE_VIEW_GAME_COUNT.valueOf());
         for (const singleViewGame of component.singleViewGames) {
             expect(singleViewGame.type).toEqual(GameType.SingleView);
         }
 
-        expect(component.doubleViewGames.length).toEqual(DOUBLE_VIEW_GAME_COUNT);
+        expect(component.doubleViewGames.length).toEqual(DOUBLE_VIEW_GAME_COUNT.valueOf());
         for (const doubleViewGame of component.doubleViewGames) {
             expect(doubleViewGame.type).toEqual(GameType.DoubleView);
         }

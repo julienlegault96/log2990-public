@@ -14,6 +14,7 @@ import { UserComponent } from "./User/user-component/user.component";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
 import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
+import { HomePageComponent } from "./home-page/home-page.component";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,9 @@ import { CreateGameService } from "./services/create-game.service";
         SoloGameComponent,
         ChronoComponent,
         UserComponent,
-        CreateGameComponent
+        CreateGameComponent,
+        LeaderboardComponent,
+        HomePageComponent
     ],
     imports: [
         BrowserModule,
