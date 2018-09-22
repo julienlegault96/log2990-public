@@ -34,4 +34,24 @@ describe("CreateGameComponent", () => {
     it("should create", () => {
         expect(component).toBeTruthy();
     });
+
+    it("should accept empty names", () => {
+        component.name = "";
+        expect(component.isValidName(new Event("change"))).toBe(true);
+    });
+
+    it("should accept names with less than 21 char", () => {
+        component.name = "Username";
+        expect(component.isValidName(new Event("change"))).toBe(true);
+    });
+
+    it("should accept names with 20 char", () => {
+        component.name = "12345678901234567890";
+        expect(component.isValidName(new Event("change"))).toBe(true);
+    });
+
+    it("should reject name over 20 char", () => {
+        component.name = "123456789012345678901";
+        expect(component.isValidName(new Event("change"))).toBe(false);
+    });
 });
