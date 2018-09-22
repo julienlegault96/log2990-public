@@ -30,7 +30,7 @@ export class CreateGameComponent implements OnInit {
 
             return;
         }
-        const imageList: Array<File> = this.getImageList().map((elem: File | null) => elem as File);
+        const imageList: Array<File> = this.getImageListForSubmit();
         this.createGameService.submit(this.name, imageList);
     }
 
@@ -52,6 +52,10 @@ export class CreateGameComponent implements OnInit {
 
     public isValidName(event: Event): boolean {
         return this.name.length <= this.createGameService.getNameMaxLength();
+    }
+
+    private getImageListForSubmit(): File[] {
+        return this.getImageList().map((elem: File | null) => elem as File);
     }
 
     private isValidImageTarget(target: HTMLInputElement): boolean {

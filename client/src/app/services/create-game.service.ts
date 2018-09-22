@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { GameService } from "./game.service";
-import { Game } from "../../../../common/game/game";
+import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 
 @Injectable()
@@ -19,23 +19,13 @@ export class CreateGameService extends GameService {
         const modifiedImagePromise: Promise<string> = this.getBase64(images[1]);
 
         Promise.all([rawImagePromise, modifiedImagePromise]).then((values) => {
-            const newGame: Game = {
-                "type": GameType.SingleView, "title": name, "imageUrl": [values[0], values[1]], "leaderboards": [{
-                    "title": "Solo", "scores": [{ "username": "Username1", "time": 34 }, {
-                        "username": "Username2", "time": 46
-                    },                          {
-                        "username": "Username3", "time": 67
-                    }, ]
-                },                                                                                               {
-                    "title": "1 vs 1", "scores": [{
-                        "username": "Username11", "time": 15
-                    },                            {
-                        "username": "Username22", "time": 25
-                    },                            { "username": "Username33", "time": 35 },
-                    ]
-                }
-                ]
-            };
+            const newGame: Game = newGameTemplate;
+            newGame.type = GameType.SingleView;
+            newGame.title = name;
+            newGame.imageUrl = [
+                values[0],
+                values[1]
+            ];
             this.addGame(newGame).subscribe((game: Game) => {
                 alert("Uploaded");
             });

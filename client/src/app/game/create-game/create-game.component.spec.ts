@@ -54,4 +54,89 @@ describe("CreateGameComponent", () => {
         component.name = "123456789012345678901";
         expect(component.isValidName(new Event("change"))).toBe(false);
     });
+
+    it("should reject no rawImage", () => {
+        component.setRawImage(new Event("change"));
+        expect(component.rawImageMessage).toBe("Choisir un fichier");
+    });
+
+    it("should reject no modifiedImage", () => {
+        component.modifiedImageMessage = "Message modifie";
+        component.setModifiedImage(new Event("change"));
+        expect(component.modifiedImageMessage).toBe("Choisir un fichier");
+    });
+
+    it("should reject wrong rawImage format", () => {
+        component.rawImageMessage = "Message modifie";
+        const eventTarget: EventTarget = new EventTarget();
+
+        const event: Event = Object.create(Event.prototype);
+        Object.defineProperty(event, "target", eventTarget);
+
+        component.setRawImage(event);
+        expect(component.rawImageMessage).toBe("Choisir un fichier");
+    });
+
+    it("should reject wrong modifiedImage format", () => {
+        component.modifiedImageMessage = "Message modifie";
+        const eventTarget: EventTarget = new EventTarget();
+
+        const event: Event = Object.create(Event.prototype);
+        Object.defineProperty(event, "target", eventTarget);
+
+        component.setModifiedImage(event);
+        expect(component.modifiedImageMessage).toBe("Choisir un fichier");
+    });
+
+    // // Non fonctionnel
+    // it("should accept .bmp rawImage", () => {
+    //     const filename: string = "image.bmp";
+
+    //     const files: FileList = {
+    //         length: 1,
+    //         item: () => ({
+    //             name: filename,
+    //             lastModified: 1,
+    //             size: 1,
+    //             type: "bmp",
+    //             slice: () => (new Blob()),
+    //         }),
+    //     };
+
+    //     const htmlInputElement: HTMLInputElement = Object.create(HTMLInputElement.prototype);
+    //     Object.defineProperty(htmlInputElement, "files", files);
+
+    //     // Impossible de definir un fichier en modifiant l'attribut
+    //     const event: Event = Object.create(Event.prototype);
+    //     Object.defineProperty(event, "target", htmlInputElement);
+
+    //     component.setRawImage(event);
+    //     expect(component.rawImageMessage).toBe(filename);
+    // });
+
+    // // Non fonctionnel
+    // it("should accept .bmp modifiedImage", () => {
+    //     const filename: string = "image.bmp";
+
+    //     const files: FileList = {
+    //         length: 1,
+    //         item: () => ({
+    //             name: filename,
+    //             lastModified: 1,
+    //             size: 1,
+    //             type: "bmp",
+    //             slice: () => (new Blob()),
+    //         }),
+    //     };
+
+    //     const htmlInputElement: HTMLInputElement = Object.create(HTMLInputElement.prototype);
+    //     Object.defineProperty(htmlInputElement, "files", files);
+
+    //     // Impossible de definir un fichier en modifiant l'attribut
+    //     const event: Event = Object.create(Event.prototype);
+    //     Object.defineProperty(event, "target", htmlInputElement);
+
+    //     component.setModifiedImage(event);
+    //     expect(component.modifiedImageMessage).toBe(filename);
+    // });
 });
