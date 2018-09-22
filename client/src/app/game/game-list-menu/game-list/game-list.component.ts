@@ -32,7 +32,7 @@ export class GameListComponent implements OnInit {
     }
 
     private filterGames(games: Game[]): void {
-        this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
-        this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+        this.singleViewGames = games.filter((game: Game) => game.type === GameType.SingleView);
+        this.doubleViewGames = games.filter((game: Game) => game.type === GameType.DoubleView);
     }
 }

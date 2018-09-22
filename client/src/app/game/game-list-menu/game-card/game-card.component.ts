@@ -14,11 +14,11 @@ export class GameCardComponent implements OnInit {
     @Input() public game: Game;
     public isJoinable: boolean;
 
-    constructor(private gameService: GameService) { }
+    public constructor(private gameService: GameService) { }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.gameService.isJoinable(this.game)
-            .subscribe(isJoinable => this.isJoinable = isJoinable);
+            .subscribe((isJoinable) => this.isJoinable = isJoinable);
     }
 
 }
