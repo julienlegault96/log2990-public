@@ -29,11 +29,16 @@ describe("AppComponent", () => {
                 UserComponent,
                 CreateGameComponent,
             ],
-            imports: [HttpClientModule, RouterTestingModule, FormsModule],
+            imports: [
+                HttpClientModule,
+                RouterTestingModule,
+                FormsModule,
+            ],
             providers: [
                 AbstractServerService,
                 GameService,
-                CreateGameService]
+                CreateGameService,
+            ]
         }).compileComponents();
     }));
     it("should create the app", async(() => {
