@@ -51,7 +51,6 @@ export class CreateGameComponent implements OnInit {
     }
 
     public isValidName(event: Event): boolean {
-        // console.log(this.createGameService);
         return this.name.length <= this.createGameService.getNameMaxLength();
     }
 
