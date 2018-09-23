@@ -13,15 +13,17 @@ export class Users {
     public constructor(@inject(Types.Mongo) private mongo: Mongo) { }
 
     public async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const response: User[] = await this.mongo.findDocuments<User>(Collections.Users);
-        res.status(CODES.OK).send(JSON.stringify(response));
+        res.status(CODES.OK).send(JSON.stringify(await this.fetchUsers()));
+    }
+
+    public async fetchUsers(): Promise<User[]> {
+        return this.mongo.findDocuments<User>(Collections.Users);
     }
 
     public async addUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = Object.assign(new User, req.body);
-            const response: InsertOneWriteOpResult =
-                await this.mongo.insertDocument<User>(Collections.Users, user);
+
+            const response: InsertOneWriteOpResult = await this. insertUser(Object.assign(new User, req.body));
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
@@ -33,11 +35,14 @@ export class Users {
         }
     }
 
+    public async insertUser(user: User): Promise<InsertOneWriteOpResult> {
+        return this.mongo.insertDocument<User>(Collections.Users, user);
+    }
+
     public async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const userFilter: FilterQuery<User> = {$where: Object.assign(new User, req.body) };
-            const response: DeleteWriteOpResultObject = 
-                await this.mongo.removeDocument<User>(Collections.Users, userFilter);
+
+            const response: DeleteWriteOpResultObject = await this. deleteUser(Object.assign(new User, req.body));
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
@@ -47,5 +52,11 @@ export class Users {
         } catch (e) {
             res.status(CODES.BAD_REQUEST).send("User provided does not follow the valid format");
         }
+    }
+
+    public async deleteUser(user: User): Promise<DeleteWriteOpResultObject> {
+        const userFilter: FilterQuery<User> = {$where: user };
+
+        return this.mongo.removeDocument<User>(Collections.Users, userFilter);
     }
 }

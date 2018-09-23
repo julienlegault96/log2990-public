@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { injectable } from "inversify";
 import {
     MongoClient,
@@ -6,8 +7,10 @@ import {
     InsertWriteOpResult,
     InsertOneWriteOpResult,
     UpdateWriteOpResult,
-    DeleteWriteOpResultObject
+    DeleteWriteOpResultObject,
+    Collection
 } from "mongodb";
+
 
 export enum Collections {
     Games = "Games",
@@ -17,13 +20,12 @@ export enum Collections {
 @injectable()
 export class Mongo {
 
-    private readonly url: string = 'mongodb://log2990-01:log2990-01@ds149672.mlab.com:49672/log2990-01';
-    private readonly dbName: string = 'log2990-01';
+    private readonly url: string = "mongodb://log2990-01:log2990-01@ds149672.mlab.com:49672/log2990-01";
+    private readonly dbName: string = "log2990-01";
     private client: MongoClient;
     private db: Db;
 
-    public constructor() {
-    }
+    public constructor() {}
 
     private async connect(): Promise<void> {
         this.client = await MongoClient.connect(this.url, { useNewUrlParser: true });
@@ -35,8 +37,9 @@ export class Mongo {
             await this.connect();
         }
 
-        const collection = this.db.collection(collectionName);
-        return await collection.find<Type>(query).toArray();
+        const collection: Collection<any> = this.db.collection(collectionName);
+
+        return collection.find<Type>(query).toArray();
     }
 
     public async insertDocument<Type>(collectionName: Collections, doc: Type): Promise<InsertOneWriteOpResult> {
@@ -44,8 +47,9 @@ export class Mongo {
             await this.connect();
         }
 
-        const collection = this.db.collection(collectionName);
-        return await collection.insertOne(doc);
+        const collection: Collection<any> = this.db.collection(collectionName);
+
+        return collection.insertOne(doc);
     }
 
     public async insertDocuments<Type>(collectionName: Collections, docs: Type[]): Promise<InsertWriteOpResult> {
@@ -53,17 +57,22 @@ export class Mongo {
             await this.connect();
         }
 
-        const collection = this.db.collection(collectionName);
-        return await collection.insertMany(docs);
+        const collection: Collection<any> = this.db.collection(collectionName);
+
+        return collection.insertMany(docs);
     }
 
-    public async updateDocument<Type>(collectionName: Collections, update: Type, filter: FilterQuery<Type> = {}): Promise<UpdateWriteOpResult> {
+    public async updateDocument<Type>(collectionName: Collections,
+                                      update: Type,
+                                      filter: FilterQuery<Type> = {}
+                                     ): Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
 
-        const collection = this.db.collection(collectionName);
-        return await collection.updateOne(filter, update);
+        const collection: Collection<any> = this.db.collection(collectionName);
+
+        return collection.updateOne(filter, update);
     }
 
     public async removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
@@ -71,7 +80,8 @@ export class Mongo {
             await this.connect();
         }
 
-        const collection = this.db.collection(collectionName);
-        return await collection.deleteOne(filter);
+        const collection: Collection<any> = this.db.collection(collectionName);
+
+        return collection.deleteOne(filter);
     }
 }
