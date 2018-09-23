@@ -17,16 +17,16 @@ export const newGameTemplate: Game = {
             "title": "Solo",
             "scores": [
                 {
-                    "username": "Username1",
-                    "time": 34
+                    "username": "Sophie",
+                    "time": 48
                 },
                 {
-                    "username": "Username2",
-                    "time": 46
+                    "username": "Gabriel",
+                    "time": 52
                 },
                 {
-                    "username": "Username3",
-                    "time": 67
+                    "username": "Louis",
+                    "time": 59
                 },
             ]
         },
@@ -34,16 +34,16 @@ export const newGameTemplate: Game = {
             "title": "1 vs 1",
             "scores": [
                 {
-                    "username": "Username11",
-                    "time": 15
+                    "username": "Julien",
+                    "time": 40
                 },
                 {
-                    "username": "Username22",
-                    "time": 25
+                    "username": "Din",
+                    "time": 44
                 },
                 {
-                    "username": "Username33",
-                    "time": 35
+                    "username": "Kevin",
+                    "time": 49
                 },
             ]
         }
