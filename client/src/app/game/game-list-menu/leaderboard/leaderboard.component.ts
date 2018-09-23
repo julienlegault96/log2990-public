@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 
-import { Leaderboard } from "../../../../../common/game/leaderboard";
+import { Leaderboard } from "../../../../../../common/game/leaderboard";
 
 @Component({
     selector: "app-leaderboard",
@@ -9,11 +9,11 @@ import { Leaderboard } from "../../../../../common/game/leaderboard";
 })
 export class LeaderboardComponent implements OnInit {
 
-    @Input() leaderboard: Leaderboard;
+    @Input() public leaderboard: Leaderboard;
 
-    constructor() { }
+    public constructor() { }
 
-    ngOnInit() {
+    public ngOnInit(): void {
     }
 
 }

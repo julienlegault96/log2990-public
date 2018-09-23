@@ -1,14 +1,14 @@
-import { GameService } from './game.service';
+import { GameService } from "./game.service";
 
 import { Game } from "../../../../common/game/game";
-import { GameType } from '../../../../common/game/game-type';
+import { GameType } from "../../../../common/game/game-type";
 import { TestHelper } from "../../test.helper";
 
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpy: any;
 let gameService: GameService;
 
-describe('GameService', () => {
+describe("GameService", () => {
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
         gameService = new GameService(httpClientSpy);

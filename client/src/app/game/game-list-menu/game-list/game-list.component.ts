@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 
-import { GameService } from "../game.service";
+import { GameService } from "../../../services/game.service";
 
-import { Game } from "../../../../../common/game/game";
-import { GameType } from "../../../../../common/game/game-type";
+import { Game } from "../../../../../../common/game/game";
+import { GameType } from "../../../../../../common/game/game-type";
 
 @Component({
     selector: "app-games",
@@ -15,12 +15,12 @@ export class GameListComponent implements OnInit {
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
 
-    constructor(private gameService: GameService) {
+    public constructor(private gameService: GameService) {
         this.singleViewGames = new Array();
         this.doubleViewGames = new Array();
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.getGames();
     }
 
@@ -31,8 +31,8 @@ export class GameListComponent implements OnInit {
             });
     }
 
-    private filterGames(games: Game[]) {
-        this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
-        this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+    private filterGames(games: Game[]): void {
+        this.singleViewGames = games.filter((game: Game) => game.type === GameType.SingleView);
+        this.doubleViewGames = games.filter((game: Game) => game.type === GameType.DoubleView);
     }
 }
