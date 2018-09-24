@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, fakeAsync, tick, async } from "@angular/core/testing";
+import { TestBed, ComponentFixture, fakeAsync, tick } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { AdminViewComponent, AdminViewCardComponent  } from "./admin-view.component";
 import { LeaderboardComponent} from "../../game/game-list-menu/leaderboard/leaderboard.component";
@@ -165,5 +165,5 @@ describe("AdminViewComponent", () => {
 
     fixture.detectChanges(); // update errorMessage within setTimeout()
     expect(component).toBeTruthy();
-  });
+  }));
 });

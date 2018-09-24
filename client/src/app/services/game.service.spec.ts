@@ -1,10 +1,10 @@
 import { GameService } from "./game.service";
-import { TestBed, inject } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { Game } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { TestHelper } from "../../test.helper";
-import { Leaderboard, defaultLeaderboards } from "../../../../common/game/leaderboard";
+import { defaultLeaderboards } from "../../../../common/game/leaderboard";
 
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpy: any;
