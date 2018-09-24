@@ -15,19 +15,19 @@ export class ChronoComponent implements OnInit {
     private endTime: Date;
     public printedTime: String;
     private timer: number;
-    private verrouTimer: boolean;
+    private isStarted: boolean;
     public constructor() {
         this.time = 0;
         this.printedTime = "00:00";
-        this.verrouTimer = false;
+        this.isStarted = false;
     }
     public start(): void {
-        if (!this.verrouTimer) {
+        if (!this.isStarted) {
             this.startTime = new Date();
             this.timer = window.setInterval(() => {
                 this.calculate();
             }, 1);
-            this.verrouTimer = true;
+            this.isStarted = true;
         }
     }
 
@@ -49,9 +49,9 @@ export class ChronoComponent implements OnInit {
     }
 
     public stop(): void {
-        if (this.verrouTimer) {
+        if (this.isStarted) {
             clearInterval(this.timer);
-            this.verrouTimer = false;
+            this.isStarted = false;
         }
     }
 
