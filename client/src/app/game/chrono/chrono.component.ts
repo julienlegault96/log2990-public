@@ -13,13 +13,15 @@ export class ChronoComponent implements OnInit {
 
     public formattedTime: string;
     private startTime: Date;
-    private endTime: Date;
     private timer: number;
     private isStarted: boolean;
 
     public constructor() {
         this.formattedTime = "00:00";
         this.isStarted = false;
+    }
+
+    public ngOnInit(): void {
     }
 
     public start(): void {
@@ -32,18 +34,29 @@ export class ChronoComponent implements OnInit {
         }
     }
 
+    public stop(): void {
+        if (this.isStarted) {
+            clearInterval(this.timer);
+            this.isStarted = false;
+        }
+    }
+
     private calculate(): void {
-        this.endTime = new Date();
-        const elapsedTime: number = this.endTime.getTime() - this.startTime.getTime();
-
-        let diff: Date;
-        diff = new Date(elapsedTime);
-        diff.setHours(diff.getHours());
-
-        const seconds: number = diff.getSeconds();
-        const minutes: number = diff.getMinutes() + (diff.getUTCHours() * this.MINUTES_IN_HOUR);
+        const elapsedTime: Date = this.getElapsedTime();
+        const seconds: number = elapsedTime.getSeconds();
+        const minutes: number = elapsedTime.getMinutes() + (elapsedTime.getUTCHours() * this.MINUTES_IN_HOUR);
 
         this.formattedTime = this.getformattedTime(minutes, seconds);
+    }
+
+    private getElapsedTime(): Date {
+        const endTime: Date = new Date();
+        const elapsedTimeMilliseconds: number = endTime.getTime() - this.startTime.getTime();
+
+        const elapsedTime: Date = new Date(elapsedTimeMilliseconds);
+        elapsedTime.setHours(elapsedTime.getHours());
+
+        return elapsedTime;
     }
 
     private getformattedTime(minutes: number, seconds: number): string {
@@ -53,16 +66,6 @@ export class ChronoComponent implements OnInit {
         formattedTime += seconds < this.LIMIT_TO_ADD_ZERO ? ("0" + seconds) : ("" + seconds);
 
         return formattedTime;
-    }
-
-    public stop(): void {
-        if (this.isStarted) {
-            clearInterval(this.timer);
-            this.isStarted = false;
-        }
-    }
-
-    public ngOnInit(): void {
     }
 
 }
