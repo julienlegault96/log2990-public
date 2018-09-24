@@ -41,12 +41,18 @@ export class ChronoComponent implements OnInit {
         diff.setHours(diff.getHours());
 
         const seconds: number = diff.getSeconds();
-
         const minutes: number = diff.getMinutes() + (diff.getUTCHours() * this.MINUTES_IN_HOUR);
 
-        this.formattedTime = "";
-        this.formattedTime += minutes < this.LIMIT_TO_ADD_ZERO ? "0" + minutes + ":" : minutes + ":";
-        this.formattedTime += seconds < this.LIMIT_TO_ADD_ZERO ? "0" + seconds : "" + seconds;
+        this.formattedTime = this.getformattedTime(minutes, seconds);
+    }
+
+    private getformattedTime(minutes: number, seconds: number): string {
+        let formattedTime: string;
+        formattedTime = minutes < this.LIMIT_TO_ADD_ZERO ? ("0" + minutes) : (String(minutes));
+        formattedTime += ":";
+        formattedTime += seconds < this.LIMIT_TO_ADD_ZERO ? ("0" + seconds) : ("" + seconds);
+
+        return formattedTime;
     }
 
     public stop(): void {
