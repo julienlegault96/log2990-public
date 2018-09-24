@@ -17,7 +17,7 @@ export class GameService extends AbstractServerService {
         return this.postRequest<Game>(Endpoints.Games, newGame);
     }
 
-    public resetLeaderboard(toReset: Game): Observable<{} | Game> {
+    public resetLeaderboard(toReset: Game): Observable<Game> {
         toReset.leaderboards = defaultLeaderboards;
 
         return this.putRequest<Game>(Endpoints.Leaderboard, toReset);

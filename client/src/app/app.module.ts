@@ -37,7 +37,7 @@ import { AdminViewComponent, AdminViewCardComponent} from "./admin/admin-view/ad
     ],
     providers: [
         GameService,
-        CreateGameService
+        CreateGameService,
     ],
     bootstrap: [AppComponent]
 })

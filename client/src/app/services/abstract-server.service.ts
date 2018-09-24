@@ -57,7 +57,7 @@ export abstract class AbstractServerService {
         );
     }
 
-    protected putRequest<T>(serverEndpoint: Endpoints, body: T): Observable<{} | T> {
+    protected putRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
         const options: {} = {
             headers: new HttpHeaders({ "Content-Type": "application/json" })
         };

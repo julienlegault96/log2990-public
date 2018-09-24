@@ -11,7 +11,6 @@ export class Games {
 
     public async getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
         let response = await this.mongo.findDocuments<Game>(Collections.Games);
-        console.log(response);
         res.status(200).send(JSON.stringify(response));
     }
 
@@ -25,8 +24,7 @@ export class Games {
             } else {
                 res.status(500).send("Failed to insert game into Mongo");
             }
-        }
-        catch (e) {
+        } catch (e) {
             res.status(400).send("Game provided does not follow the valid format");
         }
     }
@@ -35,17 +33,14 @@ export class Games {
         try {
             let game: Game = Object.assign(new Game, req.body);
             // tslint:disable-next-line:prefer-for-of
-            console.log(game.leaderboards[0].scores);
-            let response = await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, {$set: {"leaderboards": game.leaderboards}});
-            console.log(response);
+            let response = await this.mongo.updateDocumentById<Game>(Collections.Games, game._id,
+                                                                     {$set: {"leaderboards": game.leaderboards}});
             if (response.result.ok) {
                 res.sendStatus(200);
             } else {
                 res.status(500).send("Failed to insert game into Mongo");
             }
-        }
-        catch (e) {
-            console.log(e);
+        } catch (e) {
             res.status(400).send("Game provided does not follow the valid format");
         }
     }
