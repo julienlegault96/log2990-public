@@ -55,4 +55,6 @@ export class UserService extends AbstractServerService {
 
         this.postRequest<User>(Endpoints.Users, newUser);
     }
+
+    public removeUser(username: string): void {}
 }
