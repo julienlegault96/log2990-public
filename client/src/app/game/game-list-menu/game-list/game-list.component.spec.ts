@@ -38,6 +38,7 @@ describe("GameListComponent", () => {
     it("should filter games", fakeAsync(() => {
         const returnedGames: Game[] = [
             {
+                _id: 1,
                 type: GameType.DoubleView,
                 title: "DoubleViewGame 1",
                 imageUrl: ["double-view-game-1.bmp"],
@@ -79,6 +80,7 @@ describe("GameListComponent", () => {
                 ]
             },
             {
+                _id: 2,
                 type: GameType.DoubleView,
                 title: "DoubleViewGame 2",
                 imageUrl: ["double-view-game-2.bmp"],
@@ -120,6 +122,7 @@ describe("GameListComponent", () => {
                 ]
             },
             {
+                _id: 3,
                 type: GameType.SingleView,
                 title: "SingleViewGame 1",
                 imageUrl: ["single-view-game-1.bmp"],

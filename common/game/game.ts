@@ -2,16 +2,16 @@ import { GameType } from './game-type';
 import { Leaderboard } from './leaderboard';
 
 export class Game {
-    type: GameType;
     _id: number;
+    type: GameType;
     title: string;
     imageUrl: string[];
     leaderboards: Leaderboard[];
 }
 
 export const newGameTemplate: Game = {
-    "type": GameType.SingleView,
     "_id": 1,
+    "type": GameType.SingleView,
     "title": "Nouveau jeu",
     "imageUrl": ["", ""],
     "leaderboards": [

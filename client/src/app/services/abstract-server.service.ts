@@ -57,6 +57,16 @@ export abstract class AbstractServerService {
         );
     }
 
+    protected putRequest<T>(serverEndpoint: Endpoints, body: T): Observable<{} | T> {
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
+        };
+
+        return this.http.put<T>(this.getUrl(serverEndpoint), body, options).pipe(
+            tap(),
+            catchError(this.handleError)
+        );
+    }
     protected deleteRequest<T>(serverEndpoint: Endpoints, pathParam?: string): Observable<{} | T> {
         return this.http.delete<T>(this.getUrl(serverEndpoint, pathParam)).pipe(
             catchError(this.handleError)

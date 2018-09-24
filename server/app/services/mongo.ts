@@ -6,7 +6,8 @@ import {
     InsertWriteOpResult,
     InsertOneWriteOpResult,
     UpdateWriteOpResult,
-    DeleteWriteOpResultObject
+    DeleteWriteOpResultObject,
+    ObjectID
 } from "mongodb";
 
 export enum Collections {
@@ -62,7 +63,15 @@ export class Mongo {
         }
 
         const collection = this.db.collection(collectionName);
-        return await collection.updateOne(filter, update);
+        return await collection.updateOne(filter, {$set: {update}});
+    }
+
+    public async updateDocumentById<Type>(collectionName: Collections, id: number, query:{ [key: string]: any}): Promise<UpdateWriteOpResult> {
+        if (!this.client || !this.client.isConnected) {
+            await this.connect();
+        }
+        const collection = this.db.collection(collectionName);
+        return await collection.updateOne({_id: new ObjectID(id)}, query);
     }
 
     public async removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {

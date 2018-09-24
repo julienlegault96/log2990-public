@@ -17,6 +17,7 @@ describe("GameService", () => {
     it("should return expected message (HttpClient called once)", () => {
         const returnedGames: Game[] = [
             {
+                "_id": 1,
                 "type": GameType.DoubleView,
                 "title": "DoubleViewGame 1",
                 "imageUrl": ["double-view-game-1.bmp"],

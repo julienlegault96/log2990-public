@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
 import Types from "../types";
 import { Game } from "../../../common/game/game";
-import { Mongo, Collections, } from "../services/mongo";
+import { Mongo, Collections} from "../services/mongo";
 
 @injectable()
 export class Games {
@@ -11,6 +11,7 @@ export class Games {
 
     public async getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
         let response = await this.mongo.findDocuments<Game>(Collections.Games);
+        console.log(response);
         res.status(200).send(JSON.stringify(response));
     }
 
@@ -31,15 +32,11 @@ export class Games {
     }
 
     public async resetLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        console.log("Appel");       
         try {
             let game: Game = Object.assign(new Game, req.body);
             // tslint:disable-next-line:prefer-for-of
-            for ( let index = 0; index < game.leaderboards.length; index++ ) {
-                game.leaderboards[index].scores[0].time = 5;
-                
-            }
-            let response = await this.mongo.updateDocument<Game>(Collections.Games, game, {_id: game._id});
+            console.log(game.leaderboards[0].scores);
+            let response = await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, {$set: {"leaderboards": game.leaderboards}});
             console.log(response);
             if (response.result.ok) {
                 res.sendStatus(200);
@@ -48,6 +45,7 @@ export class Games {
             }
         }
         catch (e) {
+            console.log(e);
             res.status(400).send("Game provided does not follow the valid format");
         }
     }

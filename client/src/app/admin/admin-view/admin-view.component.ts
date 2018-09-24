@@ -26,8 +26,8 @@ export class AdminViewCardComponent extends AbsGameCardComponent {
     super(gameService);
   }
 
-  public resetLeaderboard(){
-    this.gameService.resetLeaderboard(this.game);
+  public resetLeaderboard(): void {
+    this.gameService.resetLeaderboard(this.game).subscribe();
   }
 
 }
