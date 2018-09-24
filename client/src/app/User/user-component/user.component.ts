@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
         this.getUsers();
     }
 
-    public validateUsername(): boolean {
+    public validateUsername(): string {
         return this.userService.validateUsername(this.currentUser._id);
     }
 
