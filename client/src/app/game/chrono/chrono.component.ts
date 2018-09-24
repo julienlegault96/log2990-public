@@ -29,6 +29,7 @@ export class ChronoComponent implements OnInit {
             this.startTime = new Date();
             this.timer = window.setInterval(() => {
                 this.calculate();
+            // tslint:disable-next-line:align
             }, 1);
             this.isStarted = true;
         }

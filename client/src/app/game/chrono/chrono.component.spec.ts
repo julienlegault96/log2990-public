@@ -26,4 +26,15 @@ describe("ChronoComponent", () => {
     it("should write 00:00 at start", () => {
         expect(component.formattedTime).toBe("00:00");
     });
+
+    it("should show 1 second after 1 second", () => {
+        const oneSecond: number = 1000;
+        component.start();
+        setTimeout(() => {
+            component.stop();
+            expect(component.formattedTime).toBe("00:01");
+        // tslint:disable-next-line:align
+        }, oneSecond);
+    });
+
 });
