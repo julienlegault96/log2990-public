@@ -23,31 +23,35 @@ describe("UserService", () => {
     }));
 
     it("should reject empty names", () => {
-        expect(userService.validateUsername("")).toBe(false);
+        expect(userService.validateUsername("")).
+        toBe("\n- Seul des caractères alphanumériques sont acceptés.\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.");
     });
 
     it("should accept alphanumeric names", () => {
-        expect(userService.validateUsername("qawsedrftyhuji12345")).toBe(true);
+        expect(userService.validateUsername("qawsedrftyhuji12345")).toBe("");
     });
 
     it("should reject non alphanumeric names", () => {
-        expect(userService.validateUsername("#@%&*()^^$++{}////")).toBe(false);
+        expect(userService.validateUsername("#@%&*()^^$++{}////")).
+        toBe("\n- Seul des caractères alphanumériques sont acceptés.");
     });
 
     it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(userService.validateUsername("#@%ait96)^^ab467/")).toBe(false);
+        expect(userService.validateUsername("#@%ait96)^^ab467/")).
+        toBe("\n- Seul des caractères alphanumériques sont acceptés.");
     });
 
     it("should accept names with 1 caracter", () => {
-        expect(userService.validateUsername("H")).toBe(true);
+        expect(userService.validateUsername("H")).toBe("");
     });
 
     it("should accept names with 20 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghij")).toBe(true);
+        expect(userService.validateUsername("1234567890abcdefghij")).toBe("");
     });
 
     it("should reject names with 21 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghijK")).toBe(false);
+        expect(userService.validateUsername("1234567890abcdefghijK")).
+        toBe("\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.");
     });
 
     it("should fetch the existing usernames", () => {
