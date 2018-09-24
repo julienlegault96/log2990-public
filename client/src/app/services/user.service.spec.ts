@@ -63,7 +63,7 @@ describe("UserService", () => {
             fail
         );
         // check if only one call was made
-        expect(httpClientSpy.get).toHaveBeenCalledTimes(1)
+        expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     });
 
     it("should submit the existing usernames", () => {
@@ -74,6 +74,12 @@ describe("UserService", () => {
         userService.submitUsername(USERS[0]._id);
 
         // check if only one call was made
-        expect(httpClientSpy.post).toHaveBeenCalledTimes(1)
+        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
+    });
+
+    it("should delete the submited username", () => {
+        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData(USERS));
+        userService.removeUser(USERS[0]._id);
+        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
     });
 });
