@@ -1,3 +1,11 @@
+<nav class="navbar sticky-top navbar-light bg-light">
+  <div class="container full-width">
+    <app-create-game></app-create-game>
+    <button type="button" class="btn btn-primary disabled" >
+      Créer un jeu à vues multiples
+    </button>
+  </div>
+</nav>
 <div class="row">
   <div class="col">
     <div *ngIf="singleViewGames.length === 0; else hasSingleViewGames">
