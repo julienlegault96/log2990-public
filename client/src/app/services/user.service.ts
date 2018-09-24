@@ -39,7 +39,7 @@ export class UserService extends AbstractServerService {
         if (this.validateUsername(username).length === 0) {
             this.addUser(this.createUser(username));
         } else {
-            throw(Error("Nom invalide \n ERREURS DÉTECTÉES" + this.validateUsername(username)));
+            throw (Error("Nom invalide \n ERREURS DÉTECTÉES" + this.validateUsername(username)));
         }
     }
 
@@ -60,6 +60,6 @@ export class UserService extends AbstractServerService {
     }
 
     public removeUser(username: string): void {
-         this.deleteRequest<User>(Endpoints.Users, username);
+        this.deleteRequest<User>(Endpoints.Users, username);
     }
 }
