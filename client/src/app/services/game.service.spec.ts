@@ -30,6 +30,7 @@ describe("GameService", () => {
         // check the content of the mocked call
         gameService.getGames().subscribe(
             (games: Game[]) => {
+                expect(games).toEqual(jasmine.any(Array));
                 expect(games).toEqual(GAMES, "games check");
             }
         );

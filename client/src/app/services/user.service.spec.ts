@@ -56,6 +56,7 @@ describe("UserService", () => {
         // check the content of the mocked call
         userService.getUsers().subscribe(
             (users: User[]) => {
+                expect(users).toEqual(jasmine.any(Array));
                 expect(users).toEqual(USERS, "users check");
             },
             fail

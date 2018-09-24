@@ -6,7 +6,7 @@ import { catchError, tap } from "rxjs/operators";
 @Injectable()
 export abstract class AbstractServerService {
 
-    private readonly serverHost: string = "http://localhost:3000";
+    private readonly SERVER_HOST_URL: string = "http://localhost:3000";
 
     public constructor(protected http: HttpClient) { }
 
@@ -19,7 +19,7 @@ export abstract class AbstractServerService {
     }
 
     private appendEndpoint(serverEndpoint: Endpoints): string {
-        return `${this.serverHost}/${serverEndpoint}`;
+        return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
     }
 
     private formatPathParam(url: string, pathParam?: string | null): string {
