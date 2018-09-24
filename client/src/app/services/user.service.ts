@@ -38,7 +38,7 @@ export class UserService extends AbstractServerService {
         }
 
         if (errorString.length === 0) {
-            this.addUser(username);
+            this.addUser(this.createUser(username));
         } else {
             throw(Error("Nom invalide \n ERREURS DÉTECTÉES" + errorString));
         }
