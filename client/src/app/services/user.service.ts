@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { User } from "../../../../common/user/user";
+import { User, newUserTemplate } from "../../../../common/user/user";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 @Injectable({
@@ -48,11 +48,15 @@ export class UserService extends AbstractServerService {
         return this.getRequest<User[]>(Endpoints.Users);
     }
 
-    public addUser(username: string): void {
-        const newUser: User = {
-            _id: username
-        };
+    public createUser(username: string): User {
+        const newUser: User = newUserTemplate;
+        newUser._id = username;
 
+        return newUser;
+    }
+
+    public addUser(newUser: User): void {
+        this.createUser(newUser._id);
         this.postRequest<User>(Endpoints.Users, newUser);
     }
 
