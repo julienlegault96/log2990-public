@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 
-import { GameService } from "../game.service";
+import { GameService } from "../../../services/game.service";
 
-import { Game } from "../../../../../common/game/game";
+import { Game } from "../../../../../../common/game/game";
 
 export abstract class AbsGameCardComponent implements OnInit {
 
@@ -11,7 +11,7 @@ export abstract class AbsGameCardComponent implements OnInit {
 
     public constructor(protected gameService: GameService) { }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.gameService.isJoinable(this.game)
             .subscribe((isJoinable) => this.isJoinable = isJoinable);
     }

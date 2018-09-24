@@ -20,7 +20,7 @@ export class Games {
             let response = await this.mongo.insertDocument<Game>(Collections.Games, game);
 
             if (response.result.ok) {
-                res.sendStatus(200);
+                res.status(200).send();
             } else {
                 res.status(500).send("Failed to insert game into Mongo");
             }

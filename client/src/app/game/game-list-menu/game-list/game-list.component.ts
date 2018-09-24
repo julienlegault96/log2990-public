@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 
-import { GameService } from "../game.service";
+import { GameService } from "../../../services/game.service";
 
-import { Game } from "../../../../../common/game/game";
-import { GameType } from "../../../../../common/game/game-type";
+import { Game } from "../../../../../../common/game/game";
+import { GameType } from "../../../../../../common/game/game-type";
 
 export abstract class AbsGameListComponent implements OnInit {
 
@@ -15,7 +15,7 @@ export abstract class AbsGameListComponent implements OnInit {
         this.doubleViewGames = new Array();
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.getGames();
     }
 
