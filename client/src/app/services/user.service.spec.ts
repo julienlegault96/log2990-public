@@ -80,6 +80,6 @@ describe("UserService", () => {
     it("should delete the submited username", () => {
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData(USERS));
         userService.removeUser(USERS[0]._id);
-        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
+        expect(httpClientSpy.delete).toHaveBeenCalledTimes(1);
     });
 });
