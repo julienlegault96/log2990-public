@@ -3,15 +3,15 @@ import { TestHelper } from "../../test.helper";
 import { User } from "../../../../common/user/user";
 import { USERS } from "../../../../common/user/mock-users";
 import { UserService } from "./user.service";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
-// tslint:disable-next-line:no-any Used to mock the http call
-let httpClientSpy: any;
+let httpClientSpy: HttpClient;
 let userService: UserService;
 
 describe("UserService", () => {
     beforeEach(() => {
-        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
+        httpClientSpy = HttpClient.prototype;
+        spyOn(httpClientSpy, "get").and.returnValue(TestHelper.asyncData(USERS));
         userService = new UserService(httpClientSpy);
         TestBed.configureTestingModule({
             providers: [UserService],
@@ -52,18 +52,15 @@ describe("UserService", () => {
     });
 
     it("should fetch the existing usernames", () => {
-        // setting up fixtures
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(USERS));
 
         // check the content of the mocked call
         userService.getUsers().subscribe(
             (users: User[]) => {
-                expect(users).toEqual(jasmine.any([]));
                 expect(users).toEqual(USERS, "users check");
             },
             fail
         );
         // check if only one call was made
-        expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
+        expect(httpClientSpy.get).toHaveBeenCalledTimes(1)
     });
 });
