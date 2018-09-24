@@ -12,7 +12,6 @@ describe("GameService", () => {
 
     beforeEach( () => {
         httpClientSpy = HttpClient.prototype;
-        spyOn(httpClientSpy, "get").and.returnValue(TestHelper.asyncData(GAMES));
         gameService = new GameService(httpClientSpy);
 
         TestBed.configureTestingModule({
@@ -26,6 +25,8 @@ describe("GameService", () => {
     }));
 
     it("should return expected data on get", () => {
+        // setup stub
+        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
         gameService.getGames().subscribe(

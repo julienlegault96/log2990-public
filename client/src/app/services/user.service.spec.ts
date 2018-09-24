@@ -3,7 +3,7 @@ import { TestHelper } from "../../test.helper";
 import { User } from "../../../../common/user/user";
 import { USERS } from "../../../../common/user/mock-users";
 import { UserService } from "./user.service";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpClientModule, HttpClient, HttpHeaders } from "@angular/common/http";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
@@ -11,7 +11,6 @@ let userService: UserService;
 describe("UserService", () => {
     beforeEach(() => {
         httpClientSpy = HttpClient.prototype;
-        spyOn(httpClientSpy, "get").and.returnValue(TestHelper.asyncData(USERS));
         userService = new UserService(httpClientSpy);
         TestBed.configureTestingModule({
             providers: [UserService],
@@ -52,6 +51,8 @@ describe("UserService", () => {
     });
 
     it("should fetch the existing usernames", () => {
+        // setup stub
+        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS));
 
         // check the content of the mocked call
         userService.getUsers().subscribe(
@@ -63,5 +64,16 @@ describe("UserService", () => {
         );
         // check if only one call was made
         expect(httpClientSpy.get).toHaveBeenCalledTimes(1)
+    });
+
+    it("should submit the existing usernames", () => {
+        // setup stub
+        spyOn(httpClientSpy, "post").and.callFake( () => TestHelper.asyncData("post done"));
+
+        // check the content of the mocked call
+        userService.submitUsername(USERS[0]._id);
+
+        // check if only one call was made
+        expect(httpClientSpy.post).toHaveBeenCalledTimes(1)
     });
 });

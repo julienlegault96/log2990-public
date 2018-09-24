@@ -30,6 +30,8 @@ export class UserComponent implements OnInit {
 
     public submit(): void {
         this.userService.submitUsername(this.currentUser._id);
+
+        // update component
         this.currentUser._id = "";
         this.getUsers();
     }

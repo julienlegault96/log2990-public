@@ -40,7 +40,7 @@ export class UserService extends AbstractServerService {
         if (errorString.length === 0) {
             this.addUser(username);
         } else {
-            alert("Nom invalide \n ERREURS DÉTECTÉES" + errorString);
+            throw(Error("Nom invalide \n ERREURS DÉTECTÉES" + errorString));
         }
     }
 
@@ -52,6 +52,7 @@ export class UserService extends AbstractServerService {
         const newUser: User = {
             _id: username
         };
+
         this.postRequest<User>(Endpoints.Users, newUser);
     }
 }
