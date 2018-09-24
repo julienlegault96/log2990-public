@@ -11,9 +11,9 @@ export class ChronoComponent implements OnInit {
     private readonly MINUTES_IN_HOUR: number = 60;
     private readonly LIMIT_TO_ADD_ZERO: number = 10;
 
+    public formattedTime: string;
     private startTime: Date;
     private endTime: Date;
-    public formattedTime: String;
     private timer: number;
     private isStarted: boolean;
 
@@ -34,15 +34,15 @@ export class ChronoComponent implements OnInit {
 
     private calculate(): void {
         this.endTime = new Date();
+        const elapsedTime: number = this.endTime.getTime() - this.startTime.getTime();
+
         let diff: Date;
-        let timeElapsed: number;
-        timeElapsed = this.endTime.getTime() - this.startTime.getTime();
-        diff = new Date(timeElapsed);
+        diff = new Date(elapsedTime);
         diff.setHours(diff.getHours());
-        let minutes: number;
-        let seconds: number;
-        seconds = diff.getSeconds();
-        minutes = diff.getMinutes() + (diff.getUTCHours() * this.MINUTES_IN_HOUR);
+
+        const seconds: number = diff.getSeconds();
+
+        const minutes: number = diff.getMinutes() + (diff.getUTCHours() * this.MINUTES_IN_HOUR);
 
         this.formattedTime = "";
         this.formattedTime += minutes < this.LIMIT_TO_ADD_ZERO ? "0" + minutes + ":" : minutes + ":";
