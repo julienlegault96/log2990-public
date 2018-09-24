@@ -13,9 +13,17 @@ export class UserService extends AbstractServerService {
     // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
     private static validationRegEx: RegExp = /^[a-zA-Z0-9]+$/i;
 
-    public validateUsername(username: string): boolean {
-        return this.verifyAlphanumericSymbols(username)
-            && this.verifyUsernameLength(username);
+    public validateUsername(username: string): string {
+        let errorString: string = "";
+
+        if (!this.verifyAlphanumericSymbols(username)) {
+            errorString += "\n- Seul des caractères alphanumériques sont acceptés.";
+        }
+        if (!this.verifyUsernameLength(username)) {
+            errorString += "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
+        }
+
+        return errorString;
     }
 
     private verifyAlphanumericSymbols(username: string): boolean {
@@ -28,19 +36,10 @@ export class UserService extends AbstractServerService {
     }
 
     public submitUsername(username: string): void {
-        let errorString: string = "";
-
-        if (!this.verifyAlphanumericSymbols(username)) {
-            errorString += "\n- Seul des caractères alphanumériques sont acceptés.";
-        }
-        if (!this.verifyUsernameLength(username)) {
-            errorString += "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
-        }
-
-        if (errorString.length === 0) {
+        if (this.validateUsername(username).length === 0) {
             this.addUser(this.createUser(username));
         } else {
-            throw(Error("Nom invalide \n ERREURS DÉTECTÉES" + errorString));
+            throw(Error("Nom invalide \n ERREURS DÉTECTÉES" + this.validateUsername(username)));
         }
     }
 
