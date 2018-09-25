@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { AbsGameListComponent } from "../../game/game-list-menu/game-list/game-list.component";
 import { GameService } from "../../services/game.service";
 import { AbsGameCardComponent } from "../../game/game-list-menu/game-card/game-card.component";
+
 @Component({
   selector: "app-admin-view",
   templateUrl: "./admin-view.component.html",
@@ -28,6 +29,10 @@ export class AdminViewCardComponent extends AbsGameCardComponent {
 
   public resetLeaderboard(): void {
     this.gameService.resetLeaderboard(this.game).subscribe();
+  }
+
+  public delete(): void {
+    this.gameService.deleteGame(this.game).subscribe();
   }
 
 }

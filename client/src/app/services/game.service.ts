@@ -26,4 +26,8 @@ export class GameService extends AbstractServerService {
     public isJoinable(game: Game): Observable<boolean> {
         return of(false);
     }
+
+    public deleteGame(game: Game): Observable< {} |Game> {
+        return this.deleteRequest<Game>(Endpoints.Games, this.getUrl(Endpoints.Games, "" + game._id));
+    }
 }
