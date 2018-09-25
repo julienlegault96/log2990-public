@@ -18,6 +18,8 @@ export class Routes {
             (req: Request, res: Response, next: NextFunction) => this.games.addGame(req, res, next));
         router.put("/leaderboard",
             (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next));
+        router.delete("/games",
+            (req: Request, res: Response, next: NextFunction) => this.games.deleteGame(req, res, next));
 
         return router;
     }

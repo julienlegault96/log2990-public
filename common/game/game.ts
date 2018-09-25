@@ -40,7 +40,7 @@ export const newGameTemplate: Game = {
                     "time": 40
                 },
                 {
-                    "username": "Din",
+                    "username": "Dine",
                     "time": 44
                 },
                 {

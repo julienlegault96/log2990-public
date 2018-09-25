@@ -44,4 +44,19 @@ export class Games {
             res.status(400).send("Game provided does not follow the valid format");
         }
     }
+
+    public async deleteGame(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            let game: Game = Object.assign(new Game, req.body);
+            // tslint:disable-next-line:prefer-for-of
+            let response = await this.mongo.removeDocument<Game>(Collections.Games, game);
+            if (response.result.ok) {
+                res.sendStatus(200);
+            } else {
+                res.status(500).send("Failed to delete game into Mongo");
+            }
+        } catch (e) {
+            res.status(400).send("Game provided does not follow the valid format");
+        }
+    }
 }
