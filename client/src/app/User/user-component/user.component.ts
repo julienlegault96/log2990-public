@@ -8,9 +8,7 @@ import { UserService } from "../../services/user.service";
     styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-    public currentUser: User = {
-        _id: ""
-    };
+    public currentUser: User = new User();
 
     public users: User[];
 
@@ -25,9 +23,8 @@ export class UserComponent implements OnInit {
         }
 
     public submit(): void {
-        const newUsername: string = this.currentUser._id;
         try {
-            this.userService.submitUsername(newUsername);
+            this.userService.submitUsername(this.currentUser._id);
         } catch (error) {
             alert(error);
         }

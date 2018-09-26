@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { User, newUserTemplate } from "../../../../common/user/user";
+import { User } from "../../../../common/user/user";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { HttpErrorResponse } from "@angular/common/http";
 
@@ -83,10 +83,7 @@ export class UserService extends AbstractServerService {
     }
 
     public createUser(username: string): User {
-        const newUser: User = newUserTemplate;
-        newUser._id = username;
-
-        return newUser;
+        return new User(username);
     }
 
     public addUser(newUser: User): void {
