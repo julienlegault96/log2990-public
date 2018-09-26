@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { User } from "../../../../common/user/user";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -14,13 +14,15 @@ import { HttpErrorResponse } from "@angular/common/http";
 export class UserService extends AbstractServerService {
     private readonly MIN_USERNAME_LENGTH: number = 1;
     private readonly MAX_USERNAME_LENGTH: number = 20;
+    private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "\n- Seul des caractères alphanumériques sont acceptés.";
     private readonly LENGTH_ERROR_MESSAGE: string =
         "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
-
     // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
     private readonly VALIDATION_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
+    private readonly DUPLICATE_USER_MESSAGE: string =
+        "\n- Le nom a été refusé. Est-il déjà en usage?";
 
     public validateUsername(username: string): boolean {
         return this.verifyUsernameLength(username)
@@ -44,12 +46,12 @@ export class UserService extends AbstractServerService {
         return new User(username);
     }
 
-    public addUser(newUser: User): void {
-        this.postRequest<User>(Endpoints.Users, newUser);
+    public addUser(newUser: User): Observable< {} | User > {
+        return this.postRequest<User>(Endpoints.Users, newUser);
     }
 
     public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users);
+        this.deleteRequest<User>(Endpoints.Users).subscribe(/*force request*/);
     }
 
     /**
@@ -60,7 +62,9 @@ export class UserService extends AbstractServerService {
      */
     public submitUsername(username: string): void {
         if (this.validateUsername(username)) {
-            this.addUser(this.createUser(username));
+            this.addUser(this.createUser(username)).subscribe( 
+                (response: {} | User) => { if (!(response instanceof User)) {throw new Error(this.ERROR_HEADER+this.DUPLICATE_USER_MESSAGE);}}
+                );
         } else {
             throw new Error(this.buildErrorString(username));
         }
@@ -76,11 +80,11 @@ export class UserService extends AbstractServerService {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
 
-        return "Nom invalide \n ERREURS DÉTECTÉES" + errorString;
+        return this.ERROR_HEADER + errorString;
     }
 
-    public handleError(error: HttpErrorResponse): Observable<never> {
-        /*if (error.error instanceof ErrorEvent) {
+    protected handleError(error: HttpErrorResponse): Observable<never> {
+        if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error("An error occurred:", error.error.message);
         } else {
@@ -89,8 +93,9 @@ export class UserService extends AbstractServerService {
             console.error(
                 `Backend returned code ${error.status}, ` +
                 `body was: ${error.error}`);
-        }*/
-        throw new Error("overriden method");
+        }
+
+        return throwError("an error was handled");
     }
 
 }

@@ -82,7 +82,7 @@ describe("UserService", () => {
     it("should handle errors", () => {
         // setup fake server response
         spyOn(httpClientSpy, "post").and
-        .callFake( () => TestHelper.asyncData( throwError("Invalid username")));
+        .callFake( () => throwError("Invalid username"));
 
         // check the content of the mocked call
         userService.submitUsername(USERS[0]._id);
