@@ -37,13 +37,13 @@ export class UserService extends AbstractServerService {
     }
 
     /**
-     * Validates a username and then sens it to the server if it passes
+     * Validates a username and then sends it to the server if it passes
      * else it throws an error.
      * @param username the username of the user logging in
      * @throws an error explaining why the username was bad
      */
     public submitUsername(username: string): void {
-        if(this.validateUsername(username)) {
+        if (this.validateUsername(username)) {
             this.addUser(this.createUser(username));
         } else {
             throw new Error(this.buildErrorString(username));
