@@ -8,7 +8,6 @@ import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 describe("Users db services", () => {
     // set up fixtures
     const users: Users = new Users(new Mongo());
-
     /*
     // dummy test to purge the DB, actually works tho
     it("should delete all users", async () => {

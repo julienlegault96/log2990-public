@@ -36,6 +36,22 @@ export class UserService extends AbstractServerService {
         return Boolean(username.match(this.VALIDATION_REGEX));
     }
 
+    public getUsers(): Observable<User[]> {
+        return this.getRequest<User[]>(Endpoints.Users);
+    }
+
+    public createUser(username: string): User {
+        return new User(username);
+    }
+
+    public addUser(newUser: User): void {
+        this.postRequest<User>(Endpoints.Users, newUser);
+    }
+
+    public removeUser(userToDelete: User): void {
+        this.deleteRequest<User>(Endpoints.Users);
+    }
+
     /**
      * Validates a username and then sends it to the server if it passes
      * else it throws an error.
@@ -74,23 +90,7 @@ export class UserService extends AbstractServerService {
                 `Backend returned code ${error.status}, ` +
                 `body was: ${error.error}`);
         }*/
-
         throw new Error("overriden method");
     }
 
-    public getUsers(): Observable<User[]> {
-        return this.getRequest<User[]>(Endpoints.Users);
-    }
-
-    public createUser(username: string): User {
-        return new User(username);
-    }
-
-    public addUser(newUser: User): void {
-        this.postRequest<User>(Endpoints.Users, newUser);
-    }
-
-    public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users);
-    }
 }
