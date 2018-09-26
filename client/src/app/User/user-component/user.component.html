@@ -1,27 +1,29 @@
 <div class="col-sm-6 mx-auto">
     <div class="card">
         <div class="card-body">
+
             <div class="input-group mb-3">
-                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Nom:</span>
+                </div>
 
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Nom:</span>
-                    </div>
+                <input [(ngModel)]="currentUser._id" type="text" class="form-control"
+                    placeholder="Rentrez votre nom d'utilisateur (ex: MrBidon)">
 
-                    <input [(ngModel)]="currentUser._id" type="text" class="form-control"
-                        placeholder="Rentrez votre nom d'utilisateur (ex: MrBidon)">
-
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="submit()">
-                            soumettre
-                        </button>
-                    </div>
-
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" (click)="submit()">
+                        Soumettre
+                    </button>
                 </div>
             </div>
 
-            <h5>Utilisateurs connectés: </h5>
+            <a *ngIf="loggedIn" class="btn btn-success btn-block" routerLink="/listeJeux">
+                Passer aux jeux
+            </a>
+
+            <h5 class="" >Utilisateurs connectés: </h5>
             <span *ngFor="let user of users" class="badge badge-pill badge-primary mr-2"> {{user.name}} </span>
+
         </div>
     </div>
 </div>

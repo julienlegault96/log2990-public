@@ -8,9 +8,11 @@ import { UserService } from "../../services/user.service";
     styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-    public currentUser: User = new User();
+    private currentUser: User = new User();
+    public loggedIn: boolean = false;
 
-    public users: User[];
+    // utilisé par user.component.html
+    private users: User[];
 
     public constructor(private userService: UserService) { }
 
@@ -25,7 +27,7 @@ export class UserComponent implements OnInit {
     public submit(): void {
         try {
             this.userService.submitUsername(this.currentUser._id);
-
+            this.loggedIn = true;
             // update components connected users list
             this.getUsers();
         } catch (error) {
