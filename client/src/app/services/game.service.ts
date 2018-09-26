@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 import { Game } from "../../../../common/game/game";
-import { defaultLeaderboards } from "../../../../common/game/leaderboard";
+import { resetLeaderboards } from "../../../../common/game/leaderboard";
 
 @Injectable()
 export class GameService extends AbstractServerService {
@@ -18,7 +18,7 @@ export class GameService extends AbstractServerService {
     }
 
     public resetLeaderboard(toReset: Game): Observable<Game> {
-        toReset.leaderboards = defaultLeaderboards;
+        toReset.leaderboards = resetLeaderboards;
 
         return this.putRequest<Game>(Endpoints.Leaderboard, toReset);
     }

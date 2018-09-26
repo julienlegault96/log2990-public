@@ -44,3 +44,40 @@ export const defaultLeaderboards: Leaderboard[] = [
         ]
     }
 ];
+
+export const resetLeaderboards: Leaderboard[] = [
+    {
+        "title": "Solo",
+        "scores": [
+            {
+                "username": "Sophie",
+                "time": 5
+            },
+            {
+                "username": "Gabriel",
+                "time": 5
+            },
+            {
+                "username": "Louis",
+                "time": 5
+            },
+        ]
+    },
+    {
+        "title": "1 vs 1",
+        "scores": [
+            {
+                "username": "Julien",
+                "time": 5
+            },
+            {
+                "username": "Din",
+                "time": 5
+            },
+            {
+                "username": "Kevin",
+                "time": 5
+            },
+        ]
+    }
+];
