@@ -13,13 +13,13 @@ export class Routes {
         const router: Router = Router();
 
         router.get("/games",
-            (req: Request, res: Response, next: NextFunction) => this.games.getGames(req, res, next));
+                   (req: Request, res: Response, next: NextFunction) => this.games.getGames(req, res, next));
         router.post("/games",
-            (req: Request, res: Response, next: NextFunction) => this.games.addGame(req, res, next));
+                    (req: Request, res: Response, next: NextFunction) => this.games.addGame(req, res, next));
         router.put("/leaderboard",
-            (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next));
+                   (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next));
         router.delete("/games",
-            (req: Request, res: Response, next: NextFunction) => this.games.deleteGame(req, res, next));
+                      (req: Request, res: Response) => this.games.deleteGame(req, res));
 
         return router;
     }

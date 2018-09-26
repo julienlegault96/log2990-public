@@ -45,7 +45,7 @@ export class Games {
         }
     }
 
-    public async deleteGame(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async deleteGame(req: Request, res: Response): Promise<void> {
         try {
             let game: Game = Object.assign(new Game, req.body);
             // tslint:disable-next-line:prefer-for-of
