@@ -28,15 +28,13 @@ export class UserComponent implements OnInit {
         try {
             this.userService.submitUsername(this.currentUser._id);
             this.loggedIn = true;
-            // update components connected users list
-            this.getUsers();
         } catch (error) {
             alert(error);
         } finally {
+            // update components connected users list
+            this.getUsers();
             // clear form
             this.currentUser._id = "";
         }
-
-
     }
 }
