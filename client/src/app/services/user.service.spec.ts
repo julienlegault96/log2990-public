@@ -72,7 +72,7 @@ describe("UserService", () => {
 
     it("should submit the existing usernames", () => {
         // setup stub
-        spyOn(httpClientSpy, "post").and.callFake( () => TestHelper.asyncData("post done"));
+        spyOn(httpClientSpy, "post").and.callThrough();
 
         // check the content of the mocked call
         userService.submitUsername(USERS[0]._id);
