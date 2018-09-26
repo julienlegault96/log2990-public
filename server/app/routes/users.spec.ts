@@ -8,7 +8,6 @@ import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 describe("Users db services", () => {
     // set up fixtures
     const users: Users = new Users(new Mongo());
-    /*
     // dummy test to purge the DB, actually works tho
     it("should delete all users", async () => {
         let getResponse: User[] = await users.findUsers();
@@ -19,7 +18,6 @@ describe("Users db services", () => {
         getResponse = await users.findUsers();
         expect(getResponse.length).to.equal(0);
     });
-    */
 
     it("should create mock user", async () => {
         // insert
@@ -30,7 +28,7 @@ describe("Users db services", () => {
 
     it("shouldn't create mock user a second time", async () => {
         // insert
-        try{
+        try {
             await users.insertUser(USERS[0]);
         } catch (err) {
             expect(String(err).includes("duplicate key error")).to.equal(true);
@@ -51,5 +49,4 @@ describe("Users db services", () => {
 
         expect(Number(delResponse.deletedCount)).to.equal(1);
     });
-
 });
