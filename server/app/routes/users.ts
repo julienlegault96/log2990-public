@@ -5,22 +5,30 @@ import Types from "../types";
 import { User } from "../../../common/user/user";
 import { CODES } from "../../../common/communication/response-codes";
 import { Mongo, Collections } from "../services/mongo";
-import { InsertOneWriteOpResult, DeleteWriteOpResultObject, FilterQuery } from "mongodb";
+import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 
 @injectable()
 export class Users {
 
     public constructor(@inject(Types.Mongo) private mongo: Mongo) { }
 
-    public async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
-        res.status(CODES.OK).send(JSON.stringify(await this.fetchUsers()));
-    }
-
-    public async fetchUsers(): Promise<User[]> {
+    public async findUsers(): Promise<User[]> {
         return this.mongo.findDocuments<User>(Collections.Users);
     }
 
-    public async addUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async insertUser(user: User): Promise<InsertOneWriteOpResult> {
+        return this.mongo.insertDocument<User>(Collections.Users, user);
+    }
+
+    public async removeUser(user: User): Promise<DeleteWriteOpResultObject> {
+        return this.mongo.removeDocument<User>(Collections.Users, user);
+    }
+
+    public async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
+        res.status(CODES.OK).send(JSON.stringify(await this.findUsers()));
+    }
+
+    public async postUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
 
             const response: InsertOneWriteOpResult = await this. insertUser(Object.assign(new User, req.body));
@@ -35,14 +43,10 @@ export class Users {
         }
     }
 
-    public async insertUser(user: User): Promise<InsertOneWriteOpResult> {
-        return this.mongo.insertDocument<User>(Collections.Users, user);
-    }
-
-    public async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async deleteUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
 
-            const response: DeleteWriteOpResultObject = await this. deleteUser(Object.assign(new User, req.body));
+            const response: DeleteWriteOpResultObject = await this.removeUser(Object.assign(new User, req.body));
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);
@@ -52,11 +56,5 @@ export class Users {
         } catch (e) {
             res.status(CODES.BAD_REQUEST).send("User provided does not follow the valid format");
         }
-    }
-
-    public async deleteUser(user: User): Promise<DeleteWriteOpResultObject> {
-        const userFilter: FilterQuery<User> = {$where: user };
-
-        return this.mongo.removeDocument<User>(Collections.Users, userFilter);
     }
 }
