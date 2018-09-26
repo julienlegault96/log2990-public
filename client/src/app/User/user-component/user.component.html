@@ -7,7 +7,7 @@
                     <span class="input-group-text">Nom:</span>
                 </div>
 
-                <input [(ngModel)]="currentUser._id" type="text" class="form-control"
+                <input [(ngModel)]="username" type="text" class="form-control"
                     placeholder="Rentrez votre nom d'utilisateur (ex: MrBidon)">
 
                 <div class="input-group-append">
@@ -22,7 +22,9 @@
             </a>
 
             <h5 class="" >Utilisateurs connectés: </h5>
-            <span *ngFor="let user of users" class="badge badge-pill badge-primary mr-2"> {{user._id}} </span>
+            <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
+                {{user._id}}
+            </span>
 
         </div>
     </div>

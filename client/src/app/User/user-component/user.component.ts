@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { User } from "../../../../../common/user/user";
 import { UserService } from "../../services/user.service";
 
 @Component({
@@ -7,34 +6,30 @@ import { UserService } from "../../services/user.service";
     templateUrl: "./user.component.html",
     styleUrls: ["./user.component.css"]
 })
+
+/**
+ * this component takes the inputed string and calls submitUsername with it
+ */
 export class UserComponent implements OnInit {
-    private currentUser: User = new User();
-    public loggedIn: boolean = false;
-
-    // utilisé par user.component.html
-    private users: User[];
-
     public constructor(private userService: UserService) { }
+    private username: string;
 
     public ngOnInit(): void {
-        this.getUsers();
+        this.refreshComponent();
     }
 
-    private getUsers(): void {
-        this.userService.getUsers().subscribe((newUsers: User[]) => { this.users = newUsers; });
+    private refreshComponent(): void {
+        this.userService.refreshUserList();
         }
 
     public submit(): void {
         try {
-            this.userService.submitUsername(this.currentUser._id);
-            this.loggedIn = true;
+            this.userService.submitUsername(this.username);
         } catch (error) {
             alert(error);
         } finally {
             // update components connected users list
-            this.getUsers();
-            // clear form
-            this.currentUser._id = "";
+            this.refreshComponent();
         }
     }
 }
