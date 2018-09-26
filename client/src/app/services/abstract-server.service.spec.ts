@@ -1,4 +1,6 @@
 import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
 
 class NotSoAbstractServerService extends AbstractServerService {
     public getServerHost(): string {
@@ -7,6 +9,10 @@ class NotSoAbstractServerService extends AbstractServerService {
 
     public getUrlFromParent(serverEndpoint: Endpoints, pathParam?: string, ...queryParams: Query[]): string {
         return this.getUrl(serverEndpoint, pathParam, ...queryParams);
+    }
+
+    public handleError(error: HttpErrorResponse): Observable<never>{
+        return throwError("error handled");
     }
 }
 
