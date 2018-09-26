@@ -91,9 +91,9 @@ describe("UserService", () => {
         expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
     });
 
-    /*it("should delete the submited username", () => {
-        spyOn(httpClientSpy, "delete").and.callThrough();
-        userService.removeUser(USERS[0]._id);
+    it("should delete the submited username", () => {
+        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done"));
+        userService.removeUser(USERS[0]);
         expect(httpClientSpy.delete).toHaveBeenCalledTimes(1);
-    });*/
+    });
 });
