@@ -9,7 +9,7 @@ import { UserService } from "../../services/user.service";
 })
 export class UserComponent implements OnInit {
     public currentUser: User = {
-        _id: "MrBidon"
+        _id: ""
     };
 
     public users: User[];
@@ -20,16 +20,17 @@ export class UserComponent implements OnInit {
         this.getUsers();
     }
 
-    public validateUsername(): string {
-        return this.userService.validateUsername(this.currentUser._id);
-    }
-
     private getUsers(): void {
         this.userService.getUsers().subscribe((newUsers: User[]) => { this.users = newUsers; });
         }
 
     public submit(): void {
-        this.userService.submitUsername(this.currentUser._id);
+        const newUsername: string = this.currentUser._id;
+        try {
+            this.userService.submitUsername(newUsername);
+        } catch (error) {
+            alert(error);
+        }
 
         // update component
         this.currentUser._id = "";
