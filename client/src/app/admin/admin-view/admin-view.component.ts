@@ -33,6 +33,7 @@ export class AdminViewCardComponent extends AbsGameCardComponent {
 
   public delete(): void {
     this.gameService.deleteGame(this.game).subscribe();
+    alert("Veuillez actualiser le navigateur pour voir le chnagement!");
   }
 
 }
