@@ -8,14 +8,15 @@ import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 describe("Users db services", () => {
     // set up fixtures
     const users: Users = new Users(new Mongo());
-    // dummy test to purge the DB, actually works tho
-    it("should delete all users", async () => {
-        let getResponse: User[] = await users.findUsers();
-        for (const iterator of getResponse) {
+    let serverUsers: User[];
+
+    it("should fetch and delete all users", async () => {
+        serverUsers = await users.findUsers();
+        for (const iterator of serverUsers) {
             users.removeUser(iterator);
         }
 
-        getResponse = await users.findUsers();
+        const getResponse: User[] = await users.findUsers();
         expect(getResponse.length).to.equal(0);
     });
 
@@ -48,5 +49,15 @@ describe("Users db services", () => {
         const delResponse: DeleteWriteOpResultObject = await users.removeUser(USERS[0]);
 
         expect(Number(delResponse.deletedCount)).to.equal(1);
+    });
+
+    it("should create back all serverUsers", async () => {
+        for (const iterator of serverUsers) {
+            users.insertUser(iterator);
+        }
+
+        const getResponse: User[] = await users.findUsers();
+        expect(getResponse.length).to.equal(serverUsers.length);
+
     });
 });
