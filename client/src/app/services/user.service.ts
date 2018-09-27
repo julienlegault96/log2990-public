@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
+import { Injectable, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 import { User } from "../../../../common/user/user";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 
 @Injectable({
     providedIn: "root"
@@ -11,47 +11,101 @@ import { HttpErrorResponse } from "@angular/common/http";
 /**
  * this class connects implements methods for supervising user logins and logouts
  */
-export class UserService extends AbstractServerService {
+export class UserService extends AbstractServerService implements OnInit {
     private readonly MIN_USERNAME_LENGTH: number = 1;
     private readonly MAX_USERNAME_LENGTH: number = 20;
+    // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
+    private readonly VALIDATION_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
+
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "\n- Seul des caractères alphanumériques sont acceptés.";
     private readonly LENGTH_ERROR_MESSAGE: string =
         "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
-    // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
-    private readonly VALIDATION_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
     private readonly DUPLICATE_USER_MESSAGE: string =
-        "\n- Le nom a été refusé. Est-il déjà en usage?";
+        "\n- Un utilisateur est déjà connecté avec un tel nom.";
 
-    public validateUsername(username: string): boolean {
-        return this.verifyUsernameLength(username)
-            && this.verifyAlphanumericSymbols(username) ;
+    public asyncUserList: User[];
+    public loggedUser: User;
+    public loggedIn: boolean;
+
+    public constructor(protected http: HttpClient) {
+        super(http);
+        this.asyncUserList = [];
+        this.ngOnInit();
+     }
+
+    public ngOnInit(): void {
+        this.refreshUserList();
+        this.loggedUser = new User("Anon");
+        this.loggedIn = false;
+
+        window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
     }
 
-    private verifyUsernameLength(username: string): boolean {
+    public onUnloadEvent(e: BeforeUnloadEvent): void {
+        e.preventDefault();
+        if (this.loggedIn) {
+        super.deleteRequest<User>(Endpoints.Users, this.loggedUser );
+        }
+        // Chrome requires returnValue to be set.
+        e.returnValue = "";
+    }
+
+    public validateUsername(username: string): boolean {
+        return this.isValidUsernameLength(username)
+            && this.isValidAlphanumericSymbols(username)
+            && this.isUniqueUsername(username) ;
+    }
+
+    private isValidUsernameLength(username: string): boolean {
         return username.length >= this.MIN_USERNAME_LENGTH
             && username.length <= this.MAX_USERNAME_LENGTH;
     }
 
-    private verifyAlphanumericSymbols(username: string): boolean {
+    private isValidAlphanumericSymbols(username: string): boolean {
         return Boolean(username.match(this.VALIDATION_REGEX));
+    }
+
+    private buildErrorString(username: string): string {
+        let errorString: string = "";
+
+        if (!this.isValidAlphanumericSymbols(username)) {
+            errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
+        }
+        if (!this.isValidUsernameLength(username)) {
+            errorString += this.LENGTH_ERROR_MESSAGE;
+        }
+        if (!this.isUniqueUsername(username)){
+            errorString += this.DUPLICATE_USER_MESSAGE;
+        }
+
+        return this.ERROR_HEADER + errorString;
+    }
+
+    private isUniqueUsername(username: string): boolean {
+        for (const user of this.asyncUserList) {
+            if (user._id === username) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public refreshUserList(): void {
+        this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
     }
 
     public getUsers(): Observable<User[]> {
         return this.getRequest<User[]>(Endpoints.Users);
     }
 
-    public createUser(username: string): User {
-        return new User(username);
-    }
-
-    public addUser(newUser: User): Observable< {} | User > {
+    public addUser(newUser: User): Observable<{} | User> {
         return this.postRequest<User>(Endpoints.Users, newUser);
     }
 
     public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users).subscribe(/*force request*/);
+        this.deleteRequest<User>(Endpoints.Users, userToDelete);
     }
 
     /**
@@ -62,40 +116,19 @@ export class UserService extends AbstractServerService {
      */
     public submitUsername(username: string): void {
         if (this.validateUsername(username)) {
-            this.addUser(this.createUser(username)).subscribe( 
-                (response: {} | User) => { if (!(response instanceof User)) {throw new Error(this.ERROR_HEADER+this.DUPLICATE_USER_MESSAGE);}}
-                );
+            const clientUser: User = new User(username);
+            this.addUser(clientUser).subscribe( (serverUser: User) => { });
+
+            this.asyncUserList = this.asyncUserList.concat(clientUser);
+            this.loggedUser = clientUser;
+            this.loggedIn = true;
         } else {
             throw new Error(this.buildErrorString(username));
         }
     }
 
-    private buildErrorString(username: string): string {
-        let errorString: string = "";
-
-        if (!this.verifyAlphanumericSymbols(username)) {
-            errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
-        }
-        if (!this.verifyUsernameLength(username)) {
-            errorString += this.LENGTH_ERROR_MESSAGE;
-        }
-
-        return this.ERROR_HEADER + errorString;
-    }
-
-    protected handleError(error: HttpErrorResponse): Observable<never> {
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error("An error occurred:", error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-        }
-
-        return throwError("an error was handled");
+    protected handleError (error: HttpErrorResponse): Observable<never> {
+        return new Observable<never>();
     }
 
 }

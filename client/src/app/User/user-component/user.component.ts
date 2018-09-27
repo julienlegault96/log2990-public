@@ -15,21 +15,14 @@ export class UserComponent implements OnInit {
     private username: string;
 
     public ngOnInit(): void {
-        this.refreshComponent();
+        this.username = "";
     }
-
-    private refreshComponent(): void {
-        this.userService.refreshUserList();
-        }
 
     public submit(): void {
         try {
             this.userService.submitUsername(this.username);
         } catch (error) {
             alert(error);
-        } finally {
-            // update components connected users list
-            this.refreshComponent();
         }
     }
 }

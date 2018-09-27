@@ -1,10 +1,9 @@
 import { TestBed, inject } from "@angular/core/testing";
 import { TestHelper } from "../../test.helper";
-import { User } from "../../../../common/user/user";
 import { USERS } from "../../../../common/user/mock-users";
 import { UserService } from "./user.service";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
-import { throwError } from "rxjs";
+import { User } from "../../../../common/user/user";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
@@ -55,14 +54,10 @@ describe("UserService", () => {
         // setup fake server response
         spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
 
-        // check the content of the mocked call
-        userService.getUsers().subscribe(
-            (users: User[]) => {
-                expect(users).toEqual(jasmine.any(Array));
-                expect(users).toEqual(USERS, "users check");
-            },
-            fail
-        );
+        userService.getUsers().subscribe( (users: User[] ) => {
+            expect(users).toEqual(jasmine.any(Array));
+            expect(users).toEqual(USERS, "users check");
+        });
 
         // check if only one call was made
         expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
@@ -70,21 +65,8 @@ describe("UserService", () => {
 
     it("should submit the existing usernames", () => {
         // setup fake server response
-        spyOn(httpClientSpy, "post").and.callFake( () => TestHelper.asyncData("post done"));
+        spyOn(httpClientSpy, "post").and.callFake( () => TestHelper.asyncData(USERS[0]));
 
-        // check the content of the mocked call
-        userService.submitUsername(USERS[0]._id);
-
-        // check if only one call was made
-        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
-    });
-
-    it("should handle errors", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "post").and
-        .callFake( () => throwError("Invalid username"));
-
-        // check the content of the mocked call
         userService.submitUsername(USERS[0]._id);
 
         // check if only one call was made
@@ -92,8 +74,12 @@ describe("UserService", () => {
     });
 
     it("should delete the submited username", () => {
-        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done"));
+        // setup fake server response
+        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
+
         userService.removeUser(USERS[0]);
+
+        // check if only one call was made
         expect(httpClientSpy.delete).toHaveBeenCalledTimes(1);
     });
 });
