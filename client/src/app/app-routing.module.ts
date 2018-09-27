@@ -7,9 +7,9 @@ import { HomePageComponent } from "./home-page/home-page.component";
 
 const routes: Routes = [
     { path: "soloGame", component: SoloGameComponent },
-    { path: "pageDAcceuil", component: HomePageComponent },
+    { path: "acceuil", component: HomePageComponent },
     { path: "listeJeux", component: GameListComponent },
-    { path: "", redirectTo: "/pageDAcceuil", pathMatch: "full" },
+    { path: "", redirectTo: "/acceuil", pathMatch: "full" },
 ];
 
 @NgModule({
