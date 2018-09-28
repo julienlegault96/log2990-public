@@ -47,7 +47,7 @@ export class Games {
         try {
             const game: Game = Object.assign(new Game, req.body);
             const response: UpdateWriteOpResult =
-                await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, { $set: { "leaderboards": game.leaderboards } });
+                await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, game);
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);

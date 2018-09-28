@@ -77,7 +77,7 @@ export class Mongo {
 
     public async updateDocumentById<Type>(collectionName: Collections,
                                           id: number,
-                                          query: { [key: string]: string | number | {} } = {}
+                                          update: Type
                                         ): Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
@@ -85,7 +85,7 @@ export class Mongo {
 
         const collection: Collection = this.db.collection(collectionName);
 
-        return collection.updateOne({_id: new ObjectID(id)}, query);
+        return collection.replaceOne({_id: id}, update);
     }
 
     public async removeDocument<Type>(collectionName: Collections,
