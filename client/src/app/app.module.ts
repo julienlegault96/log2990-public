@@ -14,7 +14,8 @@ import { UserComponent } from "./User/user-component/user.component";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
 import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
-import { AdminViewComponent, AdminViewCardComponent} from "./admin/admin-view/admin-view.component";
+import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
+import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 import { GameViewComponent } from './game-view/game-view.component';
 
