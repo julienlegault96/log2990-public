@@ -67,7 +67,7 @@ export abstract class AbstractServerService {
         );
     }
 
-    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<{} | T> {
+    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<T> {
         const options: {} = {
             headers: new HttpHeaders({ "Content-Type": "application/json" }),
             body: deleteBody

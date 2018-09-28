@@ -18,7 +18,7 @@ export class CreateGameService extends GameService {
     }
 
     public isValidInputList(name: string, images: File[]): boolean {
-        return this.validator.isValidUsernameLength(name)
+        return this.validator.isStandardStringLength(name)
             && this.isValidInputImageList(images);
     }
 
