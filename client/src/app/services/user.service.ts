@@ -1,8 +1,9 @@
 import { Injectable, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { User } from "../../../../common/user/user";
-import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { AbstractServerService, Endpoints } from "./abstract-server.service";
+import { User } from "../../../../common/user/user";
+import { Validator } from "../validator";
 
 @Injectable({
     providedIn: "root"
@@ -12,10 +13,6 @@ import { HttpErrorResponse, HttpClient } from "@angular/common/http";
  * this class connects implements methods for supervising user logins and logouts
  */
 export class UserService extends AbstractServerService implements OnInit {
-    private readonly MIN_USERNAME_LENGTH: number = 1;
-    private readonly MAX_USERNAME_LENGTH: number = 20;
-    // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
-    private readonly VALIDATION_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
 
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
@@ -25,6 +22,7 @@ export class UserService extends AbstractServerService implements OnInit {
     private readonly DUPLICATE_USER_MESSAGE: string =
         "\n- Un utilisateur est déjà connecté avec un tel nom.";
 
+    public validator: Validator;
     public asyncUserList: User[];
     public loggedUser: User;
     public loggedIn: boolean;
@@ -39,6 +37,7 @@ export class UserService extends AbstractServerService implements OnInit {
         this.refreshUserList();
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
+        this.validator = new Validator();
 
         window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
     }
@@ -53,27 +52,18 @@ export class UserService extends AbstractServerService implements OnInit {
     }
 
     public validateUsername(username: string): boolean {
-        return this.isValidUsernameLength(username)
-            && this.isValidAlphanumericSymbols(username)
+        return this.validator.isValidUsernameLength(username)
+            && this.validator.isValidAlphanumericSymbols(username)
             && this.isUniqueUsername(username) ;
-    }
-
-    private isValidUsernameLength(username: string): boolean {
-        return username.length >= this.MIN_USERNAME_LENGTH
-            && username.length <= this.MAX_USERNAME_LENGTH;
-    }
-
-    private isValidAlphanumericSymbols(username: string): boolean {
-        return Boolean(username.match(this.VALIDATION_REGEX));
     }
 
     private buildErrorString(username: string): string {
         let errorString: string = "";
 
-        if (!this.isValidAlphanumericSymbols(username)) {
+        if (!this.validator.isValidAlphanumericSymbols(username)) {
             errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
         }
-        if (!this.isValidUsernameLength(username)) {
+        if (!this.validator.isValidUsernameLength(username)) {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
         if (!this.isUniqueUsername(username)) {

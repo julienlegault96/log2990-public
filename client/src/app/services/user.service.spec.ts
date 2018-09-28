@@ -1,8 +1,10 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { TestHelper } from "../../test.helper";
-import { USERS } from "../../../../common/user/mock-users";
-import { UserService } from "./user.service";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { TestHelper } from "../../test.helper";
+
+import { UserService } from "./user.service";
+
+import { USERS } from "../../../../common/user/mock-users";
 import { User } from "../../../../common/user/user";
 
 let httpClientSpy: HttpClient;
@@ -22,32 +24,12 @@ describe("UserService", () => {
         expect(service).toBeTruthy();
     }));
 
-    it("should reject empty names", () => {
-        expect(userService.validateUsername("")).toBeFalsy();
-    });
+    it("should reject existing usernames", () => {
+        // setup fixtures
+        userService.asyncUserList = USERS;
 
-    it("should accept alphanumeric names", () => {
-        expect(userService.validateUsername("qawsedrftyhuji12345")).toBeTruthy();
-    });
-
-    it("should reject non alphanumeric names", () => {
-        expect(userService.validateUsername("#@%&*()^^$++{}////")).toBeFalsy();
-    });
-
-    it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(userService.validateUsername("#@%ait96)^^ab467/")).toBeFalsy();
-    });
-
-    it("should accept names with 1 caracter", () => {
-        expect(userService.validateUsername("H")).toBeTruthy();
-    });
-
-    it("should accept names with 20 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghij")).toBeTruthy();
-    });
-
-    it("should reject names with 21 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghijK")).toBeFalsy();
+        // test
+        expect(userService.validateUsername(USERS[0]._id)).toBeFalsy();
     });
 
     it("should fetch the existing usernames", () => {

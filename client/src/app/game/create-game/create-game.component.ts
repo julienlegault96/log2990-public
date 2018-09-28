@@ -5,8 +5,8 @@ import { CreateGameService } from "../../services/create-game.service";
 @Component({
     selector: "app-create-game",
     templateUrl: "./create-game.component.html",
-    styleUrls: ["./create-game.component.css"]
 })
+
 export class CreateGameComponent implements OnInit {
 
     public name: string = "";
@@ -51,7 +51,9 @@ export class CreateGameComponent implements OnInit {
     }
 
     public isValidName(event: Event): boolean {
-        return this.name.length <= this.createGameService.getNameMaxLength();
+        // empty names should be valid
+        return this.name.length === 0
+                || this.createGameService.validator.isValidUsernameLength(this.name);
     }
 
     private getImageListForSubmit(): File[] {

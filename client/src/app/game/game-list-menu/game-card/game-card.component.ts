@@ -1,29 +1,14 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { GameService } from "../../../services/game.service";
-
-import { Game } from "../../../../../../common/game/game";
-
-export abstract class AbsGameCardComponent implements OnInit {
-
-    @Input() public game: Game;
-    public isJoinable: boolean;
-
-    public constructor(protected gameService: GameService) { }
-
-    public ngOnInit(): void {
-        this.gameService.isJoinable(this.game)
-            .subscribe((isJoinable) => this.isJoinable = isJoinable);
-    }
-
-}
+import { GameService } from "src/app/services/game.service";
+import { AbstractGameCardComponent } from "src/app/game/abstract-game-card/abstract-game-card.component";
 
 @Component({
     selector: "app-game",
     templateUrl: "./game-card.component.html",
-    styleUrls: ["./game-card.component.css"]
 })
-export class GameCardComponent extends AbsGameCardComponent {
+
+export class GameCardComponent extends AbstractGameCardComponent {
 
     public constructor(gameService: GameService) {
         super(gameService);

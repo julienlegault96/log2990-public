@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 
 @Injectable()
+
 export abstract class AbstractServerService {
 
     private readonly SERVER_HOST_URL: string = "http://localhost:3000";
@@ -62,7 +63,6 @@ export abstract class AbstractServerService {
         };
 
         return this.http.put<T>(this.getUrl(serverEndpoint), body, options).pipe(
-            tap(),
             catchError(this.handleError)
         );
     }
