@@ -27,13 +27,13 @@ describe("ChronoComponent", () => {
         expect(component.formattedTime).toBe("00:00");
     });
 
-    it("should show 1 second after 1 second", () => {
+    it("should show 1 second after 1 second", async () => {
         const oneSecond: number = 1000;
         component.start();
         setTimeout(() => {
             component.stop();
             expect(component.formattedTime).toBe("00:01");
-        // tslint:disable-next-line:align
+            // tslint:disable-next-line:align
         }, oneSecond);
     });
 

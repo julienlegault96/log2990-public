@@ -1,6 +1,7 @@
-import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
+
+import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
 
 class NotSoAbstractServerService extends AbstractServerService {
     public getServerHost(): string {
