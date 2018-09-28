@@ -51,7 +51,9 @@ export class CreateGameComponent implements OnInit {
     }
 
     public isValidName(event: Event): boolean {
-        return this.name.length <= this.createGameService.getNameMaxLength();
+        // empty names should be valid
+        return this.name.length === 0
+                || this.createGameService.validator.isValidUsernameLength(this.name);
     }
 
     private getImageListForSubmit(): File[] {

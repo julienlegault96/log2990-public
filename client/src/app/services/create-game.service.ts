@@ -3,13 +3,22 @@ import { Injectable } from "@angular/core";
 import { GameService } from "./game.service";
 import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
+import { Validator } from "../validator";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class CreateGameService extends GameService {
+    public validator: Validator;
 
-    private readonly nameMinLength: number = 1;
-    private readonly nameMaxLength: number = 20;
-    private readonly imageFileExtension: string = ".bmp";
+    public constructor(http: HttpClient) {
+        super(http);
+        this.validator = new Validator();
+    }
+
+    public isValidInputList(name: string, images: File[]): boolean {
+        return this.validator.isValidUsernameLength(name)
+            && this.isValidInputImageList(images);
+    }
 
     public submit(name: string, images: File[]): void {
         if (!this.isValidInputList(name, images)) {
@@ -25,21 +34,6 @@ export class CreateGameService extends GameService {
                 alert("Uploaded");
             });
         });
-    }
-
-    public isValidInputList(name: String, images: File[]): boolean {
-        return this.isValidName(name)
-            && this.isValidInputImageList(images);
-    }
-
-    public isValidName(name: String): boolean {
-        return Boolean(name)
-            && name.length >= this.nameMinLength
-            && name.length <= this.nameMaxLength;
-    }
-
-    public getNameMaxLength(): number {
-        return this.nameMaxLength;
     }
 
     private generateGame(name: string, imageUrls: Array<string>): Game {
@@ -65,7 +59,7 @@ export class CreateGameService extends GameService {
 
     private isValidInputImageList(images: File[]): boolean {
         for (const image of images) {
-            if (!this.isValidImage(image)) {
+            if (!this.validator.isValidImage(image)) {
                 return false;
             }
         }
@@ -73,8 +67,5 @@ export class CreateGameService extends GameService {
         return true;
     }
 
-    private isValidImage(image: File): boolean {
-        return image != null
-            && String(image.name).indexOf(this.imageFileExtension) !== -1;
-    }
+
 }
