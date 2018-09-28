@@ -5,7 +5,6 @@ import { GameService } from "../../services/game.service";
 @Component({
     selector: "app-admin-view",
     templateUrl: "./admin-view.component.html",
-    styleUrls: ["./admin-view.component.css"]
 })
 
 export class AdminViewComponent extends AbsGameListComponent {
