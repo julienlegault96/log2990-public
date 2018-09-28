@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 @Injectable()
 export abstract class AbstractServerService {
 
-    private readonly serverHost: string = "http://localhost:3000";
+    private readonly SERVER_HOST_URL: string = "http://localhost:3000";
 
     public constructor(protected http: HttpClient) { }
 
@@ -19,7 +19,7 @@ export abstract class AbstractServerService {
     }
 
     private appendEndpoint(serverEndpoint: Endpoints): string {
-        return `${this.serverHost}/${serverEndpoint}`;
+        return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
     }
 
     private formatPathParam(url: string, pathParam?: string | null): string {
@@ -46,13 +46,12 @@ export abstract class AbstractServerService {
         );
     }
 
-    protected postRequest<T>(serverEndpoint: Endpoints, body: T): Observable<{} | T> {
+    protected postRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
         const options: {} = {
             headers: new HttpHeaders({ "Content-Type": "application/json" })
         };
 
         return this.http.post<T>(this.getUrl(serverEndpoint), body, options).pipe(
-            tap(),
             catchError(this.handleError)
         );
     }
@@ -67,26 +66,19 @@ export abstract class AbstractServerService {
             catchError(this.handleError)
         );
     }
-    protected deleteRequest<T>(serverEndpoint: Endpoints, pathParam?: string): Observable<{} | T> {
-        return this.http.delete<T>(this.getUrl(serverEndpoint, pathParam)).pipe(
+
+    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<{} | T> {
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" }),
+            body: deleteBody
+        };
+
+        return this.http.delete<T>(this.getUrl(serverEndpoint), options).pipe(
             catchError(this.handleError)
         );
     }
 
-    private handleError(error: HttpErrorResponse): Observable<never> {
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error("An error occurred:", error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-        }
-
-        return throwError("Something bad happened; please try again later.");
-    }
+    protected abstract handleError(error: HttpErrorResponse): Observable<never>;
 }
 
 export enum Endpoints {

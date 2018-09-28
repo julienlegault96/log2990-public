@@ -26,9 +26,9 @@ export abstract class AbsGameListComponent implements OnInit {
             });
     }
 
-    protected filterGames(games: Game[]) {
-        this.singleViewGames = games.filter((game: Game) => game.type == GameType.SingleView);
-        this.doubleViewGames = games.filter((game: Game) => game.type == GameType.DoubleView);
+    protected filterGames(games: Game[]): void {
+        this.singleViewGames = games.filter((game: Game) => game.type === GameType.SingleView);
+        this.doubleViewGames = games.filter((game: Game) => game.type === GameType.DoubleView);
     }
 }
 

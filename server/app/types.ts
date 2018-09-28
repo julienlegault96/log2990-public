@@ -3,5 +3,6 @@ export default {
     Application: Symbol("Application"),
     Routes: Symbol("Routes"),
     Games: Symbol("Games"),
+    Users: Symbol("Users"),
     Mongo: Symbol("Mongo")
 };

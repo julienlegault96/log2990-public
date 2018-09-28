@@ -15,6 +15,7 @@ import { CreateGameComponent } from "./game/create-game/create-game.component";
 import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
 import { AdminViewComponent, AdminViewCardComponent} from "./admin/admin-view/admin-view.component";
+import { HomePageComponent } from "./home-page/home-page.component";
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { AdminViewComponent, AdminViewCardComponent} from "./admin/admin-view/ad
         UserComponent,
         AdminViewComponent,
         AdminViewCardComponent,
-		CreateGameComponent
+        CreateGameComponent,
+        HomePageComponent
     ],
     imports: [
         BrowserModule,

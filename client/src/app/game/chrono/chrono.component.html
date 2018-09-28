@@ -1,8 +1,18 @@
+<h5>
+    Chronomètre
+</h5>
+
 <p>
-    {{printedTime}}
+    {{ formattedTime }}
 </p>
+
 <div>
-    <!--bouton present a des fins de tests-->
-    <button class='start' (click)="start()">Start </button>
-    <button class='stop' (click)="stop()">Stop </button>
+    <!-- Boutons presents a des fins de tests -->
+    <button (click)="start()" class="btn btn-success mr-2">
+        Démarrer
+    </button>
+
+    <button (click)="stop()" class="btn btn-danger">
+        Arrêter
+    </button>
 </div>

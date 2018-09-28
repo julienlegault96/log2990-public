@@ -1,35 +1,31 @@
-<div style="text-align:center">
-    <div>
-      <h1>
-        Bienvenue au jeu des 7 diff&eacute;rences!
-      </h1>
-    </div>
-    <img width="300" alt="image LoupeByLSL" src="../../../assets/LoupeByLSL.jpg">
-  </div>
-
 <div class="col-sm-6 mx-auto">
     <div class="card">
         <div class="card-body">
+
             <div class="input-group mb-3">
-                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Nom:</span>
+                </div>
 
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Nom:</span>
-                    </div>
+                <input [(ngModel)]="username" type="text" class="form-control"
+                    placeholder="Rentrez votre nom d'utilisateur (ex: MrBidon)">
 
-                    <input [(ngModel)]="currentUser.name" type="text" class="form-control" placeholder="MrBidon">
-
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="submit()">
-                            soumettre 
-                        </button>
-                    </div>
-
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" (click)="submit()">
+                        Soumettre
+                    </button>
                 </div>
             </div>
 
-            <h5>Utilisateurs connectés: </h5>
-            <span *ngFor="let user of users" class="badge badge-pill badge-primary mr-2"> {{user.name}} </span>
+            <a *ngIf="userService.loggedIn" class="btn btn-success btn-block" routerLink="/listeJeux">
+                Passer aux jeux
+            </a>
+
+            <h5 class="" >Utilisateurs connectés: </h5>
+            <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
+                {{user._id}}
+            </span>
+
         </div>
     </div>
 </div>

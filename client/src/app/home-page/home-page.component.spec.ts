@@ -1,23 +1,24 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
-import { UserComponent } from "./user.component";
+import { UserComponent } from "../User/user-component/user.component";
+import { HomePageComponent } from "./home-page.component";
 
-describe("UserComponent", () => {
-    let component: UserComponent;
-    let fixture: ComponentFixture<UserComponent>;
+describe("HomePageComponent", () => {
+    let component: HomePageComponent;
+    let fixture: ComponentFixture<HomePageComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [UserComponent],
+            declarations: [HomePageComponent, UserComponent],
             imports: [FormsModule, HttpClientModule]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(UserComponent);
+        fixture = TestBed.createComponent(HomePageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

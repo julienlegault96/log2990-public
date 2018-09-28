@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SoloGameComponent } from "./solo-game.component";
-import { ChronoComponent } from "../chrono/chrono.component"
+import { ChronoComponent } from "../chrono/chrono.component";
 
 describe("SoloGameComponent", () => {
     let component: SoloGameComponent;

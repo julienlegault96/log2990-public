@@ -1,94 +1,52 @@
-import { GameService } from "./game.service";
-import { TestBed } from "@angular/core/testing";
-import { HttpClientModule } from "@angular/common/http";
-import { Game } from "../../../../common/game/game";
-import { GameType } from "../../../../common/game/game-type";
+import { TestBed, inject } from "@angular/core/testing";
 import { TestHelper } from "../../test.helper";
+import { GameService } from "./game.service";
 import { defaultLeaderboards } from "../../../../common/game/leaderboard";
+import { Game } from "../../../../common/game/game";
+import { GAMES } from "../../../../common/game/mock-games";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
-// tslint:disable-next-line:no-any Used to mock the http call
-let httpClientSpy: any;
-let gameService: GameService;
-const returnedGames: Game[] = [
-    {
-        "_id": 1,
-        "type": GameType.DoubleView,
-        "title": "DoubleViewGame 1",
-        "imageUrl": ["double-view-game-1.bmp"],
-        "leaderboards": [
-            {
-                "title": "Solo",
-                "scores": [
-                    {
-                        username: "test",
-                        time: 54
-                    },
-                    {
-                        username: "test2",
-                        time: 66
-                    },
-                    {
-                        username: "test3",
-                        time: 89
-                    }
-                ]
-            },
-            {
-                "title": "One versus One",
-                "scores": [
-                    {
-                        username: "test",
-                        time: 33
-                    },
-                    {
-                        username: "test2",
-                        time: 14
-                    },
-                    {
-                        username: "test3",
-                        time: 24
-                    }
-                ]
-            }
-        ]
-    }
-];
 describe("GameService", () => {
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                GameService
-            ],
-            imports: [
-                HttpClientModule
-            ]
-        });
-        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get", "put"]);
+    // setting  up fixtures
+    let httpClientSpy: HttpClient;
+    let gameService: GameService;
+
+    beforeEach( () => {
+        httpClientSpy = HttpClient.prototype;
         gameService = new GameService(httpClientSpy);
+
+        TestBed.configureTestingModule({
+            providers: [GameService],
+            imports: [HttpClientModule]
+        });
     });
 
-    it("should return expected message (HttpClient called once)", () => {
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(returnedGames));
+    it("should be created", inject([GameService], (service: GameService) => {
+        expect(service).toBeTruthy();
+    }));
+
+    it("should return expected data on get", () => {
+        // setup stub
+        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
         gameService.getGames().subscribe(
             (games: Game[]) => {
-                expect(games).toEqual(jasmine.any([]));
-                expect(games).toEqual(returnedGames, "games check");
-            },
-            fail
+                expect(games).toEqual(jasmine.any(Array));
+                expect(games).toEqual(GAMES, "games check");
+            }
         );
 
         // check if only one call was made
-        expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
+        expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     });
 
     it("should reset the leaderboard", () => {
 
-        httpClientSpy.put.and.returnValue(TestHelper.asyncData(returnedGames));
+        spyOn(httpClientSpy, "put").and.returnValue(TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
-        gameService.resetLeaderboard(returnedGames[0]).subscribe(
+        gameService.resetLeaderboard(GAMES[0]).subscribe(
             (game: Game) => {
                 expect(game.leaderboards[0]).toEqual(defaultLeaderboards[0]);
                 expect(game.leaderboards[1]).toEqual(defaultLeaderboards[1]);
@@ -97,6 +55,6 @@ describe("GameService", () => {
         );
 
         // check if only one call was made
-        expect(httpClientSpy.put.calls.count()).toBe(1, "one call");
+        expect(httpClientSpy.put).toHaveBeenCalledTimes(1);
     });
 });
