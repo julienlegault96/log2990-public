@@ -23,6 +23,7 @@ import { GameViewComponent } from "./game-view/game-view.component";
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
+import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { CreateGameComponent } from "./game/create-game/create-game.component";
         AdminViewCardComponent,
         CreateGameComponent,
         GameViewComponent,
+        DiffCounterComponent
     ],
     imports: [
         AppRoutingModule,
