@@ -35,7 +35,6 @@ export abstract class AbsGameListComponent implements OnInit {
 @Component({
     selector: "app-games",
     templateUrl: "./game-list.component.html",
-    styleUrls: ["./game-list.component.css"]
 })
 export class GameListComponent extends AbsGameListComponent {
 
