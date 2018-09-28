@@ -16,8 +16,16 @@ export class Games extends AbstractRoute<Game> {
     }
 
     public async resetLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const elem: Game = JSON.parse(req.body);
+        const elem: Game = req.body;
         await this.updateById(req, res, next, elem._id);
+    }
+
+    public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const randomRange: number = 1000000;
+        const randomNumber: number = Math.floor(Math.random() * randomRange);
+        req.body._id = randomNumber;
+
+        return super.post(req, res, next);
     }
 
 }
