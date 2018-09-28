@@ -13,7 +13,7 @@ describe("Users db services", () => {
     it("should fetch and delete all users", async () => {
         serverUsers = await users.findUsers();
         for (const iterator of serverUsers) {
-            users.removeUser(iterator);
+            await users.removeUser(iterator);
         }
 
         const getResponse: User[] = await users.findUsers();
@@ -53,7 +53,7 @@ describe("Users db services", () => {
 
     it("should create back all serverUsers", async () => {
         for (const iterator of serverUsers) {
-            users.insertUser(iterator);
+            await users.insertUser(iterator);
         }
 
         const getResponse: User[] = await users.findUsers();
