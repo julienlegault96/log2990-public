@@ -1,10 +1,11 @@
 import { TestBed, inject } from "@angular/core/testing";
 import { TestHelper } from "../../test.helper";
 import { GameService } from "./game.service";
-import { defaultLeaderboards } from "../../../../common/game/leaderboard";
+import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
 import { Game } from "../../../../common/game/game";
 import { GAMES } from "../../../../common/game/mock-games";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { Endpoints } from "./abstract-server.service";
 
 describe("GameService", () => {
     // setting  up fixtures
@@ -26,7 +27,7 @@ describe("GameService", () => {
     }));
 
     it("should return expected data on get", () => {
-        // setup stub
+        // setup fake server response
         spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
@@ -42,16 +43,16 @@ describe("GameService", () => {
     });
 
     it("should reset the leaderboard", () => {
-
-        spyOn(httpClientSpy, "put").and.returnValue(TestHelper.asyncData(GAMES));
+        // setup fake server response
+        spyOn(httpClientSpy, "put").and.callFake(
+            (endpoint: Endpoints, resetGame: Game) => TestHelper.asyncData(resetGame)
+            );
 
         // check the content of the mocked call
         gameService.resetLeaderboard(GAMES[0]).subscribe(
-            (game: Game) => {
-                expect(game.leaderboards[0]).toEqual(defaultLeaderboards[0]);
-                expect(game.leaderboards[1]).toEqual(defaultLeaderboards[1]);
-            },
-            fail
+            (returnedGame: Game) => {
+                expect(returnedGame.leaderboards).toEqual(BLANK_LEADERBOARDS);
+            }
         );
 
         // check if only one call was made

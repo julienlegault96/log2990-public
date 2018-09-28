@@ -4,7 +4,7 @@ import { Observable, of, throwError } from "rxjs";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 import { Game } from "../../../../common/game/game";
-import { resetLeaderboards } from "../../../../common/game/leaderboard";
+import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class GameService extends AbstractServerService {
     }
 
     public resetLeaderboard(toReset: Game): Observable<Game> {
-        toReset.leaderboards = resetLeaderboards;
+        toReset.leaderboards = BLANK_LEADERBOARDS;
 
         return this.putRequest<Game>(Endpoints.Leaderboard, toReset);
     }

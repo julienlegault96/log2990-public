@@ -27,7 +27,7 @@ describe("ChronoComponent", () => {
         expect(component.formattedTime).toBe("00:00");
     });
 
-    it("should show 1 second after 1 second", () => {
+    it("should show 1 second after 1 second", async () => {
         const oneSecond: number = 1000;
         component.start();
         setTimeout(() => {
