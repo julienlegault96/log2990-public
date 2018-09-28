@@ -7,6 +7,7 @@ import { Mongo, Collections } from "../services/mongo";
 import { AbstractRoute } from "./abstract-route/abstract-route";
 
 @injectable()
+
 export class Games extends AbstractRoute<Game> {
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
