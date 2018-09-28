@@ -8,7 +8,6 @@ import {
     InsertOneWriteOpResult,
     UpdateWriteOpResult,
     DeleteWriteOpResultObject,
-    ObjectID,
     Collection
 } from "mongodb";
 

@@ -51,15 +51,15 @@ export const resetLeaderboards: Leaderboard[] = [
         "scores": [
             {
                 "username": "Sophie",
-                "time": 12
+                "time": 59
             },
             {
                 "username": "Gabriel",
-                "time": 12
+                "time": 59
             },
             {
                 "username": "Louis",
-                "time": 12
+                "time": 59
             },
         ]
     },
@@ -68,15 +68,15 @@ export const resetLeaderboards: Leaderboard[] = [
         "scores": [
             {
                 "username": "Julien",
-                "time": 12
+                "time": 59
             },
             {
                 "username": "Din",
-                "time": 12
+                "time": 59
             },
             {
                 "username": "Kevin",
-                "time": 12
+                "time": 59
             },
         ]
     }
