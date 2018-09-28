@@ -76,7 +76,7 @@ export class UserService extends AbstractServerService implements OnInit {
         if (!this.isValidUsernameLength(username)) {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
-        if (!this.isUniqueUsername(username)){
+        if (!this.isUniqueUsername(username)) {
             errorString += this.DUPLICATE_USER_MESSAGE;
         }
 

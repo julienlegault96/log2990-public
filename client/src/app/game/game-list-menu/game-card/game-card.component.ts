@@ -18,7 +18,6 @@ export abstract class AbsGameCardComponent implements OnInit {
 
 }
 
-
 @Component({
     selector: "app-game",
     templateUrl: "./game-card.component.html",
@@ -26,8 +25,8 @@ export abstract class AbsGameCardComponent implements OnInit {
 })
 export class GameCardComponent extends AbsGameCardComponent {
 
-    constructor(gameService: GameService) {
+    public constructor(gameService: GameService) {
         super(gameService);
-     }
+    }
 
 }

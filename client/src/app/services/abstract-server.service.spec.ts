@@ -11,7 +11,7 @@ class NotSoAbstractServerService extends AbstractServerService {
         return this.getUrl(serverEndpoint, pathParam, ...queryParams);
     }
 
-    public handleError(error: HttpErrorResponse): Observable<never>{
+    public handleError(error: HttpErrorResponse): Observable<never> {
         return throwError("error handled");
     }
 }
