@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { AbsGameListComponent } from "../../game/game-list-menu/game-list/game-list.component";
+import { AbstractGameListComponent } from "../../game/game-list-menu/game-list/game-list.component";
 import { GameService } from "../../services/game.service";
 
 @Component({
@@ -7,7 +7,7 @@ import { GameService } from "../../services/game.service";
     templateUrl: "./admin-view.component.html",
 })
 
-export class AdminViewComponent extends AbsGameListComponent {
+export class AdminViewComponent extends AbstractGameListComponent {
 
     public constructor(protected gameService: GameService) {
         super(gameService);

@@ -5,7 +5,7 @@ import { GameService } from "../../../services/game.service";
 import { Game } from "../../../../../../common/game/game";
 import { GameType } from "../../../../../../common/game/game-type";
 
-export abstract class AbsGameListComponent implements OnInit {
+export abstract class AbstractGameListComponent implements OnInit {
 
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
@@ -36,7 +36,7 @@ export abstract class AbsGameListComponent implements OnInit {
     selector: "app-games",
     templateUrl: "./game-list.component.html",
 })
-export class GameListComponent extends AbsGameListComponent {
+export class GameListComponent extends AbstractGameListComponent {
 
     public constructor(gameService: GameService) {
         super(gameService);
