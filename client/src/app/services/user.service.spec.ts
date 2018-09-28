@@ -10,13 +10,18 @@ import { Endpoints } from "./abstract-server.service";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
+let getMethodSpy: jasmine.Spy;
 
 describe("UserService", () => {
     beforeEach(() => {
         httpClientSpy = HttpClient.prototype;
-        // fake server responses
-        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
-        spyOn(httpClientSpy, "post").and.callFake( (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(postedUser));
+        // setup fake server responses
+        getMethodSpy = spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
+
+        spyOn(httpClientSpy, "post").and.callFake(
+            (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(postedUser)
+            );
+
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
         userService = new UserService(httpClientSpy);
         TestBed.configureTestingModule({
@@ -39,10 +44,15 @@ describe("UserService", () => {
     });
 
     it("should fetch the existing usernames", () => {
+        // ignore calls done in constructor
+        getMethodSpy.calls.reset();
+
         userService.getUsers().subscribe( (users: User[] ) => {
             expect(users).toEqual(jasmine.any(Array));
             expect(users).toEqual(USERS, "users check");
         });
+
+        expect(getMethodSpy).toHaveBeenCalledTimes(1);
     });
 
     it("should submit the existing usernames", () => {
