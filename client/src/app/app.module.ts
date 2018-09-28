@@ -14,6 +14,7 @@ import { UserComponent } from "./User/user-component/user.component";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
 import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
+import { AdminViewComponent, AdminViewCardComponent} from "./admin/admin-view/admin-view.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 
 @NgModule({
@@ -25,8 +26,9 @@ import { HomePageComponent } from "./home-page/home-page.component";
         SoloGameComponent,
         ChronoComponent,
         UserComponent,
+        AdminViewComponent,
+        AdminViewCardComponent,
         CreateGameComponent,
-        LeaderboardComponent,
         HomePageComponent
     ],
     imports: [
@@ -37,7 +39,7 @@ import { HomePageComponent } from "./home-page/home-page.component";
     ],
     providers: [
         GameService,
-        CreateGameService
+        CreateGameService,
     ],
     bootstrap: [AppComponent]
 })

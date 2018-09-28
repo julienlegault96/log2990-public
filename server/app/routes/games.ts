@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
-
 import Types from "../types";
 import { Game } from "../../../common/game/game";
-import { CODES } from "../../../common/communication/response-codes";
 import { Mongo, Collections } from "../services/mongo";
-import { InsertOneWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
+import { CODES } from "../../../common/communication/response-codes";
+import { InsertOneWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
 
 @injectable()
 export class Games {
@@ -29,7 +28,10 @@ export class Games {
 
     public async addGame(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const response: InsertOneWriteOpResult = await this.insertGame(Object.assign(new Game, req.body));
+            const game: Game = Object.assign(new Game, req.body);
+            const randomRange: number = 1000000;
+            game._id = Math.floor(Math.random() * randomRange);
+            const response: InsertOneWriteOpResult = await this.insertGame(game);
 
             if (response.result.ok) {
                 res.status(CODES.OK).send();
@@ -41,10 +43,26 @@ export class Games {
         }
     }
 
-    public async deleteGames(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async resetLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const game: Game = Object.assign(new Game, req.body);
+            const response: UpdateWriteOpResult =
+                await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, game);
 
-            const response: DeleteWriteOpResultObject = await this.removeGame(Object.assign(new Game, req.body));
+            if (response.result.ok) {
+                res.sendStatus(CODES.OK);
+            } else {
+                res.status(CODES.SERVER_ERROR).send("Failed to insert game into Mongo");
+            }
+        } catch (e) {
+            res.status(CODES.BAD_REQUEST).send("Game provided does not follow the valid format");
+        }
+    }
+
+    public async deleteGame(req: Request, res: Response): Promise<void> {
+        try {
+            const game: Game = Object.assign(new Game, req.body);
+            const response: DeleteWriteOpResultObject = await this.removeGame(game);
 
             if (response.result.ok) {
                 res.sendStatus(CODES.OK);

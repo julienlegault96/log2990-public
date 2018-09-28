@@ -4,6 +4,7 @@ import { Observable, of, throwError } from "rxjs";
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 import { Game } from "../../../../common/game/game";
+import { resetLeaderboards } from "../../../../common/game/leaderboard";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
@@ -17,11 +18,21 @@ export class GameService extends AbstractServerService {
         return this.postRequest<Game>(Endpoints.Games, newGame);
     }
 
+    public resetLeaderboard(toReset: Game): Observable<Game> {
+        toReset.leaderboards = resetLeaderboards;
+
+        return this.putRequest<Game>(Endpoints.Leaderboard, toReset);
+    }
+
     public isJoinable(game: Game): Observable<boolean> {
         return of(false);
     }
 
-    protected handleError (error: HttpErrorResponse): Observable<never>{
+    public deleteGame(game: Game): Observable<{} | Game> {
+        return this.deleteRequest<Game>(Endpoints.Games, game);
+    }
+
+    protected handleError(error: HttpErrorResponse): Observable<never> {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error("An error occurred:", error.error.message);

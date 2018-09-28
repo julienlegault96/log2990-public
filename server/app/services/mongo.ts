@@ -24,15 +24,13 @@ export class Mongo {
     private client: MongoClient;
     private db: Db;
 
-    public constructor() {}
-
     private async connect(): Promise<void> {
         this.client = await MongoClient.connect(this.DB_URL, { useNewUrlParser: true });
         this.db = this.client.db(this.DB_NAME);
     }
 
     public async findDocuments<Type>(collectionName: Collections,
-                                     query: { [key: string]: any } = {}
+                                     query: { [key: string]: string | number | {} } = {}
                                     ): Promise<Type[]> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
@@ -74,6 +72,19 @@ export class Mongo {
         const collection: Collection = this.db.collection(collectionName);
 
         return collection.updateOne(filter, update);
+    }
+
+    public async updateDocumentById<Type>(collectionName: Collections,
+                                          id: number,
+                                          update: Type
+                                        ): Promise<UpdateWriteOpResult> {
+        if (!this.client || !this.client.isConnected) {
+            await this.connect();
+        }
+
+        const collection: Collection = this.db.collection(collectionName);
+
+        return collection.replaceOne({_id: id}, update);
     }
 
     public async removeDocument<Type>(collectionName: Collections,

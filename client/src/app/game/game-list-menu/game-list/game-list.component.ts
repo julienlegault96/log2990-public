@@ -5,17 +5,12 @@ import { GameService } from "../../../services/game.service";
 import { Game } from "../../../../../../common/game/game";
 import { GameType } from "../../../../../../common/game/game-type";
 
-@Component({
-    selector: "app-games",
-    templateUrl: "./game-list.component.html",
-    styleUrls: ["./game-list.component.css"]
-})
-export class GameListComponent implements OnInit {
+export abstract class AbsGameListComponent implements OnInit {
 
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
 
-    public constructor(private gameService: GameService) {
+    public constructor(protected gameService: GameService) {
         this.singleViewGames = new Array();
         this.doubleViewGames = new Array();
     }
@@ -24,15 +19,27 @@ export class GameListComponent implements OnInit {
         this.getGames();
     }
 
-    private getGames(): void {
+    protected getGames(): void {
         this.gameService.getGames()
             .subscribe((games: Game[]) => {
                 this.filterGames(games);
             });
     }
 
-    private filterGames(games: Game[]): void {
+    protected filterGames(games: Game[]): void {
         this.singleViewGames = games.filter((game: Game) => game.type === GameType.SingleView);
         this.doubleViewGames = games.filter((game: Game) => game.type === GameType.DoubleView);
+    }
+}
+
+@Component({
+    selector: "app-games",
+    templateUrl: "./game-list.component.html",
+    styleUrls: ["./game-list.component.css"]
+})
+export class GameListComponent extends AbsGameListComponent {
+
+    public constructor(gameService: GameService) {
+        super(gameService);
     }
 }

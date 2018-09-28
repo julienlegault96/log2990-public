@@ -19,7 +19,6 @@ import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
 import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderboard.component";
 
-
 describe("AppComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -46,6 +45,7 @@ describe("AppComponent", () => {
             ]
         }).compileComponents();
     }));
+    
     it("should create the app", async(() => {
         const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent);
         const app: any = fixture.debugElement.componentInstance;
