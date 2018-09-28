@@ -4,7 +4,7 @@ import Types from "../types";
 import { Game } from "../../../common/game/game";
 import { Mongo, Collections } from "../services/mongo";
 import { CODES } from "../../../common/communication/response-codes";
-import { InsertOneWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
+import { InsertOneWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject, ObjectID } from "mongodb";
 
 @injectable()
 export class Games {
@@ -18,6 +18,8 @@ export class Games {
     public async addGame(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const game: Game = Object.assign(new Game, req.body);
+            const randomRange: number = 1000000;
+            game._id = Math.floor(Math.random() * randomRange);
             const response: InsertOneWriteOpResult = await this.mongo.insertDocument<Game>(Collections.Games, game);
 
             if (response.result.ok) {
