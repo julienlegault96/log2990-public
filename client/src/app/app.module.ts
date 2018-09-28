@@ -15,7 +15,7 @@ import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderbo
 import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/chrono/chrono.component";
 
-import { UserComponent } from "./User/user-component/user.component";
+import { UserComponent } from "./user/user-component/user.component";
 
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";
