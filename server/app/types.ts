@@ -1,6 +1,8 @@
-export default  {
-        Server: Symbol("Server"),
-        Application: Symbol("Application"),
-        Routes: Symbol("Routes"),
-        Index: Symbol("Index")
+export default {
+    Server: Symbol("Server"),
+    Application: Symbol("Application"),
+    Routes: Symbol("Routes"),
+    Games: Symbol("Games"),
+    Users: Symbol("Users"),
+    Mongo: Symbol("Mongo")
 };
