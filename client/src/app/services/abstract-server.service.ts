@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 @Injectable()
+
 export abstract class AbstractServerService {
 
     private readonly SERVER_HOST_URL: string = "http://localhost:3000";

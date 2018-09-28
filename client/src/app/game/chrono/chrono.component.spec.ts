@@ -33,7 +33,7 @@ describe("ChronoComponent", () => {
         setTimeout(() => {
             component.stop();
             expect(component.formattedTime).toBe("00:01");
-        // tslint:disable-next-line:align
+            // tslint:disable-next-line:align
         }, oneSecond);
     });
 

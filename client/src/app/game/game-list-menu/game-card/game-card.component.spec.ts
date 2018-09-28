@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { TestHelper } from "../../../../test.helper";
 
 import { GameCardComponent } from "./game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
-import { GAMES } from "../../../../../../common/game/mock-games";
 import { GameService } from "../../../services/game.service";
-import { TestHelper } from "../../../../test.helper";
+
+import { GAMES } from "../../../../../../common/game/mock-games";
 
 describe("GameCardComponent", () => {
     let component: GameCardComponent;

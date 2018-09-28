@@ -1,10 +1,12 @@
 import { Injectable } from "@angular/core";
 
 import { GameService } from "./game.service";
+
 import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 
 @Injectable()
+
 export class CreateGameService extends GameService {
 
     private readonly nameMinLength: number = 1;

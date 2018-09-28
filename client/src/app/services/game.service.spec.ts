@@ -1,10 +1,12 @@
 import { TestBed, inject } from "@angular/core/testing";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { TestHelper } from "../../test.helper";
+
 import { GameService } from "./game.service";
+
 import { defaultLeaderboards } from "../../../../common/game/leaderboard";
 import { Game } from "../../../../common/game/game";
 import { GAMES } from "../../../../common/game/mock-games";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 describe("GameService", () => {
     // setting  up fixtures

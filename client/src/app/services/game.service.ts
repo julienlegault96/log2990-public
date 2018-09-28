@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
 import { Game } from "../../../../common/game/game";
 import { resetLeaderboards } from "../../../../common/game/leaderboard";
-import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
+
 export class GameService extends AbstractServerService {
 
     public getGames(): Observable<Game[]> {
@@ -46,4 +47,5 @@ export class GameService extends AbstractServerService {
 
         return throwError("Something bad happened; please try again later.");
     }
+
 }

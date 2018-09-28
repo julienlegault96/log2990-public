@@ -12,10 +12,10 @@ import { HttpErrorResponse, HttpClient } from "@angular/common/http";
  * this class connects implements methods for supervising user logins and logouts
  */
 export class UserService extends AbstractServerService implements OnInit {
+
     private readonly MIN_USERNAME_LENGTH: number = 1;
     private readonly MAX_USERNAME_LENGTH: number = 20;
-    // Disclaimer: cette expression régulière a été prise de https://stackoverflow.com/a/389022
-    private readonly VALIDATION_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
+    private readonly VALIDATION_REGEX: RegExp = /^[a-z0-9]+$/i;
 
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =

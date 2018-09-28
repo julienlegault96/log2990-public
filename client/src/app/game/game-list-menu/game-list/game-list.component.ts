@@ -7,9 +7,11 @@ import { AbstractGameListComponent } from "src/app/game/game-list-menu/abstract-
     selector: "app-games",
     templateUrl: "./game-list.component.html",
 })
+
 export class GameListComponent extends AbstractGameListComponent {
 
     public constructor(gameService: GameService) {
         super(gameService);
     }
+
 }
