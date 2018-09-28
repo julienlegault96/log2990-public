@@ -18,13 +18,21 @@ export class Compteur {
 
 private imageDiff: number = 0;
 
-public incrementImageDiff(): void {
+public incrementDiff(): void {
   this.imageDiff++;
 }
 
 public getImageDiff(): number {
 
   return this.imageDiff;
+}
+
+public setDiff(): void {
+    this.imageDiff = 0;
+}
+
+public decrementDiff(): void {
+    this.imageDiff--;
 }
 
 }
