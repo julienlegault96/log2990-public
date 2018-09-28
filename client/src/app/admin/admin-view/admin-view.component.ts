@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+
 import { GameService } from "../../services/game.service";
 import { AbstractGameListComponent } from "src/app/game/game-list-menu/abstract-game-list/abstract-game-list.component";
 

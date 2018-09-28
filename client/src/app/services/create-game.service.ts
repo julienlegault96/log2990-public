@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 
 import { GameService } from "./game.service";
+
 import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable()
+
 export class CreateGameService extends GameService {
     public validator: Validator;
 

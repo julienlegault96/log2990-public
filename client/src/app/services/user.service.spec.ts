@@ -1,8 +1,10 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { TestHelper } from "../../test.helper";
-import { USERS } from "../../../../common/user/mock-users";
-import { UserService } from "./user.service";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { TestHelper } from "../../test.helper";
+
+import { UserService } from "./user.service";
+
+import { USERS } from "../../../../common/user/mock-users";
 import { User } from "../../../../common/user/user";
 
 let httpClientSpy: HttpClient;

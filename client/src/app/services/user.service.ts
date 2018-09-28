@@ -13,6 +13,7 @@ import { Validator } from "../validator";
  * this class connects implements methods for supervising user logins and logouts
  */
 export class UserService extends AbstractServerService implements OnInit {
+
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "\n- Seul des caractères alphanumériques sont acceptés.";

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+
 import { UserService } from "../../services/user.service";
 
 @Component({
@@ -10,8 +11,10 @@ import { UserService } from "../../services/user.service";
  * this component takes the inputed string and calls submitUsername with it
  */
 export class UserComponent implements OnInit {
-    public constructor(private userService: UserService) { }
+
     private username: string;
+
+    public constructor(private userService: UserService) { }
 
     public ngOnInit(): void {
         this.username = "";
@@ -24,4 +27,5 @@ export class UserComponent implements OnInit {
             alert(error);
         }
     }
+
 }
