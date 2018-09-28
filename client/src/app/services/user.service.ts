@@ -46,7 +46,7 @@ export class UserService extends AbstractServerService {
     public onUnloadEvent(e: BeforeUnloadEvent): void {
         e.preventDefault();
         if (this.loggedIn) {
-        this.removeUser( this.loggedUser );
+        this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
         e.returnValue = "";
@@ -88,16 +88,22 @@ export class UserService extends AbstractServerService {
         this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
     }
 
+    public loginUser(userToLog: User): void {
+        this.asyncUserList = this.asyncUserList.concat(userToLog);
+        this.loggedUser = userToLog;
+        this.loggedIn = true;
+    }
+
     public getUsers(): Observable<User[]> {
         return this.getRequest<User[]>(Endpoints.Users);
     }
 
-    public addUser(newUser: User): Observable<{} | User> {
+    public addUser(newUser: User): Observable<User> {
         return this.postRequest<User>(Endpoints.Users, newUser);
     }
 
-    public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users, userToDelete);
+    public removeUser(userToDelete: User): Observable<User> {
+        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
     }
 
     /**
@@ -110,10 +116,7 @@ export class UserService extends AbstractServerService {
         if (this.validateUsername(username)) {
             const clientUser: User = new User(username);
             this.addUser(clientUser).subscribe( (serverUser: User) => { });
-
-            this.asyncUserList = this.asyncUserList.concat(clientUser);
-            this.loggedUser = clientUser;
-            this.loggedIn = true;
+            this.loginUser(clientUser);
         } else {
             throw new Error(this.buildErrorString(username));
         }
