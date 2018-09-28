@@ -5,7 +5,6 @@ import { AbstractGameCardComponent } from "src/app/game/abstract-game-card/abstr
 @Component({
     selector: "app-admin-card",
     templateUrl: "./admin-view-card.component.html",
-    styleUrls: ["../../game/game-list-menu/game-card/game-card.component.css"]
 })
 
 export class AdminViewCardComponent extends AbstractGameCardComponent {
