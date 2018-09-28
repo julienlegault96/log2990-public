@@ -10,6 +10,21 @@ export class GameViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
+
+}
+export class Compteur {
+
+private imageDiff: number = 0;
+
+public incrementImageDiff(): void {
+  this.imageDiff++;
+}
+
+public getImageDiff(): number {
+
+  return this.imageDiff;
+}
 
 }
