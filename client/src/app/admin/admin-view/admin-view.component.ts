@@ -10,7 +10,7 @@ import { AbsGameCardComponent } from "../../game/game-list-menu/game-card/game-c
 })
 export class AdminViewComponent extends AbsGameListComponent {
 
-  public constructor(gameService: GameService) {
+  public constructor(protected gameService: GameService) {
     super(gameService);
   }
 
