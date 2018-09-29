@@ -34,14 +34,14 @@ FormeTetraedre *tetraedre = NULL;
 // diverses variables d'état
 struct Etat
 {
-   bool enmouvement;     // le modèle est en mouvement automatique ou non
+  // bool enmouvement;     // le modèle est en mouvement automatique ou non
    bool afficheAxes;     // indique si on affiche les axes
    bool culling;         // indique si on veut ne pas afficher les faces arrières
    GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
    int modele;           // le modèle à afficher
    double dimBoite;      // la dimension de la boite
-   bool teteOrientee;    // l'orientation de la tête est toujours vers l'avant?
-} etat = { false, true, false, GL_LINE, 1, 10.0, false };
+ //  bool teteOrientee;    // l'orientation de la tête est toujours vers l'avant?
+} etat = { /*false*/, true, false, GL_LINE, 1, 10.0,/* false*/ };
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
@@ -247,11 +247,10 @@ void FenetreTP::initialiser()
    glUseProgram( progBase );
    cubeFil = new FormeCube( 1.0, false );
    cube = new FormeCube( 1.0, true );
-   sphere = new FormeSphere( 0.25, 8, 8, true );
-   cylindre = new FormeCylindre( 1.0, 1.0, 1.0, 40, 1, true );
-   cone = new FormeCylindre(1.0, 0.0, 1.5,30, 1, true);
-   tore = new FormeTore(1, 2, 10, 10 , true ); 
-   tetraedre = new FormeTetraedre(5,true);
+   sphere = new FormeSphere( 1.0, 8, 8, true );
+   cylindre = new FormeCylindre( 1.0, 1.0, 1.0, 10, 1, true );
+   cone = new FormeCylindre(1.0, 0.0, 1.5,10, 1, true);
+   tetraedre = new FormeTetraedre(1.5, true);
 
 }
 
@@ -265,7 +264,6 @@ void FenetreTP::conclure()
    delete sphere;
    delete cylindre;
    delete cone;
-   delete tore;
    delete tetraedre;
 }
 
@@ -303,11 +301,6 @@ void afficherQuad( )
 void afficherCone()
 {
     cone->afficher();
-}
-
-void afficherTore()
-{
-    tore->afficher();
 }
 
 void afficherTetraedre()
@@ -528,28 +521,33 @@ void FenetreTP::afficherScene()
    // tracer la bestiole à pattes
    glPolygonMode( GL_FRONT_AND_BACK, etat.modePolygone );
    if ( etat.culling ) glEnable( GL_CULL_FACE ); else glDisable( GL_CULL_FACE );
-/*
-    glVertexAttrib3f( locColor, 1.0, 0.0, 0.0 );
-   afficherSphere(); 
 
-   matrModel.Translate(0,1,0);
+    glVertexAttrib3f( locColor, 1.0, 0.0, 0.0 ); //rouge
+    afficherSphere(); 
+
+   matrModel.Translate(-2,2,0);
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
-   glVertexAttrib3f( locColor, 0.0, 1.0, 0.0 );
+   glVertexAttrib3f( locColor, 0.0, 1.0, 0.0 ); //vert
    afficherCube();
 
-   matrModel.Translate(0,1,0);
+   matrModel.Translate(2,-2,0);
+   matrModel.Translate(-2,-2,0);
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
-   glVertexAttrib3f( locColor, 0.0, 1.0, 0.0 );
+   glVertexAttrib3f( locColor, 0.0, 0.0, 1.0 ); //bleu
    afficherCone();
 
 
-   matrModel.Translate(0,3,0);
-    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
-   glVertexAttrib3f( locColor, 0.0, 0.0, 1.0 );
+   matrModel.Translate(2,2,0);
+   matrModel.Translate(2,-2,0);
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
+   glVertexAttrib3f( locColor, 1.0, 1.0, 0.0 ); // jaune
    afficherCylindre();
 
-   afficherTore();*/
 
+    matrModel.Translate(-2,2,0);
+   matrModel.Translate(2,2,0);
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
+   glVertexAttrib3f( locColor, 1.0, 0.0, 1.0 ); // Rose
    afficherTetraedre();
 
 
