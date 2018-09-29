@@ -29,4 +29,7 @@ $(SRC).exe : $(SRC).cpp *.h
 sol :  ; make SRC=$(SRC)Solution exe
 runs : ; make SRC=$(SRC)Solution run
 
+clean :
+	rm -rf *.o *.exe *.exe.dSYM
+
 
