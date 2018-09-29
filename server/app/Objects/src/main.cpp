@@ -193,6 +193,9 @@ void FenetreTP::afficherScene()
       cubeFil->afficher();
    }matrModel.PopMatrix(); glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
 
+    // Mode plein ou en fil
+   glPolygonMode( GL_FRONT_AND_BACK, etat.modePolygone );
+   if ( etat.culling ) glEnable( GL_CULL_FACE ); else glDisable( GL_CULL_FACE );
 
     // afficherRepereCourant();
 
