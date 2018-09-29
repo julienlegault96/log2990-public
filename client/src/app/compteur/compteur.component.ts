@@ -7,28 +7,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompteurComponent implements OnInit {
 
-  constructor() { }
+  public constructor() { }
 
-  private imageDiff: number = 0;
+  private readonly MAXDIF: number = 7;
+  private readonly MAXBASE: number = 100;
+  private difFound: number = 0;
+  public percentageFound: number;
 
-  public incrementDiff(): void {
-        this.imageDiff++;
+  public getDif(): number {
+
+      return this.difFound;
     }
 
-  public getImageDiff(): number {
-
-        return this.imageDiff;
+  public setDif(): void {
+      this.difFound = 0;
     }
 
-  public setDiff(): void {
-        this.imageDiff = 0;
+  public decrementDif(): void {
+      this.difFound--;
     }
 
-  public decrementDiff(): void {
-        this.imageDiff--;
-    }
+  public incrementDif(): void {
+    this.difFound++;
+    this.percentageFound = this.difFound * this.MAXBASE / this.MAXDIF ;
+    this.percentageFound = parseFloat(this.percentageFound.toFixed(0));
+}
 
-  ngOnInit() {
+  public ngOnInit() {
 
   }
 

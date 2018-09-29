@@ -1,3 +1,15 @@
-<p>
-  compteur works!
-</p>
+
+<div class="row">
+    <div class="col-md-6 col-sm-12 image-container">
+        <img class="img-thumbnail game-image" src="https://www.w3schools.com/w3css/img_lights.jpg">
+    </div>
+    <div class="col-md-6 col-sm-12 image-container"> 
+        <button class="btn btn-primary btn-block" (click)="incrementDif()">
+             <img class="img-thumbnail game-image" src="https://www.w3schools.com/w3css/img_lights.jpg">
+        </button>
+    </div>
+</div>
+<!-- progressbar-->
+<div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: 70%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{percentageFound}}%</div>
+</div>
