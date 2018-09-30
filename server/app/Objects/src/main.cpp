@@ -5,6 +5,10 @@
 #include "inf2705-nuanceur.h"
 #include "inf2705-fenetre.h"
 #include "inf2705-forme.h"
+#include <stdio.h>
+#include <stdlib.h> 
+#include <time.h> 
+
 
 
 // variables pour l'utilisation des nuanceurs
@@ -162,6 +166,32 @@ void afficherTetraedre()
 {
     tetraedre->afficher();
 }
+//fonction retournant un float aleatoire
+//source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
+
+float randFloat(const float& min, const float& max) {
+	float range = max - min;
+    //srand(NULL);
+	float num = range * rand() / RAND_MAX;
+	return (num + min);
+}
+glm:: vec3 ColorShpere(randFloat(0,1),randFloat(0,1),randFloat(0,1));
+
+glm::vec3 translateSphere(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(0,etat.dimBoite-1));
+
+glm::vec4 RotateSphere(randFloat(0,360), randFloat(0,1),
+                       randFloat(0,1),randFloat(0,1));          
+
+GLfloat scaleSphere = randFloat(0.5, 1.5);
+
+
+
+
+glm::vec3 translateCube(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(0,etat.dimBoite-0.5));
 
 void FenetreTP::afficherScene()
 {
@@ -186,7 +216,7 @@ void FenetreTP::afficherScene()
 
    // tracer la boite englobante
    glVertexAttrib3f( locColor, 1.0, 1.0, 1.0 ); // équivalent au glColor() de OpenGL 2.x
-   matrModel.PushMatrix();{
+   matrModel.PushMatrix();{      
       matrModel.Translate( 0, 0, 0.5*etat.dimBoite );
       matrModel.Scale( etat.dimBoite, etat.dimBoite, etat.dimBoite );
       glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
@@ -197,36 +227,46 @@ void FenetreTP::afficherScene()
    glPolygonMode( GL_FRONT_AND_BACK, etat.modePolygone );
    if ( etat.culling ) glEnable( GL_CULL_FACE ); else glDisable( GL_CULL_FACE );
 
-    // afficherRepereCourant();
+    // afficherRepereCourant();    
 
-    glVertexAttrib3f( locColor, 1.0, 0.0, 0.0 ); //rouge
+    glVertexAttrib3f( locColor,ColorShpere.r, ColorShpere.b, ColorShpere.g ); //rouge
+    matrModel.PushMatrix();{
+    matrModel.Translate(0,0,1);              
+    matrModel.Translate(translateSphere.x,translateSphere.y,translateSphere.z); 
+    matrModel.Scale(scaleSphere,scaleSphere,scaleSphere);
+    matrModel.Rotate(RotateSphere.x,RotateSphere.y,RotateSphere.z,RotateSphere.w);
+    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
     afficherSphere(); 
-
-   matrModel.Translate(-2,2,0);
-   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
+    }matrModel.PopMatrix();     
+    
+    
    glVertexAttrib3f( locColor, 0.0, 1.0, 0.0 ); //vert
+   matrModel.PushMatrix();{
+   matrModel.Translate(0,0,0.5);              
+   matrModel.Translate(translateCube.x,translateCube.y,translateCube.z); 
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );  
    afficherCube();
+   }matrModel.PopMatrix(); 
 
-   matrModel.Translate(2,-2,0);
-   matrModel.Translate(-2,-2,0);
-   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
    glVertexAttrib3f( locColor, 0.0, 0.0, 1.0 ); //bleu
+   matrModel.PushMatrix();{
+   
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
    afficherCone();
+   }matrModel.PopMatrix(); 
 
-
-   matrModel.Translate(2,2,0);
-   matrModel.Translate(2,-2,0);
-   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
    glVertexAttrib3f( locColor, 1.0, 1.0, 0.0 ); // jaune
+   matrModel.PushMatrix();{
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );   
    afficherCylindre();
+   }matrModel.PopMatrix(); 
 
-
-    matrModel.Translate(-2,2,0);
-   matrModel.Translate(2,2,0);
-   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
    glVertexAttrib3f( locColor, 1.0, 0.0, 1.0 ); // Rose
+   matrModel.PushMatrix();{
+   matrModel.Translate(0,0,0.75);  
+   glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );   
    afficherTetraedre();
-
+   }matrModel.PopMatrix(); 
 
 }
 
