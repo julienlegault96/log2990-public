@@ -182,8 +182,8 @@ glm::vec3 translateSphere(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(0,etat.dimBoite-1));
 
-glm::vec4 RotateSphere(randFloat(0,360), randFloat(0,1),
-                       randFloat(0,1),randFloat(0,1));          
+glm::vec4 RotateSphere(randFloat(0,1), randFloat(0,1),
+                       randFloat(0,1), randFloat(0,360));         
 
 GLfloat scaleSphere = randFloat(0.5, 1.5);
 
@@ -194,10 +194,23 @@ glm::vec3 translateCube(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(0,etat.dimBoite-0.5));
 
-glm::vec4 RotateCube(randFloat(0,360), randFloat(0,1),
-                       randFloat(0,1),randFloat(0,1));  
+glm::vec4 RotateCube(randFloat(0,1), randFloat(0,1),
+                     randFloat(0,1), randFloat(0,360));  
 
 GLfloat scaleCube= randFloat(0.5, 1.5);
+
+// Cone
+glm:: vec3 ColorCone(randFloat(0,1),randFloat(0,1),randFloat(0,1));
+
+glm::vec3 translateCone(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+                        randFloat(0,etat.dimBoite));
+
+glm::vec4 RotateCone(randFloat(0,1), randFloat(0,1),
+                     randFloat(0,1), randFloat(0,360));  
+
+GLfloat scaleCone = randFloat(0.5, 1.5);
+
 
 void FenetreTP::afficherScene()
 {
@@ -240,7 +253,7 @@ void FenetreTP::afficherScene()
     matrModel.Translate(0,0,1);              
     matrModel.Translate(translateSphere.x,translateSphere.y,translateSphere.z); 
     matrModel.Scale(scaleSphere,scaleSphere,scaleSphere);
-    matrModel.Rotate(RotateSphere.x,RotateSphere.y,RotateSphere.z,RotateSphere.w);
+    matrModel.Rotate(RotateSphere.w,RotateSphere.x,RotateSphere.y,RotateSphere.z);
     glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
     afficherSphere(); 
     }matrModel.PopMatrix();     
@@ -251,14 +264,16 @@ void FenetreTP::afficherScene()
    matrModel.Translate(0,0,0.5);              
    matrModel.Translate(translateCube.x,translateCube.y,translateCube.z); 
    matrModel.Scale(scaleCube,scaleCube,scaleCube);
-   matrModel.Rotate(RotateCube.x,RotateCube.y,RotateCube.z,RotateCube.w);
+   matrModel.Rotate(RotateCube.w,RotateCube.x,RotateCube.y,RotateCube.z);
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );  
    afficherCube();
    }matrModel.PopMatrix(); 
 
-   glVertexAttrib3f( locColor, 0.0, 0.0, 1.0 ); //bleu
+   glVertexAttrib3f( locColor, ColorCone.r, ColorCone.b, ColorCone.g ); 
    matrModel.PushMatrix();{
-   
+   matrModel.Translate(translateCone.x,translateCone.y,translateCone.z); 
+   matrModel.Scale(scaleCone,scaleCone,scaleCone);
+   matrModel.Rotate(RotateCone.w,RotateCone.x,RotateCone.y,RotateCone.z);   
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
    afficherCone();
    }matrModel.PopMatrix(); 
