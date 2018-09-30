@@ -1,76 +1,32 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
+
 import Types from "../types";
-import { Game } from "../../../common/game/game";
 import { Mongo, Collections } from "../services/mongo";
-import { CODES } from "../../../common/communication/response-codes";
-import { InsertOneWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject } from "mongodb";
+import { AbstractRoute } from "./abstract-route/abstract-route";
+
+import { Game } from "../../../common/game/game";
 
 @injectable()
-export class Games {
-    public constructor(@inject(Types.Mongo) private mongo: Mongo) { }
 
-    public async findGames(): Promise<Game[]> {
-        return this.mongo.findDocuments<Game>(Collections.Games);
-    }
+export class Games extends AbstractRoute<Game> {
 
-    public async insertGame(game: Game): Promise<InsertOneWriteOpResult> {
-        return this.mongo.insertDocument<Game>(Collections.Games, game);
-    }
-
-    public async removeGame(game: Game): Promise<DeleteWriteOpResultObject> {
-        return this.mongo.removeDocument<Game>(Collections.Games, game);
-    }
-
-    public async getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
-        res.status(CODES.OK).send(JSON.stringify(await this.findGames()));
-    }
-
-    public async addGame(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const game: Game = Object.assign(new Game, req.body);
-            const randomRange: number = 1000000;
-            game._id = Math.floor(Math.random() * randomRange);
-            const response: InsertOneWriteOpResult = await this.insertGame(game);
-
-            if (response.result.ok) {
-                res.status(CODES.OK).send();
-            } else {
-                res.status(CODES.SERVER_ERROR).send("Failed to insert game into Mongo");
-            }
-        } catch (e) {
-            res.status(CODES.BAD_REQUEST).send("Game provided does not follow the valid format");
-        }
+    public constructor(@inject(Types.Mongo) mongo: Mongo) {
+        super(mongo);
+        this.collection = Collections.Games;
     }
 
     public async resetLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const game: Game = Object.assign(new Game, req.body);
-            const response: UpdateWriteOpResult =
-                await this.mongo.updateDocumentById<Game>(Collections.Games, game._id, game);
-
-            if (response.result.ok) {
-                res.sendStatus(CODES.OK);
-            } else {
-                res.status(CODES.SERVER_ERROR).send("Failed to insert game into Mongo");
-            }
-        } catch (e) {
-            res.status(CODES.BAD_REQUEST).send("Game provided does not follow the valid format");
-        }
+        const elem: Game = req.body;
+        await this.updateById(req, res, next, elem._id);
     }
 
-    public async deleteGame(req: Request, res: Response): Promise<void> {
-        try {
-            const game: Game = Object.assign(new Game, req.body);
-            const response: DeleteWriteOpResultObject = await this.removeGame(game);
+    public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const randomRange: number = 1000000;
+        const randomNumber: number = Math.floor(Math.random() * randomRange);
+        req.body._id = randomNumber;
 
-            if (response.result.ok) {
-                res.sendStatus(CODES.OK);
-            } else {
-                res.status(CODES.SERVER_ERROR).send("Failed to remove game from Mongo");
-            }
-        } catch (e) {
-            res.status(CODES.BAD_REQUEST).send("Game provided does not follow the valid format");
-        }
+        return super.post(req, res, next);
     }
+
 }

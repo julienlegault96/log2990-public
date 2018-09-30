@@ -11,18 +11,18 @@ describe("Games db services", () => {
     let serverGames: Game[];
 
     it("should fetch and delete all games", async () => {
-        serverGames = await games.findGames();
+        serverGames = await games.getAll();
         for (const iterator of serverGames) {
-            await games.removeGame(iterator);
+            await games.remove(iterator);
         }
 
-        const getResponse: Game[] = await games.findGames();
+        const getResponse: Game[] = await games.getAll();
         expect(getResponse.length).to.equal(0);
     });
 
     it("should create mock game", async () => {
         // insert
-        const insResponse: InsertOneWriteOpResult = await games.insertGame(GAMES[0]);
+        const insResponse: InsertOneWriteOpResult = await games.insert(GAMES[0]);
 
         expect(insResponse.insertedCount).to.equal(1);
     });
@@ -30,7 +30,7 @@ describe("Games db services", () => {
     it("shouldn't create mock game a second time", async () => {
         // insert
         try {
-            await games.insertGame(GAMES[0]);
+            await games.insert(GAMES[0]);
         } catch (err) {
             expect(String(err).includes("duplicate key error")).to.equal(true);
         }
@@ -38,7 +38,7 @@ describe("Games db services", () => {
 
     it("should fetch mock game", async () => {
         // get
-        const getResponse: Game[] = await games.findGames();
+        const getResponse: Game[] = await games.getAll();
 
         expect(getResponse.length).to.equal(1);
         expect(getResponse[0].title).to.equal(GAMES[0].title);
@@ -46,17 +46,17 @@ describe("Games db services", () => {
 
     it("should delete mock game", async () => {
         // delete
-        const delResponse: DeleteWriteOpResultObject = await games.removeGame(GAMES[0]);
+        const delResponse: DeleteWriteOpResultObject = await games.remove(GAMES[0]);
 
         expect(Number(delResponse.deletedCount)).to.equal(1);
     });
 
     it("should create back all serverGames", async () => {
         for (const iterator of serverGames) {
-            await games.insertGame(iterator);
+            await games.insert(iterator);
         }
 
-        const getResponse: Game[] = await games.findGames();
+        const getResponse: Game[] = await games.getAll();
         expect(getResponse.length).to.equal(serverGames.length);
 
     });
