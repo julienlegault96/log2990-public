@@ -171,10 +171,11 @@ void afficherTetraedre()
 
 float randFloat(const float& min, const float& max) {
 	float range = max - min;
-    //srand(NULL);
 	float num = range * rand() / RAND_MAX;
 	return (num + min);
 }
+
+//Sphere
 glm:: vec3 ColorShpere(randFloat(0,1),randFloat(0,1),randFloat(0,1));
 
 glm::vec3 translateSphere(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
@@ -186,12 +187,17 @@ glm::vec4 RotateSphere(randFloat(0,360), randFloat(0,1),
 
 GLfloat scaleSphere = randFloat(0.5, 1.5);
 
-
-
+//Cube
+glm:: vec3 ColorCube(randFloat(0,1),randFloat(0,1),randFloat(0,1));
 
 glm::vec3 translateCube(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(-etat.dimBoite/2,etat.dimBoite/2),
                         randFloat(0,etat.dimBoite-0.5));
+
+glm::vec4 RotateCube(randFloat(0,360), randFloat(0,1),
+                       randFloat(0,1),randFloat(0,1));  
+
+GLfloat scaleCube= randFloat(0.5, 1.5);
 
 void FenetreTP::afficherScene()
 {
@@ -229,7 +235,7 @@ void FenetreTP::afficherScene()
 
     // afficherRepereCourant();    
 
-    glVertexAttrib3f( locColor,ColorShpere.r, ColorShpere.b, ColorShpere.g ); //rouge
+    glVertexAttrib3f( locColor,ColorShpere.r, ColorShpere.b, ColorShpere.g ); 
     matrModel.PushMatrix();{
     matrModel.Translate(0,0,1);              
     matrModel.Translate(translateSphere.x,translateSphere.y,translateSphere.z); 
@@ -240,10 +246,12 @@ void FenetreTP::afficherScene()
     }matrModel.PopMatrix();     
     
     
-   glVertexAttrib3f( locColor, 0.0, 1.0, 0.0 ); //vert
+   glVertexAttrib3f( locColor, ColorCube.r, ColorCube.b, ColorCube.g ); 
    matrModel.PushMatrix();{
    matrModel.Translate(0,0,0.5);              
    matrModel.Translate(translateCube.x,translateCube.y,translateCube.z); 
+   matrModel.Scale(scaleCube,scaleCube,scaleCube);
+   matrModel.Rotate(RotateCube.x,RotateCube.y,RotateCube.z,RotateCube.w);
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );  
    afficherCube();
    }matrModel.PopMatrix(); 
