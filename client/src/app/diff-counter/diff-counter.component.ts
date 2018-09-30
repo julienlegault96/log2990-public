@@ -6,22 +6,24 @@ import { Component, OnInit } from "@angular/core";
 })
 
 export class DiffCounterComponent implements OnInit {
-    private playerCount: number;
+
     public counts: number[];
+    private counter: number;
 
     public constructor(playerCount?: number) {
-        this.playerCount = (playerCount === undefined) ? 1 : playerCount;
-     }
-
-    public ngOnInit(): void {
-        this.counts = Array<number>(this.playerCount);
+        this.counter = (playerCount === undefined) ? 1 : playerCount;
     }
 
-    public incrementPlayerCount( userId: string): void {
+    public ngOnInit(): void {
+        this.counts = Array<number>(this.counter);
+    }
+
+    public incrementPlayerCount(userId: string): void {
         this.counts[0]++;
     }
 
     public diffFound(userId: string): void {
         this.incrementPlayerCount(userId);
     }
+
 }
