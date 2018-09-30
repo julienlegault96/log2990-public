@@ -190,8 +190,8 @@ GLfloat scaleSphere = randFloat(0.5, 1.5);
 //Cube
 glm:: vec3 ColorCube(randFloat(0,1),randFloat(0,1),randFloat(0,1));
 
-glm::vec3 translateCube(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
-                        randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+glm::vec3 translateCube(randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(-etat.dimBoite/3,etat.dimBoite/3),
                         randFloat(0,etat.dimBoite-0.5));
 
 glm::vec4 RotateCube(randFloat(0,1), randFloat(0,1),
@@ -202,8 +202,8 @@ GLfloat scaleCube= randFloat(0.5, 1.5);
 // Cone
 glm:: vec3 ColorCone(randFloat(0,1),randFloat(0,1),randFloat(0,1));
 
-glm::vec3 translateCone(randFloat(-etat.dimBoite/2,etat.dimBoite/2),
-                        randFloat(-etat.dimBoite/2,etat.dimBoite/2),
+glm::vec3 translateCone(randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(-etat.dimBoite/3,etat.dimBoite/3),
                         randFloat(0,etat.dimBoite));
 
 glm::vec4 RotateCone(randFloat(0,1), randFloat(0,1),
@@ -224,6 +224,16 @@ glm::vec4 RotateCylindre(randFloat(0,1), randFloat(0,1),
 GLfloat scaleCylindre = randFloat(0.5, 1.5);
 
 // Tetrahedre
+glm:: vec3 ColorTetrahedre(randFloat(0,1),randFloat(0,1),randFloat(0,1));
+
+glm::vec3 translateTetrahedre(randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(0,0.75*etat.dimBoite -0.75));
+
+glm::vec4 RotateTertahedre(randFloat(0,1), randFloat(0,1),
+                     randFloat(0,1), randFloat(0,360));  
+
+GLfloat scaleTetrahedre = randFloat(0.75, 2.25);
 
 
 void FenetreTP::afficherScene()
@@ -304,10 +314,12 @@ void FenetreTP::afficherScene()
    glVertexAttrib3f( locColor, 1.0, 0.0, 1.0 ); // Rose
    matrModel.PushMatrix();{
    matrModel.Translate(0,0,0.75);  
+   matrModel.Translate(translateTetrahedre.x,translateTetrahedre.y,translateTetrahedre.z); 
+   matrModel.Scale(scaleTetrahedre,scaleTetrahedre,scaleTetrahedre);
+   matrModel.Rotate(RotateTertahedre.w,RotateTertahedre.x,RotateTertahedre.y,RotateTertahedre.z);   
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );   
    afficherTetraedre();
    }matrModel.PopMatrix(); 
-
 }
 
 void FenetreTP::redimensionner( GLsizei w, GLsizei h )
