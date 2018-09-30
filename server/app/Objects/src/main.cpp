@@ -211,6 +211,20 @@ glm::vec4 RotateCone(randFloat(0,1), randFloat(0,1),
 
 GLfloat scaleCone = randFloat(0.5, 1.5);
 
+// Cylindre
+glm:: vec3 ColorCylindre(randFloat(0,1),randFloat(0,1),randFloat(0,1));
+
+glm::vec3 translateCylindre(randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(-etat.dimBoite/3,etat.dimBoite/3),
+                        randFloat(0,etat.dimBoite));
+
+glm::vec4 RotateCylindre(randFloat(0,1), randFloat(0,1),
+                     randFloat(0,1), randFloat(0,360));  
+
+GLfloat scaleCylindre = randFloat(0.5, 1.5);
+
+// Tetrahedre
+
 
 void FenetreTP::afficherScene()
 {
@@ -278,8 +292,11 @@ void FenetreTP::afficherScene()
    afficherCone();
    }matrModel.PopMatrix(); 
 
-   glVertexAttrib3f( locColor, 1.0, 1.0, 0.0 ); // jaune
+   glVertexAttrib3f( locColor, ColorCylindre.r, ColorCylindre.b, ColorCylindre.g ); 
    matrModel.PushMatrix();{
+   matrModel.Translate(translateCylindre.x,translateCylindre.y,translateCylindre.z); 
+   matrModel.Scale(scaleCylindre,scaleCylindre,scaleCylindre);
+   matrModel.Rotate(RotateCylindre.w,RotateCylindre.x,RotateCylindre.y,RotateCylindre.z);    
    glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );   
    afficherCylindre();
    }matrModel.PopMatrix(); 
