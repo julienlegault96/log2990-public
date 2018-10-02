@@ -23,13 +23,13 @@ describe("DiffCounterComponent", () => {
         expect(component).toBeTruthy();
     });
 
-    it("devrais lire 0 à l'initialisation pour un joueur", () => {
+    it("should read 0 on counter for 1 player", () => {
         component.setPlayerOne("playerOneId");
 
         expect(component.getPlayerCount("playerOneId")).toEqual(0);
     });
 
-    it("devrais contenir autant de counter que de joueurs", () => {
+    it("should have right amount of counters", () => {
         component.setPlayerOne("playerOneId");
 
         expect(component.getPlayerCount("playerOneId")).toEqual(0);
@@ -43,7 +43,7 @@ describe("DiffCounterComponent", () => {
         expect(component.getPlayerCount("playerTwoId")).toEqual(0);
     });
 
-    it("devrais lire 0 à l'initialisation pour deux joueur", () => {
+    it("should read read 0 on counters for 2 players", () => {
         component.setPlayerOne("playerOneId");
         component.setPlayerTwo("playerTwoId");
 
@@ -51,7 +51,7 @@ describe("DiffCounterComponent", () => {
         expect(component.getPlayerCount("playerTwoId")).toEqual(0);
     });
 
-    it("le compteur devrais s'incrémenter de 1 à chaque différence trouvée", () => {
+    it("should add 1 if a diff is found", () => {
         component.setPlayerOne("playerOneId");
         component.diffFound("playerOneId");
 
