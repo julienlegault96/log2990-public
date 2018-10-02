@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompteurComponent } from './compteur.component';
+import { ImageDiffCounterComponent } from './image-diff-counter.component';
 
-describe('CompteurComponent', () => {
-  let component: CompteurComponent;
-  let fixture: ComponentFixture<CompteurComponent>;
+describe('ImageDiffCounterComponent', () => {
+  let component: ImageDiffCounterComponent;
+  let fixture: ComponentFixture<ImageDiffCounterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompteurComponent ]
+      declarations: [ ImageDiffCounterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CompteurComponent);
+    fixture = TestBed.createComponent(ImageDiffCounterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

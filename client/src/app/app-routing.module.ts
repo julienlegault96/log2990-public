@@ -11,7 +11,7 @@ const routes: Routes = [
     { path: "index", component: HomePageComponent },
     { path: "listeJeux", component: GameListComponent },
     { path: "admin", component: AdminViewComponent },
-    { path: "", redirectTo: "/index", pathMatch: "full" },
+    { path: "", redirectTo: "/game", pathMatch: "full" },
 ];
 
 @NgModule({
