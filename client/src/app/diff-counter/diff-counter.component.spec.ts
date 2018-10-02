@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { DiffCounterComponent } from "./diff-counter.component";
-import { catchError } from "rxjs/operators";
 
 describe("DiffCounterComponent", () => {
     let component: DiffCounterComponent;
