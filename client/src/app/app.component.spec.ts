@@ -18,6 +18,7 @@ import { AbstractServerService } from "./services/abstract-server.service";
 import { GameService } from "./services/game.service";
 import { CreateGameService } from "./services/create-game.service";
 import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderboard.component";
+import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
 
 describe("AppComponent", () => {
     beforeEach(async(() => {
@@ -31,7 +32,8 @@ describe("AppComponent", () => {
                 UserComponent,
                 CreateGameComponent,
                 LeaderboardComponent,
-                HomePageComponent
+                HomePageComponent,
+                DiffCounterComponent,
             ],
             imports: [
                 HttpClientModule,
@@ -45,7 +47,7 @@ describe("AppComponent", () => {
             ]
         }).compileComponents();
     }));
-    
+
     it("should create the app", async(() => {
         const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent);
         const app: any = fixture.debugElement.componentInstance;
