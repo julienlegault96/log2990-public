@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: "app-diff-counter",
@@ -6,48 +6,50 @@ import { Component, OnInit, Input } from "@angular/core";
 })
 
 export class DiffCounterComponent implements OnInit {
+    private readonly MAX_PLAYERS: number = 2;
+    private readonly UNDECLARED_ID_ERROR: string = "Aucun compteur n'est initialisé pour l'indentifiant ";
+    
+    private counters: number[];
+    private playerOneId: string;
+    private playerTwoId: string;
 
-    public counters: number[];
-    @Input() public playerOneId: string;
-    @Input() public playerTwoId?: string;
-
-    public constructor() {
-    }
+    public constructor() { }
 
     public ngOnInit(): void {
-        this.initializeCounters();
+        this.counters = new Array<number>(this.MAX_PLAYERS);
     }
 
-    private initializeCounters(): void {
-        if (this.playerTwoId === undefined) {
-            const arraySize: number = 1;
-            this.counters = new Array(arraySize);
-            this.counters[0] = 0;
+    public setPlayerOne(playerOneId: string): void {
+        this.playerOneId = playerOneId;
+        this.counters[0] = 0;
+    }
+
+    public setPlayerTwo(playerTwoId: string): void {
+        this.playerTwoId = playerTwoId;
+        this.counters[1] = 0;
+    }
+
+    public getPlayerCount(playerId: string): number {
+        return this.counters[this.getIndex(playerId)];
+    }
+
+    public diffFound(playerId: string): void {
+        this.incrementPlayerCount(playerId);
+    }
+
+    private incrementPlayerCount(playerId: string): void {
+        this.counters[this.getIndex(playerId)]++;
+    }
+
+    private getIndex(playerId: string): number {
+        if (playerId === this.playerOneId) {
+            return 0;
+        } else if (playerId === this.playerTwoId) {
+            return 1;
         } else {
-            const arraySize: number = 2;
-            this.counters = new Array(arraySize);
-            this.counters[0] = 0;
-            this.counters[1] = 0;
+            throw new Error( this.UNDECLARED_ID_ERROR + playerId);
         }
-    }
 
-    public diffFound(userId: string): void {
-        if (this.isValidUserId(userId)) {
-            this.incrementPlayerCount(userId);
-        }
-    }
-
-    private isValidUserId(userId: string): boolean {
-        return (userId === this.playerOneId)
-            || ((this.playerTwoId !== undefined) && (userId === this.playerTwoId));
-    }
-
-    private incrementPlayerCount(userId: string): void {
-        this.counters[this.getIndex(userId)]++;
-    }
-
-    private getIndex(userId: string): number {
-        return userId === this.playerOneId ? 0 : 1;
     }
 
 }
