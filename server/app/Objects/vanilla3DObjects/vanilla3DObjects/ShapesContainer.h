@@ -44,7 +44,8 @@ void ShapesContainer::generateShapes() {
 	}
 }
 ShapesContainer::~ShapesContainer() {}
-
+//fonction retournant un float aleatoire
+//source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
 float ShapesContainer::randFloat(const float& min, const float& max) {
 	float range = max - min;
 	float num = range * rand() / RAND_MAX;

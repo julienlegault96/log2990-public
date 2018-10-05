@@ -152,6 +152,7 @@ private:
 // le nuanceur de sommets minimal
 const GLchar *ProgNuanceur::chainesSommetsMinimal =
 {
+	""
    "#version 410\n"
    "uniform mat4 matrModel;\n"
    "uniform mat4 matrVisu;\n"

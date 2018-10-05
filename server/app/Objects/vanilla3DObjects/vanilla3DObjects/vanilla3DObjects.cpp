@@ -18,17 +18,65 @@
 // variables pour l'utilisation des nuanceurs
 GLuint progBase;  // le programme de nuanceurs de base
 GLint locVertex = -1;
+GLint locNormal;
 GLint locColor = -1;
 GLint locmatrModel = -1;
 GLint locmatrVisu = -1;
 GLint locmatrProj = -1;
+GLint locmatrNormale;
+GLint locplanCoupe;
+GLuint indLightSource;
+GLuint indFrontMaterial;
+GLuint indLightModel;
 
+GLuint ubo[3];
 // matrices du pipeline graphique
 MatricePipeline matrModel, matrVisu, matrProj;
 
 // les formes
 ShapesContainer *shapes = NULL;
+// définition des lumières
+struct LightSourceParameters
+{
+	glm::vec4 ambient;
+	glm::vec4 diffuse;
+	glm::vec4 specular;
+	glm::vec4 position;       // dans le repère du monde (il faudra convertir vers le repère de la caméra pour les calculs)
+	glm::vec3 spotDirection;  // dans le repère du monde (il faudra convertir vers le repère de la caméra pour les calculs)
+	float spotExposant;
+	float spotAngleOuverture; // angle d'ouverture delta du spot ([0.0,90.0] ou 180.0)
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+} LightSource[1] = { { glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(10, 10, 10, 1.0),
+glm::vec3(0.0, 0.0, 1.0),
+1.0,       // l'exposant du cône
+180.0,     // l'angle du cône du spot
+1., 0., 0. } };
 
+// définition du matériau
+struct MaterialParameters
+{
+	glm::vec4 emission;
+	glm::vec4 ambient;
+	glm::vec4 diffuse;
+	glm::vec4 specular;
+	float shininess;
+} FrontMaterial = { glm::vec4(0.0, 0.0, 0.0, 1.0),
+glm::vec4(0.2, 0.2, 0.2, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+20.0 };
+
+struct LightModelParameters
+{
+	glm::vec4 ambient; // couleur ambiante
+	int localViewer;   // doit-on prendre en compte la position de l'observateur? (local ou à l'infini)
+	int twoSide;       // éclairage sur les deux côtés ou un seul?
+} LightModel = { glm::vec4(0,0,0,1), false, false };
 // diverses variables d'état
 struct Etat {
 	bool afficheAxes;     // indique si on affiche les axes
@@ -74,20 +122,26 @@ void chargerNuanceurs()
 		progBase = glCreateProgram();
 
 		// attacher le nuanceur de sommets
+		const GLchar *chainesSommets[2] = { "#version 410\n#define NUANCEUR_SOMMETS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
+		if (chainesSommets[1] != NULL)
 		{
 			GLuint nuanceurObj = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(nuanceurObj, 1, &ProgNuanceur::chainesSommetsMinimal, NULL);
+			glShaderSource(nuanceurObj, 2, chainesSommets, NULL);
 			glCompileShader(nuanceurObj);
 			glAttachShader(progBase, nuanceurObj);
 			ProgNuanceur::afficherLogCompile(nuanceurObj);
+			delete[] chainesSommets[1];
 		}
 		// attacher le nuanceur de fragments
+		const GLchar *chainesFragments[2] = { "#version 410\n#define NUANCEUR_FRAGMENTS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
+		if (chainesFragments[1] != NULL)
 		{
 			GLuint nuanceurObj = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(nuanceurObj, 1, &ProgNuanceur::chainesFragmentsMinimal, NULL);
+			glShaderSource(nuanceurObj, 2, chainesFragments, NULL);
 			glCompileShader(nuanceurObj);
 			glAttachShader(progBase, nuanceurObj);
 			ProgNuanceur::afficherLogCompile(nuanceurObj);
+			delete[] chainesFragments[1];
 		}
 
 		// faire l'édition des liens du programme
@@ -96,10 +150,42 @@ void chargerNuanceurs()
 
 		// demander la "Location" des variables
 		if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
+		if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
 		if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
 		if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
 		if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
 		if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
+		if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
+		if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
+		if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
+		if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de FrontMaterial" << std::endl;
+		if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
+
+		// charger les ubo
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(LightSource), &LightSource, GL_DYNAMIC_COPY);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			const GLuint bindingIndex = 0;
+			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[0]);
+			glUniformBlockBinding(progBase, indLightSource, bindingIndex);
+		}
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, ubo[1]);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(FrontMaterial), &FrontMaterial, GL_DYNAMIC_COPY);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			const GLuint bindingIndex = 1;
+			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[1]);
+			glUniformBlockBinding(progBase, indFrontMaterial, bindingIndex);
+		}
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, ubo[2]);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(LightModel), &LightModel, GL_DYNAMIC_COPY);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			const GLuint bindingIndex = 2;
+			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[2]);
+			glUniformBlockBinding(progBase, indLightModel, bindingIndex);
+		}
 	}
 }
 
@@ -107,7 +193,8 @@ void FenetreTP::initialiser()
 {
 	// donner la couleur de fond
 	glClearColor(0.2, 0.21, 0.26, 1.0);
-
+	// allouer les UBO pour les variables uniformes
+	glGenBuffers(3, ubo);
 	// activer les etats openGL
 	glEnable(GL_DEPTH_TEST);
 
@@ -122,6 +209,7 @@ void FenetreTP::initialiser()
 
 void FenetreTP::conclure()
 {
+	glDeleteBuffers(3, ubo);
 	delete shapes;
 }
 
@@ -149,13 +237,36 @@ void FenetreTP::afficherScene()
 	matrModel.LoadIdentity();
 	glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel); // informer la carte graphique des changements faits à la matrice
 
+	glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
 
 															  // afficher les axes
 	if (etat.afficheAxes) FenetreTP::afficherAxes();
 
+	// mettre à jour les blocs de variables uniformes
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
+		GLvoid *p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		memcpy(p, &LightSource, sizeof(LightSource));
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+	}
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, ubo[1]);
+		GLvoid *p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		memcpy(p, &FrontMaterial, sizeof(FrontMaterial));
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+	}
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, ubo[2]);
+		GLvoid *p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		memcpy(p, &LightModel, sizeof(LightModel));
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+	}
+
 	// Mode plein ou en fil
 	glPolygonMode(GL_FRONT_AND_BACK, etat.modePolygone);
 	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
+
+
 
 	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
 	{
@@ -165,6 +276,7 @@ void FenetreTP::afficherScene()
 			matrModel.Scale(shape->scale_);
 			matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
 			glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+			glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
 			shape->Draw();
 		}matrModel.PopMatrix(); 
 	}
