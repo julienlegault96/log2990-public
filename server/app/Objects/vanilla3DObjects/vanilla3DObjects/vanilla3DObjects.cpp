@@ -12,6 +12,7 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "Shape.h"
+#include "ShapesContainer.h"
 
 
 // variables pour l'utilisation des nuanceurs
@@ -31,6 +32,8 @@ Shape *cubeShape = NULL;
 Shape *coneShape = NULL;
 Shape *cylindreShape = NULL;
 Shape *tetrahedreShape = NULL;
+
+ShapesContainer *shapes = NULL;
 
 // diverses variables d'état
 struct Etat {
@@ -207,7 +210,7 @@ void FenetreTP::afficherScene()
 	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
 
 	// afficherRepereCourant();    
-	glVertexAttrib3f(locColor, sphereShape->baseColor_.r, sphereShape->baseColor_.b, sphereShape->baseColor_.g);
+	/*glVertexAttrib3f(locColor, sphereShape->baseColor_.r, sphereShape->baseColor_.b, sphereShape->baseColor_.g);
 	matrModel.PushMatrix(); {
 		
 		matrModel.Translate(sphereShape->coords_);
@@ -254,7 +257,19 @@ void FenetreTP::afficherScene()
 		matrModel.Rotate(tetrahedreShape->rotation_, tetrahedreShape->rotationAxis_);
 		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
 		tetrahedreShape->Draw();
-	}matrModel.PopMatrix();
+	}matrModel.PopMatrix();*/
+
+	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
+	{
+		glVertexAttrib3f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g);
+		matrModel.PushMatrix(); {
+			matrModel.Translate(shape->coords_);
+			matrModel.Scale(shape->scale_);
+			matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+			glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+			shape->Draw();
+		}matrModel.PopMatrix(); 
+	}
 	
 }
 
@@ -356,72 +371,72 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
+	shapes = new ShapesContainer(200, etat.dimBoite);
+	//// Sphere
+	//glm::vec3 ColorShpere(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	// Sphere
-	glm::vec3 ColorShpere(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+	//glm::vec3 translateSphere(randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
+	//	randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
+	//	randFloat(0, etat.dimBoite - 1));
 
-	glm::vec3 translateSphere(randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
-		randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
-		randFloat(0, etat.dimBoite - 1));
+	//glm::vec3 RotateSphere(randFloat(0, 1), randFloat(0, 1),
+	//	randFloat(0, 1));
 
-	glm::vec3 RotateSphere(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1));
+	//GLfloat scaleSphere = randFloat(0.5, 1.5);
+	//sphereShape = new Shape(Shapelist::Sphere, translateSphere, ColorShpere, randFloat(0, 360), RotateSphere, scaleSphere);
 
-	GLfloat scaleSphere = randFloat(0.5, 1.5);
-	sphereShape = new Shape(Shapelist::Sphere, translateSphere, ColorShpere, randFloat(0, 360), RotateSphere, scaleSphere);
+	////Cube
+	//glm::vec3 ColorCube(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	//Cube
-	glm::vec3 ColorCube(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+	//glm::vec3 translateCube(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(0, etat.dimBoite - 0.5));
 
-	glm::vec3 translateCube(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(0, etat.dimBoite - 0.5));
+	//glm::vec4 RotateCube(randFloat(0, 1), randFloat(0, 1),
+	//	randFloat(0, 1), randFloat(0, 360));
 
-	glm::vec4 RotateCube(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1), randFloat(0, 360));
+	//GLfloat scaleCube = randFloat(0.5, 1.5);
+	//cubeShape = new Shape(Shapelist::Cube, translateCube, ColorCube, randFloat(0, 360), RotateCube, scaleCube);
 
-	GLfloat scaleCube = randFloat(0.5, 1.5);
-	cubeShape = new Shape(Shapelist::Cube, translateCube, ColorCube, randFloat(0, 360), RotateCube, scaleCube);
+	//// Cone
+	//glm::vec3 ColorCone(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	// Cone
-	glm::vec3 ColorCone(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+	//glm::vec3 translateCone(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(0, etat.dimBoite));
 
-	glm::vec3 translateCone(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(0, etat.dimBoite));
+	//glm::vec4 RotateCone(randFloat(0, 1), randFloat(0, 1),
+	//	randFloat(0, 1), randFloat(0, 360));
 
-	glm::vec4 RotateCone(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1), randFloat(0, 360));
+	//GLfloat scaleCone = randFloat(0.5, 1.5);
+	//coneShape = new Shape(Shapelist::Cone, translateCone, ColorCone, randFloat(0, 360), RotateCone, scaleCone);
 
-	GLfloat scaleCone = randFloat(0.5, 1.5);
-	coneShape = new Shape(Shapelist::Cone, translateCone, ColorCone, randFloat(0, 360), RotateCone, scaleCone);
+	//// Cylindre
+	//glm::vec3 ColorCylindre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	// Cylindre
-	glm::vec3 ColorCylindre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+	//glm::vec3 translateCylindre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(0, etat.dimBoite));
 
-	glm::vec3 translateCylindre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(0, etat.dimBoite));
+	//glm::vec4 RotateCylindre(randFloat(0, 1), randFloat(0, 1),
+	//	randFloat(0, 1), randFloat(0, 360));
 
-	glm::vec4 RotateCylindre(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1), randFloat(0, 360));
+	//GLfloat scaleCylindre = randFloat(0.5, 1.5);
+	//cylindreShape = new Shape(Shapelist::Cylindre, translateCylindre, ColorCylindre, randFloat(0, 360), RotateCylindre, scaleCylindre);
 
-	GLfloat scaleCylindre = randFloat(0.5, 1.5);
-	cylindreShape = new Shape(Shapelist::Cylindre, translateCylindre, ColorCylindre, randFloat(0, 360), RotateCylindre, scaleCylindre);
+	//// Tetrahedre
+	//glm::vec3 ColorTetrahedre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	// Tetrahedre
-	glm::vec3 ColorTetrahedre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+	//glm::vec3 translateTetrahedre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
+	//	randFloat(0, 0.75*etat.dimBoite - 0.75));
 
-	glm::vec3 translateTetrahedre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-		randFloat(0, 0.75*etat.dimBoite - 0.75));
+	//glm::vec4 RotateTetrahedre(randFloat(0, 1), randFloat(0, 1),
+	//	randFloat(0, 1), randFloat(0, 360));
 
-	glm::vec4 RotateTetrahedre(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1), randFloat(0, 360));
-
-	GLfloat scaleTetrahedre = randFloat(0.75, 2.25);
-	tetrahedreShape = new Shape(Shapelist::Tetrahedre, translateTetrahedre, ColorTetrahedre, randFloat(0, 360), RotateTetrahedre, scaleTetrahedre);
-		
+	//GLfloat scaleTetrahedre = randFloat(0.75, 2.25);
+	//tetrahedreShape = new Shape(Shapelist::Tetrahedre, translateTetrahedre, ColorTetrahedre, randFloat(0, 360), RotateTetrahedre, scaleTetrahedre);
+	//	
 
 	bool boucler = true;
 	while (boucler)
