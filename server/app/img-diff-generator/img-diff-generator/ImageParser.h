@@ -15,8 +15,11 @@ public:
 	const Image getImageFromBase64(const string & data64);
 
 private:
-	const unsigned HEADER_SIZE = 54;
-	const unsigned BIT_DEPTH = 24;
+	const unsigned 
+		HEADER_SIZE = 54,
+		BIT_DEPTH = 24,
+		IMAGE_HEIGHT = 480,
+		IMAGE_WIDTH = 640;
 
 	const Image getImage(const unsigned char * data);
 	const Image parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData);
@@ -24,7 +27,10 @@ private:
 	const unsigned getHeight(const unsigned char * header);
 	const unsigned getWidth(const unsigned char * header);
 
-	const bool isValidBitDepth(const unsigned char * header);
 	const bool isBmpFile(const string & filename);
+	const bool isValidBitDepth(const unsigned char * header);
+
+	const bool isValidHeight(const unsigned char * header);
+	const bool isValidWidth(const unsigned char * header);
 
 };

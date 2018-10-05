@@ -47,6 +47,11 @@ const Image ImageParser::getImage(const unsigned char * data)
 		throw std::runtime_error("Invalid bmp bit depth");
 	}
 
+	if (!this->isValidHeight(data) || !this->isValidWidth(data))
+	{
+		throw std::invalid_argument("Invalid image size");
+	}
+
 	return 
 		this->parseData(
 			this->getHeight(data),
@@ -88,11 +93,6 @@ const unsigned ImageParser::getWidth(const unsigned char * header)
 	return header[18];
 }
 
-const bool ImageParser::isValidBitDepth(const unsigned char * header)
-{
-	return header[28] == this->BIT_DEPTH;
-}
-
 const bool ImageParser::isBmpFile(const string & filename)
 {
 	if (filename.length() < 4)
@@ -101,4 +101,19 @@ const bool ImageParser::isBmpFile(const string & filename)
 	}
 
 	return filename.compare(filename.size() - 4, 4, ".bmp") == 0;
+}
+
+const bool ImageParser::isValidBitDepth(const unsigned char * header)
+{
+	return header[28] == this->BIT_DEPTH;
+}
+
+const bool ImageParser::isValidHeight(const unsigned char * header)
+{
+	return this->getHeight(header) == this->IMAGE_HEIGHT;
+}
+
+const bool ImageParser::isValidWidth(const unsigned char * header)
+{
+	return this->getWidth(header) == this->IMAGE_WIDTH;
 }
