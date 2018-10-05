@@ -15,4 +15,11 @@ public:
 
 private:
 
+	const Image getImage(const unsigned char * data);
+
+	const unsigned getHeight(const unsigned char * header);
+	const unsigned getWidth(const unsigned char * header);
+
+	const bool is24Bit(const unsigned char * header);
+
 };
