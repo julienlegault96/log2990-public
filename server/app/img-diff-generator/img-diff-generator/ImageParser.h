@@ -15,6 +15,7 @@ public:
 	const Image getImageFromBase64(const string & data64);
 
 private:
+	const unsigned HEADER_SIZE = 54;
 
 	const Image getImage(const unsigned char * data);
 	const Image parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData);

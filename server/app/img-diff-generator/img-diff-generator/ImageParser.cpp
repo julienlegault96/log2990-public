@@ -37,40 +37,24 @@ const Image ImageParser::getImageFromBase64(const string & data64)
 
 const Image ImageParser::getImage(const unsigned char * data)
 {
-	// https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
-
-	// header init
-	const unsigned headerSize = 54;
-	unsigned char * header = new unsigned char[headerSize];
-	memcpy_s(header, headerSize, data, headerSize);
-
-	if (!this->is24Bit(header))
+	if (!this->is24Bit(data))
 	{
 		throw std::runtime_error("Invalid bmp bit depth");
 	}
 
-	unsigned height = this->getHeight(header);
-	unsigned width = this->getWidth(header);
-
-	delete[] header;
-	header = nullptr;
-
-	// image data init
-	int imageSize = 3 * width * height; // 3 bytes per pixels
-	unsigned char * imageData = new unsigned char[imageSize];
-	memcpy_s(imageData, imageSize, data + headerSize, imageSize);
-
-	Image image = this->parseData(height, width, imageData);
-	delete[] imageData;
-	imageData = nullptr;
-
-	return image;
+	return 
+		this->parseData(
+			this->getHeight(data),
+			this->getWidth(data),
+			data + this->HEADER_SIZE
+		);
 }
 
 const Image ImageParser::parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData)
 {
 	Image image(height, width);
 
+	// https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
 	for (unsigned x = 0; x < width; x++)
 	{
 		for (unsigned y = 0; y < height; y++)
