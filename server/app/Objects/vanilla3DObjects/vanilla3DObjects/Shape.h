@@ -1,7 +1,6 @@
 #pragma once
 #include "inf2705-forme.h"
 #include <GL/glew.h>
-//#include <glm\glm.hpp>;
 enum Shapelist {Sphere, Cone, Cube, Tetrahedre, Cylindre };
 class  Shape
 {
