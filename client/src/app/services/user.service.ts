@@ -1,9 +1,11 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
+
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
-import { User } from "../../../../common/user/user";
 import { Validator } from "../validator";
+
+import { User } from "../../../../common/user/user";
 
 @Injectable({
     providedIn: "root"
@@ -12,8 +14,7 @@ import { Validator } from "../validator";
 /**
  * this class connects implements methods for supervising user logins and logouts
  */
-export class UserService extends AbstractServerService implements OnInit {
-
+export class UserService extends AbstractServerService {
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "\n- Seul des caractères alphanumériques sont acceptés.";
@@ -30,10 +31,10 @@ export class UserService extends AbstractServerService implements OnInit {
     public constructor(protected http: HttpClient) {
         super(http);
         this.asyncUserList = [];
-        this.ngOnInit();
+        this.initialise();
      }
 
-    public ngOnInit(): void {
+    private initialise(): void {
         this.refreshUserList();
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
@@ -45,25 +46,25 @@ export class UserService extends AbstractServerService implements OnInit {
     public onUnloadEvent(e: BeforeUnloadEvent): void {
         e.preventDefault();
         if (this.loggedIn) {
-        super.deleteRequest<User>(Endpoints.Users, this.loggedUser );
+        this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
         e.returnValue = "";
     }
 
     public validateUsername(username: string): boolean {
-        return this.validator.isValidUsernameLength(username)
-            && this.validator.isValidAlphanumericSymbols(username)
+        return this.validator.isStandardStringLength(username)
+            && this.validator.isAlphanumericString(username)
             && this.isUniqueUsername(username) ;
     }
 
     private buildErrorString(username: string): string {
         let errorString: string = "";
 
-        if (!this.validator.isValidAlphanumericSymbols(username)) {
+        if (!this.validator.isAlphanumericString(username)) {
             errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
         }
-        if (!this.validator.isValidUsernameLength(username)) {
+        if (!this.validator.isStandardStringLength(username)) {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
         if (!this.isUniqueUsername(username)) {
@@ -82,20 +83,27 @@ export class UserService extends AbstractServerService implements OnInit {
 
         return true;
     }
+
     public refreshUserList(): void {
         this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
+    }
+
+    public loginUser(userToLog: User): void {
+        this.asyncUserList = this.asyncUserList.concat(userToLog);
+        this.loggedUser = userToLog;
+        this.loggedIn = true;
     }
 
     public getUsers(): Observable<User[]> {
         return this.getRequest<User[]>(Endpoints.Users);
     }
 
-    public addUser(newUser: User): Observable<{} | User> {
+    public addUser(newUser: User): Observable<User> {
         return this.postRequest<User>(Endpoints.Users, newUser);
     }
 
-    public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users, userToDelete);
+    public removeUser(userToDelete: User): Observable<User> {
+        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
     }
 
     /**
@@ -108,10 +116,7 @@ export class UserService extends AbstractServerService implements OnInit {
         if (this.validateUsername(username)) {
             const clientUser: User = new User(username);
             this.addUser(clientUser).subscribe( (serverUser: User) => { });
-
-            this.asyncUserList = this.asyncUserList.concat(clientUser);
-            this.loggedUser = clientUser;
-            this.loggedIn = true;
+            this.loginUser(clientUser);
         } else {
             throw new Error(this.buildErrorString(username));
         }

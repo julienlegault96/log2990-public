@@ -11,12 +11,12 @@ export class Validator {
 
     public constructor() {}
 
-    public isValidUsernameLength(username: string): boolean {
+    public isStandardStringLength(username: string): boolean {
         return username.length >= this.MIN_USERNAME_LENGTH
             && username.length <= this.MAX_USERNAME_LENGTH;
     }
 
-    public isValidAlphanumericSymbols(username: string): boolean {
+    public isAlphanumericString(username: string): boolean {
         return Boolean(username.match(this.VALIDATION_REGEX));
     }
 

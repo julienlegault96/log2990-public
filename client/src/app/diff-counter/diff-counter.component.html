@@ -1,0 +1,15 @@
+<div class="row">
+    <div *ngFor="let counter of counters; let i = index" [attr.data-index]="i" class="col">
+        <div *ngIf="counter !== undefined;">
+            <h4>
+                Joueur #{{ i + 1 }}
+            </h4>
+            <span *ngIf="counter <= 1; else elseBlock">
+                {{ counter }} différence trouvée
+            </span>
+            <ng-template #elseBlock>
+                {{ counter }} différences trouvées
+            </ng-template>
+        </div>
+    </div>
+</div>
