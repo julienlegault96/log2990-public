@@ -60,9 +60,17 @@ const Image ImageParser::getImage(const unsigned char * data)
 	unsigned char * imageData = new unsigned char[imageSize];
 	memcpy_s(imageData, imageSize, data + headerSize, imageSize);
 
+	Image image = this->parseData(height, width, imageData);
+	delete[] imageData;
+	imageData = nullptr;
+
+	return image;
+}
+
+const Image ImageParser::parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData)
+{
 	Image image(height, width);
 
-	// image data parsing
 	for (unsigned x = 0; x < width; x++)
 	{
 		for (unsigned y = 0; y < height; y++)

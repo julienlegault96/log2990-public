@@ -17,6 +17,7 @@ public:
 private:
 
 	const Image getImage(const unsigned char * data);
+	const Image parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData);
 
 	const unsigned getHeight(const unsigned char * header);
 	const unsigned getWidth(const unsigned char * header);
