@@ -26,12 +26,6 @@ GLint locmatrProj = -1;
 MatricePipeline matrModel, matrVisu, matrProj;
 
 // les formes
-FormeCube *cubeFil = NULL;
-FormeCube *cube = NULL;
-FormeSphere *sphere = NULL;
-FormeCylindre *cylindre = NULL;
-FormeCylindre *cone = NULL;
-FormeTetraedre *tetraedre = NULL;
 Shape *sphereShape = NULL;
 Shape *cubeShape = NULL;
 Shape *coneShape = NULL;
@@ -132,12 +126,11 @@ void FenetreTP::initialiser()
 
 void FenetreTP::conclure()
 {
-	delete cubeFil;
-	delete cube;
-	delete sphere;
-	delete cylindre;
-	delete cone;
-	delete tetraedre;
+	delete cubeShape;
+	delete sphereShape;
+	delete cylindreShape;
+	delete coneShape;
+	delete tetrahedreShape;
 }
 
 // affiche la position courante du repère (pour débogage)
@@ -149,27 +142,27 @@ void afficherRepereCourant(int num = 0)
 
 void afficherCylindre()
 {
-	cylindre->afficher();
+	cylindreShape->Draw();
 }
 
 void afficherSphere()
 {
-	sphere->afficher();
+	sphereShape->Draw();
 }
 
 void afficherCube()
 {
-	cube->afficher();
+	cubeShape->Draw();
 }
 
 void afficherCone()
 {
-	cone->afficher();
+	coneShape->Draw();
 }
 
 void afficherTetraedre()
 {
-	tetraedre->afficher();
+	tetrahedreShape->Draw();
 }
 //fonction retournant un float aleatoire
 //source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
@@ -180,8 +173,8 @@ float randFloat(const float& min, const float& max) {
 	return (num + min);
 }
 void randCoords(glm::vec3 *coords) {
-	coords->x = randFloat(-etat.dimBoite / 3, etat.dimBoite / 3);
-	coords->y = randFloat(-etat.dimBoite / 3, etat.dimBoite / 3);
+	coords->x = randFloat(-etat.dimBoite/2, etat.dimBoite/2 );
+	coords->y = randFloat(-etat.dimBoite/2, etat.dimBoite/2 );
 	coords->z=  randFloat(0, etat.dimBoite);
 }
 

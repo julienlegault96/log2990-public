@@ -46,7 +46,7 @@ Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec3 baseColor, GLfloat rota
 		break;
 	
 	case(Cylindre):
-		forme = new FormeCylindre(1.0, 1.0, 3.0, 10, 1, true);
+		forme = new FormeCylindre(1.0, 1.0, 2.0, 10, 1, true);
 		break;
 
 	case(Tetrahedre):
