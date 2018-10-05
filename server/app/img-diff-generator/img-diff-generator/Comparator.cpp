@@ -18,8 +18,6 @@ void Comparator::exec(const string & filename1, const string & filename2)
 		{
 			if (image1.getPixel(i, j) != image2.getPixel(i, j))
 			{
-				//Pixel pixel(0, 0, 0);
-				//this->differenceImage.setPixel(i, j, pixel);
 				this->fattify(i, j);
 			}
 		}
