@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "app-chrono",
     templateUrl: "./chrono.component.html",
 })
 
-export class ChronoComponent implements OnInit {
+export class ChronoComponent {
 
     private readonly MINUTES_IN_HOUR: number = 60;
     private readonly LIMIT_TO_ADD_ZERO: number = 10;
@@ -18,18 +18,13 @@ export class ChronoComponent implements OnInit {
     public constructor() {
         this.formattedTime = "00:00";
         this.isStarted = false;
-    }
-
-    public ngOnInit(): void {
+        this.timer = 0;
     }
 
     public start(): void {
         if (!this.isStarted) {
             this.startTime = new Date();
-            this.timer = window.setInterval(() => {
-                this.calculate();
-            // tslint:disable-next-line:align
-            }, 1);
+            this.timer = window.setInterval(() => { this.calculate(); }, 1);
             this.isStarted = true;
         }
     }
