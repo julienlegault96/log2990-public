@@ -4,11 +4,11 @@
 
 using namespace std;
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	cout << "Enter filename: " << endl;
-
 	string filename = "C:\\Users\\Kevin\\Documents\\PolyMTL\\Session 4\\LOG2990\\log2990\\server\\app\\img-diff-generator\\Debug\\test3.bmp";
+	
+	//cout << "Enter filename: " << endl;
 	//cin >> filename;
 
 	ImageParser imageParser;
@@ -22,15 +22,27 @@ void main(int argc, char *argv[])
 			<< endl;
 
 		cout << image;
-
 	}
-	catch (const std::runtime_error& e)
+	catch (const std::runtime_error & e)
 	{
-		cout << e.what();
+		cerr << "Runtime error:" << endl;
+		cerr << e.what() << endl;
+	}
+	catch (const std::invalid_argument & e)
+	{
+		cerr << "Invalid argument: " << endl;
+		cerr << e.what() << endl;
+	}
+	catch (const std::exception & e)
+	{
+		cerr << "Generic exception: " << endl;
+		cerr << e.what() << endl;
 	}
 	catch (...)
 	{
-		cout << "Unknown error";
+		cerr << "Unknown exception" << endl;
 	}
+
 	system("pause");
+	return 0;
 }

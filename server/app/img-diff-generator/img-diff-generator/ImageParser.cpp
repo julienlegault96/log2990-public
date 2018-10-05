@@ -6,10 +6,14 @@ ImageParser::ImageParser()
 
 const Image ImageParser::getImageFromUrl(const string & filename)
 {
-	FILE * file;
-	errno_t err;
+	if (!this->isBmpFile(filename))
+	{
+		throw std::invalid_argument("File has to be .bmp");
+	}
 
-	if (err = fopen_s(&file, filename.data(), "rb"))
+	FILE * file;
+
+	if (fopen_s(&file, filename.data(), "rb"))
 	{
 		throw std::runtime_error("File opening error");
 	}
@@ -27,6 +31,7 @@ const Image ImageParser::getImageFromUrl(const string & filename)
 
 	delete[] data;
 	data = nullptr;
+
 	return image;
 }
 
@@ -37,7 +42,7 @@ const Image ImageParser::getImageFromBase64(const string & data64)
 
 const Image ImageParser::getImage(const unsigned char * data)
 {
-	if (!this->is24Bit(data))
+	if (!this->isValidBitDepth(data))
 	{
 		throw std::runtime_error("Invalid bmp bit depth");
 	}
@@ -59,10 +64,11 @@ const Image ImageParser::parseData(const unsigned & height, const unsigned & wid
 	{
 		for (unsigned y = 0; y < height; y++)
 		{
+			unsigned position = (x + y * width) * 3 + (y * width) % 4;
 			unsigned char
-				blue = imageData[(x + y * width) * 3],
-				green = imageData[(x + y * width) * 3 + 1],
-				red = imageData[(x + y * width) * 3 + 2];
+				blue = imageData[position],
+				green = imageData[position + 1],
+				red = imageData[position + 2];
 
 			Pixel pixel = { red, green, blue };
 			image.setPixel(x, y, pixel);
@@ -82,7 +88,17 @@ const unsigned ImageParser::getWidth(const unsigned char * header)
 	return header[18];
 }
 
-const bool ImageParser::is24Bit(const unsigned char * header)
+const bool ImageParser::isValidBitDepth(const unsigned char * header)
 {
-	return header[28] == 24;
+	return header[28] == this->BIT_DEPTH;
+}
+
+const bool ImageParser::isBmpFile(const string & filename)
+{
+	if (filename.length() < 4)
+	{
+		return false;
+	}
+
+	return filename.compare(filename.size() - 4, 4, ".bmp") == 0;
 }

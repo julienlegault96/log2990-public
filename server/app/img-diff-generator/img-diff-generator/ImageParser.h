@@ -16,6 +16,7 @@ public:
 
 private:
 	const unsigned HEADER_SIZE = 54;
+	const unsigned BIT_DEPTH = 24;
 
 	const Image getImage(const unsigned char * data);
 	const Image parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData);
@@ -23,6 +24,7 @@ private:
 	const unsigned getHeight(const unsigned char * header);
 	const unsigned getWidth(const unsigned char * header);
 
-	const bool is24Bit(const unsigned char * header);
+	const bool isValidBitDepth(const unsigned char * header);
+	const bool isBmpFile(const string & filename);
 
 };
