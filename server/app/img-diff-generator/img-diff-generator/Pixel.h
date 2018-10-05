@@ -1,6 +1,16 @@
 #pragma once
 
-struct Pixel
+class Pixel
 {
-	unsigned char r = 0, g = 0, b = 0;
+public:
+	Pixel();
+	Pixel(const unsigned char & r, const unsigned char & g, const unsigned & b);
+
+	const bool operator==(const Pixel & pixel) const;
+	const bool operator!=(const Pixel & pixel) const;
+
+	unsigned char
+		r, 
+		g, 
+		b;
 };

@@ -4,7 +4,7 @@ ImageParser::ImageParser()
 {
 }
 
-const Image ImageParser::getImageFromUrl(const string & filename)
+const Image ImageParser::getImageFromUrl(const string & filename) const
 {
 	if (!this->isBmpFile(filename))
 	{
@@ -35,12 +35,12 @@ const Image ImageParser::getImageFromUrl(const string & filename)
 	return image;
 }
 
-const Image ImageParser::getImageFromBase64(const string & data64)
+const Image ImageParser::getImageFromBase64(const string & data64) const
 {
 	return Image(0, 0);
 }
 
-const Image ImageParser::getImage(const unsigned char * data)
+const Image ImageParser::getImage(const unsigned char * data) const
 {
 	if (!this->isValidBitDepth(data))
 	{
@@ -60,7 +60,7 @@ const Image ImageParser::getImage(const unsigned char * data)
 		);
 }
 
-const Image ImageParser::parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData)
+const Image ImageParser::parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData) const
 {
 	Image image(height, width);
 
@@ -75,7 +75,7 @@ const Image ImageParser::parseData(const unsigned & height, const unsigned & wid
 				green = imageData[position + 1],
 				red = imageData[position + 2];
 
-			Pixel pixel = { red, green, blue };
+			Pixel pixel(red, green, blue);
 			image.setPixel(x, y, pixel);
 		}
 	}
@@ -83,17 +83,17 @@ const Image ImageParser::parseData(const unsigned & height, const unsigned & wid
 	return image;
 }
 
-const unsigned ImageParser::getHeight(const unsigned char * header)
+const unsigned ImageParser::getHeight(const unsigned char * header) const
 {
 	return header[22];
 }
 
-const unsigned ImageParser::getWidth(const unsigned char * header)
+const unsigned ImageParser::getWidth(const unsigned char * header) const
 {
 	return header[18];
 }
 
-const bool ImageParser::isBmpFile(const string & filename)
+const bool ImageParser::isBmpFile(const string & filename) const
 {
 	if (filename.length() < 4)
 	{
@@ -103,17 +103,17 @@ const bool ImageParser::isBmpFile(const string & filename)
 	return filename.compare(filename.size() - 4, 4, ".bmp") == 0;
 }
 
-const bool ImageParser::isValidBitDepth(const unsigned char * header)
+const bool ImageParser::isValidBitDepth(const unsigned char * header) const
 {
 	return header[28] == this->BIT_DEPTH;
 }
 
-const bool ImageParser::isValidHeight(const unsigned char * header)
+const bool ImageParser::isValidHeight(const unsigned char * header) const
 {
 	return this->getHeight(header) == this->IMAGE_HEIGHT;
 }
 
-const bool ImageParser::isValidWidth(const unsigned char * header)
+const bool ImageParser::isValidWidth(const unsigned char * header) const
 {
 	return this->getWidth(header) == this->IMAGE_WIDTH;
 }

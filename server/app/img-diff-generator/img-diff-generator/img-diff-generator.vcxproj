@@ -115,11 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Comparator.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageParser.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pixel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Comparator.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageParser.h" />
     <ClInclude Include="Pixel.h" />

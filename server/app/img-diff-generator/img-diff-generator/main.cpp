@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "ImageParser.h"
+#include "Comparator.h"
 
 using namespace std;
 
@@ -10,18 +11,22 @@ int main(int argc, char *argv[])
 	
 	//cout << "Enter filename: " << endl;
 	//cin >> filename;
-
-	ImageParser imageParser;
 	try
 	{
-		Image image = imageParser.getImageFromUrl(filename);
-		cout << "Size: "
-			<< image.getPixels().size()
-			<< "x"
-			<< image.getPixels()[0].size()
-			<< endl;
+		string filename1 = "C:\\Users\\Kevin\\Documents\\PolyMTL\\Session 4\\LOG2990\\log2990\\server\\app\\img-diff-generator\\Debug\\comp1.bmp";
+		string filename2 = "C:\\Users\\Kevin\\Documents\\PolyMTL\\Session 4\\LOG2990\\log2990\\server\\app\\img-diff-generator\\Debug\\comp2.bmp";
+		Comparator comparator;
+		comparator.exec(filename1, filename2);
+		comparator.save(filename);
+		//ImageParser imageParser;
+		//Image image = imageParser.getImageFromUrl(filename);
+		//cout << "Size: "
+		//	<< image.getPixels().size()
+		//	<< "x"
+		//	<< image.getPixels()[0].size()
+		//	<< endl;
 
-		cout << image;
+		//cout << image;
 	}
 	catch (const std::runtime_error & e)
 	{

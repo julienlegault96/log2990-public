@@ -11,7 +11,8 @@ class Image
 public:
 	Image(const unsigned & height, const unsigned & width);
 
-	const vector<vector<Pixel>> getPixels();
+	const Pixel getPixel(const unsigned & x, const unsigned & y) const;
+	const vector<vector<Pixel>> getPixels() const;
 	void setPixel(const unsigned & x, const unsigned & y, const Pixel & pixel);
 
 	friend ostream& operator<<(ostream & os, Image & image);
