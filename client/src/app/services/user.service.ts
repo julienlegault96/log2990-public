@@ -100,12 +100,6 @@ export class UserService extends AbstractServerService {
         this.deleteRequest<User>(Endpoints.Users, userToDelete);
     }
 
-    /**
-     * Validates a username and then sends it to the server if it passes
-     * else it throws an error.
-     * @param username the username of the user logging in
-     * @throws an error explaining why the username was bad
-     */
     public submitUsername(username: string): void {
         if (this.validateUsername(username)) {
             const clientUser: User = new User(username);
