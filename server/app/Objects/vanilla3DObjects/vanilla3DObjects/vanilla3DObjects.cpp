@@ -1,7 +1,6 @@
 // vanilla3DObjects.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #pragma comment(lib,"opengl32.lib")
 #include <iostream>
 #include <math.h>
@@ -13,7 +12,6 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "Shape.h"
-
 
 
 // variables pour l'utilisation des nuanceurs
