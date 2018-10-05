@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 const MAXFOUND: number = 7;
 const BASE: number = 100;
 @Component({
-  selector: 'app-image-diff-counter',
-  templateUrl: './image-diff-counter.component.html',
-  styleUrls: ['./image-diff-counter.component.css']
+  selector: "app-image-diff-counter",
+  templateUrl: "./image-diff-counter.component.html",
+  styleUrls: ["./image-diff-counter.component.css"]
 })
 export class ImageDiffCounterComponent implements OnInit {
 
