@@ -27,12 +27,6 @@ GLint locmatrProj = -1;
 MatricePipeline matrModel, matrVisu, matrProj;
 
 // les formes
-Shape *sphereShape = NULL;
-Shape *cubeShape = NULL;
-Shape *coneShape = NULL;
-Shape *cylindreShape = NULL;
-Shape *tetrahedreShape = NULL;
-
 ShapesContainer *shapes = NULL;
 
 // diverses variables d'état
@@ -40,9 +34,8 @@ struct Etat {
 	bool afficheAxes;     // indique si on affiche les axes
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
 	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
-	int modele;           // le modèle à afficher
 	double dimBoite;      // la dimension de la boite
-} etat = { true, false, GL_LINE, 1, 10.0 };
+} etat = { true, false, GL_FILL, 10.0 };
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
@@ -129,11 +122,7 @@ void FenetreTP::initialiser()
 
 void FenetreTP::conclure()
 {
-	delete cubeShape;
-	delete sphereShape;
-	delete cylindreShape;
-	delete coneShape;
-	delete tetrahedreShape;
+	delete shapes;
 }
 
 // affiche la position courante du repère (pour débogage)
@@ -142,47 +131,6 @@ void afficherRepereCourant(int num = 0)
 	glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
 	FenetreTP::afficherAxes(1.5, 3.0);
 }
-
-void afficherCylindre()
-{
-	cylindreShape->Draw();
-}
-
-void afficherSphere()
-{
-	sphereShape->Draw();
-}
-
-void afficherCube()
-{
-	cubeShape->Draw();
-}
-
-void afficherCone()
-{
-	coneShape->Draw();
-}
-
-void afficherTetraedre()
-{
-	tetrahedreShape->Draw();
-}
-//fonction retournant un float aleatoire
-//source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
-
-float randFloat(const float& min, const float& max) {
-	float range = max - min;
-	float num = range * rand() / RAND_MAX;
-	return (num + min);
-}
-void randCoords(glm::vec3 *coords) {
-	coords->x = randFloat(-etat.dimBoite/2, etat.dimBoite/2 );
-	coords->y = randFloat(-etat.dimBoite/2, etat.dimBoite/2 );
-	coords->z=  randFloat(0, etat.dimBoite);
-}
-
-
-
 
 void FenetreTP::afficherScene()
 {
@@ -208,56 +156,6 @@ void FenetreTP::afficherScene()
 	// Mode plein ou en fil
 	glPolygonMode(GL_FRONT_AND_BACK, etat.modePolygone);
 	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
-
-	// afficherRepereCourant();    
-	/*glVertexAttrib3f(locColor, sphereShape->baseColor_.r, sphereShape->baseColor_.b, sphereShape->baseColor_.g);
-	matrModel.PushMatrix(); {
-		
-		matrModel.Translate(sphereShape->coords_);
-		matrModel.Scale(sphereShape->scale_);
-		matrModel.Rotate(sphereShape->rotation_, sphereShape->rotationAxis_);
-		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-		sphereShape->Draw();
-	}matrModel.PopMatrix();
-
-
-	glVertexAttrib3f(locColor, cubeShape->baseColor_.r, cubeShape->baseColor_.b, cubeShape->baseColor_.g);
-	matrModel.PushMatrix(); {
-		matrModel.Translate(0, 0, 0.5);
-		matrModel.Translate(cubeShape->coords_);
-		matrModel.Scale(cubeShape->scale_);
-		matrModel.Rotate(cubeShape->rotation_, cubeShape->rotationAxis_);
-		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-		cubeShape->Draw();
-	}matrModel.PopMatrix();
-	
-	glVertexAttrib3f(locColor, coneShape->baseColor_.r, coneShape->baseColor_.b, coneShape->baseColor_.g);
-	matrModel.PushMatrix(); {
-		matrModel.Translate(coneShape->coords_);
-		matrModel.Scale(coneShape->scale_);
-		matrModel.Rotate(coneShape->rotation_, coneShape->rotationAxis_);
-		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-		coneShape->Draw();
-	}matrModel.PopMatrix();
-
-	
-	glVertexAttrib3f(locColor, cylindreShape->baseColor_.r, cylindreShape->baseColor_.b, cylindreShape->baseColor_.g);
-	matrModel.PushMatrix(); {
-		matrModel.Translate(cylindreShape->coords_);
-		matrModel.Scale(cylindreShape->scale_);
-		matrModel.Rotate(cylindreShape->rotation_, cylindreShape->rotationAxis_);
-		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-		cylindreShape->Draw();
-	}matrModel.PopMatrix();
-
-	glVertexAttrib3f(locColor, tetrahedreShape->baseColor_.r, tetrahedreShape->baseColor_.b, tetrahedreShape->baseColor_.g);
-	matrModel.PushMatrix(); {
-		matrModel.Translate(tetrahedreShape->coords_);
-		matrModel.Scale(tetrahedreShape->scale_);
-		matrModel.Rotate(tetrahedreShape->rotation_, tetrahedreShape->rotationAxis_);
-		glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-		tetrahedreShape->Draw();
-	}matrModel.PopMatrix();*/
 
 	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
 	{
@@ -371,73 +269,8 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
-	shapes = new ShapesContainer(200, etat.dimBoite);
-	//// Sphere
-	//glm::vec3 ColorShpere(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
-
-	//glm::vec3 translateSphere(randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
-	//	randFloat(-etat.dimBoite / 2, etat.dimBoite / 2),
-	//	randFloat(0, etat.dimBoite - 1));
-
-	//glm::vec3 RotateSphere(randFloat(0, 1), randFloat(0, 1),
-	//	randFloat(0, 1));
-
-	//GLfloat scaleSphere = randFloat(0.5, 1.5);
-	//sphereShape = new Shape(Shapelist::Sphere, translateSphere, ColorShpere, randFloat(0, 360), RotateSphere, scaleSphere);
-
-	////Cube
-	//glm::vec3 ColorCube(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
-
-	//glm::vec3 translateCube(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(0, etat.dimBoite - 0.5));
-
-	//glm::vec4 RotateCube(randFloat(0, 1), randFloat(0, 1),
-	//	randFloat(0, 1), randFloat(0, 360));
-
-	//GLfloat scaleCube = randFloat(0.5, 1.5);
-	//cubeShape = new Shape(Shapelist::Cube, translateCube, ColorCube, randFloat(0, 360), RotateCube, scaleCube);
-
-	//// Cone
-	//glm::vec3 ColorCone(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
-
-	//glm::vec3 translateCone(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(0, etat.dimBoite));
-
-	//glm::vec4 RotateCone(randFloat(0, 1), randFloat(0, 1),
-	//	randFloat(0, 1), randFloat(0, 360));
-
-	//GLfloat scaleCone = randFloat(0.5, 1.5);
-	//coneShape = new Shape(Shapelist::Cone, translateCone, ColorCone, randFloat(0, 360), RotateCone, scaleCone);
-
-	//// Cylindre
-	//glm::vec3 ColorCylindre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
-
-	//glm::vec3 translateCylindre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(0, etat.dimBoite));
-
-	//glm::vec4 RotateCylindre(randFloat(0, 1), randFloat(0, 1),
-	//	randFloat(0, 1), randFloat(0, 360));
-
-	//GLfloat scaleCylindre = randFloat(0.5, 1.5);
-	//cylindreShape = new Shape(Shapelist::Cylindre, translateCylindre, ColorCylindre, randFloat(0, 360), RotateCylindre, scaleCylindre);
-
-	//// Tetrahedre
-	//glm::vec3 ColorTetrahedre(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
-
-	//glm::vec3 translateTetrahedre(randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(-etat.dimBoite / 3, etat.dimBoite / 3),
-	//	randFloat(0, 0.75*etat.dimBoite - 0.75));
-
-	//glm::vec4 RotateTetrahedre(randFloat(0, 1), randFloat(0, 1),
-	//	randFloat(0, 1), randFloat(0, 360));
-
-	//GLfloat scaleTetrahedre = randFloat(0.75, 2.25);
-	//tetrahedreShape = new Shape(Shapelist::Tetrahedre, translateTetrahedre, ColorTetrahedre, randFloat(0, 360), RotateTetrahedre, scaleTetrahedre);
-	//	
-
+	shapes = new ShapesContainer(50, etat.dimBoite);
+	
 	bool boucler = true;
 	while (boucler)
 	{
