@@ -4,5 +4,6 @@ export default {
     Routes: Symbol("Routes"),
     Games: Symbol("Games"),
     Users: Symbol("Users"),
-    Mongo: Symbol("Mongo")
+    Mongo: Symbol("Mongo"),
+    Imgur: Symbol("Imgur")
 };
