@@ -1,4 +1,4 @@
-﻿// "#version 4xx\n#define NUANCEUR_...\n" doit être ajouté en préambule au chargement de chaque nuanceur
+// "#version 4xx\n#define NUANCEUR_...\n" doit être ajouté en préambule au chargement de chaque nuanceur
 ////////////////////////////////////////////////////////////////////////////////
 
 // Définition des paramètres des sources de lumière
