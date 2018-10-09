@@ -7,7 +7,6 @@ import { AbstractRoute } from "./abstract-route/abstract-route";
 import { Imgur } from "./imgur/imgur";
 
 import { Game } from "../../../common/game/game";
-import { CODES } from "../../../common/communication/response-codes";
 
 @injectable()
 
@@ -24,31 +23,24 @@ export class Games extends AbstractRoute<Game> {
     }
 
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const randomRange: number = 1000000;
-        const randomNumber: number = Math.floor(Math.random() * randomRange);
-        req.body._id = randomNumber;
+        req.body._id = this.generateId();
 
         const imgur: Imgur = new Imgur();
-        imgur.uploadImage(req.body.imageUrl[0])
-            .then((imgurUrl: string) => {
-                console.log(imgurUrl);
-                req.body.imageUrl[0] = imgurUrl;
-            })
-            .catch((err: string) => {
-                res.status(CODES.SERVER_ERROR).send(err);
-            });
+        const promise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
+        const promise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
 
-        imgur.uploadImage(req.body.imageUrl[1])
-            .then((imgurUrl: string) => {
-                req.body.imageUrl[1] = imgurUrl;
-            })
-            .catch((err: string) => {
-                res.status(CODES.SERVER_ERROR).send(err);
-            });
-
-        console.log(req.body.imageUrl);
+        Promise.all([promise1, promise2]).then((imageUrls: Array<string>) => {
+            req.body.imageUrl[0] = imageUrls[0];
+            req.body.imageUrl[1] = imageUrls[1];
+        });
 
         return super.post(req, res, next);
+    }
+
+    private generateId(): number {
+        const randomRange: number = 1000000;
+
+        return Math.floor(Math.random() * randomRange);
     }
 
 }

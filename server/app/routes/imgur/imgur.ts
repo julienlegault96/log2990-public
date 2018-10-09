@@ -24,11 +24,11 @@ export class Imgur {
                     if (json.status && json.status === CODES.OK && json.data) {
                         resolve(json.data.link);
                     } else {
-                        reject(new Error("Imgur API Error"));
+                        reject("Imgur API Error");
                     }
                 })
-                .catch(() => {
-                    reject(new Error("Imgur Uploading Error"));
+                .catch((err: string) => {
+                    reject("Imgur Uploading Error" + err);
                 });
         });
     }

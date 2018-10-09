@@ -12,7 +12,6 @@ export class Routes {
     public constructor(
         @inject(Types.Games) private games: Games,
         @inject(Types.Users) private users: Users,
-        @inject(Types.Imgur) private imgur: Imgur,
     ) { }
 
     public get routes(): Router {
@@ -34,11 +33,6 @@ export class Routes {
         router.delete(
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.delete(req, res, next)
-        );
-
-        router.get(
-            "/img",
-            (req: Request, res: Response, next: NextFunction) => this.imgur.get(req, res, next)
         );
 
         // USERS
