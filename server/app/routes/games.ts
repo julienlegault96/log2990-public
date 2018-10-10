@@ -28,13 +28,16 @@ export class Games extends AbstractRoute<Game> {
         req.body._id = this.generateId();
 
         const imgur: Imgur = new Imgur();
-        const promise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
-        const promise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
+        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
 
-        Promise.all([promise1, promise2]).then((imageUrls: Array<string>) => {
-            req.body.imageUrl[0] = imageUrls[0];
-            req.body.imageUrl[1] = imageUrls[1];
-        });
+        const imgurPromises: Promise<void> = Promise.all([imgurPromise1, imgurPromise2])
+            .then((imageUrls: Array<string>) => {
+                req.body.imageUrl[0] = imageUrls[0];
+                req.body.imageUrl[1] = imageUrls[1];
+            });
+
+        await (imgurPromises);
 
         return super.post(req, res, next);
     }
