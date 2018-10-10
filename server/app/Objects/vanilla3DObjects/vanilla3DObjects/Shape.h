@@ -5,14 +5,19 @@ enum Shapelist {Sphere, Cone, Cube, Tetrahedre, Cylindre };
 class  Shape
 {
 public:
-	Shape(Shapelist type, glm::vec3 coords, glm::vec3 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	void init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
 	glm::vec3 coords_;
-	glm::vec3 baseColor_;
+	glm::vec4 baseColor_;
 	GLfloat rotation_;
 	glm::vec3 rotationAxis_;
 	GLfloat scale_;
+	bool modified_ = false;
+	bool appear = true;
 	  void Draw();
 	~  Shape();
+	void ChangeColor(glm::vec4 baseColor);
+	void disappear();
 	
 
 private:
@@ -24,8 +29,12 @@ private:
 void Shape::Draw() {
 	forme->afficher();
 }
-Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec3 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
+Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
 {
+	init(type, coords, baseColor, rotation, rotationAxis, scale);
+}
+
+void Shape::init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale) {
 	this->coords_ = coords;
 	this->baseColor_ = baseColor;
 	this->rotation_ = rotation;
@@ -44,7 +53,7 @@ Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec3 baseColor, GLfloat rota
 	case(Cube):
 		forme = new FormeCube(1.0, true);
 		break;
-	
+
 	case(Cylindre):
 		forme = new FormeCylindre(1.0, 1.0, 2.0, 10, 1, true);
 		break;
@@ -52,11 +61,17 @@ Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec3 baseColor, GLfloat rota
 	case(Tetrahedre):
 		forme = new FormeTetraedre(1.5, true);
 		break;
+	}
 }
-
-	  
+void Shape::ChangeColor(glm::vec4 baseColor) {
+	this->baseColor_ = baseColor;
+	this->modified_ = true;
 }
-
+void Shape::disappear() {
+	this->appear = false;
+	this->modified_ = true;
+}
   Shape::~  Shape()
 {
+	delete forme;
 }

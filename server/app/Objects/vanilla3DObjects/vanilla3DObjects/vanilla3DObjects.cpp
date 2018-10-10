@@ -197,7 +197,8 @@ void FenetreTP::initialiser()
 	glGenBuffers(3, ubo);
 	// activer les etats openGL
 	glEnable(GL_DEPTH_TEST);
-
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	// charger les nuanceurs
 	chargerNuanceurs();
 
@@ -267,18 +268,20 @@ void FenetreTP::afficherScene()
 	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
 
 
-
 	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
 	{
-		glVertexAttrib3f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g);
-		matrModel.PushMatrix(); {
-			matrModel.Translate(shape->coords_);
-			matrModel.Scale(shape->scale_);
-			matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-			glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-			glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-			shape->Draw();
-		}matrModel.PopMatrix(); 
+		if (shape->appear)
+		{
+			glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
+			matrModel.PushMatrix(); {
+				matrModel.Translate(shape->coords_);
+				matrModel.Scale(shape->scale_);
+				matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+				glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+				glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+				shape->Draw();
+			}matrModel.PopMatrix();
+		}
 	}
 	
 }
@@ -317,9 +320,8 @@ void FenetreTP::clavier(TP_touche touche)
 	case TP_EGAL:
 		if (camera.dist > 1.0) camera.dist -= 0.1;
 		break;
-	case TP_b: // Incrémenter la dimension de la boite
-		etat.dimBoite += 0.05;
-		std::cout << " etat.dimBoite=" << etat.dimBoite << std::endl;
+	case TP_b: // Modifier
+		shapes->modify();
 		break;
 	case TP_h: // Décrémenter la dimension de la boite
 		etat.dimBoite -= 0.05;
