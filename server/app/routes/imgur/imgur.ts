@@ -1,6 +1,5 @@
 import { injectable } from "inversify";
 
-// import Types from "../../types";
 import { CODES } from "../../../../common/communication/response-codes";
 
 @injectable()
