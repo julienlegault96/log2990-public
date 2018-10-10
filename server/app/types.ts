@@ -5,5 +5,5 @@ export default {
     Games: Symbol("Games"),
     Users: Symbol("Users"),
     Mongo: Symbol("Mongo"),
-    Imgur: Symbol("Imgur")
+    Imgur: Symbol("Imgur"),
 };
