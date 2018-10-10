@@ -47,18 +47,31 @@ export class Games extends AbstractRoute<Game> {
         const imgur: Imgur = new Imgur();
         const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
         const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        // Appel du generateur d'image de difference et creation d'une Promise
 
-        return Promise.all([imgurPromise1, imgurPromise2]);
+        return Promise.all([
+            imgurPromise1,
+            imgurPromise2/*,
+            base64Promise*/]);
     }
 
     private async doubleViewUpload(req: Request): Promise<string[]> {
         const imgur: Imgur = new Imgur();
         const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
         const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        // Appel du generateur d'image de difference et creation d'une Promise
+
         const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[2]);
         const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[3]);
+        // Appel du generateur d'image de difference et creation d'une Promise
 
-        return Promise.all([imgurPromise1, imgurPromise2, imgurPromise3, imgurPromise4]);
+        return Promise.all([
+            imgurPromise1,
+            imgurPromise2,
+            /*base64Promise1, */
+            imgurPromise3,
+            imgurPromise4/*,
+            base64Promise2 */]);
     }
 
     private generateId(): number {
