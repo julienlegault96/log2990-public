@@ -27,7 +27,7 @@ export class Imgur {
                     }
                 })
                 .catch((err: string) => {
-                    reject("Imgur Uploading Error" + err);
+                    reject("Imgur Uploading Error : " + err);
                 });
         });
     }

@@ -7,6 +7,7 @@ import { AbstractRoute } from "./abstract-route/abstract-route";
 import { Imgur } from "./imgur/imgur";
 
 import { Game } from "../../../common/game/game";
+import { GameType } from "../../../common/game/game-type";
 
 @injectable()
 
@@ -27,19 +28,40 @@ export class Games extends AbstractRoute<Game> {
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
         req.body._id = this.generateId();
 
+        const imgurPromise: Promise<string[]> =
+            (req.body.type === GameType.SingleView)
+                ? this.singleViewUpload(req)
+                : this.doubleViewUpload(req);
+
+        imgurPromise
+            .then((imagesUrl: string[]) => {
+                req.body.imageUrl = imagesUrl;
+            })
+            .catch((err: string) => {
+                //console.log(err);
+            });
+
+        await (imgurPromise);
+
+        return super.post(req, res, next);
+    }
+
+    private async singleViewUpload(req: Request): Promise<string[]> {
         const imgur: Imgur = new Imgur();
         const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
         const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
 
-        const imgurPromises: Promise<void> = Promise.all([imgurPromise1, imgurPromise2])
-            .then((imageUrls: Array<string>) => {
-                req.body.imageUrl[0] = imageUrls[0];
-                req.body.imageUrl[1] = imageUrls[1];
-            });
+        return Promise.all([imgurPromise1, imgurPromise2]);
+    }
 
-        await (imgurPromises);
+    private async doubleViewUpload(req: Request): Promise<string[]> {
+        const imgur: Imgur = new Imgur();
+        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
+        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[2]);
+        const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[3]);
 
-        return super.post(req, res, next);
+        return Promise.all([imgurPromise1, imgurPromise2, imgurPromise3, imgurPromise4]);
     }
 
     private generateId(): number {
