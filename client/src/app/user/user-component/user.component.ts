@@ -16,7 +16,7 @@ export class UserComponent {
 
     public constructor(private userService: UserService) {
         this.username = "";
-     }
+    }
 
     public submit(): void {
         try {
