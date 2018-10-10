@@ -14,6 +14,10 @@ import { GameType } from "../../../common/game/game-type";
 export class Games extends AbstractRoute<Game> {
 
     private readonly ID_RANGE: number = 1000000;
+    private readonly FIRST_VIEW_RAW_INDEX: number = 0;
+    private readonly FIRST_VIEW_MODIFIED_INDEX: number = 1;
+    private readonly SECOND_VIEW_RAW_INDEX: number = 2;
+    private readonly SECOND_VIEW_MODIFED_INDEX: number = 3;
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
@@ -45,24 +49,24 @@ export class Games extends AbstractRoute<Game> {
 
     private async singleViewUpload(req: Request): Promise<string[]> {
         const imgur: Imgur = new Imgur();
-        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
-        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
+        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
         // Appel du generateur d'image de difference et creation d'une Promise
 
         return Promise.all([
             imgurPromise1,
             imgurPromise2/*,
-            base64Promise*/]);
+            base64Promise*/]).catch();
     }
 
     private async doubleViewUpload(req: Request): Promise<string[]> {
         const imgur: Imgur = new Imgur();
-        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[0]);
-        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[1]);
+        const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
+        const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
         // Appel du generateur d'image de difference et creation d'une Promise
 
-        const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[2]);
-        const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[3]);
+        const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_RAW_INDEX]);
+        const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_MODIFED_INDEX]);
         // Appel du generateur d'image de difference et creation d'une Promise
 
         return Promise.all([
