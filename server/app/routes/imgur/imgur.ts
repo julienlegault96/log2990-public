@@ -9,10 +9,15 @@ export class Imgur {
     // tslint:disable-next-line:no-any
     private imgurApi: any;
 
+    private readonly IMGUR_API: string = "https://api.imgur.com/3/";
+    private readonly IMGUR_USERNAME: string = "kevin.pastor@polymtl.ca";
+    private readonly IMGUR_PASSWORD: string = "log2990";
+    private readonly IMGUR_CLIENT_ID: string = "f70c85481f5e351";
+
     public constructor() {
         this.imgurApi = require("imgur");
-        this.imgurApi.setAPIUrl("https://api.imgur.com/3/");
-        this.imgurApi.setCredentials("kevin.pastor@polymtl.ca", "log2990", "f70c85481f5e351");
+        this.imgurApi.setAPIUrl(this.IMGUR_API);
+        this.imgurApi.setCredentials(this.IMGUR_USERNAME, this.IMGUR_PASSWORD, this.IMGUR_CLIENT_ID);
     }
 
     public async uploadImage(imgBase64: string): Promise<string> {
