@@ -36,9 +36,6 @@ export class Games extends AbstractRoute<Game> {
         imgurPromise
             .then((imagesUrl: string[]) => {
                 req.body.imageUrl = imagesUrl;
-            })
-            .catch((err: string) => {
-                //console.log(err);
             });
 
         await (imgurPromise);
