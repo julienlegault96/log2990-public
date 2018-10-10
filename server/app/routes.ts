@@ -4,7 +4,6 @@ import { Router, Request, Response, NextFunction } from "express";
 import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
-import { Imgur } from "./routes/imgur/imgur";
 
 @injectable()
 export class Routes {
