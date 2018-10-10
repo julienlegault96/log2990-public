@@ -53,7 +53,7 @@ describe("DiffCounterComponent", () => {
 
     it("should add 1 if a diff is found", () => {
         component.setPlayerOne("playerOneId");
-        component.diffFound("playerOneId");
+        component.incrementPlayerCount("playerOneId");
 
         expect(component.getPlayerCount("playerOneId")).toEqual(1);
     });

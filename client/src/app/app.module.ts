@@ -13,7 +13,7 @@ import { GameCardComponent } from "./game/game-list-menu/game-card/game-card.com
 import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderboard.component";
 import { SoloGameComponent } from "./game/game-view/solo-game/solo-game.component";
 import { GameViewComponent } from "./game/game-view/game-view.component";
-import { ChronoComponent } from "./game/chrono/chrono.component";
+import { ChronoComponent } from "./game/game-view/chrono/chrono.component";
 import { MessageBarComponent } from "./game/game-view/message-bar/message-bar.component";
 import { MessageComponent } from "./game/game-view/message/message.component";
 
@@ -24,8 +24,7 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
-import { ImageDiffCounterComponent } from "./image-diff-counter/image-diff-counter.component";
-import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
+import { DiffCounterComponent } from "./game/game-view/diff-counter/diff-counter.component";
 
 @NgModule({
     declarations: [
@@ -44,7 +43,6 @@ import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
         HomePageComponent,
         MessageBarComponent,
         MessageComponent,
-        ImageDiffCounterComponent,
         DiffCounterComponent
     ],
     imports: [

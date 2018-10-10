@@ -6,9 +6,7 @@
             <app-message-bar></app-message-bar>
         </div>
         <div class="col-9 image-view">
-            <app-diff-counter></app-diff-counter>
+            <app-solo-game [playerId]="1" (errorFound)="messageBar.addMessage($event)"></app-solo-game>
         </div>
-
     </div>
 </div>
-

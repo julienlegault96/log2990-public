@@ -3,6 +3,9 @@
         <img class="img-thumbnail game-image" src="https://www.w3schools.com/w3css/img_lights.jpg">
     </div>
     <div class="col-md-6 col-sm-12 image-container">
-        <img class="img-thumbnail game-image" src="https://www.w3schools.com/w3css/img_lights.jpg">
+        <button type="button" class="btn btn-light" (click)="diffCounter.incrementPlayerCountSolo(); errorFound.emit('Error Found!')">
+            <img class="img-thumbnail game-image" src="https://www.w3schools.com/w3css/img_lights.jpg">
+        </button>
     </div>
 </div>
+<app-diff-counter [playerOneId]="playerId"></app-diff-counter>
