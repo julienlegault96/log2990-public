@@ -17,7 +17,7 @@ export class Imgur {
     }
 
     public async uploadImage(imgBase64: string): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<string>((resolve: Function, reject: Function) => {
             this.imgurApi.uploadBase64(imgBase64)
                 // tslint:disable-next-line:no-any
                 .then((json: any) => {
