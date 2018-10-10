@@ -12,6 +12,8 @@ import { Game } from "../../../common/game/game";
 
 export class Games extends AbstractRoute<Game> {
 
+    private readonly ID_RANGE: number = 1000000;
+
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
         this.collection = Collections.Games;
@@ -38,9 +40,7 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private generateId(): number {
-        const randomRange: number = 1000000;
-
-        return Math.floor(Math.random() * randomRange);
+        return Math.floor(Math.random() * this.ID_RANGE);
     }
 
 }
