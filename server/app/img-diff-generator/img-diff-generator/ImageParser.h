@@ -18,6 +18,7 @@ private:
 	const unsigned
 		HEADER_SIZE = 54,
 		BIT_DEPTH = 24,
+		//TODO
 		IMAGE_HEIGHT = 8, // 480,
 		IMAGE_WIDTH = 8; // 640;
 

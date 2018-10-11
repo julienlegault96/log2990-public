@@ -18,7 +18,7 @@ void Comparator::exec(const string & filename1, const string & filename2)
 		{
 			if (image1.getPixel(i, j) != image2.getPixel(i, j))
 			{
-				this->fattify(i, j);
+				this->enlargeErrorZone(i, j);
 			}
 		}
 	}
@@ -26,19 +26,20 @@ void Comparator::exec(const string & filename1, const string & filename2)
 
 const void Comparator::save(const string & filename) const
 {
+	// TODO
 	Image image(this->differenceImage);
 	cout << image;
 	return void();
 }
 
-const void Comparator::fattify(const unsigned & x, const unsigned & y)
+const void Comparator::enlargeErrorZone(const unsigned & x, const unsigned & y)
 {
 	Pixel pixel(0, 0, 0);
-	for (pair<int, int> fatPair : this->stencil)
+	for (pair<int, int> stencilPair : this->CIRCLE_STENCIL)
 	{
-		unsigned i = ((int)x + fatPair.first < 0) ? 0 : x + fatPair.first;
+		unsigned i = ((int)x + stencilPair.first < 0) ? 0 : x + stencilPair.first;
 		i = (i >= this->IMAGE_HEIGHT) ? this->IMAGE_HEIGHT - 1 : i;
-		unsigned j = ((int)y + fatPair.second < 0) ? 0 : y + fatPair.second;
+		unsigned j = ((int)y + stencilPair.second < 0) ? 0 : y + stencilPair.second;
 		j = (j >= this->IMAGE_WIDTH) ? this->IMAGE_WIDTH - 1 : j;
 		this->differenceImage.setPixel(i, j, pixel);
 	}

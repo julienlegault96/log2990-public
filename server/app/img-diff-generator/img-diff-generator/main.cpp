@@ -18,15 +18,6 @@ int main(int argc, char *argv[])
 		Comparator comparator;
 		comparator.exec(filename1, filename2);
 		comparator.save(filename);
-		//ImageParser imageParser;
-		//Image image = imageParser.getImageFromUrl(filename);
-		//cout << "Size: "
-		//	<< image.getPixels().size()
-		//	<< "x"
-		//	<< image.getPixels()[0].size()
-		//	<< endl;
-
-		//cout << image;
 	}
 	catch (const std::runtime_error & e)
 	{
@@ -47,7 +38,7 @@ int main(int argc, char *argv[])
 	{
 		cerr << "Unknown exception" << endl;
 	}
-
+	//TODO take away
 	system("pause");
 	return 0;
 }

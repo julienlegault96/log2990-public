@@ -37,6 +37,7 @@ const Image ImageParser::getImageFromUrl(const string & filename) const
 
 const Image ImageParser::getImageFromBase64(const string & data64) const
 {
+	// TODO
 	return Image(0, 0);
 }
 
