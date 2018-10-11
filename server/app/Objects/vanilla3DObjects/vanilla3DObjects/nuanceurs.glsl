@@ -59,6 +59,7 @@ out Attribs {
 vec3 lumiDir;
 vec3 normale, obsVec;
 vec4 couleur;
+float attenuation;
 } AttribsOut;
 
 void main(void)
@@ -72,7 +73,9 @@ vec4 pos = matrModel * Vertex;
 gl_ClipDistance[0] = dot( planCoupe, pos );
 }
 
+
 // la couleur du sommet
+
 AttribsOut.couleur = Color;
 
 // calculer la normale (N) qui sera interpolée pour le nuanceur de fragment
@@ -80,7 +83,11 @@ AttribsOut.normale = matrNormale * Normal;
 
 // calculer la position (P) du sommet (dans le repère de la caméra)
 vec3 pos = vec3( matrVisu * matrModel * Vertex );
+float distance = sqrt(pow(LightSource[0].position.x - pos.x ,2) +
+pow(LightSource[0].position.y - pos.y ,2) +
+pow(LightSource[0].position.z - pos.z ,2));
 
+AttribsOut.attenuation= 1.0/ (1.0 + LightSource[0].constantAttenuation * pow(distance, 2));
 // vecteur de la direction (L) de la lumière (dans le repère de la caméra)
 AttribsOut.lumiDir = ( matrVisu * LightSource[0].position ).xyz - pos;
 
@@ -102,6 +109,7 @@ in Attribs {
 vec3 lumiDir;
 vec3 normale, obsVec;
 vec4 couleur;
+float attenuation;
 } AttribsIn;
 
 out vec4 FragColor;
@@ -127,16 +135,16 @@ if ( NdotL > 0.0 )
 {
 // calcul de la composante diffuse
 //coul += FrontMaterial.diffuse * LightSource[0].diffuse * NdotL;
-coul += AttribsIn.couleur * LightSource[0].diffuse * NdotL; //(ici, on utilise plutôt la couleur de l'objet)
+coul += AttribsIn.couleur * LightSource[0].diffuse* NdotL ; //(ici, on utilise plutôt la couleur de l'objet)
 
 // calcul de la composante spéculaire (Blinn ou Phong)
 float NdotHV = max( 0.0, ( utiliseBlinn ) ? dot( normalize( L + O ), N ) : dot( reflect( -L, N ), O ) );
-coul += FrontMaterial.specular * LightSource[0].specular * ( ( NdotHV == 0.0 ) ? 0.0 : pow( NdotHV, FrontMaterial.shininess ) );
+coul += FrontMaterial.specular *LightSource[0].specular * ( ( NdotHV == 0.0 ) ? 0.0 : pow( NdotHV, FrontMaterial.shininess ) );
 }
-
 // assigner la couleur finale
 FragColor = clamp( coul, 0.0, 1.0 );
-
+float factAttenuation = smoothstep(50, 30, AttribsIn.attenuation);
+FragColor*=factAttenuation;
 //FragColor = clamp(vec4(N,1.0),0.,1.);
 }
 
