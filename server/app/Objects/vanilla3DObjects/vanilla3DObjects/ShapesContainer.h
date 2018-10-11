@@ -43,14 +43,13 @@ void ShapesContainer::generateShape() {
 	Shapelist type = Shapelist(rand() % Shapelist::Cylindre + 1);
 	glm::vec4 color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 
-	glm::vec3 translateSphere(0, 0, 0);
-	randCoords(&translateSphere);
+	glm::vec3 translateShape(0, 0, 0);
+	randCoords(&translateShape);
 
-	glm::vec3 RotateSphere(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1));
+	glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	GLfloat scaleSphere = randFloat(0.5*scalingFactor, 1.5*scalingFactor);
-	Shape *newShape = new Shape(type, translateSphere, color, randFloat(0, 360), RotateSphere, scaleSphere);
+	GLfloat scaleShape = randFloat(0.5*scalingFactor, 1.5*scalingFactor);
+	Shape *newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
 	shapes_.push_back(newShape);
 }
 ShapesContainer::~ShapesContainer() {
