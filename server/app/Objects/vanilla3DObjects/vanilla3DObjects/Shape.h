@@ -26,15 +26,18 @@ private:
 
 };
 
-void Shape::Draw() {
+void Shape::Draw()
+{
 	forme->afficher();
 }
+
 Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
 {
 	init(type, coords, baseColor, rotation, rotationAxis, scale);
 }
 
-void Shape::init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale) {
+void Shape::init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
+ {
 	this->coords_ = coords;
 	this->baseColor_ = baseColor;
 	this->rotation_ = rotation;
@@ -63,14 +66,19 @@ void Shape::init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat 
 		break;
 	}
 }
-void Shape::ChangeColor(glm::vec4 baseColor) {
+
+void Shape::ChangeColor(glm::vec4 baseColor) 
+{
 	this->baseColor_ = baseColor;
 	this->modified_ = true;
 }
-void Shape::disappear() {
+
+void Shape::disappear()
+{
 	this->appear = false;
 	this->modified_ = true;
 }
+
   Shape::~  Shape()
 {
 	delete forme;
