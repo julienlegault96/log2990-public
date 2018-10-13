@@ -3,7 +3,7 @@
         <div class="col-3 side-view">
             <app-chrono></app-chrono>
             <div class="dropdown-divider"></div>
-            <app-message-bar></app-message-bar>
+            <app-message-bar [messages]></app-message-bar>
         </div>
         <div class="col-9 image-view">
             <app-solo-game [playerId]="playerId" (errorFound)="messageBar.addMessage($event)"></app-solo-game>

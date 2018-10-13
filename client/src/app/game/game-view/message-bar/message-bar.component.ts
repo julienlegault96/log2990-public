@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
     selector: "app-message-bar",
@@ -6,9 +6,9 @@ import { Component } from "@angular/core";
     styleUrls: ["./message-bar.component.css"]
 })
 export class MessageBarComponent {
-    public messages: string[] = [];
+   @Input() public messages: string[] = [];
 
-    public addMessage(message: string): void {
+   public addMessage(message: string): void {
         this.messages.push(message);
     }
 }
