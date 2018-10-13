@@ -4,7 +4,7 @@ ImageParser::ImageParser()
 {
 }
 
-const Image ImageParser::getImageFromUrl(const string & filename) const
+const Image ImageParser::getImageFromUrl(const char * filename) const
 {
 	if (!this->isBmpFile(filename))
 	{
@@ -13,7 +13,7 @@ const Image ImageParser::getImageFromUrl(const string & filename) const
 
 	FILE * file;
 
-	if (fopen_s(&file, filename.data(), "rb"))
+	if (fopen_s(&file, filename, "rb"))
 	{
 		throw std::runtime_error("File opening error");
 	}
@@ -35,7 +35,7 @@ const Image ImageParser::getImageFromUrl(const string & filename) const
 	return image;
 }
 
-const Image ImageParser::getImageFromBase64(const string & data64) const
+const Image ImageParser::getImageFromBase64(const char * data64) const
 {
 	// TODO
 	return Image(0, 0);
@@ -43,32 +43,42 @@ const Image ImageParser::getImageFromBase64(const string & data64) const
 
 const Image ImageParser::getImage(const unsigned char * data) const
 {
-	if (!this->isValidBitDepth(data))
+	if (!isValidBitDepth(data))
 	{
-		throw std::runtime_error("Invalid bmp bit depth");
+		throw std::invalid_argument(
+			"Invalid bmp bit depth, expected " +
+			to_string(EXPECTED_BMP_HEADER.biBitCount) +
+			" but got " +
+			to_string(getBitDepth(data))
+		);
 	}
 
-	if (!this->isValidHeight(data) || !this->isValidWidth(data))
+	if (!isValidHeight(data) || !isValidWidth(data))
 	{
-		throw std::invalid_argument("Invalid image size");
+		throw std::invalid_argument(
+			"Invalid image size, expected " +
+			to_string(EXPECTED_BMP_HEADER.biWidth) + " x " + to_string(EXPECTED_BMP_HEADER.biHeight) +
+			" but got " +
+			to_string(getWidth(data)) + " x " + to_string(getHeight(data))
+		);
 	}
 
 	return 
-		this->parseData(
-			this->getHeight(data),
-			this->getWidth(data),
-			data + this->HEADER_SIZE
+		parseData(
+			getHeight(data),
+			getWidth(data),
+			data + EXPECTED_BMP_HEADER.bfOffBits
 		);
 }
 
 const Image ImageParser::parseData(const unsigned & height, const unsigned & width, const unsigned char * imageData) const
 {
-	Image image(height, width);
+	Image image(width, height);
 
 	// https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
-	for (unsigned x = 0; x < width; x++)
+	for (unsigned y = 0; y < height; ++y)
 	{
-		for (unsigned y = 0; y < height; y++)
+		for (unsigned x = 0; x < width; ++x)
 		{
 			unsigned position = (x + y * width) * 3 + (y * width) % 4;
 			unsigned char
@@ -86,12 +96,19 @@ const Image ImageParser::parseData(const unsigned & height, const unsigned & wid
 
 const unsigned ImageParser::getHeight(const unsigned char * header) const
 {
-	return header[22];
+	// little endian, offsets 22 to 25
+	return header[25] << 8 | header[24] << 8 | header[23] << 8 | header[22];
 }
 
 const unsigned ImageParser::getWidth(const unsigned char * header) const
 {
-	return header[18];
+	// little endian, offsets 18 to 21
+	return header[21] << 8 | header[20] << 8 | header[19] << 8 | header[18];
+}
+
+const unsigned ImageParser::getBitDepth(const unsigned char * header) const
+{
+	return header[29] << 8 | header[28];
 }
 
 const bool ImageParser::isBmpFile(const string & filename) const
@@ -106,15 +123,15 @@ const bool ImageParser::isBmpFile(const string & filename) const
 
 const bool ImageParser::isValidBitDepth(const unsigned char * header) const
 {
-	return header[28] == this->BIT_DEPTH;
+	return getBitDepth(header) == EXPECTED_BMP_HEADER.biBitCount;
 }
 
 const bool ImageParser::isValidHeight(const unsigned char * header) const
 {
-	return this->getHeight(header) == this->IMAGE_HEIGHT;
+	return getHeight(header) == EXPECTED_BMP_HEADER.biHeight;
 }
 
 const bool ImageParser::isValidWidth(const unsigned char * header) const
 {
-	return this->getWidth(header) == this->IMAGE_WIDTH;
+	return getWidth(header) == EXPECTED_BMP_HEADER.biWidth;
 }
