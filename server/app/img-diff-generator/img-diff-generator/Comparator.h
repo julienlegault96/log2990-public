@@ -1,10 +1,12 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <utility>
 #include "ImageParser.h"
+#include "ImageHeader.h"
 #include "Image.h"
 
 using namespace std;
@@ -14,16 +16,12 @@ class Comparator
 public:
 	Comparator();
 
-	void exec(const string & filename1, const string & filename2);
+	void compare(const char* filename1, const char* filename2);
 
-	const void save(const string & filename) const;
+	void saveTo(const char* filename) const;
 
 private:
-	//TODO take off small size
-	const unsigned
-		IMAGE_HEIGHT = 8, // 480,
-		IMAGE_WIDTH = 8; // 640;
-
+	const Pixel DIFF_PIXEL = Pixel(0, 0, 0);
 	const vector<pair<int, int>> CIRCLE_STENCIL = {
 							{-1,  3}, {0,  3}, {1,  3},
 				  {-2,  2}, {-1,  2}, {0,  2}, {1,  2}, {2,  2},
@@ -35,6 +33,6 @@ private:
 	};
 
 	Image differenceImage;
-	const void enlargeErrorZone(const unsigned & x, const unsigned & y);
+	void enlargeErrorZone(const int32_t x, const int32_t y);
 
 };
