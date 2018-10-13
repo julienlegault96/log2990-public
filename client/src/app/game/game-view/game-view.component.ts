@@ -10,7 +10,17 @@ import { SoloGameComponent } from "./solo-game/solo-game.component";
 })
 
 export class GameViewComponent {
-    @ViewChild(MessageBarComponent) messageBar: MessageBarComponent;
-    @ViewChild(ChronoComponent) chrono: ChronoComponent;
-    @ViewChild(SoloGameComponent) soloGame: SoloGameComponent;
+    @ViewChild(MessageBarComponent) public messageBar: MessageBarComponent;
+    @ViewChild(ChronoComponent) public chrono: ChronoComponent;
+    @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
+    public playerId: string;
+
+   /* public setPlayerId(id: string): string {
+        return this.soloGame.setPlayerId(id);
+    }*/
+
+    public ngOnInit(): void {
+        this.playerId = this.soloGame.setPlayerId("1");
+
+     }
 }

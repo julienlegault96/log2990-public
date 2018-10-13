@@ -7,10 +7,15 @@ import { DiffCounterComponent } from "../diff-counter/diff-counter.component";
 })
 
 export class SoloGameComponent {
-    @ViewChild(DiffCounterComponent) diffCounter: DiffCounterComponent;
+    @ViewChild(DiffCounterComponent) public diffCounter: DiffCounterComponent;
 
-    @Output() errorFound = new EventEmitter<string>();
+    @Output() public errorFound = new EventEmitter<string>();
 
     // Used to pass down to diff counter
     @Input() private playerId: string;
+    public setPlayerId(id: string): string {
+        this.playerId = id;
+
+        return this.playerId;
+    }
 }
