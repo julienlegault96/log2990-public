@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iomanip>
+#include <string>
 #include "Pixel.h"
 
 using namespace std;
@@ -9,11 +10,11 @@ using namespace std;
 class Image
 {
 public:
-	Image(const unsigned & height, const unsigned & width);
+	Image(const unsigned height, const unsigned width);
 
 	const Pixel getPixel(const unsigned & x, const unsigned & y) const;
 	const vector<vector<Pixel>> getPixels() const;
-	void setPixel(const unsigned & x, const unsigned & y, const Pixel & pixel);
+	void setPixel(const unsigned x, const unsigned y, const Pixel & pixel);
 
 	friend ostream& operator<<(ostream & os, Image & image);
 
