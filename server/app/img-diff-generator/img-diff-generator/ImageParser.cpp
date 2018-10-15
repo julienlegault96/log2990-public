@@ -47,7 +47,7 @@ const Image ImageParser::getImage(const unsigned char * data) const
 	{
 		throw std::invalid_argument(
 			"Invalid bmp bit depth, expected " +
-			to_string(EXPECTED_BMP_HEADER.biBitCount) +
+			to_string(DEFAULT_24BIT_BMP_HEADER.biBitCount) +
 			" but got " +
 			to_string(getBitDepth(data))
 		);
@@ -57,7 +57,7 @@ const Image ImageParser::getImage(const unsigned char * data) const
 	{
 		throw std::invalid_argument(
 			"Invalid image size, expected " +
-			to_string(EXPECTED_BMP_HEADER.biWidth) + " x " + to_string(EXPECTED_BMP_HEADER.biHeight) +
+			to_string(DEFAULT_24BIT_BMP_HEADER.biWidth) + " x " + to_string(DEFAULT_24BIT_BMP_HEADER.biHeight) +
 			" but got " +
 			to_string(getWidth(data)) + " x " + to_string(getHeight(data))
 		);
@@ -67,7 +67,7 @@ const Image ImageParser::getImage(const unsigned char * data) const
 		parseData(
 			getHeight(data),
 			getWidth(data),
-			data + EXPECTED_BMP_HEADER.bfOffBits
+			data + DEFAULT_24BIT_BMP_HEADER.bfOffBits
 		);
 }
 
@@ -123,15 +123,15 @@ const bool ImageParser::isBmpFile(const string & filename) const
 
 const bool ImageParser::isValidBitDepth(const unsigned char * header) const
 {
-	return getBitDepth(header) == EXPECTED_BMP_HEADER.biBitCount;
+	return getBitDepth(header) == DEFAULT_24BIT_BMP_HEADER.biBitCount;
 }
 
 const bool ImageParser::isValidHeight(const unsigned char * header) const
 {
-	return getHeight(header) == EXPECTED_BMP_HEADER.biHeight;
+	return getHeight(header) == DEFAULT_24BIT_BMP_HEADER.biHeight;
 }
 
 const bool ImageParser::isValidWidth(const unsigned char * header) const
 {
-	return getWidth(header) == EXPECTED_BMP_HEADER.biWidth;
+	return getWidth(header) == DEFAULT_24BIT_BMP_HEADER.biWidth;
 }

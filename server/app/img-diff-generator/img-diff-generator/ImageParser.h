@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include "ImageHeader.h"
 #include "Image.h"
 
 using namespace std;

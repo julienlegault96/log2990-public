@@ -85,6 +85,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,9 +123,11 @@
     <ClCompile Include="ImageParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pixel.cpp" />
+    <ClCompile Include="ImageHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Comparator.h" />
+    <ClInclude Include="ImageHeader.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageParser.h" />
     <ClInclude Include="Pixel.h" />

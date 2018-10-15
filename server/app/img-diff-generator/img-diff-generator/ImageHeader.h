@@ -1,14 +1,37 @@
 #pragma once
 
+#include <iostream>
 #include <iomanip>
 using namespace std;
 
 // https://en.wikipedia.org/wiki/BMP_file_format
-static struct {
-	uint16_t bfType1 = 0x42 << 8 | 0x4D; // "BM", identifies file as .bmp
+class ImageHeader {
+public:
+
+	ImageHeader();
+
+	ImageHeader(
+		uint8_t bfType[2], // "BM" identifies file as .bmp
+		int32_t bfSize, // headersize + bytesPerLine * depth where bytesPerLine = width * 3 (for 24 bit images) in little endian
+		uint16_t bfReserved[2], // Unused - must be two zero bytes
+		uint32_t bfOffBits, // Offset to start of Pixel Data, a.k.a the header's size
+		uint32_t biSize, //	size of the info section, the standard is 40
+		int32_t biWidth,
+		int32_t biHeight,
+		uint16_t biPlanes, // must be 1
+		uint16_t biBitCount, // a.k.a bit depth
+		uint32_t biCompression,
+		uint32_t biSizeImage,
+		int32_t biXPelsPerMeter,
+		int32_t biYPelsPerMeter,
+		uint32_t biClrUsed,
+		uint32_t biClrImportant
+	);
+
+
+	uint8_t bfType[2] = { 0x42, 0x4D }; // "BM", identifies file as .bmp
 	int32_t bfSize = 46134L; // headersize + bytesPerLine * depth where bytesPerLine = width * 3 (for 24 bit images) in little endian
-	uint16_t bfReserved1 = 0L; // Unused - must be two zero bytes
-	uint16_t bfReserved2 = 0L; // Unused - must be two zero bytes
+	uint16_t bfReserved[2]; // Unused - must be two zero bytes
 	uint32_t bfOffBits = 54L; // Offset to start of Pixel Data, a.k.a the header's size
 	uint32_t biSize = 40L; //	size of the info section, here the standard 40
 	int32_t biWidth = 640L;
@@ -21,4 +44,8 @@ static struct {
 	int32_t biYPelsPerMeter = 0L;
 	uint32_t biClrUsed = 0L;
 	uint32_t biClrImportant = 0L;
-} EXPECTED_BMP_HEADER;
+
+	friend ostream& operator<<(ostream & os, const ImageHeader & header);
+private:
+
+};

@@ -6,7 +6,6 @@
 #include <vector>
 #include <utility>
 #include "ImageParser.h"
-#include "ImageHeader.h"
 #include "Image.h"
 
 using namespace std;

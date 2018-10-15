@@ -37,7 +37,7 @@ void Image::setPixel(const unsigned x, const unsigned y, const Pixel & pixel)
 	pixels[y][x] = pixel;
 }
 
-ostream& operator<<(ostream & stream, Image & image)
+ostream& operator<<(ostream & stream, const Image & image)
 {
 	vector<vector<Pixel>> pixels(image.getPixels());
 	char * memblock;
