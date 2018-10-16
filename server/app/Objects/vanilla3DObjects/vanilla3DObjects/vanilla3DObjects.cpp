@@ -49,13 +49,13 @@ struct LightSourceParameters
 	float linearAttenuation;
 	float quadraticAttenuation;
 } LightSource[1] = { { glm::vec4(1.0, 1.0, 1.0, 1.0),
-glm::vec4(1.0, 1.0, 1.0, 1.0),
-glm::vec4(1.0, 1.0, 1.0, 1.0),
-glm::vec4(10, 10, 10, 1.0),
-glm::vec3(0.0, 0.0, 1.0),
-1.0,       // l'exposant du cône
-180.0,     // l'angle du cône du spot
-1., 0., 0. } };
+					   glm::vec4(1.0, 1.0, 1.0, 1.0),
+					   glm::vec4(1.0, 1.0, 1.0, 1.0),
+					   glm::vec4(10, 10, 10, 1.0),
+					   glm::vec3(0.0, 0.0, 1.0),
+								 1.0,       // l'exposant du cône
+								 180.0,     // l'angle du cône du spot
+								 1., 0., 0. } };
 
 // définition du matériau
 struct MaterialParameters
@@ -66,10 +66,10 @@ struct MaterialParameters
 	glm::vec4 specular;
 	float shininess;
 } FrontMaterial = { glm::vec4(0.0, 0.0, 0.0, 1.0),
-glm::vec4(0.2, 0.2, 0.2, 1.0),
-glm::vec4(1.0, 1.0, 1.0, 1.0),
-glm::vec4(1.0, 1.0, 1.0, 1.0),
-20.0 };
+					glm::vec4(0.2, 0.2, 0.2, 1.0),
+					glm::vec4(1.0, 1.0, 1.0, 1.0),
+					glm::vec4(1.0, 1.0, 1.0, 1.0),
+					          20.0 };
 
 struct LightModelParameters
 {
@@ -77,13 +77,14 @@ struct LightModelParameters
 	int localViewer;   // doit-on prendre en compte la position de l'observateur? (local ou à l'infini)
 	int twoSide;       // éclairage sur les deux côtés ou un seul?
 } LightModel = { glm::vec4(0,0,0,1), false, false };
+
 // diverses variables d'état
 struct Etat {
 	bool afficheAxes;     // indique si on affiche les axes
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
 	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
 	double dimBoite;      // la dimension de la boite
-} etat = { true, false, GL_FILL, 10.0 };
+} etat = { false, false, GL_FILL, 10.0 };
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
@@ -113,9 +114,7 @@ public:
 } camera = { thetaInit, phiInit, distInit, true };
 
 void chargerNuanceurs()
-{
-
-	
+{	
 	// charger le nuanceur de base
 	{
 		// créer le programme
@@ -204,8 +203,6 @@ void FenetreTP::initialiser()
 
 	// créer quelques autres formes
 	glUseProgram(progBase);
-	
-
 }
 
 void FenetreTP::conclure()

@@ -25,13 +25,17 @@ private:
 	void generateShape();
 	
 };
-ShapesContainer::ShapesContainer(int numberShapes, double dimBoite) {
+
+ShapesContainer::ShapesContainer(int numberShapes, double dimBoite) 
+{
 	this->numberShapes_ = numberShapes;
 	this->dimBoite_ = dimBoite;
 	scalingFactor = pow(dimBoite_, 3) / (36*numberShapes_);
 	generateShapes();
 }
-void ShapesContainer::generateShapes() {
+
+void ShapesContainer::generateShapes() 
+{
 
 	for (int index = 0; index < numberShapes_; index++)
 	{
@@ -39,21 +43,23 @@ void ShapesContainer::generateShapes() {
 	}
 }
 
-void ShapesContainer::generateShape() {
+void ShapesContainer::generateShape()
+ {
 	Shapelist type = Shapelist(rand() % Shapelist::Cylindre + 1);
 	glm::vec4 color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 
-	glm::vec3 translateSphere(0, 0, 0);
-	randCoords(&translateSphere);
+	glm::vec3 translateShape(0, 0, 0);
+	randCoords(&translateShape);
 
-	glm::vec3 RotateSphere(randFloat(0, 1), randFloat(0, 1),
-		randFloat(0, 1));
+	glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	GLfloat scaleSphere = randFloat(0.5*scalingFactor, 1.5*scalingFactor);
-	Shape *newShape = new Shape(type, translateSphere, color, randFloat(0, 360), RotateSphere, scaleSphere);
+	GLfloat scaleShape = randFloat(0.5*scalingFactor, 1.5*scalingFactor);
+	Shape *newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
 	shapes_.push_back(newShape);
 }
-ShapesContainer::~ShapesContainer() {
+
+ShapesContainer::~ShapesContainer() 
+{
 	while(!shapes_.empty())
 	{
 		Shape *shape = shapes_.back();
@@ -61,14 +67,18 @@ ShapesContainer::~ShapesContainer() {
 		shapes_.pop_back();
 	}
 }
+
 //fonction retournant un float aleatoire
 //source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
-float ShapesContainer::randFloat(const float& min, const float& max) {
+float ShapesContainer::randFloat(const float& min, const float& max)
+{
 	float range = max - min;
 	float num = range * rand() / RAND_MAX;
 	return (num + min);
 }
-void ShapesContainer::randCoords(glm::vec3 *coords) {
+
+void ShapesContainer::randCoords(glm::vec3 *coords) 
+{
 	do {
 		coords->x = randFloat(-dimBoite_ / 2, dimBoite_ / 2);
 		coords->y = randFloat(-dimBoite_  / 2, dimBoite_/ 2);
@@ -76,7 +86,8 @@ void ShapesContainer::randCoords(glm::vec3 *coords) {
 	} while (checkForCollision(coords));
 }
 
-bool ShapesContainer::checkForCollision(glm::vec3 *coords) {
+bool ShapesContainer::checkForCollision(glm::vec3 *coords) 
+{
 	bool collision = false;
 	double distance = 0;
 	auto shape = begin(shapes_);
@@ -88,11 +99,13 @@ bool ShapesContainer::checkForCollision(glm::vec3 *coords) {
 	return collision;
 }
 
-std::vector<Shape*> ShapesContainer::getShapes() {
+std::vector<Shape*> ShapesContainer::getShapes() 
+{
 	return shapes_;
 }
 
-void ShapesContainer::modify() {
+void ShapesContainer::modify() 
+{
 	int index = rand() % this->numberShapes_;
 	while (this->shapes_.at(index)->modified_) {
 		index = rand() % this->numberShapes_ ;
@@ -113,18 +126,22 @@ void ShapesContainer::modify() {
 	
 }
 
-void ShapesContainer::changeColor(int index) {
+void ShapesContainer::changeColor(int index) 
+{
 	glm::vec4 newColor(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 	while(this->shapes_.at(index)->baseColor_ == newColor) {
 		glm::vec4 newColor(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 	}
 	this->shapes_.at(index)->ChangeColor(newColor);
 }
-void ShapesContainer::deleteShape(int index) {
+
+void ShapesContainer::deleteShape(int index) 
+{
 	this->shapes_.at(index)->disappear();
 }
 
-void ShapesContainer::addShape() {
+void ShapesContainer::addShape() 
+{
 	generateShape();
 	this->shapes_.at(this->numberShapes_)->modified_ = true;
 	this->numberShapes_++;
