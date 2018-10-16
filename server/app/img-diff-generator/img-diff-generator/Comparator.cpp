@@ -1,6 +1,6 @@
 #include "Comparator.h"
 
-Comparator::Comparator() : differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight)
+Comparator::Comparator() : differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight), partialDiff(false)
 {
 }
 
@@ -30,6 +30,18 @@ void Comparator::compare(const char * filename1, const char * filename2)
 			}
 		}
 	}
+}
+
+void Comparator::InterpretOptionStrings(const char * partialString)
+{
+	if (partialString != EXPECTED_PARTIAL_OPTION_STRING) {
+		throw std::invalid_argument(
+			"Invalid option, submited +" + string(partialString) + " when accepted options are " 
+			+ "\"" + EXPECTED_PARTIAL_OPTION_STRING + "\""
+		);
+	}
+
+	partialDiff = true;
 }
 
 void Comparator::saveTo(const char*  filename) const

@@ -11,18 +11,16 @@ ImageHeader::ImageHeader(uint8_t bfType[2], int32_t bfSize, uint16_t bfReserved[
 
 void split4BytesInLittleEndian(char * memblock, const int32_t fourBytes, const int beginIndex, const int endIndex = 0)
 {
-	// least significative byte first
-	memblock[beginIndex] = (char)(fourBytes & 0x000f);
-	memblock[beginIndex + 1] = (char)(fourBytes & 0x00f0 >> 8);
-	memblock[beginIndex + 2] = (char)(fourBytes & 0x0f00 >> 16);
-	memblock[beginIndex + 3] = (char)(fourBytes & 0xf000 >> 24);
+	memblock[beginIndex] = fourBytes;
+	memblock[beginIndex + 1] = fourBytes >> 8;
+	memblock[beginIndex + 2] = fourBytes >> 16;
+	memblock[beginIndex + 3] = fourBytes >> 24;
 }
 
 void split2BytesInLittleEndian(char * memblock, const int16_t twoBytes, const int beginIndex, const int endIndex = 0)
 {
-	// least significative byte first
-	memblock[beginIndex] = (char)(twoBytes & 0x000f);
-	memblock[beginIndex + 1] = (char)(twoBytes & 0x00f0 >> 8);
+	memblock[beginIndex] = twoBytes;
+	memblock[beginIndex + 1] = twoBytes >> 8;
 }
 
 ostream & operator<<(ostream & stream, const ImageHeader & header)

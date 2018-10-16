@@ -16,7 +16,7 @@ public:
 	Comparator();
 
 	void compare(const char* filename1, const char* filename2);
-
+	void InterpretOptionStrings(const char* partialString);
 	void saveTo(const char* filename) const;
 
 private:
@@ -30,7 +30,9 @@ private:
 				  {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2},
 							{-1, -3}, {0, -3}, {1, -3}
 	};
+	const char * EXPECTED_PARTIAL_OPTION_STRING = "-partiel";
 
+	bool partialDiff;
 	Image differenceImage;
 	void enlargeErrorZone(const int32_t x, const int32_t y);
 

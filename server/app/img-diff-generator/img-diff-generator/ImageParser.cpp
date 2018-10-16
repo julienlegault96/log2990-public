@@ -27,7 +27,7 @@ const Image ImageParser::getImageFromUrl(const char * filename) const
 	fread(data, fileSize, 1, file);
 	fclose(file);
 
-	Image image = this->getImage(data);
+	Image image = getImage(data);
 
 	delete[] data;
 	data = nullptr;
