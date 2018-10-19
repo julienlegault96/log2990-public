@@ -405,21 +405,6 @@ public:
             //else
             //   std::cout << "//@FenetreTP,WINDOWEVENT;" << " e.window.event=" << e.window.event << std::endl;
             break;
-         case SDL_KEYDOWN: // une touche est pressée
-            clavier( (TP_touche) e.key.keysym.sym );
-            break;
-         case SDL_KEYUP: // une touche est relâchée
-            break;
-         case SDL_MOUSEBUTTONDOWN: // un bouton de la souris est pressé
-         case SDL_MOUSEBUTTONUP: // un bouton de la souris est relâché
-            sourisClic( e.button.button, e.button.state, e.button.x, e.button.y );
-            break;
-         case SDL_MOUSEMOTION: // la souris est déplacée
-            sourisMouvement( e.motion.x, e.motion.y );
-            break;
-         case SDL_MOUSEWHEEL: // la molette de la souris est tournée
-            sourisMolette( e.wheel.x, e.wheel.y );
-            break;
          default:
             //std::cerr << "//@FenetreTP," << __LINE__ << ";" << " e.type=" << e.type << std::endl;
             break;

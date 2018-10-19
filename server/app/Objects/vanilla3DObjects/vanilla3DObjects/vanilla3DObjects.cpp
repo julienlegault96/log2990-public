@@ -213,13 +213,6 @@ void FenetreTP::conclure()
 	delete shapes;
 }
 
-// affiche la position courante du repère (pour débogage)
-void afficherRepereCourant(int num = 0)
-{
-	glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-	FenetreTP::afficherAxes(1.5, 3.0);
-}
-
 void FenetreTP::afficherScene()
 {
 	// effacer l'ecran et le tampon de profondeur
@@ -290,108 +283,6 @@ void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 	glViewport(0, 0, w, h);
 }
 
-void FenetreTP::clavier(TP_touche touche)
-{
-	switch (touche)
-	{
-	case TP_ECHAP:
-	case TP_q: // Quitter l'application
-		quit();
-		break;
-	case TP_x: // Activer/désactiver l'affichage des axes
-		etat.afficheAxes = !etat.afficheAxes;
-		std::cout << "// Affichage des axes ? " << (etat.afficheAxes ? "OUI" : "NON") << std::endl;
-		break;
-	case TP_i: // Réinitiliaser le point de vue
-		camera.phi = phiInit; camera.theta = thetaInit; camera.dist = distInit;
-		break;
-	case TP_g: // Permuter l'affichage en fil de fer ou plein
-		etat.modePolygone = (etat.modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
-		break;
-	case TP_c: // Permuter l'affichage des faces arrières
-		etat.culling = !etat.culling;
-		break;
-	case TP_SOULIGNE:
-	case TP_MOINS: // Reculer la caméra
-		camera.dist += 0.1;
-		break;
-	case TP_PLUS: // Avancer la caméra
-	case TP_EGAL:
-		if (camera.dist > 1.0) camera.dist -= 0.1;
-		break;
-	case TP_b: // Modifier
-		shapes->modify();
-		break;
-	case TP_h: // Décrémenter la dimension de la boite
-		etat.dimBoite -= 0.05;
-		if (etat.dimBoite < 1.0) etat.dimBoite = 1.0;
-		std::cout << " etat.dimBoite=" << etat.dimBoite << std::endl;
-		break;
-	default:
-		std::cout << " touche inconnue : " << (char)touche << std::endl;
-		imprimerTouches();
-		break;
-	}
-}
-
-glm::ivec2 sourisPosPrec(0, 0);
-static bool pressed = false;
-void FenetreTP::sourisClic(int button, int state, int x, int y)
-{
-	// button est un parmi { TP_BOUTON_GAUCHE, TP_BOUTON_MILIEU, TP_BOUTON_DROIT }
-	// state  est un parmi { TP_PRESSE, DL_RELEASED }
-	pressed = (state == TP_PRESSE);
-	switch (button)
-	{
-	case TP_BOUTON_GAUCHE: // Déplacer (modifier angles) la caméra
-		sourisPosPrec.x = x;
-		sourisPosPrec.y = y;
-		break;
-	}
-}
-
-void FenetreTP::sourisMolette(int x, int y)
-{
-	const int sens = +1;
-	camera.dist -= 0.2 * sens*y;
-	if (camera.dist < 15.0) camera.dist = 15.0;
-	else if (camera.dist > 70.0) camera.dist = 70.0;
-}
-
-void FenetreTP::sourisMouvement(int x, int y)
-{
-	if (pressed)
-	{
-		int dx = x - sourisPosPrec.x;
-		int dy = y - sourisPosPrec.y;
-		camera.theta -= dx / 3.0;
-		camera.phi -= dy / 3.0;
-		sourisPosPrec.x = x;
-		sourisPosPrec.y = y;
-
-		camera.verifierAngles();
-	}
-}
-void screenshot() {
-	GLubyte couleur[3];
-	Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
-	for (int x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; x++)
-	{
-		for (int y = 0; y < DEFAULT_24BIT_BMP_HEADER.biHeight; y++)
-		{
-			glReadPixels(x+100, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, couleur);
-			Pixel pixel(couleur[0], couleur[1], couleur[2]);
-			image.setPixel(x, y, pixel);
-		}
-	}
-	ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
-	header.biClrUsed = (uint32_t)image.colorsUsed.size();
-	ofstream bmpOutputFile;
-	bmpOutputFile.open("Side1Org.bmp", ios::out | ios::binary);
-	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
-	bmpOutputFile << image;
-	bmpOutputFile.close();
-}
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
@@ -401,6 +292,9 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
+	camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
+	camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
+	
 	shapes = new ShapesContainer(50, etat.dimBoite);
 	
 	bool boucler = true;
