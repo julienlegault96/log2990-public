@@ -68,5 +68,6 @@ ostream& operator<<(ostream & stream, const Image & image)
 		memblock = nullptr;
 	}
 
+
 	return stream;
 }

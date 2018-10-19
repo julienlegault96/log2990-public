@@ -64,6 +64,7 @@ ostream & operator<<(ostream & stream, const ImageHeader & header)
 	split4BytesInLittleEndian(memblock, header.biClrImportant, 50, 53);
 
 	stream.write(memblock, header.bfOffBits);
+	 
 
 	delete[] memblock;
 	memblock = nullptr;
