@@ -17,6 +17,7 @@
 #include "Image.h"
 #include "ImageHeader.h"
 
+using namespace std;
 // variables pour l'utilisation des nuanceurs
 GLuint progBase;  // le programme de nuanceurs de base
 GLint locVertex = -1;
@@ -34,7 +35,6 @@ GLuint indLightModel;
 GLuint ubo[3];
 // matrices du pipeline graphique
 MatricePipeline matrModel, matrVisu, matrProj;
-
 // les formes
 ShapesContainer *shapes = NULL;
 // définition des lumières
@@ -302,6 +302,13 @@ void screenshot() {
 	bmpOutputFile << image;
 	bmpOutputFile.close();
 }
+
+void cameraInitialisation()
+{
+	camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
+	camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
+}
+
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
@@ -311,8 +318,8 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
-	camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
-	camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
+	//camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
+	//camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
 	
 	shapes = new ShapesContainer(50, etat.dimBoite);
 	
