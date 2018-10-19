@@ -6,7 +6,7 @@ ImageParser::ImageParser()
 
 const Image ImageParser::getImageFromUrl(const char * filename) const
 {
-	if (!this->isBmpFile(filename))
+	if (!isBmpFile(filename))
 	{
 		throw std::invalid_argument("File has to be .bmp");
 	}
@@ -37,8 +37,11 @@ const Image ImageParser::getImageFromUrl(const char * filename) const
 
 const Image ImageParser::getImageFromBase64(const char * data64) const
 {
-	// TODO
-	return Image(0, 0);
+	size_t len = string(data64).length();
+	string res = base64().decode(data64, len);
+	const unsigned char * data = reinterpret_cast<const unsigned char*>(res.c_str());
+
+	return getImage(data);
 }
 
 const Image ImageParser::getImage(const unsigned char * data) const
@@ -81,6 +84,7 @@ const Image ImageParser::parseData(const unsigned & height, const unsigned & wid
 		for (unsigned x = 0; x < width; ++x)
 		{
 			unsigned position = (x + y * width) * 3 + (y * width) % 4;
+			// saved in bgr order
 			unsigned char
 				blue = imageData[position],
 				green = imageData[position + 1],

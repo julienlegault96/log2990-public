@@ -30,7 +30,7 @@ private:
 				  {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2},
 							{-1, -3}, {0, -3}, {1, -3}
 	};
-	const char * EXPECTED_PARTIAL_OPTION_STRING = "-partiel";
+	const string EXPECTED_PARTIAL_OPTION_STRING = "-partiel";
 
 	bool partialDiff;
 	Image differenceImage;

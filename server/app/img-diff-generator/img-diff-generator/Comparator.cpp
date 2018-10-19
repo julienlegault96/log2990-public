@@ -7,15 +7,17 @@ Comparator::Comparator() : differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEF
 void Comparator::compare(const char * filename1, const char * filename2)
 {
 	ImageParser imageParser;
-	Image image1 = imageParser.getImageFromUrl(filename1);
-	Image image2 = imageParser.getImageFromUrl(filename2);
+	long file1len = string(filename1).length();
+	long file2len = string(filename2).length();
+	Image image1 = file1len > 1000 ? imageParser.getImageFromBase64(filename1) : imageParser.getImageFromUrl(filename1);
+	Image image2 = file2len > 1000 ? imageParser.getImageFromBase64(filename2) : imageParser.getImageFromUrl(filename2);
 
 	if (image1.getPixels().size() != image2.getPixels().size()
 		|| image1.getPixels()[0].size() != image2.getPixels()[0].size()) {
 		throw std::invalid_argument(
 			" Images were of different sizes, image#1 was a " +
 			to_string(image1.getPixels().size()) + " x " + to_string(image1.getPixels()[0].size()) +
-			"and image#1 was a " +
+			" and image#2 was a " +
 			to_string(image2.getPixels().size()) + " x " + to_string(image2.getPixels()[0].size())
 		);
 	}
@@ -26,33 +28,51 @@ void Comparator::compare(const char * filename1, const char * filename2)
 		{
 			if (image1.getPixel(x, y) != image2.getPixel(x, y))
 			{
-				 true ? enlargeErrorZone(x, y) : differenceImage.setPixel(x, y, DIFF_PIXEL);
+				 partialDiff ? differenceImage.setPixel(x, y, DIFF_PIXEL) : enlargeErrorZone(x, y);
 			}
 		}
 	}
 }
 
-void Comparator::InterpretOptionStrings(const char * partialString)
+void Comparator::InterpretOptionStrings(const char * options)
 {
-	if (partialString != EXPECTED_PARTIAL_OPTION_STRING) {
+	const string optString = string(options);
+	if ( optString != EXPECTED_PARTIAL_OPTION_STRING) {
 		throw std::invalid_argument(
-			"Invalid option, submited +" + string(partialString) + " when accepted options are " 
-			+ "\"" + EXPECTED_PARTIAL_OPTION_STRING + "\""
+			"Invalid option, submited \"" + optString + "\" when accepted options are \"" +
+			EXPECTED_PARTIAL_OPTION_STRING + "\""
 		);
 	}
+	else {
+		partialDiff = true;
+	}
 
-	partialDiff = true;
+	
 }
 
 void Comparator::saveTo(const char*  filename) const
 {
-	// https://www.siggraph.org/education/materials/HyperVis/asp_data/compimag/bmpfile.htm
-	//Create a new file for writing
-	ofstream bmpOutputFile;
-	bmpOutputFile.open(filename, ios::out | ios::binary);
-	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
-	bmpOutputFile << differenceImage;
-	bmpOutputFile.close();
+	fstream file;
+	// open for .bmp
+	file.open(filename,  ios::in | ios::out | ios::binary);
+	file << DEFAULT_24BIT_BMP_HEADER;
+	file << differenceImage;
+	int len = file.tellp();
+
+	//extract bytes for encoding
+	char * bmpData = new char[len];
+	file.read(bmpData, len);
+	string b64String = base64().encode((const unsigned char *)bmpData, len);
+
+	delete[] bmpData;
+	bmpData = nullptr;
+	file.close();
+
+	string b64filename(filename);
+	// open for b64
+	file.open(b64filename.substr(0, b64filename.length() - 4) + "B64", ios::out | ios::binary);
+	file.write(b64String.data(), b64String.length());
+	file.close();
 }
 
 void Comparator::enlargeErrorZone(const int32_t x, const int32_t y)

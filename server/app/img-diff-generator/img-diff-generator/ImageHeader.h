@@ -11,21 +11,8 @@ public:
 	ImageHeader();
 
 	ImageHeader(
-		uint8_t bfType[2], // "BM" identifies file as .bmp
-		int32_t bfSize, // headersize + bytesPerLine * depth where bytesPerLine = width * 3 (for 24 bit images) in little endian
-		uint16_t bfReserved[2], // Unused - must be two zero bytes
-		uint32_t bfOffBits, // Offset to start of Pixel Data, a.k.a the header's size
-		uint32_t biSize, //	size of the info section, the standard is 40
 		int32_t biWidth,
-		int32_t biHeight,
-		uint16_t biPlanes, // must be 1
-		uint16_t biBitCount, // a.k.a bit depth
-		uint32_t biCompression,
-		uint32_t biSizeImage,
-		int32_t biXPelsPerMeter,
-		int32_t biYPelsPerMeter,
-		uint32_t biClrUsed,
-		uint32_t biClrImportant
+		int32_t biHeight
 	);
 
 

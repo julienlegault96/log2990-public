@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Image.h"
+#include "base64.h"
 
 using namespace std;
 
