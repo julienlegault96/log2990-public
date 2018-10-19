@@ -11,23 +11,20 @@ const Image ImageParser::getImageFromUrl(const char * filename) const
 		throw std::invalid_argument("File has to be .bmp");
 	}
 
-	FILE * file;
-
-	if (fopen_s(&file, filename, "rb"))
+	ifstream file(filename, ios::in | ios::ate | ios::binary);
+	if (!file.is_open())
 	{
-		throw std::runtime_error("File opening error");
+		throw std::runtime_error("Could not open \"" + string(filename) + "\" for input");
 	}
 
-	// https://stackoverflow.com/questions/14002954/c-programming-how-to-read-the-whole-file-contents-into-a-buffer
-	fseek(file, 0, SEEK_END);
-	long fileSize = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	long fileSize = file.tellg();
+	file.seekg(0);
 
-	unsigned char * data = new unsigned char [fileSize + 1];
-	fread(data, fileSize, 1, file);
-	fclose(file);
+	char * data = new char [fileSize + 1];
+	file.read(data, fileSize);
+	file.close();
 
-	Image image = getImage(data);
+	Image image = getImage((const unsigned char *)data);
 
 	delete[] data;
 	data = nullptr;

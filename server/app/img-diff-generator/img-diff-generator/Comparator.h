@@ -17,7 +17,7 @@ public:
 
 	void compare(const char* filename1, const char* filename2);
 	void InterpretOptionStrings(const char* partialString);
-	void saveTo(const char* filename) const;
+	void saveDiffTo(const char* filename) const;
 
 private:
 	const Pixel DIFF_PIXEL = Pixel(0, 0, 0);

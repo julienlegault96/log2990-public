@@ -20,34 +20,27 @@ int main(int argc, char *argv[])
 		
 		char* PROGRAM_NAME = _strdup("img-diff-generator");
 
-		FILE * file;
 
-		if (fopen_s(&file,
-			"C:\\Users\\papal\\Documents\\Travail\\LOG2990 - Projet 2\\server\\app\\img-diff-generator\\img-diff-generator\\Debug\\comp1B64.txt", "rb"))
+		ifstream file("./Debug/comp1B64.txt", ios::in | ios::ate | ios::binary);
+		if (!file.is_open())
 		{
-			throw std::runtime_error("File opening error, could not open test base64 file");
+			throw std::runtime_error("Could not open \"./Debug/comp1B64.txt\" for input");
 		}
 
-		fseek(file, 0, SEEK_END);
-		long fileSize = ftell(file);
-		fseek(file, 0, SEEK_SET);
+		long fileSize = file.tellg();
+		file.seekg(0);
 
-		char * data = new char[fileSize + 1];
-		fread(data, fileSize, 1, file);
-		fclose(file);
+		char* data = new char[fileSize + 1];
+		file.read(data, fileSize);
+		file.close();
 
 		char* IMAGE1_FILENAME = _strdup(data);
 
 		delete[] data;
 		data = nullptr;
-		//"C:\\Users\\papal\\Documents\\Travail\\LOG2990 - Projet 2\\server\\app\\img-diff-generator\\img-diff-generator\\Debug\\comp1.bmp");
-		//"C:\\Users\\Kevin\\Documents\\PolyMTL\\Session 4\\LOG2990\\log2990\\server\\app\\img-diff-generator\\Debug\\comp1.bmp");
-		char* IMAGE2_FILENAME = _strdup(
-			"C:\\Users\\papal\\Documents\\Travail\\LOG2990 - Projet 2\\server\\app\\img-diff-generator\\img-diff-generator\\Debug\\comp2.bmp");
-		//"C:\\Users\\Kevin\\Documents\\PolyMTL\\Session 4\\LOG2990\\log2990\\server\\app\\img-diff-generator\\Debug\\comp2.bmp");
-		char* DIFF_FILENAME = _strdup(
-			"C:\\Users\\papal\\Documents\\Travail\\LOG2990 - Projet 2\\server\\app\\img-diff-generator\\img-diff-generator\\Debug\\diff.bmp");
-
+		
+		char* IMAGE2_FILENAME = _strdup("./Debug/comp2.bmp");
+		char* DIFF_FILENAME = _strdup("./Debug/diff.bmp");
 		char* OPTION = _strdup("-partiel");
 
 		char * argvBuff[5] = { PROGRAM_NAME, IMAGE1_FILENAME, IMAGE2_FILENAME, DIFF_FILENAME, OPTION };
@@ -64,7 +57,7 @@ int main(int argc, char *argv[])
 		}
 
 		comparator.compare(argv[1], argv[2]);
-		comparator.saveTo(argv[3]);
+		comparator.saveDiffTo(argv[3]);
 	}
 	catch (const std::runtime_error & e)	{
 		cerr << "Runtime error:" << endl;

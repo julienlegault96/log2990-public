@@ -50,11 +50,14 @@ void Comparator::InterpretOptionStrings(const char * options)
 	
 }
 
-void Comparator::saveTo(const char*  filename) const
+void Comparator::saveDiffTo(const char*  filename) const
 {
-	fstream file;
-	// open for .bmp
-	file.open(filename,  ios::in | ios::out | ios::binary);
+	fstream file(filename, ios::in | ios::out | ios::binary | ios_base::trunc);
+	if (!file.is_open())
+	{
+		throw std::runtime_error("Could not open \"" + string(filename) + "\" for output");
+	}
+
 	file << DEFAULT_24BIT_BMP_HEADER;
 	file << differenceImage;
 	int len = file.tellp();
@@ -62,16 +65,22 @@ void Comparator::saveTo(const char*  filename) const
 	//extract bytes for encoding
 	char * bmpData = new char[len];
 	file.read(bmpData, len);
-	string b64String = base64().encode((const unsigned char *)bmpData, len);
+	string b64Data = base64().encode((const unsigned char *)bmpData, len);
 
 	delete[] bmpData;
 	bmpData = nullptr;
 	file.close();
 
 	string b64filename(filename);
+	b64filename = b64filename.substr(0, b64filename.length() - 4) + "B64";
 	// open for b64
-	file.open(b64filename.substr(0, b64filename.length() - 4) + "B64", ios::out | ios::binary);
-	file.write(b64String.data(), b64String.length());
+	file.open(b64filename, ios::out | ios::binary);
+	if (!file.is_open())
+	{
+		throw std::runtime_error("Could not open \"" + b64filename + "\" for output");
+	}
+
+	file.write(b64Data.data(), b64Data.length());
 	file.close();
 }
 
