@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
 	srand(time(0));
 	std::cout << time(0);
 	
-	shapes = new ShapesContainer(50, etat.dimBoite);
+	shapes = new ShapesContainer(glm::mix( 10, 200,rand() / ( (double)RAND_MAX) ), etat.dimBoite);
 	
 	bool boucler = true;
 	while (boucler)
