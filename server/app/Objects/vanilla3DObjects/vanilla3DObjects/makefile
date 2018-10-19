@@ -24,7 +24,7 @@ exe : $(SRC).exe
 run : exe
 	./$(SRC).exe
 $(SRC).exe : $(SRC).cpp *.h
-	$(CXX) $(CXXFLAGS) -o$@ $(SRC).cpp $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o$@ $(SRC).cpp Image.cpp ImageHeader.cpp Pixel.cpp $(LDFLAGS)
 
 sol :  ; make SRC=$(SRC)Solution exe
 runs : ; make SRC=$(SRC)Solution run
