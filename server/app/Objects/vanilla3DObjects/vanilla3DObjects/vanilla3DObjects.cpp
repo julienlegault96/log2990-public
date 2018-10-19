@@ -13,7 +13,9 @@
 #include <time.h> 
 #include "Shape.h"
 #include "ShapesContainer.h"
-
+#include "Pixel.h"
+#include "Image.h"
+#include "ImageHeader.h"
 
 // variables pour l'utilisation des nuanceurs
 GLuint progBase;  // le programme de nuanceurs de base
@@ -84,7 +86,7 @@ struct Etat {
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
 	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
 	double dimBoite;      // la dimension de la boite
-} etat = { false, false, GL_FILL, 10.0 };
+} etat = { false, false, GL_FILL, 9.0 };
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
@@ -370,7 +372,26 @@ void FenetreTP::sourisMouvement(int x, int y)
 		camera.verifierAngles();
 	}
 }
-
+void screenshot() {
+	GLubyte couleur[3];
+	Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
+	for (int x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; x++)
+	{
+		for (int y = 0; y < DEFAULT_24BIT_BMP_HEADER.biHeight; y++)
+		{
+			glReadPixels(x+100, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, couleur);
+			Pixel pixel(couleur[0], couleur[1], couleur[2]);
+			image.setPixel(x, y, pixel);
+		}
+	}
+	ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
+	header.biClrUsed = (uint32_t)image.colorsUsed.size();
+	ofstream bmpOutputFile;
+	bmpOutputFile.open("Side1Org.bmp", ios::out | ios::binary);
+	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
+	bmpOutputFile << image;
+	bmpOutputFile.close();
+}
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
@@ -393,7 +414,7 @@ int main(int argc, char *argv[])
 		// récupérer les événements et appeler la fonction de rappel
 		boucler = fenetre.gererEvenement();
 	}
-
+	screenshot();
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
 
