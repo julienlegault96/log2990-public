@@ -51,13 +51,13 @@ struct LightSourceParameters
 	float linearAttenuation;
 	float quadraticAttenuation;
 } LightSource[1] = { { glm::vec4(1.0, 1.0, 1.0, 1.0),
-					   glm::vec4(1.0, 1.0, 1.0, 1.0),
-					   glm::vec4(1.0, 1.0, 1.0, 1.0),
-					   glm::vec4(10, 10, 10, 1.0),
-					   glm::vec3(0.0, 0.0, 1.0),
-								 1.0,       // l'exposant du cône
-								 180.0,     // l'angle du cône du spot
-								 1., 0., 0. } };
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(10, 10, 10, 1.0),
+glm::vec3(0.0, 0.0, 1.0),
+1.0,       // l'exposant du cône
+180.0,     // l'angle du cône du spot
+1., 0., 0. } };
 
 // définition du matériau
 struct MaterialParameters
@@ -67,11 +67,11 @@ struct MaterialParameters
 	glm::vec4 diffuse;
 	glm::vec4 specular;
 	float shininess;
-} FrontMaterial = { glm::vec4(0.0, 0.0, 0.0, 1.0),
-					glm::vec4(0.2, 0.2, 0.2, 1.0),
-					glm::vec4(1.0, 1.0, 1.0, 1.0),
-					glm::vec4(1.0, 1.0, 1.0, 1.0),
-					          20.0 };
+} FrontMaterial = { glm::vec4(0.2, 0.2, 0.2, 1.0),
+glm::vec4(0.2, 0.2, 0.2, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+glm::vec4(1.0, 1.0, 1.0, 1.0),
+20.0 };
 
 struct LightModelParameters
 {
@@ -86,10 +86,10 @@ struct Etat {
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
 	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
 	double dimBoite;      // la dimension de la boite
-} etat = { false, false, GL_FILL, 9.0 };
+} etat = { false, false, GL_FILL, 8.0 };
 
 // variables pour définir le point de vue
-const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
+const GLdouble thetaInit = 0., phiInit = 80., distInit = 60.;
 class Camera
 {
 public:
@@ -111,12 +111,14 @@ public:
 	}
 	double theta;         // angle de rotation de la caméra (coord. sphériques)
 	double phi;           // angle de rotation de la caméra (coord. sphériques)
+	double previousTheta;
+	double previousPhi;
 	double dist;          // distance (coord. sphériques)
 	bool modeLookAt;      // on utilise LookAt (au lieu de Rotate et Translate)
-} camera = { thetaInit, phiInit, distInit, true };
+} camera = { thetaInit, phiInit,thetaInit, phiInit, distInit, true };
 
 void chargerNuanceurs()
-{	
+{
 	// charger le nuanceur de base
 	{
 		// créer le programme
@@ -232,7 +234,7 @@ void FenetreTP::afficherScene()
 
 	glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
 
-															  // afficher les axes
+	// afficher les axes
 	if (etat.afficheAxes) FenetreTP::afficherAxes();
 
 	// mettre à jour les blocs de variables uniformes
@@ -275,14 +277,14 @@ void FenetreTP::afficherScene()
 			}matrModel.PopMatrix();
 		}
 	}
-	
+
 }
 
 void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 {
 	glViewport(0, 0, w, h);
 }
-void screenshot() {
+void screenshot(string filename) {
 	GLubyte couleur[3];
 	Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
 	for (int x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; x++)
@@ -297,18 +299,27 @@ void screenshot() {
 	ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
 	header.biClrUsed = (uint32_t)image.colorsUsed.size();
 	ofstream bmpOutputFile;
-	bmpOutputFile.open("Side1Org.bmp", ios::out | ios::binary);
+	bmpOutputFile.open(filename, ios::out | ios::binary);
 	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
 	bmpOutputFile << image;
 	bmpOutputFile.close();
 }
 
-void cameraInitialisation()
+void turnCamera()
 {
-	camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
-	camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
+	camera.previousPhi = camera.phi;
+	camera.previousTheta = camera.theta;
+	camera.phi = glm::mix(0, 360, rand() / ((double)RAND_MAX));
+	camera.theta = glm::mix(0.1, 180 - 0.1, rand() / ((double)RAND_MAX));
+	camera.verifierAngles();
 }
 
+void unturnCamera()
+{
+	camera.phi = camera.previousPhi;
+	camera.theta = camera.previousTheta;
+	camera.verifierAngles();
+}
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
@@ -318,22 +329,30 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
-	cameraInitialisation();
-	
-	shapes = new ShapesContainer(15 , etat.dimBoite);
-	
-	bool boucler = true;
-	while (boucler)
-	{
 
-		// affichage
-		fenetre.afficherScene();
-		fenetre.swap();
+	shapes = new ShapesContainer(15, etat.dimBoite);
 
-		// récupérer les événements et appeler la fonction de rappel
-		boucler = fenetre.gererEvenement();
-	}
-	screenshot();
+	// affichage
+
+	fenetre.afficherScene();
+	fenetre.swap();
+
+
+	screenshot("Side1Org.bmp");
+
+	turnCamera();
+	fenetre.afficherScene();
+	fenetre.swap();
+	screenshot("Side2Org.bmp");
+	//modifier scène
+	shapes->modify();
+	fenetre.afficherScene();
+	fenetre.swap();
+	screenshot("Side2Diff.bmp");
+	unturnCamera();
+	fenetre.afficherScene();
+	fenetre.swap();
+	screenshot("Side1Diff.bmp");
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
 

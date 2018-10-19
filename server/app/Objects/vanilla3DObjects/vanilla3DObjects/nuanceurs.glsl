@@ -121,7 +121,7 @@ vec3 L = normalize( AttribsIn.lumiDir ); // vecteur vers la source lumineuse
 vec3 N = normalize( gl_FrontFacing ? AttribsIn.normale : -AttribsIn.normale );
 vec3 O = normalize( AttribsIn.obsVec );  // position de l'observateur
 
-vec4 coul = FrontMaterial.emission + FrontMaterial.ambient * LightModel.ambient;
+vec4 coul = AttribsIn.couleur + FrontMaterial.ambient * LightModel.ambient;
 
 // calcul de la composante ambiante
 coul += FrontMaterial.ambient * LightSource[0].ambient;

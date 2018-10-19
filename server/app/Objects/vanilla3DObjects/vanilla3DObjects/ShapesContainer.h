@@ -106,22 +106,27 @@ std::vector<Shape*> ShapesContainer::getShapes()
 
 void ShapesContainer::modify() 
 {
-	int index = rand() % this->numberShapes_;
-	while (this->shapes_.at(index)->modified_) {
-		index = rand() % this->numberShapes_ ;
-	}
-	Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
-	switch (mod)
+	for (int i = 0; i < 7; i++)
 	{
-	case ColorChange:
-		changeColor(index);
-		break;
-	case AddObject:
-		addShape();
-		break;
-	case DeleteObject:
-		deleteShape(index);
-		break;
+
+
+		int index = rand() % this->numberShapes_;
+		while (this->shapes_.at(index)->modified_) {
+			index = rand() % this->numberShapes_;
+		}
+		Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
+		switch (mod)
+		{
+		case ColorChange:
+			changeColor(index);
+			break;
+		case AddObject:
+			addShape();
+			break;
+		case DeleteObject:
+			deleteShape(index);
+			break;
+		}
 	}
 	
 }
