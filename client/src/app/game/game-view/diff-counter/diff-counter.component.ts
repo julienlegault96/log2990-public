@@ -15,15 +15,30 @@ export class DiffCounterComponent implements OnInit {
 
     public progressBarWidth: number[];
     private counters: number[];
+    private playerCount: number;
+
     @Input() public playerOneId: string;
-    @Input() private playerTwoId: string;
-    private playerCount: number = this.MIN_PLAYERS;
+    @Input() public playerTwoId: string;
 
     public ngOnInit(): void {
         if (this.playerTwoId) {
-            this.playerCount = this.MAX_PLAYERS;
+            this.updatePlayerCount(this.MAX_PLAYERS);
         }
 
+        this.updatePlayerCount(this.MIN_PLAYERS);
+    }
+
+    public setPlayerOne(playerId: string): void {
+        this.playerOneId = playerId;
+    }
+
+    public setPlayerTwo(playerId: string): void {
+        this.playerTwoId = playerId;
+        this.updatePlayerCount(this.MAX_PLAYERS);
+    }
+
+    public updatePlayerCount(count: number): void {
+        this.playerCount = count;
         this.counters = new Array<number>(this.playerCount).fill(0);
         this.progressBarWidth = new Array<number>(this.playerCount).fill(0);
     }

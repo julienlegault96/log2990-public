@@ -8,7 +8,8 @@ import {
     InsertOneWriteOpResult,
     UpdateWriteOpResult,
     DeleteWriteOpResultObject,
-    Collection
+    Collection,
+    ObjectID
 } from "mongodb";
 
 export enum Collections {
@@ -29,9 +30,17 @@ export class Mongo {
         this.db = this.client.db(this.DB_NAME);
     }
 
-    public async findDocuments<Type>(collectionName: Collections,
-                                     query: { [key: string]: string | number | {} } = {}
-                                    ): Promise<Type[]> {
+    public async findDocumentById<Type>(collectionName: Collections, id: number): Promise<Type> {
+        if (!this.client || !this.client.isConnected) {
+            await this.connect();
+        }
+
+        const collection: Collection = this.db.collection(collectionName);
+
+        return collection.findOne({ _id: id });
+    }
+
+    public async findDocuments<Type>(collectionName: Collections, query: { [key: string]: string | number | {} } = {}): Promise<Type[]> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -61,10 +70,8 @@ export class Mongo {
         return collection.insertMany(docs);
     }
 
-    public async updateDocument<Type>(collectionName: Collections,
-                                      update: Type,
-                                      filter: FilterQuery<Type> = {}
-                                     ): Promise<UpdateWriteOpResult> {
+    public async updateDocument<Type>(collectionName: Collections, update: Type, filter: FilterQuery<Type> = {})
+        : Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -74,22 +81,17 @@ export class Mongo {
         return collection.updateOne(filter, update);
     }
 
-    public async updateDocumentById<Type>(collectionName: Collections,
-                                          id: number,
-                                          update: Type
-                                        ): Promise<UpdateWriteOpResult> {
+    public async updateDocumentById<Type>(collectionName: Collections, id: number, update: Type): Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
 
         const collection: Collection = this.db.collection(collectionName);
 
-        return collection.replaceOne({_id: id}, update);
+        return collection.replaceOne({ _id: id }, update);
     }
 
-    public async removeDocument<Type>(collectionName: Collections,
-                                      filter: FilterQuery<Type> = {}
-                                      ): Promise<DeleteWriteOpResultObject> {
+    public async removeDocument<Type>(collectionName: Collections, filter: FilterQuery<Type> = {}): Promise<DeleteWriteOpResultObject> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }

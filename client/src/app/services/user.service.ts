@@ -31,10 +31,10 @@ export class UserService extends AbstractServerService {
     public constructor(protected http: HttpClient) {
         super(http);
         this.asyncUserList = [];
-        this.initialise();
-     }
+        this.initialize();
+    }
 
-    private initialise(): void {
+    private initialize(): void {
         this.refreshUserList();
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
@@ -46,7 +46,7 @@ export class UserService extends AbstractServerService {
     public onUnloadEvent(e: BeforeUnloadEvent): void {
         e.preventDefault();
         if (this.loggedIn) {
-        this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
+            this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
         e.returnValue = "";
@@ -55,7 +55,7 @@ export class UserService extends AbstractServerService {
     public validateUsername(username: string): boolean {
         return this.validator.isStandardStringLength(username)
             && this.validator.isAlphanumericString(username)
-            && this.isUniqueUsername(username) ;
+            && this.isUniqueUsername(username);
     }
 
     private buildErrorString(username: string): string {
@@ -85,7 +85,7 @@ export class UserService extends AbstractServerService {
     }
 
     public refreshUserList(): void {
-        this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
+        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
     }
 
     public loginUser(userToLog: User): void {
@@ -115,15 +115,14 @@ export class UserService extends AbstractServerService {
     public submitUsername(username: string): void {
         if (this.validateUsername(username)) {
             const clientUser: User = new User(username);
-            this.addUser(clientUser).subscribe( (serverUser: User) => { });
+            this.addUser(clientUser).subscribe((serverUser: User) => { });
             this.loginUser(clientUser);
         } else {
             throw new Error(this.buildErrorString(username));
         }
     }
 
-    protected handleError (error: HttpErrorResponse): Observable<never> {
+    protected handleError(error: HttpErrorResponse): Observable<never> {
         return new Observable<never>();
     }
-
 }

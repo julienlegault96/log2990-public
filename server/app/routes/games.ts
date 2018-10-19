@@ -28,5 +28,4 @@ export class Games extends AbstractRoute<Game> {
 
         return super.post(req, res, next);
     }
-
 }

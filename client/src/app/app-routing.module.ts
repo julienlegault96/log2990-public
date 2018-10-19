@@ -7,11 +7,11 @@ import { HomePageComponent } from "./home-page/home-page.component";
 import { GameViewComponent } from "./game/game-view/game-view.component";
 
 const routes: Routes = [
-    { path: "game", component: GameViewComponent },
+    { path: "game/:id", component: GameViewComponent },
     { path: "index", component: HomePageComponent },
     { path: "listeJeux", component: GameListComponent },
     { path: "admin", component: AdminViewComponent },
-    { path: "", redirectTo: "/game", pathMatch: "full" },
+    { path: "", redirectTo: "index", pathMatch: "full" },
 ];
 
 @NgModule({

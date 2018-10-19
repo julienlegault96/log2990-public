@@ -17,7 +17,7 @@ export class UserComponent implements OnInit {
     public constructor(private userService: UserService) { }
 
     public ngOnInit(): void {
-        this.username = "someone";
+        this.username = "";
     }
 
     public submit(): void {
@@ -27,5 +27,4 @@ export class UserComponent implements OnInit {
             alert(error);
         }
     }
-
 }

@@ -14,6 +14,7 @@ import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderbo
 import { SoloGameComponent } from "./game/game-view/solo-game/solo-game.component";
 import { GameViewComponent } from "./game/game-view/game-view.component";
 import { ChronoComponent } from "./game/game-view/chrono/chrono.component";
+import { DiffCounterComponent } from "./game/game-view/diff-counter/diff-counter.component";
 import { MessageBarComponent } from "./game/game-view/message-bar/message-bar.component";
 import { MessageComponent } from "./game/game-view/message/message.component";
 
@@ -24,7 +25,6 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
-import { DiffCounterComponent } from "./game/game-view/diff-counter/diff-counter.component";
 
 @NgModule({
     declarations: [
