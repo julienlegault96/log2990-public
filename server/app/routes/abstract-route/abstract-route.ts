@@ -69,6 +69,10 @@ export class AbstractRoute<T> {
         }
     }
 
+    public async getById(id: string): Promise<T[]> {
+        return this.mongo.findDocuments<T>(this.collection, { _id: id });
+    }
+
     public async getAll(): Promise<T[]> {
         return this.mongo.findDocuments<T>(this.collection);
     }
