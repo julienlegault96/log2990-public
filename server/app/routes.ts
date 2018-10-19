@@ -4,6 +4,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
+import { ImgDiff } from "./routes/imgdiff";
 
 @injectable()
 export class Routes {
@@ -11,10 +12,16 @@ export class Routes {
     public constructor(
         @inject(Types.Games) private games: Games,
         @inject(Types.Users) private users: Users,
+        @inject(Types.ImgDiff) private imgDiff: ImgDiff,
     ) { }
 
     public get routes(): Router {
         const router: Router = Router();
+
+        router.get(
+            "/imgdiff",
+            (req: Request, res: Response, next: NextFunction) => this.imgDiff.get(req, res, next)
+        );
 
         // GAMES
         router.get(
