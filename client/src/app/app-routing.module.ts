@@ -5,6 +5,7 @@ import { GameListComponent } from "./game/game-list-menu/game-list/game-list.com
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 import { GameViewComponent } from "./game/game-view/game-view.component";
+import { ImageDiffComponent } from "./game/image-diff/image-diff.component";
 
 const routes: Routes = [
     { path: "game/:id", component: GameViewComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
     { path: "listeJeux", component: GameListComponent },
     { path: "admin", component: AdminViewComponent },
     { path: "", redirectTo: "index", pathMatch: "full" },
+    { path: "test", component: ImageDiffComponent},
 ];
 
 @NgModule({
