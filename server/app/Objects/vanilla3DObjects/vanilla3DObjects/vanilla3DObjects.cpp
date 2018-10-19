@@ -318,8 +318,9 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
+	cameraInitialisation();
 	
-	shapes = new ShapesContainer(glm::mix( 10, 200,rand() / ( (double)RAND_MAX) ), etat.dimBoite);
+	shapes = new ShapesContainer(15 , etat.dimBoite);
 	
 	bool boucler = true;
 	while (boucler)
