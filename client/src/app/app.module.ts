@@ -25,6 +25,7 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
+import { ImageDiffComponent } from "./game/image-diff/image-diff.component";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,9 @@ import { CreateGameComponent } from "./game/create-game/create-game.component";
         HomePageComponent,
         MessageBarComponent,
         MessageComponent,
-        DiffCounterComponent
+        DiffCounterComponent,
+        GameViewComponent,
+        ImageDiffComponent,
     ],
     imports: [
         AppRoutingModule,
