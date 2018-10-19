@@ -211,13 +211,6 @@ void FenetreTP::conclure()
 	delete shapes;
 }
 
-// affiche la position courante du repère (pour débogage)
-void afficherRepereCourant(int num = 0)
-{
-	glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-	FenetreTP::afficherAxes(1.5, 3.0);
-}
-
 void FenetreTP::afficherScene()
 {
 	// effacer l'ecran et le tampon de profondeur
@@ -286,50 +279,6 @@ void FenetreTP::afficherScene()
 void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 {
 	glViewport(0, 0, w, h);
-}
-
-void FenetreTP::clavier(TP_touche touche)
-{
-	switch (touche)
-	{
-	case TP_ECHAP:
-	case TP_q: // Quitter l'application
-		quit();
-		break;
-	case TP_x: // Activer/désactiver l'affichage des axes
-		etat.afficheAxes = !etat.afficheAxes;
-		std::cout << "// Affichage des axes ? " << (etat.afficheAxes ? "OUI" : "NON") << std::endl;
-		break;
-	case TP_i: // Réinitiliaser le point de vue
-		camera.phi = phiInit; camera.theta = thetaInit; camera.dist = distInit;
-		break;
-	case TP_g: // Permuter l'affichage en fil de fer ou plein
-		etat.modePolygone = (etat.modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
-		break;
-	case TP_c: // Permuter l'affichage des faces arrières
-		etat.culling = !etat.culling;
-		break;
-	case TP_SOULIGNE:
-	case TP_MOINS: // Reculer la caméra
-		camera.dist += 0.1;
-		break;
-	case TP_PLUS: // Avancer la caméra
-	case TP_EGAL:
-		if (camera.dist > 1.0) camera.dist -= 0.1;
-		break;
-	case TP_b: // Modifier
-		shapes->modify();
-		break;
-	case TP_h: // Décrémenter la dimension de la boite
-		etat.dimBoite -= 0.05;
-		if (etat.dimBoite < 1.0) etat.dimBoite = 1.0;
-		std::cout << " etat.dimBoite=" << etat.dimBoite << std::endl;
-		break;
-	default:
-		std::cout << " touche inconnue : " << (char)touche << std::endl;
-		imprimerTouches();
-		break;
-	}
 }
 
 int main(int argc, char *argv[])
