@@ -332,45 +332,6 @@ void FenetreTP::clavier(TP_touche touche)
 	}
 }
 
-glm::ivec2 sourisPosPrec(0, 0);
-static bool pressed = false;
-void FenetreTP::sourisClic(int button, int state, int x, int y)
-{
-	// button est un parmi { TP_BOUTON_GAUCHE, TP_BOUTON_MILIEU, TP_BOUTON_DROIT }
-	// state  est un parmi { TP_PRESSE, DL_RELEASED }
-	pressed = (state == TP_PRESSE);
-	switch (button)
-	{
-	case TP_BOUTON_GAUCHE: // Déplacer (modifier angles) la caméra
-		sourisPosPrec.x = x;
-		sourisPosPrec.y = y;
-		break;
-	}
-}
-
-void FenetreTP::sourisMolette(int x, int y)
-{
-	const int sens = +1;
-	camera.dist -= 0.2 * sens*y;
-	if (camera.dist < 15.0) camera.dist = 15.0;
-	else if (camera.dist > 70.0) camera.dist = 70.0;
-}
-
-void FenetreTP::sourisMouvement(int x, int y)
-{
-	if (pressed)
-	{
-		int dx = x - sourisPosPrec.x;
-		int dy = y - sourisPosPrec.y;
-		camera.theta -= dx / 3.0;
-		camera.phi -= dy / 3.0;
-		sourisPosPrec.x = x;
-		sourisPosPrec.y = y;
-
-		camera.verifierAngles();
-	}
-}
-
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
