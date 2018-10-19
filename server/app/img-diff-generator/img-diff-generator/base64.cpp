@@ -8,7 +8,7 @@
 * Returns: Allocated buffer of out_len bytes of encoded data,
 * or empty string on failure
 */
-const std::string base64::encode(const unsigned char *src, size_t len)
+std::string base64::encode(const unsigned char *src, size_t len)
 {
 	unsigned char *out, *pos;
 	const unsigned char *end, *in;
@@ -52,35 +52,30 @@ const std::string base64::encode(const unsigned char *src, size_t len)
 	return outStr;
 }
 
-
-const std::string base64::decode(const void* data, const size_t &len)
+std::string base64::decode(const void* data, const size_t len)
 {
-	if (len == 0) return "";
+	unsigned char* p = (unsigned char*)data;
+	int pad = len > 0 && (len % 4 || p[len - 1] == '=');
+	const size_t L = ((len + 3) / 4 - pad) * 4;
+	std::string str(L / 4 * 3 + pad, '\0');
 
-	unsigned char *p = (unsigned char*)data;
-	size_t j = 0,
-		pad1 = len % 4 || p[len - 1] == '=',
-		pad2 = pad1 && (len % 4 > 2 || p[len - 2] != '=');
-	const size_t last = (len - pad1) / 4 << 2;
-	std::string result(last / 4 * 3 + pad1 + pad2, '\0');
-	unsigned char *str = (unsigned char*)&result[0];
-
-	for (size_t i = 0; i < last; i += 4)
+	for (size_t i = 0, j = 0; i < L; i += 4)
 	{
 		int n = B64index[p[i]] << 18 | B64index[p[i + 1]] << 12 | B64index[p[i + 2]] << 6 | B64index[p[i + 3]];
 		str[j++] = n >> 16;
 		str[j++] = n >> 8 & 0xFF;
 		str[j++] = n & 0xFF;
 	}
-	if (pad1)
+	if (pad)
 	{
-		int n = B64index[p[last]] << 18 | B64index[p[last + 1]] << 12;
-		str[j++] = n >> 16;
-		if (pad2)
+		int n = B64index[p[L]] << 18 | B64index[p[L + 1]] << 12;
+		str[str.size() - 1] = n >> 16;
+
+		if (len > L + 2 && p[L + 2] != '=')
 		{
-			n |= B64index[p[last + 2]] << 6;
-			str[j++] = n >> 8 & 0xFF;
+			n |= B64index[p[L + 2]] << 6;
+			str.push_back(n >> 8 & 0xFF);
 		}
 	}
-	return result;
+	return str;
 }

@@ -18,8 +18,8 @@
 
 class base64 {
 public:
-	const std::string encode(const unsigned char *src, size_t len);
-	const std::string decode(const void* data, const size_t &len);
+	std::string encode(const unsigned char *src, size_t len);
+	std::string decode(const void* data, const size_t len);
 private:
 	const unsigned char base64_table[65] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
