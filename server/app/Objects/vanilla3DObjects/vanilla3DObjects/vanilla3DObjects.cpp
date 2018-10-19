@@ -318,8 +318,6 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
-	//camera.phi = glm::mix( 0, 360,rand() / ( (double)RAND_MAX) );
-	//camera.theta = glm::mix( 0.1, 180-0.1, rand() / ( (double)RAND_MAX) );
 	
 	shapes = new ShapesContainer(50, etat.dimBoite);
 	
