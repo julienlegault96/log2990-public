@@ -282,7 +282,26 @@ void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 {
 	glViewport(0, 0, w, h);
 }
-
+void screenshot() {
+	GLubyte couleur[3];
+	Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
+	for (int x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; x++)
+	{
+		for (int y = 0; y < DEFAULT_24BIT_BMP_HEADER.biHeight; y++)
+		{
+			glReadPixels(x + 100, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, couleur);
+			Pixel pixel(couleur[0], couleur[1], couleur[2]);
+			image.setPixel(x, y, pixel);
+		}
+	}
+	ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
+	header.biClrUsed = (uint32_t)image.colorsUsed.size();
+	ofstream bmpOutputFile;
+	bmpOutputFile.open("Side1Org.bmp", ios::out | ios::binary);
+	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
+	bmpOutputFile << image;
+	bmpOutputFile.close();
+}
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
