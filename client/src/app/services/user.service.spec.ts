@@ -19,7 +19,7 @@ describe("UserService", () => {
         getMethodSpy = spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
 
         spyOn(httpClientSpy, "post").and.callFake(
-            (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(postedUser)
+            (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(null)
             );
 
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
@@ -55,11 +55,12 @@ describe("UserService", () => {
         expect(getMethodSpy).toHaveBeenCalledTimes(1);
     });
 
-    it("should submit the existing usernames", () => {
+    it("should submit usernames", () => {
         userService.submitUsername(USERS[0]._id);
 
-        // check if only one call was made
+        // should have called login
         expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
+        expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     });
 
     it("should delete the submited username", () => {

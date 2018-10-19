@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 import { CreateGameService } from "../../services/create-game.service";
 
@@ -7,9 +7,9 @@ import { CreateGameService } from "../../services/create-game.service";
     templateUrl: "./create-game.component.html",
 })
 
-export class CreateGameComponent implements OnInit {
+export class CreateGameComponent {
 
-    public name: string = "";
+    public name: string;
     private rawImage: File | null;
     private modifiedImage: File | null;
 
@@ -17,11 +17,9 @@ export class CreateGameComponent implements OnInit {
     public modifiedImageMessage: string;
 
     public constructor(private createGameService: CreateGameService) {
+        this.name = "";
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
-    }
-
-    public ngOnInit(): void {
     }
 
     public submit(): void {

@@ -10,7 +10,7 @@ export class Routes {
 
     public constructor(
         @inject(Types.Games) private games: Games,
-        @inject(Types.Users) private users: Users
+        @inject(Types.Users) private users: Users,
     ) { }
 
     public get routes(): Router {

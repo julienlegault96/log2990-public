@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { Validator } from "../validator";
@@ -31,11 +31,8 @@ export class UserService extends AbstractServerService {
     public constructor(protected http: HttpClient) {
         super(http);
         this.asyncUserList = [];
-        this.initialize();
-    }
-
-    private initialize(): void {
         this.refreshUserList();
+
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
         this.validator = new Validator();
@@ -43,19 +40,55 @@ export class UserService extends AbstractServerService {
         window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
     }
 
-    public onUnloadEvent(e: BeforeUnloadEvent): void {
-        e.preventDefault();
+    public onUnloadEvent(event: BeforeUnloadEvent): void {
+        event.preventDefault();
         if (this.loggedIn) {
             this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
-        e.returnValue = "";
+        event.returnValue = "";
     }
 
     public validateUsername(username: string): boolean {
         return this.validator.isStandardStringLength(username)
             && this.validator.isAlphanumericString(username)
             && this.isUniqueUsername(username);
+    }
+
+    public refreshUserList(): void {
+        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
+    }
+
+    public getUsers(): Observable<User[]> {
+        return this.getRequest<User[]>(Endpoints.Users);
+    }
+
+    public addUser(newUser: User): Observable<User> {
+        return this.postRequest<User>(Endpoints.Users, newUser);
+    }
+
+    public removeUser(userToDelete: User): Observable<User> {
+        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
+    }
+
+    public submitUsername(username: string): void {
+        if (this.validateUsername(username)) {
+            this.login(new User(username));
+        } else {
+            throw new Error(this.buildErrorString(username));
+        }
+    }
+
+    private login(user: User): void {
+        this.addUser(user).subscribe((nullUser: User) => {
+            this.getUsers().subscribe((newUsers: User[]) => {
+                if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
+                    this.asyncUserList.push(user);
+                    this.loggedUser = user;
+                    this.loggedIn = true;
+                }
+            });
+        });
     }
 
     private buildErrorString(username: string): string {
@@ -84,45 +117,18 @@ export class UserService extends AbstractServerService {
         return true;
     }
 
-    public refreshUserList(): void {
-        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
-    }
-
-    public loginUser(userToLog: User): void {
-        this.asyncUserList = this.asyncUserList.concat(userToLog);
-        this.loggedUser = userToLog;
-        this.loggedIn = true;
-    }
-
-    public getUsers(): Observable<User[]> {
-        return this.getRequest<User[]>(Endpoints.Users);
-    }
-
-    public addUser(newUser: User): Observable<User> {
-        return this.postRequest<User>(Endpoints.Users, newUser);
-    }
-
-    public removeUser(userToDelete: User): Observable<User> {
-        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
-    }
-
-    /**
-     * Validates a username and then sends it to the server if it passes
-     * else it throws an error.
-     * @param username the username of the user logging in
-     * @throws an error explaining why the username was bad
-     */
-    public submitUsername(username: string): void {
-        if (this.validateUsername(username)) {
-            const clientUser: User = new User(username);
-            this.addUser(clientUser).subscribe((serverUser: User) => { });
-            this.loginUser(clientUser);
-        } else {
-            throw new Error(this.buildErrorString(username));
-        }
-    }
-
     protected handleError(error: HttpErrorResponse): Observable<never> {
-        return new Observable<never>();
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error("An error occurred:", error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
+        }
+
+        return throwError("Something bad happened; please try again later.");
     }
 }
