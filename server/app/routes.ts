@@ -4,7 +4,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
-import { ImgDiff } from "./routes/imgdiff";
+import { ImgDiff } from "./routes/img-diff/imgdiff";
 
 @injectable()
 export class Routes {

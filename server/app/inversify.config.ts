@@ -8,7 +8,7 @@ import { Mongo } from "./services/mongo";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
 import { Imgur } from "./routes/imgur/imgur";
-import { ImgDiff } from "./routes/imgdiff";
+import { ImgDiff } from "./routes/img-diff/imgdiff";
 
 const container: Container = new Container();
 
