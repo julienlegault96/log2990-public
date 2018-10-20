@@ -2,7 +2,7 @@ CONTEXT=sdl2
 #CONTEXT=glfw3
 
 CXXFLAGS += -DFENETRE_$(CONTEXT)
-CXXFLAGS += -g -W -Wall -Wno-unused-parameter -Wno-deprecated-declarations -Wvla # -pedantic -std=c++11
+CXXFLAGS += -g -W -Wall -Wno-unused-parameter -Wno-deprecated-declarations -Wvla -pedantic -std=c++11
 CXXFLAGS += $(shell pkg-config --cflags glew)
 CXXFLAGS += $(shell pkg-config --cflags $(CONTEXT))
 
