@@ -32,17 +32,21 @@ export class ImgDiff {
     }
 
     private async getDifferencePixel(id: string, coordinates: Coordinates): Promise<Coordinates[]> {
-        // tslint:disable-next-line:max-line-length
-        const imgData: string | undefined = "Qk3mBAAAAAAAADYAAAAoAAAAFAAAABQAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////////////////AAAAAAAAAAAA////////////////////////////////////////AAAAAAAAAAAA////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////";
+        const imgData: string | undefined = await this.getDiffImgData(id);
         if (imgData) {
-            // const base64Prefix: string = "data:image/bmp;base64,";
-            // (imgData.startsWith(base64Prefix)) ? imgData : `${base64Prefix}${imgData}`;
-            // tslint:disable-next-line:no-console
-
-            return this.getConnectedPixels(coordinates, new Buffer(imgData, "base64"));
+            return this.getConnectedPixels(coordinates, new Buffer(this.parseBase64(imgData), "base64"));
         }
 
         return [];
+    }
+
+    private parseBase64(base64Data: string): string {
+        const base64Prefix: string = "data:image/bmp;base64,";
+        if (base64Data.startsWith(base64Prefix)) {
+            return base64Data.substr(base64Prefix.length);
+        } else {
+            return base64Data;
+        }
     }
 
     private getConnectedPixels(initialCoordinates: Coordinates, image: Buffer): Array<Coordinates> {
@@ -140,16 +144,16 @@ export class ImgDiff {
         return ((image[25] << 8 | image[24]) << 8 | image[23]) << 8 | image[22];
     }
 
-    private async getDiffImg(id: string): Promise<string | undefined> {
-        const games: Game[] = await this.getById(id);
-        if (games[0]) {
+    private async getDiffImgData(id: string): Promise<string | undefined> {
+        const games: Game[] = await this.getById(parseInt(id, 10));
+        if (games[0] && games[0].imageUrl[2]) {
             return games[0].imageUrl[2];
         } else {
             return undefined;
         }
     }
 
-    private async getById(id: string): Promise<Game[]> {
+    private async getById(id: number): Promise<Game[]> {
         return this.mongo.findDocuments<Game>(this.collection, { _id: id });
     }
 
