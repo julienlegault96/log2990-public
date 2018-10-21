@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 
 @Injectable()
 
@@ -53,6 +53,7 @@ export abstract class AbstractServerService {
         };
 
         return this.http.post<T>(this.getUrl(serverEndpoint), body, options).pipe(
+            tap(),
             catchError(this.handleError)
         );
     }
@@ -67,7 +68,7 @@ export abstract class AbstractServerService {
         );
     }
 
-    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<{} | T> {
+    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<T> {
         const options: {} = {
             headers: new HttpHeaders({ "Content-Type": "application/json" }),
             body: deleteBody

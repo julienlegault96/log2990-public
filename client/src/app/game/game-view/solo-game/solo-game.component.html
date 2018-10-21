@@ -1,0 +1,12 @@
+<h3>{{game.title}}</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12 image-container">
+        <img class="img-thumbnail game-image" src={{game.imageUrl[0]}}>
+    </div>
+    <div class="col-md-6 col-sm-12 image-container">
+        <button type="button" class="btn btn-light image-btn" (click)="diffCounter.incrementPlayerCountSolo(); errorFound.emit(playerId + ' à trouvé une différence!')">
+            <img class="img-thumbnail game-image" src={{game.imageUrl[1]}}>
+        </button>
+    </div>
+</div>
+<app-diff-counter [playerOneId]="playerId"></app-diff-counter>

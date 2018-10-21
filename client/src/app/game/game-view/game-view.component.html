@@ -1,0 +1,12 @@
+<div class="container game-view">
+    <div class="row game-row">
+        <div class="col-3 side-view">
+            <app-chrono (timerMilestone)="messageBar.addMessage($event)"></app-chrono>
+            <div class="dropdown-divider"></div>
+            <app-message-bar [messages]></app-message-bar>
+        </div>
+        <div class="col-9 image-view">
+            <app-solo-game [playerId]="playerId" [game]="game" (errorFound)="messageBar.addMessage($event)"></app-solo-game>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,11 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
+
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
-import { User } from "../../../../common/user/user";
 import { Validator } from "../validator";
+
+import { User } from "../../../../common/user/user";
 
 @Injectable({
     providedIn: "root"
@@ -12,8 +14,7 @@ import { Validator } from "../validator";
 /**
  * this class connects implements methods for supervising user logins and logouts
  */
-export class UserService extends AbstractServerService implements OnInit {
-
+export class UserService extends AbstractServerService {
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "\n- Seul des caractères alphanumériques sont acceptés.";
@@ -30,11 +31,8 @@ export class UserService extends AbstractServerService implements OnInit {
     public constructor(protected http: HttpClient) {
         super(http);
         this.asyncUserList = [];
-        this.ngOnInit();
-     }
-
-    public ngOnInit(): void {
         this.refreshUserList();
+
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
         this.validator = new Validator();
@@ -42,28 +40,64 @@ export class UserService extends AbstractServerService implements OnInit {
         window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
     }
 
-    public onUnloadEvent(e: BeforeUnloadEvent): void {
-        e.preventDefault();
+    public onUnloadEvent(event: BeforeUnloadEvent): void {
+        event.preventDefault();
         if (this.loggedIn) {
-        super.deleteRequest<User>(Endpoints.Users, this.loggedUser );
+            this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
-        e.returnValue = "";
+        event.returnValue = "";
     }
 
     public validateUsername(username: string): boolean {
-        return this.validator.isValidUsernameLength(username)
-            && this.validator.isValidAlphanumericSymbols(username)
-            && this.isUniqueUsername(username) ;
+        return this.validator.isStandardStringLength(username)
+            && this.validator.isAlphanumericString(username)
+            && this.isUniqueUsername(username);
+    }
+
+    public refreshUserList(): void {
+        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
+    }
+
+    public getUsers(): Observable<User[]> {
+        return this.getRequest<User[]>(Endpoints.Users);
+    }
+
+    public addUser(newUser: User): Observable<User> {
+        return this.postRequest<User>(Endpoints.Users, newUser);
+    }
+
+    public removeUser(userToDelete: User): Observable<User> {
+        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
+    }
+
+    public submitUsername(username: string): void {
+        if (this.validateUsername(username)) {
+            this.login(new User(username));
+        } else {
+            throw new Error(this.buildErrorString(username));
+        }
+    }
+
+    private login(user: User): void {
+        this.addUser(user).subscribe((nullUser: User) => {
+            this.getUsers().subscribe((newUsers: User[]) => {
+                if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
+                    this.asyncUserList.push(user);
+                    this.loggedUser = user;
+                    this.loggedIn = true;
+                }
+            });
+        });
     }
 
     private buildErrorString(username: string): string {
         let errorString: string = "";
 
-        if (!this.validator.isValidAlphanumericSymbols(username)) {
+        if (!this.validator.isAlphanumericString(username)) {
             errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
         }
-        if (!this.validator.isValidUsernameLength(username)) {
+        if (!this.validator.isStandardStringLength(username)) {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
         if (!this.isUniqueUsername(username)) {
@@ -82,43 +116,19 @@ export class UserService extends AbstractServerService implements OnInit {
 
         return true;
     }
-    public refreshUserList(): void {
-        this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
-    }
 
-    public getUsers(): Observable<User[]> {
-        return this.getRequest<User[]>(Endpoints.Users);
-    }
-
-    public addUser(newUser: User): Observable<{} | User> {
-        return this.postRequest<User>(Endpoints.Users, newUser);
-    }
-
-    public removeUser(userToDelete: User): void {
-        this.deleteRequest<User>(Endpoints.Users, userToDelete);
-    }
-
-    /**
-     * Validates a username and then sends it to the server if it passes
-     * else it throws an error.
-     * @param username the username of the user logging in
-     * @throws an error explaining why the username was bad
-     */
-    public submitUsername(username: string): void {
-        if (this.validateUsername(username)) {
-            const clientUser: User = new User(username);
-            this.addUser(clientUser).subscribe( (serverUser: User) => { });
-
-            this.asyncUserList = this.asyncUserList.concat(clientUser);
-            this.loggedUser = clientUser;
-            this.loggedIn = true;
+    protected handleError(error: HttpErrorResponse): Observable<never> {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error("An error occurred:", error.error.message);
         } else {
-            throw new Error(this.buildErrorString(username));
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
         }
-    }
 
-    protected handleError (error: HttpErrorResponse): Observable<never> {
-        return new Observable<never>();
+        return throwError("Something bad happened; please try again later.");
     }
-
 }

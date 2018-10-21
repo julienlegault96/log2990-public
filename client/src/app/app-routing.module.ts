@@ -1,17 +1,17 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { SoloGameComponent } from "./game/solo-game/solo-game.component";
 import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { HomePageComponent } from "./home-page/home-page.component";
+import { GameViewComponent } from "./game/game-view/game-view.component";
 
 const routes: Routes = [
-    { path: "soloGame", component: SoloGameComponent },
+    { path: "game/:id", component: GameViewComponent },
     { path: "index", component: HomePageComponent },
     { path: "listeJeux", component: GameListComponent },
     { path: "admin", component: AdminViewComponent },
-    { path: "", redirectTo: "/index", pathMatch: "full" },
+    { path: "", redirectTo: "index", pathMatch: "full" },
 ];
 
 @NgModule({

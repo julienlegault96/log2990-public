@@ -11,6 +11,10 @@ import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
 
 export class GameService extends AbstractServerService {
 
+    public getGame(gameId: string): Observable<Game> {
+        return this.getRequest<Game>(Endpoints.Games, gameId);
+    }
+
     public getGames(): Observable<Game[]> {
         return this.getRequest<Game[]>(Endpoints.Games);
     }
@@ -50,5 +54,4 @@ export class GameService extends AbstractServerService {
 
         return throwError("Something bad happened; please try again later.");
     }
-
 }

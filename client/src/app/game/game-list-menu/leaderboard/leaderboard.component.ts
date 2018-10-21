@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 import { Leaderboard } from "../../../../../../common/game/leaderboard";
 
@@ -7,13 +7,6 @@ import { Leaderboard } from "../../../../../../common/game/leaderboard";
     templateUrl: "./leaderboard.component.html",
 })
 
-export class LeaderboardComponent implements OnInit {
-
+export class LeaderboardComponent {
     @Input() public leaderboard: Leaderboard;
-
-    public constructor() { }
-
-    public ngOnInit(): void {
-    }
-
 }

@@ -8,31 +8,31 @@ describe("Validator", () => {
     });
 
     it("should reject empty names", () => {
-        expect(validator.isValidAlphanumericSymbols("")).toBeFalsy();
+        expect(validator.isAlphanumericString("")).toBeFalsy();
     });
 
     it("should accept alphanumeric names", () => {
-        expect(validator.isValidAlphanumericSymbols("qawsedrftyhuji12345")).toBeTruthy();
+        expect(validator.isAlphanumericString("qawsedrftyhuji12345")).toBeTruthy();
     });
 
     it("should reject non alphanumeric names", () => {
-        expect(validator.isValidAlphanumericSymbols("#@%&*()^^$++{}////")).toBeFalsy();
+        expect(validator.isAlphanumericString("#@%&*()^^$++{}////")).toBeFalsy();
     });
 
     it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(validator.isValidAlphanumericSymbols("#@%ait96)^^ab467/")).toBeFalsy();
+        expect(validator.isAlphanumericString("#@%ait96)^^ab467/")).toBeFalsy();
     });
 
     it("should accept names with 1 caracter", () => {
-        expect(validator.isValidUsernameLength("H")).toBeTruthy();
+        expect(validator.isStandardStringLength("H")).toBeTruthy();
     });
 
     it("should accept names with 20 caracters", () => {
-        expect(validator.isValidUsernameLength("1234567890abcdefghij")).toBeTruthy();
+        expect(validator.isStandardStringLength("1234567890abcdefghij")).toBeTruthy();
     });
 
     it("should reject names with 21 caracters", () => {
-        expect(validator.isValidUsernameLength("1234567890abcdefghijK")).toBeFalsy();
+        expect(validator.isStandardStringLength("1234567890abcdefghijK")).toBeFalsy();
     });
 
     it("should reject invalid images", () => {
