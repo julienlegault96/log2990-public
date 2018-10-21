@@ -24,6 +24,8 @@ import { GameViewComponent } from "./game-view/game-view.component";
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
 
+import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -38,6 +40,7 @@ import { CreateGameComponent } from "./game/create-game/create-game.component";
         AdminViewCardComponent,
         CreateGameComponent,
         GameViewComponent,
+        CreateMultipleViewComponent
     ],
     imports: [
         AppRoutingModule,

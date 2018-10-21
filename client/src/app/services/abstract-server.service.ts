@@ -84,7 +84,8 @@ export abstract class AbstractServerService {
 export enum Endpoints {
     Games = "games",
     Users = "users",
-    Leaderboard = "leaderboard"
+    Leaderboard = "leaderboard",
+    MultipleView = "multipleView"
 }
 
 export class Query {
