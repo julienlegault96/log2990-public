@@ -1,5 +1,5 @@
-<div class="col-sm-6 mx-auto">
-    <div class="card">
+<div class="">
+    <div class="col-sm-6 mx-auto card bg-light mb-3">
         <div class="card-body">
 
             <div class="input-group mb-3">
@@ -20,7 +20,13 @@
                 Passer aux jeux
             </a>
 
-            <h5 class="">Utilisateurs connectés: </h5>
+            <h5 class="">
+                <button class="badge badge-secondary pb-1" type="button" (click)="userService.refreshUserList()">
+                   &#x21bb;
+                </button>
+                Utilisateurs connectés:
+            </h5>
+            
             <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
                 {{user._id}}
             </span>

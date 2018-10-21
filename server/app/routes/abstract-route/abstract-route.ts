@@ -20,6 +20,10 @@ export class AbstractRoute<T> {
         res.status(CODES.OK).send(JSON.stringify(await this.getAll()));
     }
 
+    public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+        res.status(CODES.OK).send(JSON.stringify(await this.getOne(req.params.id)));
+    }
+
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const elem: T = req.body;
@@ -69,6 +73,10 @@ export class AbstractRoute<T> {
         return this.mongo.findDocuments<T>(this.collection);
     }
 
+    public async getOne(id: number): Promise<T> {
+        return this.mongo.findDocumentById<T>(this.collection, Number(id));
+    }
+
     public async insert(elem: T): Promise<InsertOneWriteOpResult> {
         return this.mongo.insertDocument<T>(this.collection, elem);
     }
@@ -80,5 +88,4 @@ export class AbstractRoute<T> {
     public async remove(elem: T): Promise<DeleteWriteOpResultObject> {
         return this.mongo.removeDocument<T>(this.collection, elem);
     }
-
 }

@@ -38,12 +38,12 @@ export class UserService extends AbstractServerService {
         this.validator = new Validator();
 
         window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
-     }
+    }
 
     public onUnloadEvent(event: BeforeUnloadEvent): void {
         event.preventDefault();
         if (this.loggedIn) {
-        this.removeUser( this.loggedUser ).subscribe(/*fire & forget*/);
+            this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
         }
         // Chrome requires returnValue to be set.
         event.returnValue = "";
@@ -52,11 +52,11 @@ export class UserService extends AbstractServerService {
     public validateUsername(username: string): boolean {
         return this.validator.isStandardStringLength(username)
             && this.validator.isAlphanumericString(username)
-            && this.isUniqueUsername(username) ;
+            && this.isUniqueUsername(username);
     }
 
     public refreshUserList(): void {
-        this.getUsers().subscribe( (newUsers: User[]) => {this.asyncUserList = newUsers; });
+        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
     }
 
     public getUsers(): Observable<User[]> {
@@ -80,8 +80,8 @@ export class UserService extends AbstractServerService {
     }
 
     private login(user: User): void {
-        this.addUser(user).subscribe( (nullUser: User) => {
-            this.getUsers().subscribe( (newUsers: User[]) => {
+        this.addUser(user).subscribe((nullUser: User) => {
+            this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
                     this.asyncUserList.push(user);
                     this.loggedUser = user;
@@ -117,7 +117,7 @@ export class UserService extends AbstractServerService {
         return true;
     }
 
-    protected handleError (error: HttpErrorResponse): Observable<never> {
+    protected handleError(error: HttpErrorResponse): Observable<never> {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error("An error occurred:", error.error.message);
@@ -131,5 +131,4 @@ export class UserService extends AbstractServerService {
 
         return throwError("Something bad happened; please try again later.");
     }
-
 }

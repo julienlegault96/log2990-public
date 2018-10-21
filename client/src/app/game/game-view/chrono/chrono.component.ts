@@ -1,14 +1,19 @@
-import { Component } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 
 @Component({
     selector: "app-chrono",
     templateUrl: "./chrono.component.html",
 })
 
-export class ChronoComponent {
+export class ChronoComponent implements OnInit {
+    @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
 
     private readonly MINUTES_IN_HOUR: number = 60;
+    private readonly SECONDS_IN_MINUTE: number = 60;
+    private readonly MILLISECONDS_IN_SECOND: number = 1000;
     private readonly LIMIT_TO_ADD_ZERO: number = 10;
+    private readonly SECONDS_ALERT: number = 30;
+    private readonly MODULO_ZERO: number = 0;
 
     public formattedTime: string;
     private startTime: Date;
@@ -18,13 +23,16 @@ export class ChronoComponent {
     public constructor() {
         this.formattedTime = "00:00";
         this.isStarted = false;
-        this.timer = 0;
+    }
+
+    public ngOnInit(): void {
+        this.start();
     }
 
     public start(): void {
         if (!this.isStarted) {
             this.startTime = new Date();
-            this.timer = window.setInterval(() => { this.calculate(); }, 1);
+            this.timer = window.setInterval(() => this.calculate(), this.MILLISECONDS_IN_SECOND);
             this.isStarted = true;
         }
     }
@@ -42,6 +50,10 @@ export class ChronoComponent {
         const minutes: number = elapsedTime.getMinutes() + (elapsedTime.getUTCHours() * this.MINUTES_IN_HOUR);
 
         this.formattedTime = this.getformattedTime(minutes, seconds);
+
+        if ((seconds >= this.SECONDS_ALERT || minutes > 0) && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
+            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes sont se sont écoulées`);
+        }
     }
 
     private getElapsedTime(): Date {
@@ -62,5 +74,4 @@ export class ChronoComponent {
 
         return formattedTime;
     }
-
 }

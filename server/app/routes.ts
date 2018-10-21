@@ -21,6 +21,10 @@ export class Routes {
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.get(req, res, next)
         );
+        router.get(
+            "/games/:id",
+            (req: Request, res: Response, next: NextFunction) => this.games.getById(req, res, next)
+        );
         router.post(
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.post(req, res, next)
