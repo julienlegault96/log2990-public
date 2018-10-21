@@ -9,6 +9,6 @@
         </button>
     </div>
 </div> -->
-<app-image-diff [gameId]="game._id" [imageView]="firstView" [playerId]="playerId" [emitter]="errorFound" [originalImageSrc]="game.imageUrl[0]"
-    [modifiedImageSrc]="game.imageUrl[1]"></app-image-diff>
+<app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
+    [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorFound.emit(playerId + ' &agrave; trouv&eacute; une diff&eacute;rence!')"></app-image-diff>
 <app-diff-counter [playerOneId]="playerId"></app-diff-counter>

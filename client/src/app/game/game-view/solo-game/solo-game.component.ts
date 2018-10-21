@@ -15,6 +15,8 @@ export class SoloGameComponent {
     @Input() public playerId: string;
     @Input() public game: Game;
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+
     public firstView: ImageView = ImageView.FirstView;
     public secondView: ImageView = ImageView.SecondView;
+
 }

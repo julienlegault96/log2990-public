@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { ImgDiffService } from "src/app/services/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
@@ -17,14 +17,9 @@ export class ImageDiffComponent implements OnInit {
     @Input() public modifiedImageSrc: string;
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
-    @Input() public emitter: EventEmitter<string>;
-    @Input() public playerId: string;
+    @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public constructor(private imgDiffService: ImgDiffService) {
-        // this.originalImageSrc = "https://i.imgur.com/qQQYnx8.png";
-        // this.modifiedImageSrc = "https://i.imgur.com/1lgyTWK.png";
-        // this.imageView = ImageView.FirstView;
-        // this.gameId = 804690;
     }
 
     public ngOnInit(): void {
@@ -34,7 +29,6 @@ export class ImageDiffComponent implements OnInit {
 
     public isClicked(event: MouseEvent): void {
         // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
-        // tslint:disable-next-line:no-any
         const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
 
         if (target) {
@@ -45,11 +39,19 @@ export class ImageDiffComponent implements OnInit {
                 .subscribe((errorCoordinates: Array<Coordinates>) => {
                     console.log(errorCoordinates);
                     if (errorCoordinates.length > 0) {
-                        this.emitter.emit(this.playerId + " à trouvé une différence!");
+                        this.errorFound.emit();
+                        this.playSound();
                         this.updateModifiedImage(errorCoordinates);
                     }
                 });
         }
+    }
+
+    private playSound(): void {
+        const audio: HTMLAudioElement = new Audio();
+        audio.src = "../../../../assets/success.mp3";
+        audio.load();
+        audio.play();
     }
 
     private initializeOriginalImage(): void {
