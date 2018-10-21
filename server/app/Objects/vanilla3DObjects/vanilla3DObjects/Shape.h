@@ -54,15 +54,15 @@ void Shape::init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat 
 		break;
 
 	case(Cube):
-		forme = new FormeCube(0.5, true);
+		forme = new FormeCube(0.75, true);
 		break;
 
 	case(Cylindre):
-		forme = new FormeCylindre(0.5, 0.5, 0.8, 10, 1, true);
+		forme = new FormeCylindre(0.4, 0.4, 0.6, 10, 1, true);
 		break;
 
 	case(Tetrahedre):
-		forme = new FormeTetraedre(0.5, true);
+		forme = new FormeTetraedre(1.0, true);
 		break;
 	}
 }
