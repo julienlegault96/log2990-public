@@ -52,7 +52,7 @@ export class ChronoComponent implements OnInit {
         this.formattedTime = this.getformattedTime(minutes, seconds);
 
         if ((seconds >= this.SECONDS_ALERT || minutes > 0) && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
-            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes sont se sont écoulées`);
+            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes se sont écoulées`);
         }
     }
 

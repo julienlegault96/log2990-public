@@ -55,16 +55,6 @@ export class ImageDiffComponent implements OnInit {
         }
     }
 
-    private isAlreadyFound(currentCoordinates: Coordinates): boolean {
-        for (const coordinates of this.foundErrors) {
-            if (currentCoordinates.x === coordinates.x && currentCoordinates.y === coordinates.y) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private initializeOriginalImage(): void {
         const originalImage: HTMLImageElement = new Image();
         originalImage.crossOrigin = "Anonymous";
@@ -85,6 +75,16 @@ export class ImageDiffComponent implements OnInit {
             this.modifiedCtx.drawImage(modifiedImage, 0, 0);
             modifiedImage.style.display = "none";
         };
+    }
+
+    private isAlreadyFound(currentCoordinates: Coordinates): boolean {
+        for (const coordinates of this.foundErrors) {
+            if (currentCoordinates.x === coordinates.x && currentCoordinates.y === coordinates.y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private updateModifiedImage(errorCoordinates: Array<Coordinates>): void {
