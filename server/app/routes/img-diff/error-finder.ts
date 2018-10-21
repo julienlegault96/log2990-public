@@ -19,11 +19,11 @@ export class ErrorFinder {
         const connectedPixels: Array<Coordinates> = [];
         const usedPixels: Object = {};
         const stack: Array<Coordinates> = [initialCoordinates];
-        let currentCoordinates: Coordinates | undefined;
 
-        while (currentCoordinates = stack.pop()) {
-            const adjacentPixels: Array<Coordinates> = this.getAdjacentPixels(currentCoordinates);
-            for (const coordinates of adjacentPixels) {
+        while (stack.length > 0) {
+            // la condition du while verifie que pop ne retournera pas undefined
+            connectedPixels.push(stack.pop() as Coordinates);
+            for (const coordinates of this.getAdjacentPixels(connectedPixels[connectedPixels.length - 1])) {
                 if (this.isDifference(coordinates)) {
                     const position: number = this.getPosition(coordinates);
                     if (usedPixels[position] !== true) {
@@ -32,18 +32,6 @@ export class ErrorFinder {
                     }
                 }
             }
-
-            // this.getAdjacentPixels(currentCoordinates)
-            //     .map((coordinates: Coordinates) => {
-            //         if (this.isDifference(coordinates)) {
-            //             const position: number = this.getPosition(coordinates);
-            //             if (usedPixels[position] !== true) {
-            //                 usedPixels[position] = true;
-            //                 stack.push(coordinates);
-            //             }
-            //         }
-            //     });
-            connectedPixels.push(currentCoordinates);
         }
 
         return connectedPixels;
@@ -104,10 +92,8 @@ export class ErrorFinder {
     private getPosition(coordinates: Coordinates): number {
         const paddingByte: number = 4;
         const byteDepth: number = 3;
-        const width: number = this.getImageWidth();
-        // console.log(width);
         const headerSize: number = 54;
-        const lineOffset: number = width * (this.getImageHeight() - coordinates.y);
+        const lineOffset: number = this.getImageWidth() * (this.getImageHeight() - coordinates.y);
 
         return headerSize + (lineOffset + coordinates.x) * byteDepth
             + lineOffset % paddingByte;
