@@ -28,8 +28,8 @@ export class ImgDiff {
                     req.query.id,
                     req.query.imageView,
                     {
-                        x: Number(req.query.x),
-                        y: Number(req.query.y)
+                        x: Math.round(Number(req.query.x)),
+                        y: Math.round(Number(req.query.y))
                     }
                 )
             )

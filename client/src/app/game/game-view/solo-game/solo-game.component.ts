@@ -1,6 +1,7 @@
 import { Component, ViewChild, Input, EventEmitter, Output } from "@angular/core";
 import { DiffCounterComponent } from "../diff-counter/diff-counter.component";
 import { Game } from "../../../../../../common/game/game";
+import { ImageView } from "../../../../../../common/game/image-view";
 
 @Component({
     selector: "app-solo-game",
@@ -14,4 +15,6 @@ export class SoloGameComponent {
     @Input() public playerId: string;
     @Input() public game: Game;
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    public firstView: ImageView = ImageView.FirstView;
+    public secondView: ImageView = ImageView.SecondView;
 }

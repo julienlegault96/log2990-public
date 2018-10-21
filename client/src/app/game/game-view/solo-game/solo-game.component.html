@@ -9,4 +9,5 @@
         </button>
     </div>
 </div>
+<app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]" [modifiedImageSrc]="game.imageUrl[1]"></app-image-diff>
 <app-diff-counter [playerOneId]="playerId"></app-diff-counter>

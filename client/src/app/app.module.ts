@@ -25,7 +25,7 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
-import { ImageDiffComponent } from "./game/image-diff/image-diff.component";
+import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff.service";
 
 @NgModule({

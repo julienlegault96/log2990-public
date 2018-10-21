@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ImgDiffService } from "src/app/services/img-diff.service";
-import { Coordinates } from "../../../../../common/game/coordinates";
-import { ImageView } from "../../../../../common/game/image-view";
+import { Coordinates } from "../../../../../../common/game/coordinates";
+import { ImageView } from "../../../../../../common/game/image-view";
 
 @Component({
     selector: "app-image-diff",
@@ -13,16 +13,16 @@ export class ImageDiffComponent implements OnInit {
 
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
-    private originalImageSrc: string;
-    private modifiedImageSrc: string;
-    private gameId: number;
-    private imageView: ImageView;
+    @Input() public originalImageSrc: string;
+    @Input() public modifiedImageSrc: string;
+    @Input() public gameId: number;
+    @Input() public imageView: ImageView;
 
     public constructor(private imgDiffService: ImgDiffService) {
-        this.originalImageSrc = "https://i.imgur.com/qQQYnx8.png";
-        this.modifiedImageSrc = "https://i.imgur.com/1lgyTWK.png";
-        this.imageView = ImageView.FirstView;
-        this.gameId = 804690;
+        // this.originalImageSrc = "https://i.imgur.com/qQQYnx8.png";
+        // this.modifiedImageSrc = "https://i.imgur.com/1lgyTWK.png";
+        // this.imageView = ImageView.FirstView;
+        // this.gameId = 804690;
     }
 
     public ngOnInit(): void {
