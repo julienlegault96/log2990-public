@@ -8,6 +8,7 @@ import { Mongo, Collections } from "../../services/mongo";
 import { Game } from "../../../../common/game/game";
 import { CODES } from "../../../../common/communication/response-codes";
 import { Coordinates } from "../../../../common/game/coordinates";
+import { ImageView } from "../../../../common/game/image-view";
 
 @injectable()
 export class ImgDiff {
@@ -25,6 +26,7 @@ export class ImgDiff {
             JSON.stringify(
                 await this.getDifferencePixel(
                     req.query.id,
+                    req.query.imageView,
                     {
                         x: Number(req.query.x),
                         y: Number(req.query.y)
@@ -34,8 +36,8 @@ export class ImgDiff {
         );
     }
 
-    private async getDifferencePixel(id: string, coordinates: Coordinates): Promise<Coordinates[]> {
-        const imgData: string | undefined = await this.getDiffImgData(id);
+    private async getDifferencePixel(id: string, imageView: ImageView, coordinates: Coordinates): Promise<Coordinates[]> {
+        const imgData: string | undefined = await this.getDiffImgData(id, imageView);
         if (imgData) {
             const errorFinder: ErrorFinder = new ErrorFinder();
 
@@ -54,11 +56,14 @@ export class ImgDiff {
         }
     }
 
-    private async getDiffImgData(id: string): Promise<string | undefined> {
+    private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
         const games: Game[] = await this.getById(parseInt(id, 10));
-        const singleViewDiffIndex: number = 2;
-        if (games[0] && games[0].imageUrl[singleViewDiffIndex]) {
-            return games[0].imageUrl[singleViewDiffIndex];
+        const firstViewDiffIndex: number = 2;
+        const secondViewDiffIndex: number = 5;
+        const diffIndex: number = (Number(imageView) === ImageView.FirstView) ? firstViewDiffIndex : secondViewDiffIndex;
+
+        if (games[0] && games[0].imageUrl[diffIndex]) {
+            return games[0].imageUrl[diffIndex];
         } else {
             return undefined;
         }

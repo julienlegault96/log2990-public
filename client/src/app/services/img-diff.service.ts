@@ -4,16 +4,18 @@ import { Observable, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
 import { Coordinates } from "../../../../common/game/coordinates";
+import { ImageView } from "../../../../common/game/image-view";
 
 @Injectable()
 
 export class ImgDiffService extends AbstractServerService {
 
-    public getDiff(id: number, x: number, y: number): Observable<Array<Coordinates>> {
+    public getDiff(id: number, imageView: ImageView, x: number, y: number): Observable<Array<Coordinates>> {
         return this.getRequest<Array<Coordinates>>(
             Endpoints.ImgDiff,
             undefined,
             new Query("id", id),
+            new Query("imageView", imageView),
             new Query("x", x),
             new Query("y", y));
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ImgDiffService } from "src/app/services/img-diff.service";
 import { Coordinates } from "../../../../../common/game/coordinates";
+import { ImageView } from "../../../../../common/game/image-view";
 
 @Component({
     selector: "app-image-diff",
@@ -15,10 +16,12 @@ export class ImageDiffComponent implements OnInit {
     private originalImageSrc: string;
     private modifiedImageSrc: string;
     private gameId: number;
+    private imageView: ImageView;
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.originalImageSrc = "https://i.imgur.com/qQQYnx8.png";
         this.modifiedImageSrc = "https://i.imgur.com/1lgyTWK.png";
+        this.imageView = ImageView.FirstView;
         this.gameId = 804690;
     }
 
@@ -51,7 +54,7 @@ export class ImageDiffComponent implements OnInit {
             const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
             const x: number = event.clientX - rect.left;
             const y: number = event.clientY - rect.top;
-            this.imgDiffService.getDiff(this.gameId, x, y)
+            this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
                 .subscribe((values: Array<Coordinates>) => {
                     this.updateModifiedImage(values);
                 });
