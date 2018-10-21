@@ -88,6 +88,7 @@ export class ImageDiffComponent implements OnInit {
     }
 
     private updateModifiedImage(errorCoordinates: Array<Coordinates>): void {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
         if (errorCoordinates.length === 0) {
             return;
         }
