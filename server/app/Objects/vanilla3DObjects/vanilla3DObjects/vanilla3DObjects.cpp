@@ -86,7 +86,7 @@ struct Etat {
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
 	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
 	double dimBoite;      // la dimension de la boite
-} etat = { false, false, GL_FILL, 8.0 };
+} etat = { false, false, GL_FILL, 9.9 };
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 60.;
