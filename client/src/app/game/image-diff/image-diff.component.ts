@@ -26,23 +26,8 @@ export class ImageDiffComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        const originalImage: HTMLImageElement = new Image();
-        originalImage.crossOrigin = "Anonymous";
-        originalImage.src = this.originalImageSrc;
-        this.originalCtx = this.getContext("original");
-        originalImage.onload = () => {
-            this.originalCtx.drawImage(originalImage, 0, 0);
-            originalImage.style.display = "none";
-        };
-
-        const modifiedImage: HTMLImageElement = new Image();
-        modifiedImage.crossOrigin = "Anonymous";
-        modifiedImage.src = this.modifiedImageSrc;
-        this.modifiedCtx = this.getContext("modified");
-        modifiedImage.onload = () => {
-            this.modifiedCtx.drawImage(modifiedImage, 0, 0);
-            modifiedImage.style.display = "none";
-        };
+        this.initializeOriginalImage();
+        this.initializeModifiedImage();
     }
 
     public isClicked(event: MouseEvent): void {
@@ -59,6 +44,28 @@ export class ImageDiffComponent implements OnInit {
                     this.updateModifiedImage(values);
                 });
         }
+    }
+
+    private initializeOriginalImage(): void {
+        const originalImage: HTMLImageElement = new Image();
+        originalImage.crossOrigin = "Anonymous";
+        originalImage.src = this.originalImageSrc;
+        this.originalCtx = this.getContext("original");
+        originalImage.onload = () => {
+            this.originalCtx.drawImage(originalImage, 0, 0);
+            originalImage.style.display = "none";
+        };
+    }
+
+    private initializeModifiedImage(): void {
+        const modifiedImage: HTMLImageElement = new Image();
+        modifiedImage.crossOrigin = "Anonymous";
+        modifiedImage.src = this.modifiedImageSrc;
+        this.modifiedCtx = this.getContext("modified");
+        modifiedImage.onload = () => {
+            this.modifiedCtx.drawImage(modifiedImage, 0, 0);
+            modifiedImage.style.display = "none";
+        };
     }
 
     private updateModifiedImage(errorCoordinates: Array<Coordinates>): void {
