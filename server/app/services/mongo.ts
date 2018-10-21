@@ -9,7 +9,6 @@ import {
     UpdateWriteOpResult,
     DeleteWriteOpResultObject,
     Collection,
-    ObjectID
 } from "mongodb";
 
 export enum Collections {

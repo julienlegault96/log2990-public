@@ -81,9 +81,10 @@ export class ErrorFinder {
         const byteDepth: number = 3;
         const width: number = this.getImageWidth(image);
         const headerSize: number = 54;
+        const lineOffset: number = width * (width - 1 - coordinates.y);
 
-        return headerSize + (width * (width - 1 - coordinates.y) + coordinates.x) * byteDepth
-            + (width * (width - 1 - coordinates.y)) % paddingByte;
+        return headerSize + (lineOffset + coordinates.x) * byteDepth
+            + lineOffset % paddingByte;
     }
 
     private getImageWidth(image: Buffer): number {

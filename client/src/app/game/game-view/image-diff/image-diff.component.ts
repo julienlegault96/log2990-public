@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter } from "@angular/core";
 import { ImgDiffService } from "src/app/services/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
@@ -17,6 +17,8 @@ export class ImageDiffComponent implements OnInit {
     @Input() public modifiedImageSrc: string;
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
+    @Input() public emitter: EventEmitter<string>;
+    @Input() public playerId: string;
 
     public constructor(private imgDiffService: ImgDiffService) {
         // this.originalImageSrc = "https://i.imgur.com/qQQYnx8.png";
@@ -40,8 +42,12 @@ export class ImageDiffComponent implements OnInit {
             const x: number = event.clientX - rect.left;
             const y: number = event.clientY - rect.top;
             this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
-                .subscribe((values: Array<Coordinates>) => {
-                    this.updateModifiedImage(values);
+                .subscribe((errorCoordinates: Array<Coordinates>) => {
+                    console.log(errorCoordinates);
+                    if (errorCoordinates.length > 0) {
+                        this.emitter.emit(this.playerId + " à trouvé une différence!");
+                        this.updateModifiedImage(errorCoordinates);
+                    }
                 });
         }
     }
