@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef } from "@angular/core";
 import { ImgDiffService } from "src/app/services/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
@@ -18,6 +18,8 @@ export class ImageDiffComponent implements OnInit {
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @ViewChild("original") private originalElement: ElementRef;
+    @ViewChild("modified") private modifiedElement: ElementRef;
     private audio: HTMLAudioElement;
 
     public constructor(private imgDiffService: ImgDiffService) {
@@ -133,12 +135,12 @@ export class ImageDiffComponent implements OnInit {
     }
 
     private getCanvas(id: string): HTMLCanvasElement {
-        const element: HTMLCanvasElement = document.getElementById(id) as HTMLCanvasElement;
-
-        if (element) {
-            return element;
+        if (id === "original") {
+            return this.originalElement.nativeElement as HTMLCanvasElement;
+        } else if (id === "modified") {
+            return this.modifiedElement.nativeElement as HTMLCanvasElement;
         } else {
-            throw new Error("Invalid element id");
+            throw new Error(`Invalid element id: ${id}`);
         }
     }
 
