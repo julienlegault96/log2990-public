@@ -16,8 +16,8 @@ export class ImgDiffService extends AbstractServerService {
             undefined,
             new Query("id", id),
             new Query("imageView", imageView),
-            new Query("x", x),
-            new Query("y", y));
+            new Query("x", Math.round(x)),
+            new Query("y", Math.round(y)));
     }
 
     protected handleError(error: HttpErrorResponse): Observable<never> {

@@ -28,8 +28,8 @@ export class ImgDiff {
                     req.query.id,
                     req.query.imageView,
                     {
-                        x: Math.round(Number(req.query.x)),
-                        y: Math.round(Number(req.query.y))
+                        x: Number(req.query.x),
+                        y: Number(req.query.y)
                     }
                 )
             )
@@ -41,7 +41,7 @@ export class ImgDiff {
         if (imgData) {
             const errorFinder: ErrorFinder = new ErrorFinder();
 
-            return errorFinder.getConnectedPixels(coordinates, new Buffer(this.parseBase64(imgData), "base64"));
+            return errorFinder.findError(coordinates, new Buffer(this.parseBase64(imgData), "base64"));
         }
 
         return [];

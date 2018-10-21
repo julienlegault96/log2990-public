@@ -3,22 +3,33 @@ import { Pixel } from "./pixel";
 
 export class ErrorFinder {
 
-    public getConnectedPixels(initialCoordinates: Coordinates, image: Buffer): Array<Coordinates> {
+    private imageBuffer: Buffer;
+
+    public findError(initialCoordinates: Coordinates, imageBuffer: Buffer): Array<Coordinates> {
+        this.imageBuffer = imageBuffer;
+
+        if (this.isDifference(initialCoordinates)) {
+            return this.getConnectedPixels(initialCoordinates);
+        } else {
+            return [];
+        }
+    }
+
+    private getConnectedPixels(initialCoordinates: Coordinates): Array<Coordinates> {
         const connectedPixels: Array<Coordinates> = [];
-        if (this.isDifference(initialCoordinates, image)) {
-            const stack: Array<Coordinates> = [initialCoordinates];
-            let currentCoordinates: Coordinates | undefined;
-            while (currentCoordinates = stack.pop()) {
-                const adjacentPixels: Array<Coordinates> = this.getAdjacentPixels(currentCoordinates);
-                adjacentPixels.map((coordinates: Coordinates) => {
-                    if (this.isDifference(coordinates, image)
-                        && connectedPixels.findIndex((elem: Coordinates) => coordinates.x === elem.x && coordinates.y === elem.y) === -1
-                        && stack.findIndex((elem: Coordinates) => coordinates.x === elem.x && coordinates.y === elem.y) === -1) {
+        const usedPixels: Object = {};
+        const stack: Array<Coordinates> = [initialCoordinates];
+        let currentCoordinates: Coordinates | undefined;
+        while (currentCoordinates = stack.pop()) {
+            this.getAdjacentPixels(currentCoordinates)
+                .map((coordinates: Coordinates) => {
+                    const position: number = this.getPosition(coordinates);
+                    if (this.isDifference(coordinates) && usedPixels[position] !== true) {
+                        usedPixels[position] = true;
                         stack.push(coordinates);
                     }
                 });
-                connectedPixels.push(currentCoordinates);
-            }
+            connectedPixels.push(currentCoordinates);
         }
 
         return connectedPixels;
@@ -54,32 +65,32 @@ export class ErrorFinder {
         return adjacentPixels;
     }
 
-    private isDifference(coordinates: Coordinates, image: Buffer): boolean {
-        const pixel: Pixel = this.getPixelValue(coordinates, image);
+    private isDifference(coordinates: Coordinates): boolean {
+        const pixel: Pixel = this.getPixelValue(coordinates);
 
         return pixel.red === 0
             && pixel.green === 0
             && pixel.blue === 0;
     }
 
-    private getPixelValue(coordinates: Coordinates, image: Buffer): Pixel {
+    private getPixelValue(coordinates: Coordinates): Pixel {
         const redOffset: number = 0;
         const greenOffset: number = 1;
         const blueOffset: number = 2;
 
-        const position: number = this.getPosition(coordinates, image);
+        const position: number = this.getPosition(coordinates);
 
         return {
-            red: image[position + redOffset],
-            green: image[position + greenOffset],
-            blue: image[position + blueOffset],
+            red: this.imageBuffer[position + redOffset],
+            green: this.imageBuffer[position + greenOffset],
+            blue: this.imageBuffer[position + blueOffset],
         };
     }
 
-    private getPosition(coordinates: Coordinates, image: Buffer): number {
+    private getPosition(coordinates: Coordinates): number {
         const paddingByte: number = 4;
         const byteDepth: number = 3;
-        const width: number = this.getImageWidth(image);
+        const width: number = this.getImageWidth();
         const headerSize: number = 54;
         const lineOffset: number = width * (width - 1 - coordinates.y);
 
@@ -87,10 +98,10 @@ export class ErrorFinder {
             + lineOffset % paddingByte;
     }
 
-    private getImageWidth(image: Buffer): number {
+    private getImageWidth(): number {
         // Le width de l'image bmp est sur 4 bytes
         // tslint:disable-next-line:no-bitwise no-magic-numbers
-        return ((image[21] << 8 | image[20]) << 8 | image[19]) << 8 | image[18];
+        return ((this.imageBuffer[21] << 8 | this.imageBuffer[20]) << 8 | this.imageBuffer[19]) << 8 | this.imageBuffer[18];
     }
 
     // private getImageHeight(image: Buffer): number {
