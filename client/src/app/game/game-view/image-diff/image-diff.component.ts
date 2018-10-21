@@ -2,11 +2,11 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef }
 import { ImgDiffService } from "src/app/services/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
+import { AudioPlayer } from "./audio-player";
 
 @Component({
     selector: "app-image-diff",
     templateUrl: "./image-diff.component.html",
-    styleUrls: ["./image-diff.component.css"]
 })
 
 export class ImageDiffComponent implements OnInit {
@@ -20,12 +20,10 @@ export class ImageDiffComponent implements OnInit {
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
-    private audio: HTMLAudioElement;
+    private audioPlayer: AudioPlayer;
 
     public constructor(private imgDiffService: ImgDiffService) {
-        this.audio = new Audio();
-        this.audio.src = "../../../../assets/success.mp3";
-        this.audio.load();
+        this.audioPlayer = new AudioPlayer("../../../../assets/success.mp3");
     }
 
     public ngOnInit(): void {
@@ -45,15 +43,11 @@ export class ImageDiffComponent implements OnInit {
                 .subscribe((errorCoordinates: Array<Coordinates>) => {
                     if (errorCoordinates.length > 0) {
                         this.errorFound.emit();
-                        this.playSound();
+                        this.audioPlayer.play();
                         this.updateModifiedImage(errorCoordinates);
                     }
                 });
         }
-    }
-
-    private playSound(): void {
-        this.audio.play();
     }
 
     private initializeOriginalImage(): void {

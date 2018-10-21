@@ -10,7 +10,6 @@ import { GameService } from "src/app/services/game.service";
 @Component({
     selector: "app-game-view",
     templateUrl: "./game-view.component.html",
-    styleUrls: ["./game-view.component.css"]
 })
 
 export class GameViewComponent implements OnInit {

@@ -6,7 +6,6 @@ import { ImageView } from "../../../../../../common/game/image-view";
 @Component({
     selector: "app-solo-game",
     templateUrl: "./solo-game.component.html",
-    styleUrls: ["./solo-game.component.css"]
 })
 
 export class SoloGameComponent {
@@ -18,5 +17,10 @@ export class SoloGameComponent {
 
     public firstView: ImageView = ImageView.FirstView;
     public secondView: ImageView = ImageView.SecondView;
+
+    public errorWasFound(): void {
+        this.diffCounter.incrementPlayerCountSolo();
+        this.errorFound.emit(this.playerId + " a trouvé une différence!");
+    }
 
 }
