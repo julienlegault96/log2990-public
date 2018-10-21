@@ -4,13 +4,13 @@ Comparator::Comparator() : differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEF
 {
 }
 
-void Comparator::compare(const char * filename1, const char * filename2)
+void Comparator::compare(const char * inputOne, const char * inputTwo)
 {
 	ImageParser imageParser;
-	long file1len = string(filename1).length();
-	long file2len = string(filename2).length();
-	Image image1 = file1len > 1000 ? imageParser.getImageFromBase64(filename1) : imageParser.getImageFromUrl(filename1);
-	Image image2 = file2len > 1000 ? imageParser.getImageFromBase64(filename2) : imageParser.getImageFromUrl(filename2);
+	long file1len = string(inputOne).length();
+	long file2len = string(inputTwo).length();
+	Image image1 = file1len > 1000 ? imageParser.getImageFromBase64(inputOne) : imageParser.getImageFromUrl(inputOne);
+	Image image2 = file2len > 1000 ? imageParser.getImageFromBase64(inputTwo) : imageParser.getImageFromUrl(inputTwo);
 
 	if (image1.getPixels().size() != image2.getPixels().size()
 		|| image1.getPixels()[0].size() != image2.getPixels()[0].size()) {
@@ -52,7 +52,7 @@ void Comparator::InterpretOptionStrings(const char * options)
 
 void Comparator::saveDiffTo(const char*  filename) const
 {
-	fstream file(filename, ios::in | ios::out | ios::binary | ios_base::trunc);
+	fstream file(filename, ios::out | ios::binary | ios_base::trunc);
 	if (!file.is_open())
 	{
 		throw std::runtime_error("Could not open \"" + string(filename) + "\" for output");
@@ -60,6 +60,13 @@ void Comparator::saveDiffTo(const char*  filename) const
 
 	file << DEFAULT_24BIT_BMP_HEADER;
 	file << differenceImage;
+	file.close();
+
+	file.open(filename, ios::ate | ios::in | ios::binary);
+	if (!file.is_open())
+	{
+		throw std::runtime_error("Could not open \"" + string(filename) + "\" for base64 encoding input");
+	}
 	int len = file.tellp();
 
 	//extract bytes for encoding
@@ -70,9 +77,10 @@ void Comparator::saveDiffTo(const char*  filename) const
 	delete[] bmpData;
 	bmpData = nullptr;
 	file.close();
-
+	
+	
 	string b64filename(filename);
-	b64filename = b64filename.substr(0, b64filename.length() - 4) + "B64";
+	b64filename = b64filename.substr(0, b64filename.length() - 4) + ".B64";
 	// open for b64
 	file.open(b64filename, ios::out | ios::binary);
 	if (!file.is_open())
