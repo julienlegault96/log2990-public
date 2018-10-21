@@ -18,8 +18,12 @@ export class ImageDiffComponent implements OnInit {
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    private audio: HTMLAudioElement;
 
     public constructor(private imgDiffService: ImgDiffService) {
+        this.audio = new Audio();
+        this.audio.src = "../../../../assets/success.mp3";
+        this.audio.load();
     }
 
     public ngOnInit(): void {
@@ -37,7 +41,6 @@ export class ImageDiffComponent implements OnInit {
             const y: number = event.clientY - rect.top;
             this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
                 .subscribe((errorCoordinates: Array<Coordinates>) => {
-                    console.log(errorCoordinates);
                     if (errorCoordinates.length > 0) {
                         this.errorFound.emit();
                         this.playSound();
@@ -48,10 +51,7 @@ export class ImageDiffComponent implements OnInit {
     }
 
     private playSound(): void {
-        const audio: HTMLAudioElement = new Audio();
-        audio.src = "../../../../assets/success.mp3";
-        audio.load();
-        audio.play();
+        this.audio.play();
     }
 
     private initializeOriginalImage(): void {
@@ -91,7 +91,7 @@ export class ImageDiffComponent implements OnInit {
         const blueOffset: number = 2;
         const alphaOffset: number = 3;
 
-        errorCoordinates.map((coordinates: Coordinates) => {
+        for (const coordinates of errorCoordinates) {
             const index: number = this.getPosition(coordinates, this.getCanvas("modified"));
 
             modifiedImageBuffer[index + redOffset] =
@@ -102,7 +102,7 @@ export class ImageDiffComponent implements OnInit {
                 originalImageBuffer[index + blueOffset];
             modifiedImageBuffer[index + alphaOffset] =
                 originalImageBuffer[index + alphaOffset];
-        });
+        }
         this.modifiedCtx.putImageData(modifiedImage, 0, 0);
     }
 

@@ -20,15 +20,29 @@ export class ErrorFinder {
         const usedPixels: Object = {};
         const stack: Array<Coordinates> = [initialCoordinates];
         let currentCoordinates: Coordinates | undefined;
+
         while (currentCoordinates = stack.pop()) {
-            this.getAdjacentPixels(currentCoordinates)
-                .map((coordinates: Coordinates) => {
+            const adjacentPixels: Array<Coordinates> = this.getAdjacentPixels(currentCoordinates);
+            for (const coordinates of adjacentPixels) {
+                if (this.isDifference(coordinates)) {
                     const position: number = this.getPosition(coordinates);
-                    if (this.isDifference(coordinates) && usedPixels[position] !== true) {
+                    if (usedPixels[position] !== true) {
                         usedPixels[position] = true;
                         stack.push(coordinates);
                     }
-                });
+                }
+            }
+
+            // this.getAdjacentPixels(currentCoordinates)
+            //     .map((coordinates: Coordinates) => {
+            //         if (this.isDifference(coordinates)) {
+            //             const position: number = this.getPosition(coordinates);
+            //             if (usedPixels[position] !== true) {
+            //                 usedPixels[position] = true;
+            //                 stack.push(coordinates);
+            //             }
+            //         }
+            //     });
             connectedPixels.push(currentCoordinates);
         }
 
@@ -91,8 +105,9 @@ export class ErrorFinder {
         const paddingByte: number = 4;
         const byteDepth: number = 3;
         const width: number = this.getImageWidth();
+        // console.log(width);
         const headerSize: number = 54;
-        const lineOffset: number = width * (width - 1 - coordinates.y);
+        const lineOffset: number = width * (this.getImageHeight() - coordinates.y);
 
         return headerSize + (lineOffset + coordinates.x) * byteDepth
             + lineOffset % paddingByte;
@@ -104,10 +119,10 @@ export class ErrorFinder {
         return ((this.imageBuffer[21] << 8 | this.imageBuffer[20]) << 8 | this.imageBuffer[19]) << 8 | this.imageBuffer[18];
     }
 
-    // private getImageHeight(image: Buffer): number {
-    //     // Le height de l'image bmp est sur 4 bytes
-    //     // tslint:disable-next-line:no-bitwise no-magic-numbers
-    //     return ((image[25] << 8 | image[24]) << 8 | image[23]) << 8 | image[22];
-    // }
+    private getImageHeight(): number {
+        // Le height de l'image bmp est sur 4 bytes
+        // tslint:disable-next-line:no-bitwise no-magic-numbers
+        return ((this.imageBuffer[25] << 8 | this.imageBuffer[24]) << 8 | this.imageBuffer[23]) << 8 | this.imageBuffer[22];
+    }
 
 }
