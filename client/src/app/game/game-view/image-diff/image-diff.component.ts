@@ -11,8 +11,6 @@ import { AudioPlayer } from "./audio-player";
 
 export class ImageDiffComponent implements OnInit {
 
-    private originalCtx: CanvasRenderingContext2D;
-    private modifiedCtx: CanvasRenderingContext2D;
     @Input() public originalImageSrc: string;
     @Input() public modifiedImageSrc: string;
     @Input() public gameId: number;
@@ -20,10 +18,14 @@ export class ImageDiffComponent implements OnInit {
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
+    private originalCtx: CanvasRenderingContext2D;
+    private modifiedCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
+    private foundErrors: Array<Coordinates>;
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.audioPlayer = new AudioPlayer("../../../../assets/success.mp3");
+        this.foundErrors = [];
     }
 
     public ngOnInit(): void {
@@ -39,15 +41,28 @@ export class ImageDiffComponent implements OnInit {
             const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
             const x: number = event.clientX - rect.left;
             const y: number = event.clientY - rect.top;
-            this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
-                .subscribe((errorCoordinates: Array<Coordinates>) => {
-                    if (errorCoordinates.length > 0) {
-                        this.errorFound.emit();
-                        this.audioPlayer.play();
-                        this.updateModifiedImage(errorCoordinates);
-                    }
-                });
+            if (!this.isAlreadyFound({ x: Math.round(x), y: Math.round(y) })) {
+                this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
+                    .subscribe((errorCoordinates: Array<Coordinates>) => {
+                        if (errorCoordinates.length > 0) {
+                            this.foundErrors = this.foundErrors.concat(errorCoordinates);
+                            this.errorFound.emit();
+                            this.audioPlayer.play();
+                            this.updateModifiedImage(errorCoordinates);
+                        }
+                    });
+            }
         }
+    }
+
+    private isAlreadyFound(currentCoordinates: Coordinates): boolean {
+        for (const coordinates of this.foundErrors) {
+            if (currentCoordinates.x === coordinates.x && currentCoordinates.y === coordinates.y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private initializeOriginalImage(): void {
