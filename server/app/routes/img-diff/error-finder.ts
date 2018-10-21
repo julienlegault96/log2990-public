@@ -1,4 +1,4 @@
-import { Coordinates } from "./coordinates";
+import { Coordinates } from "../../../../common/game/coordinates";
 import { Pixel } from "./pixel";
 
 export class ErrorFinder {

@@ -1,15 +1,21 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-import { Observable, of, throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
+import { Coordinates } from "../../../../common/game/coordinates";
 
 @Injectable()
 
 export class ImgDiffService extends AbstractServerService {
 
-    public getDiff(x: number, y: number): Observable<Array<[number, number]>> {
-        return this.getRequest<Array<[number, number]>>(Endpoints.ImgDiff, undefined, new Query("x", x), new Query("y", y));
+    public getDiff(id: number, x: number, y: number): Observable<Array<Coordinates>> {
+        return this.getRequest<Array<Coordinates>>(
+            Endpoints.ImgDiff,
+            undefined,
+            new Query("id", id),
+            new Query("x", x),
+            new Query("y", y));
     }
 
     protected handleError(error: HttpErrorResponse): Observable<never> {

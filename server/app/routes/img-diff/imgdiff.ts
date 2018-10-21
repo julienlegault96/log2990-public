@@ -7,7 +7,7 @@ import Types from "../../types";
 import { Mongo, Collections } from "../../services/mongo";
 import { Game } from "../../../../common/game/game";
 import { CODES } from "../../../../common/communication/response-codes";
-import { Coordinates } from "./coordinates";
+import { Coordinates } from "../../../../common/game/coordinates";
 
 @injectable()
 export class ImgDiff {
