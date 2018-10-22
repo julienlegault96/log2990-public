@@ -26,7 +26,6 @@ export class ChronoComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.start();
     }
 
     public start(): void {

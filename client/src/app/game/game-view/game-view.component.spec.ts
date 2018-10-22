@@ -13,7 +13,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { GameService } from "src/app/services/game.service";
 import { UserService } from "src/app/services/user.service";
 
-describe("SoloGameComponent", () => {
+describe("GameViewComponent", () => {
     let component: GameViewComponent;
     let fixture: ComponentFixture<GameViewComponent>;
 

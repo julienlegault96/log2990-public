@@ -29,6 +29,7 @@ export class GameViewComponent implements OnInit {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
+                this.chrono.start();
             });
         });
     }
