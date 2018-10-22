@@ -1,11 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 
 @Component({
     selector: "app-chrono",
     templateUrl: "./chrono.component.html",
 })
 
-export class ChronoComponent implements OnInit {
+export class ChronoComponent {
     @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
 
     private readonly MINUTES_IN_HOUR: number = 60;
@@ -23,9 +23,6 @@ export class ChronoComponent implements OnInit {
     public constructor() {
         this.formattedTime = "00:00";
         this.isStarted = false;
-    }
-
-    public ngOnInit(): void {
     }
 
     public start(): void {

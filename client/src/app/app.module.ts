@@ -46,7 +46,6 @@ import { ImgDiffService } from "./services/img-diff.service";
         MessageBarComponent,
         MessageComponent,
         DiffCounterComponent,
-        GameViewComponent,
         ImageDiffComponent,
     ],
     imports: [
