@@ -1,16 +1,21 @@
 #include "Comparator.h"
 
-Comparator::Comparator() : differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight), partialDiff(false)
+Comparator::Comparator() : _differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight), _partialDiff(false)
 {
+}
+
+Image Comparator::getImage(const char* input) 
+{
+	ImageParser imageParser;
+	long inputLength = string(input).length();
+	return inputLength > BASE_64_LENGTH_THRESHOLD ?
+		imageParser.getImageFromBase64(input) : imageParser.getImageFromUrl(input);
 }
 
 void Comparator::compare(const char * inputOne, const char * inputTwo)
 {
-	ImageParser imageParser;
-	long file1len = string(inputOne).length();
-	long file2len = string(inputTwo).length();
-	Image image1 = file1len > 1000 ? imageParser.getImageFromBase64(inputOne) : imageParser.getImageFromUrl(inputOne);
-	Image image2 = file2len > 1000 ? imageParser.getImageFromBase64(inputTwo) : imageParser.getImageFromUrl(inputTwo);
+	Image image1 = getImage(inputOne);
+	Image image2 = getImage(inputTwo);
 
 	if (image1.getPixels().size() != image2.getPixels().size()
 		|| image1.getPixels()[0].size() != image2.getPixels()[0].size()) {
@@ -28,7 +33,7 @@ void Comparator::compare(const char * inputOne, const char * inputTwo)
 		{
 			if (image1.getPixel(x, y) != image2.getPixel(x, y))
 			{
-				 partialDiff ? differenceImage.setPixel(x, y, DIFF_PIXEL) : enlargeErrorZone(x, y);
+				 _partialDiff ? _differenceImage.setPixel(x, y, DIFF_PIXEL) : enlargeErrorZone(x, y);
 			}
 		}
 	}
@@ -43,11 +48,8 @@ void Comparator::InterpretOptionStrings(const char * options)
 			EXPECTED_PARTIAL_OPTION_STRING + "\""
 		);
 	}
-	else {
-		partialDiff = true;
-	}
 
-	
+	_partialDiff = true;
 }
 
 void Comparator::saveDiffTo(const char*  filename) const
@@ -59,7 +61,7 @@ void Comparator::saveDiffTo(const char*  filename) const
 	}
 
 	file << DEFAULT_24BIT_BMP_HEADER;
-	file << differenceImage;
+	file << _differenceImage;
 	file.close();
 
 	file.open(filename, ios::ate | ios::in | ios::binary);
@@ -102,6 +104,6 @@ void Comparator::enlargeErrorZone(const int32_t x, const int32_t y)
 		int32_t safeY = (y + stencilPair.second < 0) ? 0 : y + stencilPair.second;
 		safeY = (safeY > DEFAULT_24BIT_BMP_HEADER.biHeight - 1) ? DEFAULT_24BIT_BMP_HEADER.biHeight - 1 : safeY;
 
-		differenceImage.setPixel(safeX, safeY, DIFF_PIXEL);
+		_differenceImage.setPixel(safeX, safeY, DIFF_PIXEL);
 	}
 }

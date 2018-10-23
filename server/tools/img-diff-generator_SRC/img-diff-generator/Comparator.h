@@ -15,11 +15,13 @@ class Comparator
 public:
 	Comparator();
 
+	Image getImage(const char * input);
 	void compare(const char* filename1, const char* filename2);
 	void InterpretOptionStrings(const char* partialString);
 	void saveDiffTo(const char* filename) const;
 
 private:
+	const size_t BASE_64_LENGTH_THRESHOLD = 1000;
 	const Pixel DIFF_PIXEL = Pixel(0, 0, 0);
 	const vector<pair<int, int>> CIRCLE_STENCIL = {
 							{-1,  3}, {0,  3}, {1,  3},
@@ -32,8 +34,9 @@ private:
 	};
 	const string EXPECTED_PARTIAL_OPTION_STRING = "-partiel";
 
-	bool partialDiff;
-	Image differenceImage;
+	bool _partialDiff;
+	Image _differenceImage;
+
 	void enlargeErrorZone(const int32_t x, const int32_t y);
 
 };
