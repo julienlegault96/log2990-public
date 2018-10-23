@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include<typeinfo>
+
 #include "ImageParser.h"
 #include "Comparator.h"
 
@@ -31,31 +33,11 @@ int main(int argc, char *argv[])
 		comparator.compare(argv[1], argv[2]);
 		comparator.saveDiffTo(argv[3]);
 	}
-	catch (const std::runtime_error & e)	{
-		std::cerr << "Runtime error:" << std::endl 
-			<< e.what() << std::endl;
-		return -1;
-	}
-	catch (const std::invalid_argument & e)	{
-		std::cerr << "Invalid argument: " << std::endl
-			<< e.what() << std::endl;
-		return -1;
-	}
-	catch (const std::out_of_range & e)	{
-		std::cerr << "Out of range: " << std::endl
-			<< e.what() << std::endl;
-		return -1;
-	}
 	catch (const std::exception & e)	{
-		std::cerr << "Generic exception: " << std::endl
+		std::cerr << typeid(e).name() << ": " << std::endl
 			<< e.what() << std::endl;
-		return -1;
-	}
-	catch (...)	{
-		std::cerr << "Unknown exception" << std::endl;
 		return -1;
 	}
 
-	std::cout << "done" << std::endl;
 	return 0;
 }
