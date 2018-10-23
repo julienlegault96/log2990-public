@@ -4,7 +4,7 @@ Comparator::Comparator() : _differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DE
 {
 }
 
-Image Comparator::getImage(const char* input) 
+Image Comparator::getImage(const char* input) const
 {
 	ImageParser imageParser;
 	long inputLength = string(input).length();

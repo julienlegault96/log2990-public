@@ -15,9 +15,8 @@ class Comparator
 public:
 	Comparator();
 
-	Image getImage(const char * input);
-	void compare(const char* filename1, const char* filename2);
-	void InterpretOptionStrings(const char* partialString);
+	void InterpretOptionStrings(const char* options);
+	void compare(const char* inputOne, const char* inputTwo);
 	void saveDiffTo(const char* filename) const;
 
 private:
@@ -38,5 +37,6 @@ private:
 	Image _differenceImage;
 
 	void enlargeErrorZone(const int32_t x, const int32_t y);
+	Image getImage(const char * input) const;
 
 };

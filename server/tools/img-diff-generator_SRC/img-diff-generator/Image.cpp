@@ -39,24 +39,25 @@ void Image::setPixel(const unsigned x, const unsigned y, const Pixel & pixel)
 
 ostream& operator<<(ostream & stream, const Image & image)
 {
+	const short PIXEL_BYTE_LENGTH = 3;
 	vector<vector<Pixel>> pixels(image.getPixels());
 	char * memblock;
 
 	for (vector<Pixel> line : pixels)
 	{
-		memblock = new char[line.size() * 3];
+		memblock = new char[line.size() * PIXEL_BYTE_LENGTH];
 		int count = 0;
 
 		for ( Pixel pixel : line)
 		{
 			// saved in reverse order
-			memblock[count * 3] = pixel._blue;
-			memblock[count * 3 + 1] = pixel._green;
-			memblock[count * 3 + 2] = pixel._red;
+			memblock[count * PIXEL_BYTE_LENGTH] = pixel._blue;
+			memblock[count * PIXEL_BYTE_LENGTH + 1] = pixel._green;
+			memblock[count * PIXEL_BYTE_LENGTH + 2] = pixel._red;
 
 			++count;
 		}
-		stream.write(memblock, line.size() * 3);
+		stream.write(memblock, line.size() * PIXEL_BYTE_LENGTH);
 
 		delete[] memblock;
 		memblock = nullptr;

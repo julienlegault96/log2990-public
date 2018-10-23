@@ -9,12 +9,7 @@ class ImageHeader {
 public:
 
 	ImageHeader();
-
-	ImageHeader(
-		int32_t biWidth,
-		int32_t biHeight
-	);
-
+	ImageHeader(int32_t width, int32_t height);
 
 	uint8_t bfType[2] = { 0x42, 0x4D }; // "BM", identifies file as .bmp
 	int32_t bfSize = 46134L; // headersize + bytesPerLine * depth where bytesPerLine = width * 3 (for 24 bit images) in little endian
@@ -33,6 +28,4 @@ public:
 	uint32_t biClrImportant = 0L;
 
 	friend ostream& operator<<(ostream & os, const ImageHeader & header);
-private:
-
 };
