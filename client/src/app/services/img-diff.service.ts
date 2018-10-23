@@ -13,7 +13,7 @@ export class ImgDiffService extends AbstractServerService {
     public getDiff(id: number, imageView: ImageView, x: number, y: number): Observable<Array<Coordinates>> {
         return this.getRequest<Array<Coordinates>>(
             Endpoints.ImgDiff,
-            undefined,
+            null,
             new Query("id", id),
             new Query("imageView", imageView),
             new Query("x", Math.round(x)),
