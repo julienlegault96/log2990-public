@@ -1,11 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 
 @Component({
     selector: "app-chrono",
     templateUrl: "./chrono.component.html",
 })
 
-export class ChronoComponent implements OnInit {
+export class ChronoComponent {
     @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
 
     private readonly MINUTES_IN_HOUR: number = 60;
@@ -23,10 +23,6 @@ export class ChronoComponent implements OnInit {
     public constructor() {
         this.formattedTime = "00:00";
         this.isStarted = false;
-    }
-
-    public ngOnInit(): void {
-        this.start();
     }
 
     public start(): void {
@@ -52,7 +48,7 @@ export class ChronoComponent implements OnInit {
         this.formattedTime = this.getformattedTime(minutes, seconds);
 
         if ((seconds >= this.SECONDS_ALERT || minutes > 0) && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
-            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes sont se sont écoulées`);
+            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes se sont écoulées`);
         }
     }
 

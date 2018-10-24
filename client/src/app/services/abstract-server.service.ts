@@ -13,7 +13,7 @@ export abstract class AbstractServerService {
 
     protected getUrl(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): string {
         let url: string = this.appendEndpoint(serverEndpoint);
-        url += this.formatPathParam(url, pathParam);
+        url += this.formatPathParam(pathParam);
         url += this.formatQueryParams(...queryParams);
 
         return url;
@@ -23,7 +23,7 @@ export abstract class AbstractServerService {
         return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
     }
 
-    private formatPathParam(url: string, pathParam?: string | null): string {
+    private formatPathParam(pathParam?: string | null): string {
         return pathParam ? `/${pathParam}` : "";
     }
 
@@ -41,7 +41,7 @@ export abstract class AbstractServerService {
         return query;
     }
 
-    protected getRequest<T>(serverEndpoint: Endpoints, pathParam?: string, ...queryParams: Query[]): Observable<T> {
+    protected getRequest<T>(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): Observable<T> {
         return this.http.get<T>(this.getUrl(serverEndpoint, pathParam, ...queryParams)).pipe(
             catchError(this.handleError)
         );
@@ -85,7 +85,8 @@ export abstract class AbstractServerService {
 export enum Endpoints {
     Games = "games",
     Users = "users",
-    Leaderboard = "leaderboard"
+    Leaderboard = "leaderboard",
+    ImgDiff = "imgdiff",
 }
 
 export class Query {
