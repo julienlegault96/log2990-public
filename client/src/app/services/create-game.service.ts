@@ -6,7 +6,6 @@ import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs/internal/Observable";
 
 @Injectable()
 

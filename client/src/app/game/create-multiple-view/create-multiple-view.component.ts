@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { CreateGameService } from "../../services/create-game.service";
+import { GameService } from "../../services/game.service";
 
 @Component({
     selector: "app-create-multiple-view",
@@ -9,7 +9,7 @@ import { CreateGameService } from "../../services/create-game.service";
 
 export class CreateMultipleViewComponent implements OnInit {
 
-    public constructor(private createGameService: CreateGameService) {
+    public constructor(private gameService: GameService) {
 
     }
 
@@ -17,7 +17,9 @@ export class CreateMultipleViewComponent implements OnInit {
     }
 
     public generateMultipleViewImages(): void {
-    this.createGameService.generateMultipleView();
+        this.gameService.generateMultipleView().subscribe((paths: String[]) => {
+            console.log(paths[0]);
+        });
   }
 
 }
