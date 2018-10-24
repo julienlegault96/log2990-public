@@ -29,8 +29,8 @@ export class CreateGameService extends GameService {
         }
 
         const rawImagePromise: Promise<string> = this.getBase64(images[0]);
-      const modifiedImagePromise: Promise<string> = this.getBase64(images[1]);
-     
+        const modifiedImagePromise: Promise<string> = this.getBase64(images[1]);
+
         Promise.all([rawImagePromise, modifiedImagePromise]).then((imageUrls) => {
             const newGame: Game = this.generateGame(name, imageUrls);
             this.addGame(newGame).subscribe((game: Game) => {
@@ -38,7 +38,7 @@ export class CreateGameService extends GameService {
             });
         });
     }
-    
+
     private generateGame(name: string, imageUrls: Array<string>): Game {
         const newGame: Game = newGameTemplate;
         newGame.type = GameType.SingleView;

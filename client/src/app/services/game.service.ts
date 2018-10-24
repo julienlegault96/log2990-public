@@ -19,9 +19,10 @@ export class GameService extends AbstractServerService {
         return this.getRequest<Game[]>(Endpoints.Games);
     }
 
-    public generateMultipleView(): Observable<boolean> {
-        return this.getRequest<boolean>(Endpoints.MultipleView);
+    public generateMultipleView(): Observable<string[]> {
+        return this.getRequest<string[]>(Endpoints.MultipleView);
     }
+
     public addGame(newGame: Game): Observable<{} | Game> {
         return this.postRequest<Game>(Endpoints.Games, newGame);
     }

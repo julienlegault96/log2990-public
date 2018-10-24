@@ -37,6 +37,10 @@ export class Routes {
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.delete(req, res, next)
         );
+        router.get(
+            "/MultipleView",
+            (req: Request) => this.games.doubleViewUpload(req)
+        );
 
         // USERS
         router.get(

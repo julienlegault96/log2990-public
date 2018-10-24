@@ -10,13 +10,13 @@ import { CreateGameService } from "../../services/create-game.service";
 export class CreateMultipleViewComponent implements OnInit {
 
     public constructor(private createGameService: CreateGameService) {
-        
+
     }
 
     public ngOnInit(): void {
     }
 
-  public generateMultipleViewImages(): void {
+    public generateMultipleViewImages(): void {
     this.createGameService.generateMultipleView();
   }
 
