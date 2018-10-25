@@ -34,6 +34,13 @@ export class Games extends AbstractRoute<Game> {
         const elem: Game = req.body;
         await this.updateById(req, res, next, elem._id);
     }
+    
+    public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
+        res.status(CODES.OK).send(JSON.stringify((await this.getAll()).map((game: Game) => {
+            game.imageUrl[2] = "";
+            return game;
+        })));
+    }
 
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
         req.body._id = this.generateId();
