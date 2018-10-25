@@ -10,7 +10,10 @@ describe("Games db services", () => {
     const games: Games = new Games(new Mongo());
     let serverGames: Game[];
 
-    it("should fetch and delete all games", async () => {
+    it("should fetch and delete all games", async function (): Promise<void> {
+        // l'appel prend plus de 2000ms
+        // tslint:disable-next-line:no-invalid-this no-magic-numbers
+        this.timeout(10000);
         serverGames = await games.getAll();
         for (const iterator of serverGames) {
             await games.remove(iterator);
@@ -51,7 +54,11 @@ describe("Games db services", () => {
         expect(Number(delResponse.deletedCount)).to.equal(1);
     });
 
-    it("should create back all serverGames", async () => {
+    it("should create back all serverGames", async function(): Promise<void> {
+        // l'appel prend plus de 2000ms
+        // tslint:disable-next-line:no-invalid-this no-magic-numbers
+        this.timeout(10000);
+
         for (const iterator of serverGames) {
             await games.insert(iterator);
         }

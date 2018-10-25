@@ -6,8 +6,14 @@ import { MessageBarComponent } from "./message-bar/message-bar.component";
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MessageComponent } from "./message/message.component";
 import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
+import { ImageDiffComponent } from "./image-diff/image-diff.component";
+import { ImgDiffService } from "src/app/services/img-diff.service";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
+import { GameService } from "src/app/services/game.service";
+import { UserService } from "src/app/services/user.service";
 
-describe("SoloGameComponent", () => {
+describe("GameViewComponent", () => {
     let component: GameViewComponent;
     let fixture: ComponentFixture<GameViewComponent>;
 
@@ -19,7 +25,17 @@ describe("SoloGameComponent", () => {
                 MessageBarComponent,
                 MessageComponent,
                 SoloGameComponent,
-                DiffCounterComponent
+                DiffCounterComponent,
+                ImageDiffComponent,
+            ],
+            providers: [
+                ImgDiffService,
+                GameService,
+                UserService,
+            ],
+            imports: [
+                HttpClientModule,
+                RouterTestingModule,
             ]
         }).compileComponents();
     }));

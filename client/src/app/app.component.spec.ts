@@ -26,6 +26,9 @@ import { MessageComponent } from "./game/game-view/message/message.component";
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";
 
+import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
+import { ImgDiffService } from "./services/img-diff.service";
+
 describe("AppComponent", () => {
     // tslint:disable-next-line:max-func-body-length
     beforeEach(async(() => {
@@ -45,7 +48,8 @@ describe("AppComponent", () => {
                 HomePageComponent,
                 DiffCounterComponent,
                 AdminViewComponent,
-                AdminViewCardComponent
+                AdminViewCardComponent,
+                ImageDiffComponent,
             ],
             imports: [
                 HttpClientModule,
@@ -55,7 +59,8 @@ describe("AppComponent", () => {
             providers: [
                 AbstractServerService,
                 GameService,
-                CreateGameService
+                CreateGameService,
+                ImgDiffService,
             ]
         }).compileComponents();
     }));

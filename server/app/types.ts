@@ -6,4 +6,5 @@ export default {
     Users: Symbol("Users"),
     Mongo: Symbol("Mongo"),
     Imgur: Symbol("Imgur"),
+    ImgDiff: Symbol("ImgDiff"),
 };

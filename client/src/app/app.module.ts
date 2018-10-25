@@ -25,6 +25,8 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { CreateGameService } from "./services/create-game.service";
 import { CreateGameComponent } from "./game/create-game/create-game.component";
+import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
+import { ImgDiffService } from "./services/img-diff.service";
 
 import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
 
@@ -47,8 +49,8 @@ import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-
         HomePageComponent,
         MessageBarComponent,
         MessageComponent,
-        DiffCounterComponent
-
+        DiffCounterComponent,
+        ImageDiffComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -59,6 +61,7 @@ import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-
     providers: [
         GameService,
         CreateGameService,
+        ImgDiffService,
     ],
     bootstrap: [AppComponent]
 })
