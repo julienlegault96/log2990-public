@@ -30,7 +30,7 @@ ShapesContainer::ShapesContainer(int numberShapes, double dimBoite)
 {
 	this->numberShapes_ = numberShapes;
 	this->dimBoite_ = dimBoite;
-	scalingFactor = pow(dimBoite_, 3) / (36*numberShapes_);
+	scalingFactor = pow(dimBoite_, 3) / (49*numberShapes_);
 	generateShapes();
 }
 
