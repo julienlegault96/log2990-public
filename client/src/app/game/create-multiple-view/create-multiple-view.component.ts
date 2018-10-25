@@ -12,10 +12,7 @@ export class CreateMultipleViewComponent implements OnInit {
     public constructor(private gameService: GameService) {
 
     }
-
-    public ngOnInit(): void {
-    }
-
+ 
     public generateMultipleViewImages(): void {
         this.gameService.generateMultipleView().subscribe();
   }
