@@ -13,6 +13,7 @@ import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
 import { ImgDiff } from "./img-diff/imgdiff";
+import { CODES } from "../../../common/communication/response-codes";
 
 @injectable()
 
@@ -42,14 +43,14 @@ export class Games extends AbstractRoute<Game> {
                 ? this.singleViewUpload(req)
                 : this.doubleViewUpload(req);
 
-        imgurPromise
+        return imgurPromise
             .then((imagesUrl: string[]) => {
                 req.body.imageUrl = imagesUrl;
+                return super.post(req, res, next);
+            })
+            .catch(() => {
+                res.status(CODES.SERVER_ERROR).send("Failed to create game");
             });
-
-        await (imgurPromise);
-
-        return super.post(req, res, next);
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
@@ -57,14 +58,15 @@ export class Games extends AbstractRoute<Game> {
         const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
         const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
 
-        // Appel du generateur d'image de difference et creation d'une Promise
-        this.generateImageDiff(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX], req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX])
-            .then().catch(console.log);
+        const imageDiffPromise: Promise<string> = this.generateImageDiff(
+            req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
+            req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
+        );
 
         return Promise.all([
             imgurPromise1,
-            imgurPromise2/*,
-            base64Promise*/]).catch();
+            imgurPromise2,
+            imageDiffPromise]);
     }
 
     private async doubleViewUpload(req: Request): Promise<string[]> {
@@ -91,22 +93,36 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
+        const rawImagePath: string = "./tools/rawImage.bmp";
+        const modifiedImagePath: string = "./tools/modifiedImage.bmp";
+        const outputPath: string = "./tools/output.bmp";
+        const b64Path: string = "./tools/output.B64";
+
         const rawBitmap: Buffer = new Buffer(ImgDiff.parseBase64(rawImage), "base64");
-        await util.promisify(fs.writeFile)("./tools/temp/rawImage.bmp", rawBitmap);
+        await util.promisify(fs.writeFile)(rawImagePath, rawBitmap);
 
         const modifiedBitmap: Buffer = new Buffer(ImgDiff.parseBase64(modifiedImage), "base64");
-        await util.promisify(fs.writeFile)("./tools/temp/modifiedImage.bmp", modifiedBitmap);
+        await util.promisify(fs.writeFile)(modifiedImagePath, modifiedBitmap);
 
-        const { stdout } = await util.promisify(execFile)(
+        await util.promisify(execFile)(
             "./tools/img-diff-generator.exe",
-            ["./temp/rawImage.bmp", "./temp/modifiedImage.bmp"]
+            [rawImagePath, modifiedImagePath, outputPath]
         );
 
-        // tslint:disable-next-line:no-console
-        // tslint:disable-next-line:no-magic-numbers
-        console.log(stdout.substr(0, 100));
+        const output: string = await this.base64_encode(outputPath);
 
-        return stdout;
+        await util.promisify(fs.unlink)(rawImagePath);
+        await util.promisify(fs.unlink)(modifiedImagePath);
+        await util.promisify(fs.unlink)(outputPath);
+        await util.promisify(fs.unlink)(b64Path);
+
+        return output;
+    }
+
+    private async base64_encode(filepath: string): Promise<string> {
+        const bitmap = await util.promisify(fs.readFile)(filepath);
+
+        return new Buffer(bitmap).toString('base64');
     }
 
 }
