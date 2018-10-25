@@ -28,6 +28,8 @@ import { CreateGameComponent } from "./game/create-game/create-game.component";
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff.service";
 
+import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -42,6 +44,8 @@ import { ImgDiffService } from "./services/img-diff.service";
         AdminViewComponent,
         AdminViewCardComponent,
         CreateGameComponent,
+        GameViewComponent,
+        CreateMultipleViewComponent,
         HomePageComponent,
         MessageBarComponent,
         MessageComponent,
