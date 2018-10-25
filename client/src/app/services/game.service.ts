@@ -4,8 +4,9 @@ import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
-import { Game } from "../../../../common/game/game";
+import { Game, newGameTemplate } from "../../../../common/game/game";
 import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
+import { GameType } from "../../../../common/game/game-type";
 
 @Injectable()
 
@@ -17,6 +18,13 @@ export class GameService extends AbstractServerService {
 
     public getGames(): Observable<Game[]> {
         return this.getRequest<Game[]>(Endpoints.Games);
+    }
+
+    public generateMultipleView(): Observable<Game> {
+        const newGame: Game = newGameTemplate;
+        newGame.type = GameType.DoubleView;
+
+        return this.postRequest<Game>(Endpoints.Games, newGame);
     }
 
     public addGame(newGame: Game): Observable<{} | Game> {

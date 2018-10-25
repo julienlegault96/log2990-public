@@ -1,0 +1,36 @@
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+
+import { CreateMultipleViewComponent } from "./create-multiple-view.component";
+import { CreateGameService } from "../../services/create-game.service";
+
+describe("CreateGameComponent", () => {
+    let component: CreateMultipleViewComponent;
+    let fixture: ComponentFixture<CreateMultipleViewComponent>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [CreateMultipleViewComponent],
+            imports: [
+                FormsModule,
+                HttpClientModule,
+            ],
+            providers: [
+                CreateGameService
+            ],
+        })
+            .compileComponents();
+    }));
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(CreateMultipleViewComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
+
+});
