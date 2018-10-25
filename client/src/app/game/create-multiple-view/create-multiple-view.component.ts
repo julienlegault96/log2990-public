@@ -17,9 +17,7 @@ export class CreateMultipleViewComponent implements OnInit {
     }
 
     public generateMultipleViewImages(): void {
-        this.gameService.generateMultipleView().subscribe((paths: String[]) => {
-            console.log(paths[0]);
-        });
+        this.gameService.generateMultipleView().subscribe();
   }
 
 }
