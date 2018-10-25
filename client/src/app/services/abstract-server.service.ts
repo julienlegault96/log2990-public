@@ -86,7 +86,6 @@ export enum Endpoints {
     Games = "games",
     Users = "users",
     Leaderboard = "leaderboard",
-    MultipleView = "multipleView"
 }
 
 export class Query {
