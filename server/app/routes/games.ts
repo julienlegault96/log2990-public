@@ -134,8 +134,19 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private async base64_encode(filepath: string): Promise<string> {
-        const bitmap: Buffer = await util.promisify(fs.readFile)(filepath);
+        return (await this.getBitmapBuffer(filepath)).toString("base64");
+    }
 
-        return new Buffer(bitmap).toString("base64");
+    private async hasValidDifferenceCount(filepath: string, diffCount: number = 7): Promise<boolean> {
+        return (await this.CountDifferences(filepath)) === diffCount;
+    }
+
+    private async CountDifferences(filepath: string): Promise<number> {
+        const bitmapBuffer: Buffer = await this.getBitmapBuffer(filepath);
+        
+    }
+
+    private async getBitmapBuffer(filepath: string): Promise<Buffer> {
+        return util.promisify(fs.readFile)(filepath);
     }
 }
