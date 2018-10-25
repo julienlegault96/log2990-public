@@ -20,15 +20,15 @@ export const newGameTemplate: Game = {
             "scores": [
                 {
                     "username": "Sophie",
-                    "time": 48
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
                 {
                     "username": "Gabriel",
-                    "time": 52
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
                 {
                     "username": "Louis",
-                    "time": 59
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
             ]
         },
@@ -37,15 +37,15 @@ export const newGameTemplate: Game = {
             "scores": [
                 {
                     "username": "Julien",
-                    "time": 40
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
                 {
                     "username": "Dine",
-                    "time": 44
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
                 {
                     "username": "Kevin",
-                    "time": 49
+                    "time": Math.floor(Math.random() * 30) + 50
                 },
             ]
         }
