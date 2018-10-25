@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 import { GameService } from "../../services/game.service";
 
@@ -7,7 +7,7 @@ import { GameService } from "../../services/game.service";
     templateUrl: "./create-multiple-view.component.html",
 })
 
-export class CreateMultipleViewComponent implements OnInit {
+export class CreateMultipleViewComponent {
 
     public constructor(private gameService: GameService) {
 
