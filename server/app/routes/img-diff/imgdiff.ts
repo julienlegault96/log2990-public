@@ -21,6 +21,15 @@ export class ImgDiff {
         this.collection = Collections.Games;
     }
 
+    public static parseBase64(base64Data: string): string {
+        const base64Prefix: string = "data:image/bmp;base64,";
+        if (base64Data.startsWith(base64Prefix)) {
+            return base64Data.substr(base64Prefix.length);
+        } else {
+            return base64Data;
+        }
+    }
+
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
         res.status(CODES.OK).send(
             JSON.stringify(
@@ -41,19 +50,10 @@ export class ImgDiff {
         if (imgData) {
             const errorFinder: ErrorFinder = new ErrorFinder();
 
-            return errorFinder.findError(coordinates, new Buffer(this.parseBase64(imgData), "base64"));
+            return errorFinder.findError(coordinates, new Buffer(ImgDiff.parseBase64(imgData), "base64"));
         }
 
         return [];
-    }
-
-    private parseBase64(base64Data: string): string {
-        const base64Prefix: string = "data:image/bmp;base64,";
-        if (base64Data.startsWith(base64Prefix)) {
-            return base64Data.substr(base64Prefix.length);
-        } else {
-            return base64Data;
-        }
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {

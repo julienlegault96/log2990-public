@@ -9,6 +9,11 @@ import { Imgur } from "./imgur/imgur";
 import { Game } from "../../../common/game/game";
 import { GameType } from "../../../common/game/game-type";
 
+import { execFile } from "child_process";
+import * as util from "util";
+import * as fs from "fs";
+import { ImgDiff } from "./img-diff/imgdiff";
+
 @injectable()
 
 export class Games extends AbstractRoute<Game> {
@@ -51,7 +56,10 @@ export class Games extends AbstractRoute<Game> {
         const imgur: Imgur = new Imgur();
         const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
         const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
+
         // Appel du generateur d'image de difference et creation d'une Promise
+        this.generateImageDiff(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX], req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX])
+            .then().catch(console.log);
 
         return Promise.all([
             imgurPromise1,
@@ -80,6 +88,25 @@ export class Games extends AbstractRoute<Game> {
 
     private generateId(): number {
         return Math.floor(Math.random() * this.ID_RANGE);
+    }
+
+    private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
+        const rawBitmap: Buffer = new Buffer(ImgDiff.parseBase64(rawImage), "base64");
+        await util.promisify(fs.writeFile)("./tools/temp/rawImage.bmp", rawBitmap);
+
+        const modifiedBitmap: Buffer = new Buffer(ImgDiff.parseBase64(modifiedImage), "base64");
+        await util.promisify(fs.writeFile)("./tools/temp/modifiedImage.bmp", modifiedBitmap);
+
+        const { stdout } = await util.promisify(execFile)(
+            "./tools/img-diff-generator.exe",
+            ["./temp/rawImage.bmp", "./temp/modifiedImage.bmp"]
+        );
+
+        // tslint:disable-next-line:no-console
+        // tslint:disable-next-line:no-magic-numbers
+        console.log(stdout.substr(0, 100));
+
+        return stdout;
     }
 
 }
