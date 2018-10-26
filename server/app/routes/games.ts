@@ -107,9 +107,9 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private async exec3DImage(): Promise<void> {
-        const execPath: string = "./app/Objects/vanilla3DObjects/vanilla3DObjects/vanilla3DObjects.exe";
+        const execPath: string = "./tools/vanilla3DObjects.exe";
 
-        await util.promisify(execFile)(execPath);
+        await util.promisify(execFile)(execPath).catch(console.log);
     }
 
     private generateId(): number {
