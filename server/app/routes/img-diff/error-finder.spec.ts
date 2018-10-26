@@ -4,6 +4,7 @@ import * as util from "util";
 import * as fs from "fs";
 
 import { Coordinates } from "../../../../common/game/coordinates";
+import { Pixel } from "./pixel";
 
 describe("ErrorFinder service", () => {
     // set up fixtures
@@ -33,11 +34,13 @@ describe("ErrorFinder service", () => {
     });
 
     it("should not detect difference", async () => {
+        // on a du blanc ici
         const isDifference: boolean = errorFinder["isDifference"]({ x: 0, y: 0 });
         expect(isDifference).to.be.equal(false);
     });
 
     it("should detect difference", async () => {
+        // on a du noir ici
         const isDifference: boolean = errorFinder["isDifference"]({ x: 40, y: 10 });
         expect(isDifference).to.be.equal(true);
     });
@@ -56,6 +59,7 @@ describe("ErrorFinder service", () => {
 
     it("should return adjacent pixels", async () => {
         const pixels: Array<Coordinates> = errorFinder["getAdjacentPixels"]({ x: 0, y: 0 });
+        // le coin retourne seulement les coordinates valides
         const expectedPixels: Array<Coordinates> = [
             { x: 0, y: 1 },
             { x: 1, y: 0 },
@@ -81,6 +85,18 @@ describe("ErrorFinder service", () => {
         expect(pixels.length).to.be.equal(expectedPixels.length);
         expect(pixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort())
             .to.be.eql(expectedPixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort());
+    });
+
+    it("should return rgb value", async () => {
+        // on a du blanc ici
+        const pixel: Pixel = errorFinder["getPixelValue"]({ x: 0, y: 0 });
+        expect(pixel).to.be.deep.equal({red: 255, green: 255, blue: 255});
+    });
+
+    it("should return rgb value", async () => {
+        // on a du noir ici
+        const pixel: Pixel = errorFinder["getPixelValue"]({ x: 40, y: 10 });
+        expect(pixel).to.be.deep.equal({red: 0, green: 0, blue: 0});
     });
 
 });
