@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { Imgur } from "./imgur";
 
-describe("Imgdiff service", () => {
+describe("Imgur service", () => {
     // set up fixtures
 
     const imgur: Imgur = new Imgur();
