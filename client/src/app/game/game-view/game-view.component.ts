@@ -42,11 +42,14 @@ export class GameViewComponent implements OnInit {
         if (this.game.type === GameType.SingleView
             && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxSingleViewErrorCount) {
             this.chrono.stop();
-            alert("Bravo!");
+
+            // Pour ne pas mettre en attente le script
+            setTimeout(() => alert("Bravo!"), 0);
         } else if (this.game.type === GameType.DoubleView
             && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxDoubleViewErrorCount) {
             this.chrono.stop();
-            alert("Bravo!");
+            setTimeout(() => alert("Bravo!"), 0);
         }
     }
+
 }
