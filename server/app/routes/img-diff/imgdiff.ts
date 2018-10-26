@@ -57,7 +57,7 @@ export class ImgDiff {
     }
 
     private getImgBuffer(imgData: string): Buffer {
-        return new Buffer(ImgDiff.parseBase64(imgData), "base64");
+        return Buffer.from(ImgDiff.parseBase64(imgData), "base64");
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
