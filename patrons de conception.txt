@@ -1,0 +1,18 @@
+En se basant sur les définitions accessibles au 
+https://fr.wikipedia.org/wiki/Patron_de_conception et https://fr.wikipedia.org/wiki/GRASP_(programmation)
+Répondre à:
+(1) Le problème que vous avez rencontré
+(2) Pourquoi vous avez choisi ce patron
+(3) Son emplacement
+===============================================================
+
+LES PATRONS GRASP EN GÉNÉRAL: Nous avons tentés d'appliquer la majorité des patrons grasp au cours de notre développement, mais certains Se sont démarqués plus que d'autres lorsque confrontés à un problème.
+
+ - EXPERT: Si nous avons créé nos services en tentant de les séparer logiquement et de leurs donner une seule responsabilité, il y a eu des moments où ils leur utilités ont fini par grossir au delà de leurs but initial. Dans ces cas là, nous avons utilisés le patron EXPERT, qui préconise la séparation des tâches entre les classes les plus à même de les effectuer, parce que cela allais nous permettre de réduire la duplication de code ainsi que la taille des services appelants. Par exemple, lorsque plusieurs services ont commencé à faire de la validation d'entrées, nous avons extrait leurs méthodes et rassemblé le tout dans une classe du client nommée "Validator" et dont l'unique fonction est de valider.
+
+ - POLYMORPHISME: Ce patron de conception est très difficilement évitable en programmation orientée objet. Ainsi, lorsque nous avons vu que nos services http sur le client effectuaient quasiment la même chose, nous avons créé un service abstrait pour encadrer leurs usage. Cela nous à permis d'éviter à réimplémenter plusieurs fois des fonctions de communication avec le serveur (et leurs tests), ce qui aurait été chronophage et introduire des bogues difficiles à trouver. Cette classe se nomme "AbstractServerService" et est étendue par les classes GameService, ImgDiffService et UserService.
+
+LES PATRONS DU GANG OF FOUR (GOF) EN GÉNÉRAL: Si les patrons GRASP s'appliquent facilement à toute activité de développement logiciel, ceux du GOF sont plus spécifiques à certaines tâches, et par conséquent moins nombreux dans notre code.
+
+ - TEMPLATE METHOD: Lorsque nous avons écrit nos routes pour le serveur, il y a eu beaucoup de copié-collé entre les classes routes. Pour éviter une telle duplication de code, nous avons décidé d'appliquer ici aussi le patron du POLYMORPHISME (GRASP). Par contre on n'arrivait pas à utiliser seulement celui-ci, car ce qui différait entre les classes était le type d'objets plus que la manière dont les méthodes étaient implémentées. Nous avons donc utilisé le patron du TEMPLATE METHOD en plus pour nous permettre de d'améliorer notre code avec une classe abstraite nommée "AbstractRoute<T>". Celle-ci est étendue par les classes "Games" et "Users", qui se basent sur le template pour éviter à réimplémenter la majorité de leurs méthodes.
+
