@@ -964,7 +964,7 @@ private:
 class FormeSphereTheme : public FormeBase2705
 {
 public:
-   FormeSphereTheme( GLdouble radius, glm::vec4 coul=glm::vec4(1.,1.,1.,1.), GLint slices, GLint stacks,
+   FormeSphereTheme( GLdouble radius,GLuint coul, GLint slices, GLint stacks,
                 bool plein = true, bool entiere = true )
       : FormeBase2705( plein )
    {
@@ -1079,7 +1079,7 @@ public:
          glBindVertexArray( 0 );
       }
    }
-   ~FormeSphere()
+   ~FormeSphereTheme()
    {
       glDeleteBuffers( 3, vbo );
    }
