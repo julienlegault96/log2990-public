@@ -418,11 +418,21 @@ int main(int argc, char *argv[])
 	srand(time(0));
 	std::cout << time(0);
 
-	shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
+    shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
     shapes->parseModOptions(argv[3]);
 
     genererMultivue(fenetre, absoluteRef.append(argv[4]).data());
 
+   bool boucler = true;
+   while ( boucler )
+   {
+      // affichage
+      fenetre.afficherScene();
+      fenetre.swap();
+
+      // récupérer les événements et appeler la fonction de rappel
+      boucler = fenetre.gererEvenement();
+   }
 
 	// détruire les ressources OpenGL allouées
     fenetre.conclure();
