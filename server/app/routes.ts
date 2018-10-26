@@ -37,13 +37,13 @@ export class Routes {
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.post(req, res, next)
         );
-        router.put(
-            "/leaderboard",
-            (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next)
-        );
         router.delete(
             "/games/:id",
             (req: Request, res: Response, next: NextFunction) => this.games.deleteById(req, res, next)
+        );
+        router.put(
+            "/leaderboard/:id",
+            (req: Request, res: Response, next: NextFunction) => this.games.updateLeaderboard(req, res, next)
         );
 
         // USERS

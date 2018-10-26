@@ -1,5 +1,5 @@
 import { GameType } from './game-type';
-import { Leaderboard } from './leaderboard';
+import { Leaderboard, generateSoloLeaderboard, generateDuoLeaderboard } from './leaderboard';
 
 export class Game {
     _id: string;
@@ -9,45 +9,10 @@ export class Game {
     leaderboards: Leaderboard[];
 }
 
-export const newGameTemplate: Game = {
-    "_id": "1",
-    "type": GameType.SingleView,
-    "title": "Nouveau jeu",
-    "imageUrl": ["", ""],
-    "leaderboards": [
-        {
-            "title": "Solo",
-            "scores": [
-                {
-                    "username": "Sophie",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Gabriel",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Louis",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-            ]
-        },
-        {
-            "title": "1 vs 1",
-            "scores": [
-                {
-                    "username": "Julien",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Dine",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Kevin",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-            ]
-        }
-    ]
+export function generateGameTemplate(): Game {
+    const gameTemplate = new Game();
+    gameTemplate.leaderboards.push(generateSoloLeaderboard());
+    gameTemplate.leaderboards.push(generateDuoLeaderboard());
+
+    return gameTemplate;
 };

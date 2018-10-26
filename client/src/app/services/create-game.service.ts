@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { GameService } from "./game.service";
 import { CODES } from "../../../../common/communication/response-codes";
 
-import { Game, newGameTemplate } from "../../../../common/game/game";
+import { Game, generateGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
@@ -47,7 +47,7 @@ export class CreateGameService extends GameService {
     }
 
     private generateGame(name: string, imageUrls: Array<string>): Game {
-        const newGame: Game = newGameTemplate;
+        const newGame: Game = generateGameTemplate();
         newGame.type = GameType.SingleView;
         newGame.title = name;
         newGame.imageUrl = [

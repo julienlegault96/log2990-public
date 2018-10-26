@@ -1,3 +1,7 @@
+import { RANDOM_USER_NAMES } from "../user/user";
+
+const SCOREBOARD_SIZE: number = 3;
+
 export class Score {
     username: string;
     time: number;
@@ -5,79 +9,36 @@ export class Score {
 
 export class Leaderboard {
     title: string;
-    scores: Score[];
+    scores: Score[] = [];
 }
 
-export const DEFAULT_LEADERBOARDS: Leaderboard[] = [
-    {
-        "title": "Solo",
-        "scores": [
-            {
-                "username": "Sophie",
-                "time": 48
-            },
-            {
-                "username": "Gabriel",
-                "time": 52
-            },
-            {
-                "username": "Louis",
-                "time": 59
-            },
-        ]
-    },
-    {
-        "title": "1 vs 1",
-        "scores": [
-            {
-                "username": "Julien",
-                "time": 40
-            },
-            {
-                "username": "Dine",
-                "time": 44
-            },
-            {
-                "username": "Kevin",
-                "time": 49
-            },
-        ]
-    }
-];
+export function generateSoloLeaderboard(): Leaderboard {
+    let leaderboard = generateLeaderboardTemplate();
+    leaderboard.title = "Solo";
 
-export const BLANK_LEADERBOARDS: Leaderboard[] = [
-    {
-        "title": "Solo",
-        "scores": [
+    return leaderboard;
+}
+
+export function generateDuoLeaderboard(): Leaderboard {
+    let leaderboard = generateLeaderboardTemplate();
+    leaderboard.title = "1 vs 1";
+
+    return leaderboard;
+}
+
+export function generateLeaderboardTemplate() {
+    let leaderboard = new Leaderboard();
+
+    for (let i = 0; i < SCOREBOARD_SIZE; i++) {
+        leaderboard.scores.push(
             {
-                "username": "Sophie",
-                "time": 0
-            },
-            {
-                "username": "Gabriel",
-                "time": 0
-            },
-            {
-                "username": "Louis",
-                "time": 0
-            },
-        ]
-    },
-    {
-        "title": "1 vs 1",
-        "scores": [
-            {
-                "username": "Julien",
-                "time": 0
-            },
-            {
-                "username": "Dine",
-                "time": 0
-            },
-            {
-                "username": "Kevin",
-                "time": 0
-            },
-        ]
+                username: RANDOM_USER_NAMES[Math.floor(Math.random() * RANDOM_USER_NAMES.length)],
+                time: Math.floor(Math.random() * 30) + 50
+            }
+        );
     }
-];
+
+    leaderboard.scores = leaderboard.scores.sort((a: Score, b: Score) => a.time - b.time);
+
+    return leaderboard;
+}
