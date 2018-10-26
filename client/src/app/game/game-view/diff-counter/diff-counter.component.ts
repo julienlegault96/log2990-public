@@ -76,4 +76,5 @@ export class DiffCounterComponent implements OnInit {
             throw new Error(this.UNDECLARED_ID_ERROR + playerId);
         }
     }
+
 }

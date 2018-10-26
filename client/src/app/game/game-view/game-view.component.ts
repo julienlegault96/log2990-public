@@ -18,6 +18,8 @@ export class GameViewComponent implements OnInit {
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
+    private readonly maxErrorCount: number = 7;
+
     public playerId: string;
     public game: Game;
 
@@ -32,5 +34,12 @@ export class GameViewComponent implements OnInit {
                 this.chrono.start();
             });
         });
+    }
+
+    public verifyErrorCount(): void {
+        if (this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxErrorCount) {
+            this.chrono.stop();
+            alert("Bravo!");
+        }
     }
 }

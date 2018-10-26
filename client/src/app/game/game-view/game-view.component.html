@@ -6,7 +6,7 @@
             <app-message-bar [messages]></app-message-bar>
         </div>
         <div class="col-10 p-3">
-            <app-solo-game [playerId]="playerId" [game]="game" (errorFound)="messageBar.addMessage($event)"></app-solo-game>
+            <app-solo-game [playerId]="playerId" [game]="game" (errorFound)="messageBar.addMessage($event); verifyErrorCount()"></app-solo-game>
         </div>
     </div>
 </div>
