@@ -5,8 +5,8 @@ export class Game {
     _id: string;
     type: GameType;
     title: string;
-    imageUrl: string[];
-    leaderboards: Leaderboard[];
+    imageUrl: string[] = [];
+    leaderboards: Leaderboard[] = [];
 }
 
 export function generateGameTemplate(): Game {
