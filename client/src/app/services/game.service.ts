@@ -57,6 +57,6 @@ export class GameService extends AbstractServerService {
                 `body was: ${error.error}`);
         }
 
-        return throwError("Something bad happened; please try again later.");
+        return throwError({ message: "Something bad happened; please try again later.", httpError: error });
     }
 }

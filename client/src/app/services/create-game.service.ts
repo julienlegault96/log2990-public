@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 
 import { GameService } from "./game.service";
+import { CODES } from "../../../../common/communication/response-codes";
 
 import { Game, newGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
 
@@ -32,9 +33,15 @@ export class CreateGameService extends GameService {
 
         Promise.all([rawImagePromise, modifiedImagePromise]).then((imageUrls) => {
             const newGame: Game = this.generateGame(name, imageUrls);
-            this.addGame(newGame).subscribe((game: Game) => {
-                alert("Uploaded");
-            });
+            this.addGame(newGame).subscribe(
+                (game: Game) => {
+                    alert("Création du jeu réussie");
+                },
+                (error: {message: string, httpError: HttpErrorResponse}) => {
+                    const message: string = (error.httpError.status === CODES.BAD_REQUEST) ? "Les images sont invalides" : error.message;
+                    alert(message);
+                }
+            );
         });
     }
 
