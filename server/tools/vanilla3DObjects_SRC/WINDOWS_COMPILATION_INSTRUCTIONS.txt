@@ -1,0 +1,7 @@
+pour compiler sur windows, il faut s'ajouter les packages par NuGet
+https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio#package-manager-ui
+
+les packages utilisés par NuGet dans la solution sont définis dans le package.config, soit:
+glm.0.9.9.200,
+nupengl.core.0.1.0.1 et
+sdl2.2.0.5
