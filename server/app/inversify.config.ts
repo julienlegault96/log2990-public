@@ -7,7 +7,7 @@ import { Routes } from "./routes";
 import { Mongo } from "./services/mongo";
 import { GamesRoute } from "./routes/games.route";
 import { UsersRoute } from "./routes/users.route";
-import { Imgur } from "./routes/imgur/imgur";
+import { Imgur } from "./services/imgur/imgur";
 import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 
