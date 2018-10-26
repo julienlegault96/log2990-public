@@ -9,36 +9,7 @@ export abstract class AbstractServerService {
 
     private readonly SERVER_HOST_URL: string = "http://localhost:3000";
 
-    public constructor(protected http: HttpClient) { }
-
-    protected getUrl(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): string {
-        let url: string = this.appendEndpoint(serverEndpoint);
-        url += this.formatPathParam(pathParam);
-        url += this.formatQueryParams(...queryParams);
-
-        return url;
-    }
-
-    private appendEndpoint(serverEndpoint: Endpoints): string {
-        return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
-    }
-
-    private formatPathParam(pathParam?: string | null): string {
-        return pathParam ? `/${pathParam}` : "";
-    }
-
-    private formatQueryParams(...queryParams: Query[]): string {
-        let query: string = "";
-
-        if (queryParams.length > 0) {
-            query += `?${queryParams[0].tag}=${queryParams[0].value}`;
-
-            for (let i: number = 1; i < queryParams.length; i++) {
-                query += `&${queryParams[i].tag}=${queryParams[i].value}`;
-            }
-        }
-
-        return query;
+    public constructor(protected http: HttpClient) {
     }
 
     protected getRequest<T>(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): Observable<T> {
@@ -80,6 +51,37 @@ export abstract class AbstractServerService {
     }
 
     protected abstract handleError(error: HttpErrorResponse): Observable<never>;
+
+    protected getUrl(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): string {
+        let url: string = this.appendEndpoint(serverEndpoint);
+        url += this.formatPathParam(pathParam);
+        url += this.formatQueryParams(...queryParams);
+
+        return url;
+    }
+
+    private appendEndpoint(serverEndpoint: Endpoints): string {
+        return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
+    }
+
+    private formatPathParam(pathParam?: string | null): string {
+        return pathParam ? `/${pathParam}` : "";
+    }
+
+    private formatQueryParams(...queryParams: Query[]): string {
+        let query: string = "";
+
+        if (queryParams.length > 0) {
+            query += `?${queryParams[0].tag}=${queryParams[0].value}`;
+
+            for (let i: number = 1; i < queryParams.length; i++) {
+                query += `&${queryParams[i].tag}=${queryParams[i].value}`;
+            }
+        }
+
+        return query;
+    }
+
 }
 
 export enum Endpoints {

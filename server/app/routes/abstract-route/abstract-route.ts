@@ -81,11 +81,12 @@ export class AbstractRoute<T> {
         return this.mongo.insertDocument<T>(this.collection, elem);
     }
 
+    public async remove(elem: T): Promise<DeleteWriteOpResultObject> {
+        return this.mongo.removeDocument<T>(this.collection, elem);
+    }
+
     private async update(id: number, elem: T): Promise<UpdateWriteOpResult> {
         return this.mongo.updateDocumentById<T>(Collections.Games, id, elem);
     }
 
-    public async remove(elem: T): Promise<DeleteWriteOpResultObject> {
-        return this.mongo.removeDocument<T>(this.collection, elem);
-    }
 }

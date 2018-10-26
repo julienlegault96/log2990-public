@@ -6,9 +6,11 @@ import { Component, Input } from "@angular/core";
 })
 
 export class MessageBarComponent {
-   @Input() public messages: string[] = [];
 
-   public addMessage(message: string): void {
+    @Input() public messages: string[] = [];
+
+    public addMessage(message: string): void {
         this.messages.push(message);
     }
+
 }

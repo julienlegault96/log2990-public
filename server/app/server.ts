@@ -7,11 +7,12 @@ import { AddressInfo } from "net";
 @injectable()
 export class Server {
 
-    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
+    private readonly appPort: string | number | boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
 
-    public constructor(@inject(Types.Application) private application: Application) { }
+    public constructor(@inject(Types.Application) private application: Application) {
+    }
 
     public init(): void {
         this.application.app.set("port", this.appPort);
@@ -60,4 +61,5 @@ export class Server {
         // tslint:disable-next-line:no-console
         console.log(`Listening on ${bind}`);
     }
+
 }

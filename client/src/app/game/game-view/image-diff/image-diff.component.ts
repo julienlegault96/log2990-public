@@ -15,9 +15,12 @@ export class ImageDiffComponent implements OnInit {
     @Input() public modifiedImageSrc: string;
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
+
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
+
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;

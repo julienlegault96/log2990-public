@@ -11,8 +11,8 @@ import { Routes } from "./routes";
 @injectable()
 export class Application {
 
-    private readonly internalError: number = 500;
     public app: express.Application;
+    private readonly internalError: number = 500;
 
     public constructor(@inject(Types.Routes) private api: Routes) {
         this.app = express();
@@ -20,6 +20,17 @@ export class Application {
         this.config();
 
         this.routes();
+    }
+
+
+    public routes(): void {
+        const router: express.Router = express.Router();
+
+        router.use(this.api.routes);
+
+        this.app.use(router);
+
+        this.errorHandeling();
     }
 
     private config(): void {
@@ -30,16 +41,6 @@ export class Application {
         this.app.use(cookieParser());
         this.app.use(express.static(path.join(__dirname, "../client")));
         this.app.use(cors());
-    }
-
-    public routes(): void {
-        const router: express.Router = express.Router();
-
-        router.use(this.api.routes);
-
-        this.app.use(router);
-
-        this.errorHandeling();
     }
 
     private errorHandeling(): void {

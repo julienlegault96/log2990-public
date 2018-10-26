@@ -25,4 +25,5 @@ export class UserComponent {
             alert(error);
         }
     }
+
 }

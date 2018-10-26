@@ -6,7 +6,13 @@ import { Component, Output, EventEmitter } from "@angular/core";
 })
 
 export class ChronoComponent {
+
     @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
+
+    public formattedTime: string;
+    private startTime: Date;
+    private timer: number;
+    private isStarted: boolean;
 
     private readonly MINUTES_IN_HOUR: number = 60;
     private readonly SECONDS_IN_MINUTE: number = 60;
@@ -14,11 +20,6 @@ export class ChronoComponent {
     private readonly LIMIT_TO_ADD_ZERO: number = 10;
     private readonly SECONDS_ALERT: number = 30;
     private readonly MODULO_ZERO: number = 0;
-
-    public formattedTime: string;
-    private startTime: Date;
-    private timer: number;
-    private isStarted: boolean;
 
     public constructor() {
         this.formattedTime = "00:00";
@@ -70,4 +71,5 @@ export class ChronoComponent {
 
         return formattedTime;
     }
+
 }

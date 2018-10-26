@@ -10,11 +10,10 @@ import { GameService } from "../../services/game.service";
 export class CreateMultipleViewComponent {
 
     public constructor(private gameService: GameService) {
-
     }
- 
+
     public generateMultipleViewImages(): void {
         this.gameService.generateMultipleView().subscribe();
-  }
+    }
 
 }

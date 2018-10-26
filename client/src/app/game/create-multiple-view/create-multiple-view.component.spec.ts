@@ -4,8 +4,9 @@ import { HttpClientModule } from "@angular/common/http";
 
 import { CreateMultipleViewComponent } from "./create-multiple-view.component";
 import { CreateGameService } from "../../services/create-game.service";
+import { GameService } from "src/app/services/game.service";
 
-describe("CreateGameComponent", () => {
+describe("CreateMultipleViewComponent", () => {
     let component: CreateMultipleViewComponent;
     let fixture: ComponentFixture<CreateMultipleViewComponent>;
 
@@ -17,7 +18,8 @@ describe("CreateGameComponent", () => {
                 HttpClientModule,
             ],
             providers: [
-                CreateGameService
+                CreateGameService,
+                GameService,
             ],
         })
             .compileComponents();

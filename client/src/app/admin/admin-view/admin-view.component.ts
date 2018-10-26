@@ -13,4 +13,5 @@ export class AdminViewComponent extends AbstractGameListComponent {
     public constructor(protected gameService: GameService) {
         super(gameService);
     }
+
 }

@@ -13,7 +13,8 @@ export class Routes {
         @inject(Types.Games) private games: Games,
         @inject(Types.Users) private users: Users,
         @inject(Types.ImgDiff) private imgDiff: ImgDiff,
-    ) { }
+    ) {
+    }
 
     public get routes(): Router {
         const router: Router = Router();
@@ -61,4 +62,5 @@ export class Routes {
 
         return router;
     }
+
 }
