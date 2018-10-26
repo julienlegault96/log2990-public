@@ -4,7 +4,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
-import { ImgDiff } from "./routes/img-diff/imgdiff";
+import { ImgDiffRoute } from "./routes/img-diff/imgdiff";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 
 @injectable()
@@ -13,7 +13,7 @@ export class Routes {
     public constructor(
         @inject(Types.Games) private games: Games,
         @inject(Types.Users) private users: Users,
-        @inject(Types.ImgDiff) private imgDiff: ImgDiff,
+        @inject(Types.ImgDiff) private imgDiff: ImgDiffRoute,
         @inject(Types.LeaderboardRoute) private leaderboardRoute: LeaderboardRoute,
     ) {
     }

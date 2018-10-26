@@ -9,15 +9,15 @@ import { Imgur } from "./imgur/imgur";
 import { Game } from "../../../common/game/game";
 import { GameType } from "../../../common/game/game-type";
 
-import { ImgDiff } from "./img-diff/imgdiff";
+import { ImgDiffRoute } from "./img-diff/imgdiff";
 import { CODES } from "../../../common/communication/response-codes";
 import { Coordinates } from "../../../common/game/coordinates";
 
 import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { ErrorFinder } from "./img-diff/error-finder";
 import { Leaderboard } from "../../../common/game/leaderboard";
+import { ErrorFinder } from "./error-finder/error-finder";
 
 @injectable()
 
@@ -135,10 +135,10 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
-        const rawBitmap: Buffer = Buffer.from(ImgDiff.parseBase64(rawImage), "base64");
+        const rawBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(rawImage), "base64");
         await util.promisify(fs.writeFile)(this.rawImagePath, rawBitmap);
 
-        const modifiedBitmap: Buffer = Buffer.from(ImgDiff.parseBase64(modifiedImage), "base64");
+        const modifiedBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(modifiedImage), "base64");
         await util.promisify(fs.writeFile)(this.modifiedImagePath, modifiedBitmap);
 
         await util.promisify(execFile)(
