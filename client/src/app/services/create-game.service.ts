@@ -37,7 +37,7 @@ export class CreateGameService extends GameService {
                 (game: Game) => {
                     alert("Création du jeu réussie");
                 },
-                (error: {message: string, httpError: HttpErrorResponse}) => {
+                (error: { message: string, httpError: HttpErrorResponse }) => {
                     const message: string = (error.httpError.status === CODES.BAD_REQUEST) ? "Les images sont invalides" : error.message;
                     alert(message);
                 }
