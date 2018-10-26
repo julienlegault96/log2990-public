@@ -57,20 +57,20 @@ export class ImgDiff {
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
-        const games: Game[] = await this.getById(parseInt(id, 10));
+        const game: Game = await this.getById(id);
         const firstViewDiffIndex: number = 2;
         const secondViewDiffIndex: number = 5;
         const diffIndex: number = (Number(imageView) === ImageView.FirstView) ? firstViewDiffIndex : secondViewDiffIndex;
 
-        if (games[0] && games[0].imageUrl[diffIndex]) {
-            return games[0].imageUrl[diffIndex];
+        if (game && game.imageUrl[diffIndex]) {
+            return game.imageUrl[diffIndex];
         } else {
             return undefined;
         }
     }
 
-    private async getById(id: number): Promise<Game[]> {
-        return this.mongo.findDocuments<Game>(this.collection, { _id: id });
+    private async getById(id: string): Promise<Game> {
+        return this.mongo.findDocumentById<Game>(this.collection, id);
     }
 
 }

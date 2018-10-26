@@ -42,7 +42,7 @@ export class GameService extends AbstractServerService {
     }
 
     public deleteGame(game: Game): Observable<{} | Game> {
-        return this.deleteRequest<Game>(Endpoints.Games, game);
+        return this.deleteRequest<Game>(Endpoints.Games, String(game._id));
     }
 
     protected handleError(error: HttpErrorResponse): Observable<never> {

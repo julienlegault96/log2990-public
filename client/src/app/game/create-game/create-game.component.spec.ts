@@ -21,8 +21,7 @@ describe("CreateGameComponent", () => {
                 GameService,
                 CreateGameService
             ],
-        })
-            .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {

@@ -112,8 +112,8 @@ export class Games extends AbstractRoute<Game> {
         await util.promisify(execFile)(execPath);
     }
 
-    private generateId(): number {
-        return Math.floor(Math.random() * this.ID_RANGE);
+    private generateId(): string {
+        return Math.floor(Math.random() * this.ID_RANGE).toString();
     }
 
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {

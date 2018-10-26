@@ -6,7 +6,7 @@
         "start": "ng serve --open",
         "build": "ng build",
         "test": "ng test",
-        "lint": "ng lint --type-check --format stylish",
+        "lint": "tslint -c tslint.json 'src/**/*.ts'",
         "e2e": "ng e2e"
     },
     "private": true,

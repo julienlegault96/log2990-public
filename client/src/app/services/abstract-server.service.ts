@@ -39,13 +39,12 @@ export abstract class AbstractServerService {
         );
     }
 
-    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<T> {
+    protected deleteRequest<T>(serverEndpoint: Endpoints, pathParam?: string | null): Observable<T> {
         const options: {} = {
-            headers: new HttpHeaders({ "Content-Type": "application/json" }),
-            body: deleteBody
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
         };
 
-        return this.http.delete<T>(this.getUrl(serverEndpoint), options).pipe(
+        return this.http.delete<T>(this.getUrl(serverEndpoint, pathParam), options).pipe(
             catchError(this.handleError)
         );
     }

@@ -69,7 +69,7 @@ export class UserService extends AbstractServerService {
     }
 
     public removeUser(userToDelete: User): Observable<User> {
-        return this.deleteRequest<User>(Endpoints.Users, userToDelete);
+        return this.deleteRequest<User>(Endpoints.Users, userToDelete._id);
     }
 
     public submitUsername(username: string): void {

@@ -2,7 +2,7 @@ import { GameType } from './game-type';
 import { Leaderboard } from './leaderboard';
 
 export class Game {
-    _id: number;
+    _id: string;
     type: GameType;
     title: string;
     imageUrl: string[];
@@ -10,7 +10,7 @@ export class Game {
 }
 
 export const newGameTemplate: Game = {
-    "_id": 1,
+    "_id": "1",
     "type": GameType.SingleView,
     "title": "Nouveau jeu",
     "imageUrl": ["", ""],

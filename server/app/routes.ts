@@ -42,8 +42,8 @@ export class Routes {
             (req: Request, res: Response, next: NextFunction) => this.games.resetLeaderboard(req, res, next)
         );
         router.delete(
-            "/games",
-            (req: Request, res: Response, next: NextFunction) => this.games.delete(req, res, next)
+            "/games/:id",
+            (req: Request, res: Response, next: NextFunction) => this.games.deleteById(req, res, next)
         );
 
         // USERS
@@ -56,8 +56,8 @@ export class Routes {
             (req: Request, res: Response, next: NextFunction) => this.users.post(req, res, next)
         );
         router.delete(
-            "/users",
-            (req: Request, res: Response, next: NextFunction) => this.users.delete(req, res, next)
+            "/users/:id",
+            (req: Request, res: Response, next: NextFunction) => this.users.deleteById(req, res, next)
         );
 
         return router;
