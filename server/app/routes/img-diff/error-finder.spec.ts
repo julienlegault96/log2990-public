@@ -3,6 +3,8 @@ import { ErrorFinder } from "./error-finder";
 import * as util from "util";
 import * as fs from "fs";
 
+import { Coordinates } from "../../../../common/game/coordinates";
+
 describe("ErrorFinder service", () => {
     // set up fixtures
     const errorFinder: ErrorFinder = new ErrorFinder();
@@ -50,6 +52,35 @@ describe("ErrorFinder service", () => {
         const width: number = ErrorFinder.getImageHeight(buffer);
         const expectedHeight: number = 50;
         expect(width).to.be.equal(expectedHeight);
+    });
+
+    it("should return adjacent pixels", async () => {
+        const pixels: Array<Coordinates> = errorFinder["getAdjacentPixels"]({ x: 0, y: 0 });
+        const expectedPixels: Array<Coordinates> = [
+            { x: 0, y: 1 },
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+        ];
+        expect(pixels.length).to.be.equal(expectedPixels.length);
+        expect(pixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort())
+            .to.be.eql(expectedPixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort());
+    });
+
+    it("should return adjacent pixels", async () => {
+        const pixels: Array<Coordinates> = errorFinder["getAdjacentPixels"]({ x: 1, y: 1 });
+        const expectedPixels: Array<Coordinates> = [
+            { x: 0, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: 2 },
+            { x: 1, y: 0 },
+            { x: 1, y: 2 },
+            { x: 2, y: 0 },
+            { x: 2, y: 1 },
+            { x: 2, y: 2 },
+        ];
+        expect(pixels.length).to.be.equal(expectedPixels.length);
+        expect(pixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort())
+            .to.be.eql(expectedPixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort());
     });
 
 });
