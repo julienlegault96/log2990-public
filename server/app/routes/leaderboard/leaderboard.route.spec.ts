@@ -10,7 +10,26 @@ describe("Leaderboard route", () => {
     // set up fixtures
     const leaderboardRoute: LeaderboardRoute = new LeaderboardRoute(new Mongo());
 
-    it("should have valid error count", async () => {
+    it("should not update scores", async () => {
+        const leaderboardRequest: LeaderboardRequest = {
+            id: 1,
+            partyMode: GamePartyMode.Solo,
+            time: 200,
+            playerName: "Anon"
+        };
+
+        const scores: Array<Score> = await leaderboardRoute["getUpdatedScores"](GAMES[0], leaderboardRequest);
+        const expectedScores: Array<Score> = [
+            { username: "test", time: 54 },
+            { username: "test2", time: 66 },
+            { username: "test3", time: 89 }
+        ];
+
+        expect(scores.length).to.equal(expectedScores.length);
+        expect(scores).to.be.eql(expectedScores);
+    });
+
+    it("should update scores", async () => {
         const leaderboardRequest: LeaderboardRequest = {
             id: 1,
             partyMode: GamePartyMode.Solo,
@@ -24,9 +43,9 @@ describe("Leaderboard route", () => {
             { username: "test", time: 54 },
             { username: "test2", time: 66 },
         ];
-        console.log(scores);
-        expect(scores.length).to.equal(true);
-        expect(scores).to.be.deep.equal(expectedScores);
+
+        expect(scores.length).to.equal(expectedScores.length);
+        expect(scores).to.be.eql(expectedScores);
     });
 
 });
