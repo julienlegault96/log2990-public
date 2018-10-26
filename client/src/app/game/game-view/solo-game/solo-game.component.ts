@@ -9,10 +9,12 @@ import { ImageView } from "../../../../../../common/game/image-view";
 })
 
 export class SoloGameComponent {
+
     @ViewChild(DiffCounterComponent) public diffCounter: DiffCounterComponent;
 
     @Input() public playerId: string;
     @Input() public game: Game;
+
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public firstView: ImageView = ImageView.FirstView;

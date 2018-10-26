@@ -3,6 +3,7 @@
  * class dedicated to validating inputs
  */
 export class Validator {
+
     private readonly MIN_USERNAME_LENGTH: number = 1;
     private readonly MAX_USERNAME_LENGTH: number = 20;
     private readonly ACCEPTED_IMAGE_FILE_EXTENSION: string = ".bmp";
@@ -22,4 +23,5 @@ export class Validator {
         return image != null
             && String(image.name).indexOf(this.ACCEPTED_IMAGE_FILE_EXTENSION) !== -1;
     }
+
 }

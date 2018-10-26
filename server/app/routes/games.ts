@@ -100,7 +100,7 @@ export class Games extends AbstractRoute<Game> {
         });
     }
 
-    public async doubleViewUpload(req: Request): Promise<void> {
+    private async doubleViewUpload(req: Request): Promise<void> {
         await this.exec3DImage();
 
         // Sprint 3: Implémenter les fonctions nécessaires pour l'enregistrement du jeu
@@ -184,4 +184,5 @@ export class Games extends AbstractRoute<Game> {
     private async getBitmapBuffer(filepath: string): Promise<Buffer> {
         return util.promisify(fs.readFile)(filepath);
     }
+
 }

@@ -8,6 +8,7 @@ import { Leaderboard, Score } from "../../../../../../common/game/leaderboard";
 })
 
 export class LeaderboardComponent implements OnInit {
+
     @Input() public leaderboard: Leaderboard;
 
     public ngOnInit(): void {
@@ -19,4 +20,5 @@ export class LeaderboardComponent implements OnInit {
             return a.time - b.time;
         });
     }
+
 }

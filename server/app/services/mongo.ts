@@ -24,11 +24,6 @@ export class Mongo {
     private client: MongoClient;
     private db: Db;
 
-    private async connect(): Promise<void> {
-        this.client = await MongoClient.connect(this.DB_URL, { useNewUrlParser: true });
-        this.db = this.client.db(this.DB_NAME);
-    }
-
     public async findDocumentById<Type>(collectionName: Collections, id: number): Promise<Type> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
@@ -99,4 +94,10 @@ export class Mongo {
 
         return collection.deleteOne(filter);
     }
+
+    private async connect(): Promise<void> {
+        this.client = await MongoClient.connect(this.DB_URL, { useNewUrlParser: true });
+        this.db = this.client.db(this.DB_NAME);
+    }
+
 }

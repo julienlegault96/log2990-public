@@ -9,12 +9,12 @@ import { CreateGameService } from "../../services/create-game.service";
 
 export class CreateGameComponent {
 
+    public rawImageMessage: string;
+    public modifiedImageMessage: string;
+
     public name: string;
     private rawImage: File | null;
     private modifiedImage: File | null;
-
-    public rawImageMessage: string;
-    public modifiedImageMessage: string;
 
     public constructor(private createGameService: CreateGameService) {
         this.name = "";
@@ -51,7 +51,7 @@ export class CreateGameComponent {
     public isValidName(event: Event): boolean {
         // empty names should be valid
         return this.name.length === 0
-                || this.createGameService.validator.isStandardStringLength(this.name);
+            || this.createGameService.validator.isStandardStringLength(this.name);
     }
 
     private getImageListForSubmit(): File[] {

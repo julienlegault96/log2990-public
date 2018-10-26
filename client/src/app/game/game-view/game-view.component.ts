@@ -15,15 +15,16 @@ import { GameType } from "../../../../../common/game/game-type";
 })
 
 export class GameViewComponent implements OnInit {
+
     @ViewChild(MessageBarComponent) public messageBar: MessageBarComponent;
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
-    private readonly maxSingleViewErrorCount: number = 7;
-    private readonly maxDoubleViewErrorCount: number = 14;
-
     public playerId: string;
     public game: Game;
+
+    private readonly maxSingleViewErrorCount: number = 7;
+    private readonly maxDoubleViewErrorCount: number = 14;
 
     public constructor(private activatedRoute: ActivatedRoute, private userService: UserService, private gameService: GameService) {
         this.playerId = this.userService.loggedUser._id;

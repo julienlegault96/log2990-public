@@ -13,4 +13,5 @@ export class GameCardComponent extends AbstractGameCardComponent {
     public constructor(gameService: GameService) {
         super(gameService);
     }
+
 }

@@ -7,11 +7,10 @@ import { HomePageComponent } from "./home-page/home-page.component";
 import { GameViewComponent } from "./game/game-view/game-view.component";
 
 const routes: Routes = [
+    { path: "", component: HomePageComponent },
+    { path: "gameList", component: GameListComponent },
     { path: "game/:id", component: GameViewComponent },
-    { path: "index", component: HomePageComponent },
-    { path: "listeJeux", component: GameListComponent },
     { path: "admin", component: AdminViewComponent },
-    { path: "", redirectTo: "index", pathMatch: "full" },
 ];
 
 @NgModule({
@@ -20,4 +19,5 @@ const routes: Routes = [
     ],
     imports: [RouterModule.forRoot(routes)],
 })
+
 export class AppRoutingModule { }

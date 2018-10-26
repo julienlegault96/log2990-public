@@ -6,19 +6,20 @@ import { Component, Input, OnInit } from "@angular/core";
 })
 
 export class DiffCounterComponent implements OnInit {
+
+    @Input() public playerOneId: string;
+    @Input() public playerTwoId: string;
+
+    public progressBarWidth: number[];
+    private counters: number[];
+    private playerCount: number;
+
     private readonly MIN_PLAYERS: number = 1;
     private readonly MAX_PLAYERS: number = 2;
     private readonly MAXFOUNDSOLO: number = 7;
     private readonly MAXFOUNDDOUBLE: number = 7;
     private readonly BASE: number = 100;
     private readonly UNDECLARED_ID_ERROR: string = "Aucun compteur n'est initialisé pour l'indentifiant ";
-
-    public progressBarWidth: number[];
-    private counters: number[];
-    private playerCount: number;
-
-    @Input() public playerOneId: string;
-    @Input() public playerTwoId: string;
 
     public ngOnInit(): void {
         if (this.playerTwoId) {

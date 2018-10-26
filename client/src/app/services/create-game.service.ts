@@ -11,6 +11,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 @Injectable()
 
 export class CreateGameService extends GameService {
+
     public validator: Validator;
 
     public constructor(http: HttpClient) {

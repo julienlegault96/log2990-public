@@ -59,4 +59,5 @@ export class GameService extends AbstractServerService {
 
         return throwError({ message: "Something bad happened; please try again later.", httpError: error });
     }
+
 }
