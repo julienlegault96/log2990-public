@@ -84,7 +84,7 @@ export class AbstractRoute<T> {
         return this.mongo.removeDocumentById<T>(this.collection, id);
     }
 
-    private async update(id: string, elem: T): Promise<UpdateWriteOpResult> {
+    public async update(id: number, elem: T): Promise<UpdateWriteOpResult> {
         return this.mongo.updateDocumentById<T>(Collections.Games, id, elem);
     }
 
