@@ -1,16 +1,28 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { TestHelper } from "../../test.helper";
-import { USERS } from "../../../../common/user/mock-users";
-import { UserService } from "./user.service";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { TestHelper } from "../../test.helper";
+
+import { UserService } from "./user.service";
+
+import { USERS } from "../../../../common/user/mock-users";
 import { User } from "../../../../common/user/user";
+import { Endpoints } from "./abstract-server.service";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
+let getMethodSpy: jasmine.Spy;
 
 describe("UserService", () => {
     beforeEach(() => {
         httpClientSpy = HttpClient.prototype;
+        // setup fake server responses
+        getMethodSpy = spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
+
+        spyOn(httpClientSpy, "post").and.callFake(
+            (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(null)
+            );
+
+        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
         userService = new UserService(httpClientSpy);
         TestBed.configureTestingModule({
             providers: [UserService],
@@ -20,63 +32,38 @@ describe("UserService", () => {
 
     it("should be created", inject([UserService], (service: UserService) => {
         expect(service).toBeTruthy();
+        jasmine.getEnv().randomizeTests(true);
     }));
 
-    it("should reject empty names", () => {
-        expect(userService.validateUsername("")).toBeFalsy();
-    });
+    it("should reject existing usernames", () => {
+        // setup fixtures
+        userService.asyncUserList = USERS;
 
-    it("should accept alphanumeric names", () => {
-        expect(userService.validateUsername("qawsedrftyhuji12345")).toBeTruthy();
-    });
-
-    it("should reject non alphanumeric names", () => {
-        expect(userService.validateUsername("#@%&*()^^$++{}////")).toBeFalsy();
-    });
-
-    it("should reject names with non alphanumeric and alphanumeric characters", () => {
-        expect(userService.validateUsername("#@%ait96)^^ab467/")).toBeFalsy();
-    });
-
-    it("should accept names with 1 caracter", () => {
-        expect(userService.validateUsername("H")).toBeTruthy();
-    });
-
-    it("should accept names with 20 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghij")).toBeTruthy();
-    });
-
-    it("should reject names with 21 caracters", () => {
-        expect(userService.validateUsername("1234567890abcdefghijK")).toBeFalsy();
+        // test
+        expect(userService.validateUsername(USERS[0]._id)).toBeFalsy();
     });
 
     it("should fetch the existing usernames", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
+        // ignore calls done in constructor
+        getMethodSpy.calls.reset();
 
         userService.getUsers().subscribe( (users: User[] ) => {
             expect(users).toEqual(jasmine.any(Array));
             expect(users).toEqual(USERS, "users check");
         });
 
-        // check if only one call was made
+        expect(getMethodSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should submit usernames", () => {
+        userService.submitUsername(USERS[0]._id);
+
+        // should have called login
+        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
         expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     });
 
-    it("should submit the existing usernames", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "post").and.callFake( () => TestHelper.asyncData(USERS[0]));
-
-        userService.submitUsername(USERS[0]._id);
-
-        // check if only one call was made
-        expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
-    });
-
     it("should delete the submited username", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
-
         userService.removeUser(USERS[0]);
 
         // check if only one call was made

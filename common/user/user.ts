@@ -1,8 +1,12 @@
+// exterior const to avoid cluttering the db object
+const DEFAULT_USERNAME: string = "";
+
 export class User {
-    private readonly DEFAULT_USERNAME: string = "";
+
     public _id: string;
 
     public constructor(username?: string) {
-        this._id = (username === undefined ) ? this.DEFAULT_USERNAME : String(username);
+        this._id = (username === undefined) ? DEFAULT_USERNAME : String(username);
     }
+
 }

@@ -1,0 +1,52 @@
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+
+import { GameViewComponent } from "./game-view.component";
+import { ChronoComponent } from "./chrono/chrono.component";
+import { MessageBarComponent } from "./message-bar/message-bar.component";
+import { SoloGameComponent } from "./solo-game/solo-game.component";
+import { MessageComponent } from "./message/message.component";
+import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
+import { ImageDiffComponent } from "./image-diff/image-diff.component";
+import { ImgDiffService } from "src/app/services/img-diff.service";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
+import { GameService } from "src/app/services/game.service";
+import { UserService } from "src/app/services/user.service";
+
+describe("GameViewComponent", () => {
+    let component: GameViewComponent;
+    let fixture: ComponentFixture<GameViewComponent>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                GameViewComponent,
+                ChronoComponent,
+                MessageBarComponent,
+                MessageComponent,
+                SoloGameComponent,
+                DiffCounterComponent,
+                ImageDiffComponent,
+            ],
+            providers: [
+                ImgDiffService,
+                GameService,
+                UserService,
+            ],
+            imports: [
+                HttpClientModule,
+                RouterTestingModule,
+            ]
+        }).compileComponents();
+    }));
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(GameViewComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
+});

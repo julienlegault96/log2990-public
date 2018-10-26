@@ -1,10 +1,12 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { TestHelper } from "../../../../test.helper";
 
 import { GameCardComponent } from "./game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
-import { GAMES } from "../../../../../../common/game/mock-games";
 import { GameService } from "../../../services/game.service";
-import { TestHelper } from "../../../../test.helper";
+
+import { GAMES } from "../../../../../../common/game/mock-games";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("GameCardComponent", () => {
     let component: GameCardComponent;
@@ -15,9 +17,16 @@ describe("GameCardComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [GameCardComponent,
-                           LeaderboardComponent],
-            providers: [{ provide: GameService, useValue: gameService }]
+            declarations: [
+                GameCardComponent,
+                LeaderboardComponent,
+            ],
+            providers: [
+                { provide: GameService, useValue: gameService }
+            ],
+            imports: [
+                RouterTestingModule,
+            ]
         })
             .compileComponents();
     }));

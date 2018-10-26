@@ -1,0 +1,12 @@
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-2 p-3 h-100 overflow-auto">
+            <app-chrono (timerMilestone)="messageBar.addMessage($event)"></app-chrono>
+            <hr>
+            <app-message-bar [messages]></app-message-bar>
+        </div>
+        <div class="col-10 p-3">
+            <app-solo-game [playerId]="playerId" [game]="game" (errorFound)="messageBar.addMessage($event); verifyErrorCount()"></app-solo-game>
+        </div>
+    </div>
+</div>

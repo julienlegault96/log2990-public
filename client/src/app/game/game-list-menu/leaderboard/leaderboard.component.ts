@@ -1,20 +1,24 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
-import { Leaderboard } from "../../../../../../common/game/leaderboard";
+import { Leaderboard, Score } from "../../../../../../common/game/leaderboard";
 
 @Component({
     selector: "app-leaderboard",
     templateUrl: "./leaderboard.component.html",
-    styleUrls: ["./leaderboard.component.css"]
 })
 
 export class LeaderboardComponent implements OnInit {
 
     @Input() public leaderboard: Leaderboard;
 
-    public constructor() { }
-
     public ngOnInit(): void {
+        this.sortScores(this.leaderboard.scores);
+    }
+
+    public sortScores(pScores: Array<Score>): Array<Score> {
+        return pScores.sort((a: Score, b: Score) => {
+            return a.time - b.time;
+        });
     }
 
 }

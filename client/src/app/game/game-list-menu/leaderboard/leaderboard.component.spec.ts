@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+
 import { LeaderboardComponent } from "./leaderboard.component";
+
 import { Leaderboard } from "../../../../../../common/game/leaderboard";
 
 describe("LeaderboardComponent", () => {

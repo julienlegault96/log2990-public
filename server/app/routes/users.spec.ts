@@ -11,18 +11,18 @@ describe("Users db services", () => {
     let serverUsers: User[];
 
     it("should fetch and delete all users", async () => {
-        serverUsers = await users.findUsers();
+        serverUsers = await users.getAll();
         for (const iterator of serverUsers) {
-            await users.removeUser(iterator);
+            await users.remove(iterator);
         }
 
-        const getResponse: User[] = await users.findUsers();
+        const getResponse: User[] = await users.getAll();
         expect(getResponse.length).to.equal(0);
     });
 
     it("should create mock user", async () => {
         // insert
-        const insResponse: InsertOneWriteOpResult = await users.insertUser(USERS[0]);
+        const insResponse: InsertOneWriteOpResult = await users.insert(USERS[0]);
 
         expect(insResponse.insertedCount).to.equal(1);
     });
@@ -30,7 +30,7 @@ describe("Users db services", () => {
     it("shouldn't create mock user a second time", async () => {
         // insert
         try {
-            await users.insertUser(USERS[0]);
+            await users.insert(USERS[0]);
         } catch (err) {
             expect(String(err).includes("duplicate key error")).to.equal(true);
         }
@@ -38,7 +38,7 @@ describe("Users db services", () => {
 
     it("should fetch mock user", async () => {
         // get
-        const getResponse: User[] = await users.findUsers();
+        const getResponse: User[] = await users.getAll();
 
         expect(getResponse.length).to.equal(1);
         expect(getResponse[0]._id).to.equal(USERS[0]._id);
@@ -46,17 +46,17 @@ describe("Users db services", () => {
 
     it("should delete mock user", async () => {
         // delete
-        const delResponse: DeleteWriteOpResultObject = await users.removeUser(USERS[0]);
+        const delResponse: DeleteWriteOpResultObject = await users.remove(USERS[0]);
 
         expect(Number(delResponse.deletedCount)).to.equal(1);
     });
 
     it("should create back all serverUsers", async () => {
         for (const iterator of serverUsers) {
-            await users.insertUser(iterator);
+            await users.insert(iterator);
         }
 
-        const getResponse: User[] = await users.findUsers();
+        const getResponse: User[] = await users.getAll();
         expect(getResponse.length).to.equal(serverUsers.length);
 
     });

@@ -1,4 +1,4 @@
-class Score {
+export class Score {
     username: string;
     time: number;
 }
@@ -8,7 +8,7 @@ export class Leaderboard {
     scores: Score[];
 }
 
-export const defaultLeaderboards: Leaderboard[] = [
+export const DEFAULT_LEADERBOARDS: Leaderboard[] = [
     {
         "title": "Solo",
         "scores": [
@@ -34,7 +34,7 @@ export const defaultLeaderboards: Leaderboard[] = [
                 "time": 40
             },
             {
-                "username": "Din",
+                "username": "Dine",
                 "time": 44
             },
             {
@@ -45,21 +45,21 @@ export const defaultLeaderboards: Leaderboard[] = [
     }
 ];
 
-export const resetLeaderboards: Leaderboard[] = [
+export const BLANK_LEADERBOARDS: Leaderboard[] = [
     {
         "title": "Solo",
         "scores": [
             {
                 "username": "Sophie",
-                "time": 59
+                "time": 0
             },
             {
                 "username": "Gabriel",
-                "time": 59
+                "time": 0
             },
             {
                 "username": "Louis",
-                "time": 59
+                "time": 0
             },
         ]
     },
@@ -68,15 +68,15 @@ export const resetLeaderboards: Leaderboard[] = [
         "scores": [
             {
                 "username": "Julien",
-                "time": 59
+                "time": 0
             },
             {
-                "username": "Din",
-                "time": 59
+                "username": "Dine",
+                "time": 0
             },
             {
                 "username": "Kevin",
-                "time": 59
+                "time": 0
             },
         ]
     }

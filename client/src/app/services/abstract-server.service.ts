@@ -4,15 +4,57 @@ import { Observable } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 @Injectable()
+
 export abstract class AbstractServerService {
 
     private readonly SERVER_HOST_URL: string = "http://localhost:3000";
 
-    public constructor(protected http: HttpClient) { }
+    public constructor(protected http: HttpClient) {
+    }
+
+    protected getRequest<T>(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): Observable<T> {
+        return this.http.get<T>(this.getUrl(serverEndpoint, pathParam, ...queryParams)).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    protected postRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
+        };
+
+        return this.http.post<T>(this.getUrl(serverEndpoint), body, options).pipe(
+            tap(),
+            catchError(this.handleError)
+        );
+    }
+
+    protected putRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
+        };
+
+        return this.http.put<T>(this.getUrl(serverEndpoint), body, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<T> {
+        const options: {} = {
+            headers: new HttpHeaders({ "Content-Type": "application/json" }),
+            body: deleteBody
+        };
+
+        return this.http.delete<T>(this.getUrl(serverEndpoint), options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    protected abstract handleError(error: HttpErrorResponse): Observable<never>;
 
     protected getUrl(serverEndpoint: Endpoints, pathParam?: string | null, ...queryParams: Query[]): string {
         let url: string = this.appendEndpoint(serverEndpoint);
-        url += this.formatPathParam(url, pathParam);
+        url += this.formatPathParam(pathParam);
         url += this.formatQueryParams(...queryParams);
 
         return url;
@@ -22,7 +64,7 @@ export abstract class AbstractServerService {
         return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
     }
 
-    private formatPathParam(url: string, pathParam?: string | null): string {
+    private formatPathParam(pathParam?: string | null): string {
         return pathParam ? `/${pathParam}` : "";
     }
 
@@ -40,51 +82,13 @@ export abstract class AbstractServerService {
         return query;
     }
 
-    protected getRequest<T>(serverEndpoint: Endpoints, pathParam?: string, ...queryParams: Query[]): Observable<T> {
-        return this.http.get<T>(this.getUrl(serverEndpoint, pathParam, ...queryParams)).pipe(
-            catchError(this.handleError)
-        );
-    }
-
-    protected postRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
-        const options: {} = {
-            headers: new HttpHeaders({ "Content-Type": "application/json" })
-        };
-
-        return this.http.post<T>(this.getUrl(serverEndpoint), body, options).pipe(
-            catchError(this.handleError)
-        );
-    }
-
-    protected putRequest<T>(serverEndpoint: Endpoints, body: T): Observable<T> {
-        const options: {} = {
-            headers: new HttpHeaders({ "Content-Type": "application/json" })
-        };
-
-        return this.http.put<T>(this.getUrl(serverEndpoint), body, options).pipe(
-            tap(),
-            catchError(this.handleError)
-        );
-    }
-
-    protected deleteRequest<T>(serverEndpoint: Endpoints, deleteBody: T): Observable<{} | T> {
-        const options: {} = {
-            headers: new HttpHeaders({ "Content-Type": "application/json" }),
-            body: deleteBody
-        };
-
-        return this.http.delete<T>(this.getUrl(serverEndpoint), options).pipe(
-            catchError(this.handleError)
-        );
-    }
-
-    protected abstract handleError(error: HttpErrorResponse): Observable<never>;
 }
 
 export enum Endpoints {
     Games = "games",
     Users = "users",
-    Leaderboard = "leaderboard"
+    Leaderboard = "leaderboard",
+    ImgDiff = "imgdiff",
 }
 
 export class Query {

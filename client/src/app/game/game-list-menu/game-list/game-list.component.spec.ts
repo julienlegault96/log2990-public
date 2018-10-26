@@ -9,6 +9,7 @@ import { GameService } from "../../../services/game.service";
 
 import { GameType } from "../../../../../../common/game/game-type";
 import { GAMES, SINGLE_VIEW_GAME_COUNT, DOUBLE_VIEW_GAME_COUNT } from "../../../../../../common/game/mock-games";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("GameListComponent", () => {
     let component: GameListComponent;
@@ -27,8 +28,13 @@ describe("GameListComponent", () => {
                 GameCardComponent,
                 LeaderboardComponent,
             ],
-            providers: [{ provide: GameService, useValue: gameService }],
-            imports: [HttpClientModule]
+            providers: [
+                { provide: GameService, useValue: gameService }
+            ],
+            imports: [
+                HttpClientModule,
+                RouterTestingModule,
+            ]
         });
 
         fixture = TestBed.createComponent(GameListComponent);

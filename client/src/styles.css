@@ -5,3 +5,7 @@ html, body {
 body > .container {
     min-height: 100%;
 }
+
+body > .container-fluid {
+    height: 100%;
+}

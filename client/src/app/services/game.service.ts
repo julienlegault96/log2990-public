@@ -1,17 +1,30 @@
 import { Injectable } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
-import { Game } from "../../../../common/game/game";
-import { resetLeaderboards } from "../../../../common/game/leaderboard";
-import { HttpErrorResponse } from "@angular/common/http";
+import { Game, newGameTemplate } from "../../../../common/game/game";
+import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
+import { GameType } from "../../../../common/game/game-type";
 
 @Injectable()
+
 export class GameService extends AbstractServerService {
+
+    public getGame(gameId: string): Observable<Game> {
+        return this.getRequest<Game>(Endpoints.Games, gameId);
+    }
 
     public getGames(): Observable<Game[]> {
         return this.getRequest<Game[]>(Endpoints.Games);
+    }
+
+    public generateMultipleView(): Observable<Game> {
+        const newGame: Game = newGameTemplate;
+        newGame.type = GameType.DoubleView;
+
+        return this.postRequest<Game>(Endpoints.Games, newGame);
     }
 
     public addGame(newGame: Game): Observable<{} | Game> {
@@ -19,7 +32,7 @@ export class GameService extends AbstractServerService {
     }
 
     public resetLeaderboard(toReset: Game): Observable<Game> {
-        toReset.leaderboards = resetLeaderboards;
+        toReset.leaderboards = BLANK_LEADERBOARDS;
 
         return this.putRequest<Game>(Endpoints.Leaderboard, toReset);
     }
@@ -44,6 +57,7 @@ export class GameService extends AbstractServerService {
                 `body was: ${error.error}`);
         }
 
-        return throwError("Something bad happened; please try again later.");
+        return throwError({ message: "Something bad happened; please try again later.", httpError: error });
     }
+
 }

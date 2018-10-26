@@ -1,27 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 import { CreateGameService } from "../../services/create-game.service";
 
 @Component({
     selector: "app-create-game",
     templateUrl: "./create-game.component.html",
-    styleUrls: ["./create-game.component.css"]
 })
-export class CreateGameComponent implements OnInit {
 
-    public name: string = "";
-    private rawImage: File | null;
-    private modifiedImage: File | null;
+export class CreateGameComponent {
 
     public rawImageMessage: string;
     public modifiedImageMessage: string;
 
+    public name: string;
+    private rawImage: File | null;
+    private modifiedImage: File | null;
+
     public constructor(private createGameService: CreateGameService) {
+        this.name = "";
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
-    }
-
-    public ngOnInit(): void {
     }
 
     public submit(): void {
@@ -51,7 +49,9 @@ export class CreateGameComponent implements OnInit {
     }
 
     public isValidName(event: Event): boolean {
-        return this.name.length <= this.createGameService.getNameMaxLength();
+        // empty names should be valid
+        return this.name.length === 0
+            || this.createGameService.validator.isStandardStringLength(this.name);
     }
 
     private getImageListForSubmit(): File[] {
