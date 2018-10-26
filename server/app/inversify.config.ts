@@ -5,10 +5,10 @@ import { Server } from "./server";
 import { Application } from "./app";
 import { Routes } from "./routes";
 import { Mongo } from "./services/mongo";
-import { Games } from "./routes/games";
-import { Users } from "./routes/users";
+import { GamesRoute } from "./routes/games.route";
+import { UsersRoute } from "./routes/users.route";
 import { Imgur } from "./routes/imgur/imgur";
-import { ImgDiffRoute } from "./routes/img-diff/imgdiff";
+import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 
 const container: Container = new Container();
@@ -17,10 +17,10 @@ container.bind(Types.Server).to(Server);
 container.bind(Types.Application).to(Application);
 container.bind(Types.Routes).to(Routes);
 container.bind(Types.Mongo).to(Mongo);
-container.bind(Types.Users).to(Users);
-container.bind(Types.Games).to(Games);
+container.bind(Types.UsersRoute).to(UsersRoute);
+container.bind(Types.GamesRoute).to(GamesRoute);
 container.bind(Types.Imgur).to(Imgur);
-container.bind(Types.ImgDiff).to(ImgDiffRoute);
+container.bind(Types.ImgDiffRoute).to(ImgDiffRoute);
 container.bind(Types.LeaderboardRoute).to(LeaderboardRoute);
 
 export { container };

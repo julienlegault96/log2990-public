@@ -9,7 +9,7 @@ import { Imgur } from "./imgur/imgur";
 import { Game } from "../../../common/game/game";
 import { GameType } from "../../../common/game/game-type";
 
-import { ImgDiffRoute } from "./img-diff/imgdiff";
+import { ImgDiffRoute } from "./img-diff/imgdiff.route";
 import { CODES } from "../../../common/communication/response-codes";
 import { Coordinates } from "../../../common/game/coordinates";
 
@@ -21,7 +21,7 @@ import { ErrorFinder } from "./error-finder/error-finder";
 
 @injectable()
 
-export class Games extends AbstractRoute<Game> {
+export class GamesRoute extends AbstractRoute<Game> {
 
     public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
 

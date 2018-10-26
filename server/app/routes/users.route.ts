@@ -7,7 +7,7 @@ import { AbstractRoute } from "./abstract-route/abstract-route";
 import { User } from "../../../common/user/user";
 
 @injectable()
-export class Users extends AbstractRoute<User> {
+export class UsersRoute extends AbstractRoute<User> {
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
