@@ -961,6 +961,146 @@ private:
 
 //////////
 
+class FormeSphereTheme : public FormeBase2705
+{
+public:
+   FormeSphereTheme( GLdouble radius, glm::vec4 coul=glm::vec4(1.,1.,1.,1.), GLint slices, GLint stacks,
+                bool plein = true, bool entiere = true )
+      : FormeBase2705( plein )
+   {
+      if ( obtenirAttributs( ) )
+      {
+         // initialisation
+         const int TAILLEMAX = 10000;
+         assert( TAILLEMAX > 2*(slices+1)*(stacks+2) );
+         GLfloat sommets[3*TAILLEMAX], normales[3*TAILLEMAX], texcoord[2*TAILLEMAX];
+         int nsommets = 0;
+
+         // variables locales
+         const GLfloat drho = M_PI / (GLfloat) stacks;
+         const GLfloat dtheta = 2.0 * M_PI / (GLfloat) slices;
+
+         GLint imin, imax;
+         if ( locTexCoord >= 0 ) { imin = 0; imax = stacks; } else { imin = 1; imax = stacks - 1; }
+         if ( !entiere ) imax = imax/2 + 1; // pour se rendre seulement à la moitié supérieure
+
+         /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
+         /* t goes from -1.0/+1.0 at z = -radius/+radius (linear along longitudes) */
+         /* cannot use triangle fan on texturing (s coord. at top/bottom tip varies) */
+
+         nsommets = 0;
+         {
+            GLfloat t = 1.0;
+            GLfloat ds = 1.0 / slices;
+            GLfloat dt = 1.0 / stacks;
+            for ( GLint i = imin; i < imax; i++ )
+            {
+               GLfloat rho = i * drho;
+               GLfloat s = 0.0;
+               for ( GLint j = 0; j <= slices; j++ )
+               {
+                  GLfloat x, y, z;
+                  GLfloat theta = (j == slices) ? 0.0 : j * dtheta;
+                  x = -sin(theta) * sin(rho);
+                  y = cos(theta) * sin(rho);
+                  z = cos(rho);
+                  AJOUTE( x * radius, y * radius, z * radius, x, y, z, s, t );
+
+                  x = -sin(theta) * sin(rho + drho);
+                  y = cos(theta) * sin(rho + drho);
+                  z = cos(rho + drho);
+                  AJOUTE( x * radius, y * radius, z * radius, x, y, z, s, t-dt );
+                  s += ds;
+               }
+               t -= dt;
+            }
+         }
+         nsommetsStrip_ = nsommets;
+
+         if ( !(locTexCoord >= 0) )
+         {
+            AJOUTE( 0.0, 0.0, radius, 0.0, 0.0, 1.0, 0, 0 );
+            for ( GLint j = 0; j <= slices; j++ )
+            {
+               GLfloat x, y, z;
+               GLfloat theta = (j == slices) ? 0.0 : j * dtheta;
+               x = -sin(theta) * sin(drho);
+               y = cos(theta) * sin(drho);
+               z = cos(drho);
+               AJOUTE( x * radius, y * radius, z * radius, x, y, z, 0, 0 );
+            }
+         }
+         nsommetsFan_ = nsommets - nsommetsStrip_;
+
+         if ( !(locTexCoord >= 0) && entiere )
+         {
+            AJOUTE( 0.0, 0.0, -radius, 0.0, 0.0, -1.0, 0, 0 );
+            GLfloat rho = M_PI - drho;
+            for ( GLint j = slices; j >= 0; j-- )
+            {
+               GLfloat x, y, z;
+               GLfloat theta = (j == slices) ? 0.0 : j * dtheta;
+               x = -sin(theta) * sin(rho);
+               y = cos(theta) * sin(rho);
+               z = cos(rho);
+               AJOUTE( x * radius, y * radius, z * radius, x, y, z, 0, 0 );
+            }
+         }
+         assert( TAILLEMAX >= nsommets );
+
+         // remplir VBOs
+         glBindVertexArray( vao );
+         glGenBuffers( 3, vbo );
+
+         glBindBuffer( GL_ARRAY_BUFFER, vbo[0] );
+         glBufferData( GL_ARRAY_BUFFER, 3*nsommets*sizeof(GLfloat), NULL, GL_STATIC_DRAW );
+         glBufferSubData( GL_ARRAY_BUFFER, 0, 3*nsommets*sizeof(GLfloat), sommets );
+         glVertexAttribPointer( locVertex, 3, GL_FLOAT, GL_FALSE, 0, 0 );
+         glEnableVertexAttribArray(locVertex);
+
+         if ( locNormal >= 0 )
+         {
+            glBindBuffer( GL_ARRAY_BUFFER, vbo[1] );
+            glBufferData( GL_ARRAY_BUFFER, 3*nsommets*sizeof(GLfloat), NULL, GL_STATIC_DRAW );
+            glBufferSubData( GL_ARRAY_BUFFER, 0, 3*nsommets*sizeof(GLfloat), normales );
+            glVertexAttribPointer( locNormal, 3, GL_FLOAT, GL_FALSE, 0, 0 );
+            glEnableVertexAttribArray(locNormal);
+         }
+
+         if ( locTexCoord >= 0 )
+         {
+            glBindBuffer( GL_ARRAY_BUFFER, vbo[2] );
+            glBufferData( GL_ARRAY_BUFFER, 2*nsommets*sizeof(GLfloat), NULL, GL_STATIC_DRAW );
+            glBufferSubData( GL_ARRAY_BUFFER, 0, 2*nsommets*sizeof(GLfloat), texcoord );
+            glVertexAttribPointer( locTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+            glEnableVertexAttribArray(locTexCoord);
+         }
+
+         glBindVertexArray( 0 );
+      }
+   }
+   ~FormeSphere()
+   {
+      glDeleteBuffers( 3, vbo );
+   }
+   virtual void afficher()
+   {
+      glBindVertexArray( vao );
+      glDrawArrays( GL_TRIANGLE_STRIP, 0, nsommetsStrip_ );
+      if ( !(locTexCoord >= 0) )
+      {
+         glDrawArrays( GL_TRIANGLE_FAN, nsommetsStrip_, nsommetsFan_ );
+         glDrawArrays( GL_TRIANGLE_FAN, nsommetsStrip_+nsommetsFan_, nsommetsFan_ );
+      }
+      glBindVertexArray( 0 );
+   }
+private:
+   GLint nsommetsStrip_, nsommetsFan_;
+   GLuint vbo[3];
+};
+
+//////////
+
 class FormeTore : public FormeBase2705
 {
 public:
