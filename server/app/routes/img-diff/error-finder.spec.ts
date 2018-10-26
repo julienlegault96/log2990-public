@@ -6,8 +6,9 @@ import * as fs from "fs";
 describe("ErrorFinder service", () => {
     // set up fixtures
     const errorFinder: ErrorFinder = new ErrorFinder();
+    let buffer: Buffer;
     before(async () => {
-        const buffer: Buffer = await util.promisify(fs.readFile)("./test_assets/oneError.bmp");
+        buffer = await util.promisify(fs.readFile)("./test_assets/oneError.bmp");
         errorFinder["imageBuffer"] = buffer;
     });
 
@@ -37,6 +38,18 @@ describe("ErrorFinder service", () => {
     it("should detect difference", async () => {
         const isDifference: boolean = errorFinder["isDifference"]({ x: 40, y: 10 });
         expect(isDifference).to.be.equal(true);
+    });
+
+    it("should return image width", async () => {
+        const width: number = ErrorFinder.getImageWidth(buffer);
+        const expectedWidth: number = 50;
+        expect(width).to.be.equal(expectedWidth);
+    });
+
+    it("should return image height", async () => {
+        const width: number = ErrorFinder.getImageHeight(buffer);
+        const expectedHeight: number = 50;
+        expect(width).to.be.equal(expectedHeight);
     });
 
 });
