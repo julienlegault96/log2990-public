@@ -2,8 +2,8 @@ import { injectable, inject } from "inversify";
 import { Router, Request, Response, NextFunction } from "express";
 
 import Types from "./types";
-import { GamesRoute } from "./routes/games.route";
-import { UsersRoute } from "./routes/users.route";
+import { GamesRoute } from "./routes/games/games.route";
+import { UsersRoute } from "./routes/user/users.route";
 import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 

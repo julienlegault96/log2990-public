@@ -1,23 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
 
-import Types from "../types";
-import { Mongo, Collections } from "../services/mongo";
-import { AbstractRoute } from "./abstract-route/abstract-route";
-import { Imgur } from "../services/imgur/imgur";
+import Types from "../../types";
+import { Mongo, Collections } from "../../services/mongo";
+import { AbstractRoute } from "../abstract-route/abstract-route";
+import { Imgur } from "../../services/imgur/imgur";
 
-import { Game } from "../../../common/game/game";
-import { GameType } from "../../../common/game/game-type";
+import { Game } from "../../../../common/game/game";
+import { GameType } from "../../../../common/game/game-type";
 
-import { ImgDiffRoute } from "./img-diff/imgdiff.route";
-import { CODES } from "../../../common/communication/response-codes";
-import { Coordinates } from "../../../common/game/coordinates";
+import { ImgDiffRoute } from "../img-diff/imgdiff.route";
+import { CODES } from "../../../../common/communication/response-codes";
+import { Coordinates } from "../../../../common/game/coordinates";
 
 import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { Leaderboard } from "../../../common/game/leaderboard";
-import { ErrorFinder } from "../services/error-finder/error-finder";
+import { Leaderboard } from "../../../../common/game/leaderboard";
+import { ErrorFinder } from "../../services/error-finder/error-finder";
 
 @injectable()
 
