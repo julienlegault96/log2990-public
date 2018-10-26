@@ -117,6 +117,41 @@ public:
 	bool modeLookAt;      // on utilise LookAt (au lieu de Rotate et Translate)
 } camera = { thetaInit, phiInit,thetaInit, phiInit, distInit, true };
 
+////// Texture //////
+void chargerTextures()
+{
+    unsigned char *pixels;
+    GLsizei largeur, hauteur;
+   /* if ((pixels = ChargerImage("avendre.bmp", largeur, hauteur)) != NULL)
+    {
+        glGenTextures(1, &Etat::maTextureAVendre);
+        glBindTexture(GL_TEXTURE_2D, Etat::maTextureAVendre);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        delete[] pixels;
+    } */
+    if ((pixels = ChargerImage("../images/echiquier.bmp", largeur, hauteur)) != NULL)
+    {
+        glGenTextures(1, &Etat::maTextureEchiquier);
+        glBindTexture(GL_TEXTURE_2D, Etat::maTextureEchiquier);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        delete[] pixels;
+    }
+
+    /*// assigner chaque image dans une unité de texture différente
+    glActiveTexture(GL_TEXTURE0); // l'unité de texture 0
+    glBindTexture(GL_TEXTURE_2D, Etat::maTextureAVendre); */
+
+    glActiveTexture(GL_TEXTURE1); // l'unité de texture 1
+    glBindTexture(GL_TEXTURE_2D, Etat::maTextureEchiquier);
+}
+////////////////////
+
 std::string getAbsolutePath(const char * argv0)
 {
 	const short PROGRAM_NAME_LENGTH = 12;
@@ -218,7 +253,11 @@ void FenetreTP::initialiser(std::string absolutePath)
 	// charger les nuanceurs
 	chargerNuanceurs(absolutePath);
 
-	// créer quelques autres formes
+    //////////// charger les textures ////////
+    chargerTextures(); // Provisoirement
+    ////////////////////////////////////////
+
+    // créer quelques autres formes
 	glUseProgram(progBase);
 }
 
@@ -231,7 +270,7 @@ void FenetreTP::conclure()
 
 void FenetreTP::afficherScene()
 {
-	// effacer l'ecran et le tampon de profondeur
+    // effacer l'ecran et le tampon de profondeur
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(progBase);

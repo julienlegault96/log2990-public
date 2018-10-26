@@ -40,13 +40,16 @@ layout (std140) uniform LightModelParameters
 uniform mat4 matrModel;
 uniform mat4 matrVisu;
 uniform mat4 matrProj;
+uniform mat4 matrTexture;
 uniform mat3 matrNormale;
+uniform float dtexcoo;
 
 uniform vec4 planCoupe; // équation du plan de coupe
 
 layout(location=0) in vec4 Vertex;
 layout(location=2) in vec3 Normal;
 layout(location=3) in vec4 Color;
+layout(location=8) in vec2 TexCoord;
 
 // out gl_PerVertex // <-- déclaration implicite
 // {
@@ -56,10 +59,11 @@ layout(location=3) in vec4 Color;
 // };
 
 out Attribs {
-    vec3 lumiDir;
-    vec3 normale, obsVec;
-    vec4 couleur;
-    float attenuation;
+vec3 lumiDir;
+vec3 normale, obsVec;
+vec4 couleur;
+float attenuation;
+vec2 texCoord;
 } AttribsOut;
 
 void main(void)
@@ -96,8 +100,11 @@ void main(void)
     normalize(-pos) :        // =(0-pos) un vecteur qui pointe vers le (0,0,0), c'est-à-dire vers la caméra
     vec3( 0.0, 0.0, 1.0 ) ); // on considère que l'observateur (la caméra) est à l'infini dans la direction (0,0,1)
 
-    // vecteur de la direction du spot (dans le repère de la caméra)
-    //AttribsOut.spotDir = transpose(inverse(mat3(matrVisu))) * -LightSource[0].spotDirection;
+// vecteur de la direction du spot (dans le repère de la caméra)
+//AttribsOut.spotDir = transpose(inverse(mat3(matrVisu))) * -LightSource[0].spotDirection;
+
+// 
+AttribsOut.texCoord = TexCoord.st;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,46 +113,63 @@ void main(void)
 bool utiliseBlinn = true;
 
 in Attribs {
-    vec3 lumiDir;
-    vec3 normale, obsVec;
-    vec4 couleur;
-    float attenuation;
+vec3 lumiDir;
+vec3 normale, obsVec;
+vec4 couleur;
+float attenuation;
+vec2 texCoord;
 } AttribsIn;
+
+// Textures
+uniform sampler2D laTextureAVendre;
+uniform sampler2D laTextureEchiquier;
+uniform int choix;
+// Textures
 
 out vec4 FragColor;
 
 void main(void)
 {
-    vec3 L = normalize( AttribsIn.lumiDir ); // vecteur vers la source lumineuse
-    //vec3 N = normalize( AttribsIn.normale ); // vecteur normal
-    vec3 N = normalize( gl_FrontFacing ? AttribsIn.normale : -AttribsIn.normale );
-    vec3 O = normalize( AttribsIn.obsVec );  // position de l'observateur
+vec3 L = normalize( AttribsIn.lumiDir ); // vecteur vers la source lumineuse
+//vec3 N = normalize( AttribsIn.normale ); // vecteur normal
+vec3 N = normalize( gl_FrontFacing ? AttribsIn.normale : -AttribsIn.normale );
+vec3 O = normalize( AttribsIn.obsVec );  // position de l'observateur
 
-    vec4 coul = AttribsIn.couleur + FrontMaterial.ambient * LightModel.ambient;
+vec4 coul = AttribsIn.couleur + FrontMaterial.ambient * LightModel.ambient;
 
-    // calcul de la composante ambiante
-    coul += FrontMaterial.ambient * LightSource[0].ambient;
+// calcul de la composante ambiante
+coul += FrontMaterial.ambient * LightSource[0].ambient;
 
-    // utiliser le .alpha de la couleur courante
-    coul.a = AttribsIn.couleur.a;
+// utiliser le .alpha de la couleur courante
+coul.a = AttribsIn.couleur.a;
 
-    // calcul de l'éclairage seulement si le produit scalaire est positif
-    float NdotL = max( 0.0, dot( N, L ) );
-    if ( NdotL > 0.0 )
-    {
-        // calcul de la composante diffuse
-        //coul += FrontMaterial.diffuse * LightSource[0].diffuse * NdotL;
-        coul += AttribsIn.couleur * LightSource[0].diffuse* NdotL ; //(ici, on utilise plutôt la couleur de l'objet)
+// calcul de l'éclairage seulement si le produit scalaire est positif
+float NdotL = max( 0.0, dot( N, L ) );
+if ( NdotL > 0.0 )
+{
+// calcul de la composante diffuse
+//coul += FrontMaterial.diffuse * LightSource[0].diffuse * NdotL;
+coul += AttribsIn.couleur * LightSource[0].diffuse* NdotL ; //(ici, on utilise plutôt la couleur de l'objet)
 
-        // calcul de la composante spéculaire (Blinn ou Phong)
-        float NdotHV = max( 0.0, ( utiliseBlinn ) ? dot( normalize( L + O ), N ) : dot( reflect( -L, N ), O ) );
-        coul += FrontMaterial.specular *LightSource[0].specular * ( ( NdotHV == 0.0 ) ? 0.0 : pow( NdotHV, FrontMaterial.shininess ) );
-    }
-    // assigner la couleur finale
-    FragColor = clamp( coul, 0.0, 1.0 );
-    float factAttenuation = smoothstep(50, 30, AttribsIn.attenuation);
-    FragColor*=factAttenuation;
-    //FragColor = clamp(vec4(N,1.0),0.,1.);
+// calcul de la composante spéculaire (Blinn ou Phong)
+float NdotHV = max( 0.0, ( utiliseBlinn ) ? dot( normalize( L + O ), N ) : dot( reflect( -L, N ), O ) );
+coul += FrontMaterial.specular *LightSource[0].specular * ( ( NdotHV == 0.0 ) ? 0.0 : pow( NdotHV, FrontMaterial.shininess ) );
+}
+// assigner la couleur finale
+FragColor = clamp( coul, 0.0, 1.0 );
+float factAttenuation = smoothstep(50, 30, AttribsIn.attenuation);
+FragColor*=factAttenuation;
+//FragColor = clamp(vec4(N,1.0),0.,1.);
+
+// Texture
+vec4 couleur0 = texture( laTextureAVendre, AttribsIn.texCoord );
+vec4 couleur1 = texture( laTextureEchiquier, AttribsIn.texCoord );
+// assigner la couleur au fragment
+if ( choix == 0 )      FragColor = couleur0;
+else if ( choix == 1 ) FragColor = couleur1;
+else if ( choix == 2 ) FragColor = 0.5 * ( couleur0 + couleur1 );
+else if ( choix == 3 ) FragColor = 0.5 * ( couleur0 + couleur1 ) * coul;
+else                   FragColor = coul;
 }
 
 #endif
