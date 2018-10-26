@@ -34,6 +34,7 @@ import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.compo
 import { ImgDiffService } from "./services/img-diff.service";
 
 import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
 
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-
         GameService,
         CreateGameService,
         ImgDiffService,
+        LeaderboardService,
     ],
     bootstrap: [AppComponent]
 })

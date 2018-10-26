@@ -16,6 +16,7 @@ export class ChronoComponent {
 
     @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
 
+    public elapsedTime: number;
     public formattedTime: string;
     private startTime: Date;
     private timer: number;

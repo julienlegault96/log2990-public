@@ -7,9 +7,9 @@ import { AbstractRoute } from "./abstract-route/abstract-route";
 
 import { Game } from "../../../common/game/game";
 import { Score } from "../../../common/game/leaderboard";
-import { GamePartyMode } from "../../../common/game/game-party-mode";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../common/communication/response-codes";
+import { LeaderboardRequest } from "../../../common/communication/leaderboard-request";
 
 @injectable()
 
@@ -53,11 +53,4 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         return scores.slice(0, scoresToDisplay);
     }
 
-}
-
-interface LeaderboardRequest {
-    id: number;
-    partyMode: GamePartyMode;
-    time: number;
-    playerName: string;
 }
