@@ -26,7 +26,7 @@ export class GameViewComponent implements OnInit {
     public playerId: string;
     public game: Game;
 
-    private readonly maxSingleViewErrorCount: number = 1;
+    private readonly maxSingleViewErrorCount: number = 7;
     private readonly maxDoubleViewErrorCount: number = 14;
 
     public constructor(

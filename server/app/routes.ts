@@ -5,7 +5,7 @@ import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
 import { ImgDiff } from "./routes/img-diff/imgdiff";
-import { LeaderboardRoute } from "./routes/leaderboard-route";
+import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 
 @injectable()
 export class Routes {

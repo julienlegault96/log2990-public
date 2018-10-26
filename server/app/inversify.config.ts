@@ -9,7 +9,7 @@ import { Games } from "./routes/games";
 import { Users } from "./routes/users";
 import { Imgur } from "./routes/imgur/imgur";
 import { ImgDiff } from "./routes/img-diff/imgdiff";
-import { LeaderboardRoute } from "./routes/leaderboard-route";
+import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
 
 const container: Container = new Container();
 
