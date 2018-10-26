@@ -5,6 +5,7 @@ import Types from "./types";
 import { Games } from "./routes/games";
 import { Users } from "./routes/users";
 import { ImgDiff } from "./routes/img-diff/imgdiff";
+import { LeaderboardRoute } from "./routes/leaderboard-route";
 
 @injectable()
 export class Routes {
@@ -13,6 +14,7 @@ export class Routes {
         @inject(Types.Games) private games: Games,
         @inject(Types.Users) private users: Users,
         @inject(Types.ImgDiff) private imgDiff: ImgDiff,
+        @inject(Types.LeaderboardRoute) private leaderboardRoute: LeaderboardRoute,
     ) {
     }
 
@@ -36,6 +38,10 @@ export class Routes {
         router.post(
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.games.post(req, res, next)
+        );
+        router.post(
+            "/score",
+            (req: Request, res: Response, next: NextFunction) => this.leaderboardRoute.post(req, res, next)
         );
         router.delete(
             "/games/:id",

@@ -9,6 +9,7 @@ import { Games } from "./routes/games";
 import { Users } from "./routes/users";
 import { Imgur } from "./routes/imgur/imgur";
 import { ImgDiff } from "./routes/img-diff/imgdiff";
+import { LeaderboardRoute } from "./routes/leaderboard-route";
 
 const container: Container = new Container();
 
@@ -20,5 +21,6 @@ container.bind(Types.Users).to(Users);
 container.bind(Types.Games).to(Games);
 container.bind(Types.Imgur).to(Imgur);
 container.bind(Types.ImgDiff).to(ImgDiff);
+container.bind(Types.LeaderboardRoute).to(LeaderboardRoute);
 
 export { container };

@@ -13,7 +13,7 @@ import { CODES } from "../../../common/communication/response-codes";
 
 @injectable()
 
-export class LeaderboardRoutes extends AbstractRoute<Game> {
+export class LeaderboardRoute extends AbstractRoute<Game> {
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
@@ -48,8 +48,9 @@ export class LeaderboardRoutes extends AbstractRoute<Game> {
         scores.push({ username: elem.playerName, time: elem.time });
 
         const scoresToDisplay: number = 3;
+        scores.sort((a: Score, b: Score) => a.time - b.time);
 
-        return scores.sort((a: Score, b: Score) => b.time - a.time).slice(0, scoresToDisplay);
+        return scores.slice(0, scoresToDisplay);
     }
 
 }

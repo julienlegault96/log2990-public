@@ -7,4 +7,5 @@ export default {
     Mongo: Symbol("Mongo"),
     Imgur: Symbol("Imgur"),
     ImgDiff: Symbol("ImgDiff"),
+    LeaderboardRoute: Symbol("LeaderboardRoute"),
 };
