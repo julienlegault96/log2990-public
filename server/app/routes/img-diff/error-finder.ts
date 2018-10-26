@@ -5,6 +5,18 @@ export class ErrorFinder {
 
     private imageBuffer: Buffer;
 
+    public static getImageWidth(imageBuffer: Buffer): number {
+        // Le width de l'image bmp est sur 4 bytes
+        // tslint:disable-next-line:no-bitwise no-magic-numbers
+        return ((imageBuffer[21] << 8 | imageBuffer[20]) << 8 | imageBuffer[19]) << 8 | imageBuffer[18];
+    }
+
+    public static getImageHeight(imageBuffer: Buffer): number {
+        // Le height de l'image bmp est sur 4 bytes
+        // tslint:disable-next-line:no-bitwise no-magic-numbers
+        return ((imageBuffer[25] << 8 | imageBuffer[24]) << 8 | imageBuffer[23]) << 8 | imageBuffer[22];
+    }
+
     public findError(initialCoordinates: Coordinates, imageBuffer: Buffer): Array<Coordinates> {
         this.imageBuffer = imageBuffer;
 
@@ -93,22 +105,10 @@ export class ErrorFinder {
         const paddingByte: number = 4;
         const byteDepth: number = 3;
         const headerSize: number = 54;
-        const lineOffset: number = this.getImageWidth() * (this.getImageHeight() - coordinates.y);
+        const lineOffset: number =
+            ErrorFinder.getImageWidth(this.imageBuffer) * (ErrorFinder.getImageHeight(this.imageBuffer) - coordinates.y);
 
-        return headerSize + (lineOffset + coordinates.x) * byteDepth
-            + lineOffset % paddingByte;
-    }
-
-    private getImageWidth(): number {
-        // Le width de l'image bmp est sur 4 bytes
-        // tslint:disable-next-line:no-bitwise no-magic-numbers
-        return ((this.imageBuffer[21] << 8 | this.imageBuffer[20]) << 8 | this.imageBuffer[19]) << 8 | this.imageBuffer[18];
-    }
-
-    private getImageHeight(): number {
-        // Le height de l'image bmp est sur 4 bytes
-        // tslint:disable-next-line:no-bitwise no-magic-numbers
-        return ((this.imageBuffer[25] << 8 | this.imageBuffer[24]) << 8 | this.imageBuffer[23]) << 8 | this.imageBuffer[22];
+        return headerSize + (lineOffset + coordinates.x) * byteDepth + lineOffset % paddingByte;
     }
 
 }
