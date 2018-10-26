@@ -423,6 +423,7 @@ int main(int argc, char *argv[])
 
     genererMultivue(fenetre, absoluteRef.append(argv[4]).data());
 
+
 	// détruire les ressources OpenGL allouées
     fenetre.conclure();
 
