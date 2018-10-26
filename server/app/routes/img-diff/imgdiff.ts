@@ -50,10 +50,14 @@ export class ImgDiff {
         if (imgData) {
             const errorFinder: ErrorFinder = new ErrorFinder();
 
-            return errorFinder.findError(coordinates, new Buffer(ImgDiff.parseBase64(imgData), "base64"));
+            return errorFinder.findError(coordinates, this.getImgBuffer(imgData));
         }
 
         return [];
+    }
+
+    private getImgBuffer(imgData: string): Buffer {
+        return new Buffer(ImgDiff.parseBase64(imgData), "base64");
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {

@@ -65,9 +65,13 @@ describe("ErrorFinder service", () => {
             { x: 1, y: 0 },
             { x: 1, y: 1 },
         ];
+
+        const result: boolean = pixels.every((pixel: Coordinates) =>
+            expectedPixels.some((expectedPixel: Coordinates) =>
+                expectedPixel.x === pixel.x && expectedPixel.y === pixel.y));
+
         expect(pixels.length).to.be.equal(expectedPixels.length);
-        expect(pixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort())
-            .to.be.eql(expectedPixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort());
+        expect(result).to.be.equal(true);
     });
 
     it("should return adjacent pixels", async () => {
@@ -82,21 +86,25 @@ describe("ErrorFinder service", () => {
             { x: 2, y: 1 },
             { x: 2, y: 2 },
         ];
+
+        const result: boolean = pixels.every((pixel: Coordinates) =>
+            expectedPixels.some((expectedPixel: Coordinates) =>
+                expectedPixel.x === pixel.x && expectedPixel.y === pixel.y));
+
         expect(pixels.length).to.be.equal(expectedPixels.length);
-        expect(pixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort())
-            .to.be.eql(expectedPixels.map((pixel: Coordinates) => `${pixel.x},${pixel.y}`).sort());
+        expect(result).to.be.equal(true);
     });
 
     it("should return rgb value", async () => {
         // on a du blanc ici
         const pixel: Pixel = errorFinder["getPixelValue"]({ x: 0, y: 0 });
-        expect(pixel).to.be.deep.equal({red: 255, green: 255, blue: 255});
+        expect(pixel).to.be.deep.equal({ red: 255, green: 255, blue: 255 });
     });
 
     it("should return rgb value", async () => {
         // on a du noir ici
         const pixel: Pixel = errorFinder["getPixelValue"]({ x: 40, y: 10 });
-        expect(pixel).to.be.deep.equal({red: 0, green: 0, blue: 0});
+        expect(pixel).to.be.deep.equal({ red: 0, green: 0, blue: 0 });
     });
 
 });
