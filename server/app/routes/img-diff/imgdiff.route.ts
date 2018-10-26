@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { Request, Response, NextFunction } from "express";
 
-import { ErrorFinder } from "../error-finder/error-finder";
+import { ErrorFinder } from "../../services/error-finder/error-finder";
 
 import { CODES } from "../../../../common/communication/response-codes";
 import { Coordinates } from "../../../../common/game/coordinates";
