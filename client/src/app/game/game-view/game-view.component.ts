@@ -6,6 +6,7 @@ import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { UserService } from "../../services/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game.service";
+import { GameType } from "../../../../../common/game/game-type";
 
 @Component({
     selector: "app-game-view",
@@ -18,7 +19,8 @@ export class GameViewComponent implements OnInit {
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
-    private readonly maxErrorCount: number = 7;
+    private readonly maxSingleViewErrorCount: number = 7;
+    private readonly maxDoubleViewErrorCount: number = 14;
 
     public playerId: string;
     public game: Game;
@@ -37,7 +39,12 @@ export class GameViewComponent implements OnInit {
     }
 
     public verifyErrorCount(): void {
-        if (this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxErrorCount) {
+        if (this.game.type === GameType.SingleView
+            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxSingleViewErrorCount) {
+            this.chrono.stop();
+            alert("Bravo!");
+        } else if (this.game.type === GameType.DoubleView
+            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxDoubleViewErrorCount) {
             this.chrono.stop();
             alert("Bravo!");
         }
