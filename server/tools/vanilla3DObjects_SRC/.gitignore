@@ -5,6 +5,8 @@
 
 # Generated bmps
 *.bmp
+# Make generated executable
+*.exe
 
 # User-specific files
 *.rsuser
