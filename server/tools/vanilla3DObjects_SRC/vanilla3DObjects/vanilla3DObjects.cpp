@@ -284,25 +284,50 @@ void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 {
 	glViewport(0, 0, w, h);
 }
-void screenshot(string filename) {
-	GLubyte couleur[3];
+
+void FenetreTP::screenshot(const char * filename) {
+    const short PIXEL_BYTE_SIZE = 3;
+    const int32_t arraysize = PIXEL_BYTE_SIZE * DEFAULT_24BIT_BMP_HEADER.biWidth * DEFAULT_24BIT_BMP_HEADER.biHeight;
+	GLubyte* imageBytes = new GLubyte[arraysize];
+
+    
+    // center then find lower left corner of DEFAULT_HEADER w x h
+    int adjustedX = std::fmax( 0, (this->largeur_ /2) - DEFAULT_24BIT_BMP_HEADER.biWidth/2);
+    int adjustedY = std::fmax( 0, (this->hauteur_ /2) - DEFAULT_24BIT_BMP_HEADER.biHeight/2);
+
+    glReadPixels(
+        adjustedX, adjustedY,
+        DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight,
+        GL_RGB, GL_UNSIGNED_BYTE,
+        imageBytes
+    );
+
+    uint64_t offset = 0;
+
+    // glReadPixel reads lowest to highest row, left to right
 	Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
-	for (int x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; x++)
+	for (int32_t y = DEFAULT_24BIT_BMP_HEADER.biHeight; y > 0; --y) 
 	{
-		for (int y = 0; y < DEFAULT_24BIT_BMP_HEADER.biHeight; y++)
+		for (int32_t x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; ++x)
 		{
-			glReadPixels(x + 100, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, couleur);
-			Pixel pixel(couleur[0], couleur[1], couleur[2]);
-			image.setPixel(x, y, pixel);
+			Pixel pixel(imageBytes[offset], imageBytes[offset + 1], imageBytes[offset + 2]);
+			image.setPixel(x, DEFAULT_24BIT_BMP_HEADER.biHeight - y, pixel);
+            offset = offset + PIXEL_BYTE_SIZE;
 		}
 	}
+
+    delete[] imageBytes;
+    imageBytes = nullptr;
+
 	ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
 	header.biClrUsed = (uint32_t)image.colorsUsed.size();
 	ofstream bmpOutputFile;
-	bmpOutputFile.open(filename, ios::out | ios::binary);
+	bmpOutputFile.open(filename, ios::out | ios::binary | ios::trunc);
 	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
 	bmpOutputFile << image;
 	bmpOutputFile.close();
+
+
 }
 
 void turnCamera()
@@ -323,7 +348,7 @@ void unturnCamera()
 int main(int argc, char *argv[])
 {
 	// créer une fenêtre
-	FenetreTP fenetre("LOG2990");
+	FenetreTP fenetre;
 
 	// allouer des ressources et définir le contexte OpenGL
 	fenetre.initialiser();
@@ -333,26 +358,27 @@ int main(int argc, char *argv[])
 	shapes = new ShapesContainer(15, etat.dimBoite);
 
 	// affichage
-
 	fenetre.afficherScene();
-	fenetre.swap();
-
-
-	screenshot("Side1Org.bmp");
+	fenetre.screenshot("Side1Org.bmp");
+    fenetre.swap();
 
 	turnCamera();
 	fenetre.afficherScene();
+    fenetre.screenshot("Side2Org.bmp");
 	fenetre.swap();
-	screenshot("Side2Org.bmp");
+
 	//modifier scène
 	shapes->modify();
 	fenetre.afficherScene();
+    fenetre.screenshot("Side2Diff.bmp");
 	fenetre.swap();
-	screenshot("Side2Diff.bmp");
+
+
 	unturnCamera();
 	fenetre.afficherScene();
+    fenetre.screenshot("Side1Diff.bmp");
 	fenetre.swap();
-	screenshot("Side1Diff.bmp");
+
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
 
