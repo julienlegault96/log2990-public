@@ -14,10 +14,10 @@ public:
 	GLfloat scale_;
 	bool modified_ = false;
 	bool appear = true;
-	virtual void Draw();
-	~  Shape();
-	virtual void ChangeColor(glm::vec4 baseColor);
-	virtual void disappear();
+	void Draw();
+	~Shape();
+	void ChangeColor(glm::vec4 baseColor);
+	void disappear();
 	
 
 private:
