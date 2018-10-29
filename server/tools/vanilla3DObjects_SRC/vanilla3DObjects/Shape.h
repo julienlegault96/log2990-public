@@ -6,7 +6,7 @@ class  Shape
 {
 public:
 	Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
-	void init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	virtual void init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
 	glm::vec3 coords_;
 	glm::vec4 baseColor_;
 	GLfloat rotation_;
@@ -14,10 +14,10 @@ public:
 	GLfloat scale_;
 	bool modified_ = false;
 	bool appear = true;
-	  void Draw();
+	virtual void Draw();
 	~  Shape();
-	void ChangeColor(glm::vec4 baseColor);
-	void hide();
+	virtual void ChangeColor(glm::vec4 baseColor);
+	virtual void disappear();
 	
 
 private:
