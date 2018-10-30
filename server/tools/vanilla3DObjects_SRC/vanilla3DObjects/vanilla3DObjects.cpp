@@ -12,6 +12,7 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "Shape.h"
+#include "ShapeTheme.h"
 #include "ShapesContainer.h"
 #include "Pixel.h"
 #include "Image.h"
@@ -20,7 +21,7 @@
 using namespace std;
 // variables pour l'utilisation des nuanceurs
 GLuint progBase;  // le programme de nuanceurs de base
-GLint locVertex = -1;
+
 GLint locNormal;
 GLint locColor = -1;
 GLint locmatrModel = -1;
@@ -318,7 +319,8 @@ void FenetreTP::afficherScene()
 	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
 	{
 		if (shape->appear)
-		{
+		{	// *********************verifier pour afficher texture ****************//
+
 			glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
 			matrModel.PushMatrix(); {
 				matrModel.Translate(shape->coords_);
@@ -326,6 +328,13 @@ void FenetreTP::afficherScene()
 				matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
 				glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
 				glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+				if(ShapeThemelist::Spaceship)
+				{
+					 glBindVertexArray( vao[1] );
+					 glDrawElements(GL_TRIANGLES,sizeof(gTheiereSommets), GL_UNSIGNED_INT, 0 );
+					 glBindVertexArray(0);
+				}
+
 				shape->Draw();
 			}matrModel.PopMatrix();
 		}
