@@ -12,7 +12,7 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "Shape.h"
-#include "ShapeTheme.h"
+#include "Planet.h"
 #include "ShapesContainer.h"
 #include "Pixel.h"
 #include "Image.h"
@@ -23,6 +23,7 @@ using namespace std;
 GLuint progBase;  // le programme de nuanceurs de base
 
 GLint locNormal;
+GLint locVertex = -1;
 GLint locColor = -1;
 GLint locmatrModel = -1;
 GLint locmatrVisu = -1;
@@ -328,13 +329,6 @@ void FenetreTP::afficherScene()
 				matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
 				glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
 				glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-				if(ShapeThemelist::Spaceship)
-				{
-					 glBindVertexArray( vao[1] );
-					 glDrawElements(GL_TRIANGLES,sizeof(gTheiereSommets), GL_UNSIGNED_INT, 0 );
-					 glBindVertexArray(0);
-				}
-
 				shape->Draw();
 			}matrModel.PopMatrix();
 		}
