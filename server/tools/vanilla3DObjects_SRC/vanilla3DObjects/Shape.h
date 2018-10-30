@@ -6,12 +6,14 @@ class  Shape
 {
 public:
 	Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
-	virtual void init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	Shape();
+    void init(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
 	glm::vec3 coords_;
 	glm::vec4 baseColor_;
 	GLfloat rotation_;
 	glm::vec3 rotationAxis_;
 	GLfloat scale_;
+	
 	bool modified_ = false;
 	bool appear = true;
 	void Draw();
@@ -30,6 +32,9 @@ void Shape::Draw()
 {
 	forme->afficher();
 }
+
+Shape::Shape()
+{}
 
 Shape::Shape(Shapelist type, glm::vec3 coords, glm::vec4 baseColor, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
 {
