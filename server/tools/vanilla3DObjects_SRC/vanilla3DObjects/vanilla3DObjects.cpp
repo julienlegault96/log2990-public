@@ -212,7 +212,6 @@ void FenetreTP::initialiser()
 void FenetreTP::conclure()
 {
 	glDeleteBuffers(3, ubo);
-	delete shapes;
 }
 
 void FenetreTP::afficherScene()
