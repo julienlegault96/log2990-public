@@ -7,14 +7,17 @@ class ShapesContainer {
 public:
 	
 	ShapesContainer(int numberShapes, double dimBoite);
-    void setModBan( const std::string & banString);
+    void parseModOptions( const std::string & optionString);
     std::vector<Shape*> getShapes() const;
 	void modify();
 	~ShapesContainer();
 private:
     short const MOD_COUNT = 7;
 	short const MIN_DISTANCE = 6;
-    std::string _banString = "";
+    const char ADD_CHAR = 'a';
+    const char SUP_CHAR = 's';
+    const char COL_CHAR = 'c';
+    std::string _banString;
     std::vector<Shape*> _shapes = {};
 	int _numberShapes = 0;
 	double _scalingFactor = 1;
@@ -36,8 +39,10 @@ ShapesContainer::ShapesContainer(int numberShapes, double dimBoite)
 	generateShapes();
 }
 
-void ShapesContainer::setModBan(const std::string & banString) {
-    _banString = banString;
+void ShapesContainer::parseModOptions(const std::string & optionString) {
+    if (optionString.find(ADD_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::AddObject)); }
+    if (optionString.find(COL_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::ColorChange)); }
+    if (optionString.find(SUP_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::DeleteObject)); }
 }
 
 ShapesContainer::~ShapesContainer() {

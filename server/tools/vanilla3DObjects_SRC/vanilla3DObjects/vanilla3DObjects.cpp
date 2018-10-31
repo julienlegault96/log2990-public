@@ -212,6 +212,8 @@ void FenetreTP::initialiser()
 void FenetreTP::conclure()
 {
 	glDeleteBuffers(3, ubo);
+    delete shapes;
+    shapes = nullptr;
 }
 
 void FenetreTP::afficherScene()
@@ -344,8 +346,44 @@ void unturnCamera()
 	camera.theta = camera.previousTheta;
 	camera.verifierAngles();
 }
+
+void help() 
+{
+    std::cout << "Usage de l'exécutable :" << std::endl
+        << "genmulti { geo | theme }   <quantité>	<modification>  <sortie>" << std::endl;
+}
+
+void générerMultivue(FenetreTP& fenetre, const char * sortie)
+{
+    fenetre.afficherScene();
+    fenetre.screenshot("_a_ori.bmp");
+    fenetre.swap();
+
+    turnCamera();
+    fenetre.afficherScene();
+    fenetre.screenshot("_a_mod.bmp");
+    fenetre.swap();
+
+    //modifier scène
+    shapes->modify();
+    fenetre.afficherScene();
+    fenetre.screenshot("_b_ori.bmp");
+    fenetre.swap();
+
+
+    unturnCamera();
+    fenetre.afficherScene();
+    fenetre.screenshot("_b_mod.bmp");
+    fenetre.swap();
+}
+
 int main(int argc, char *argv[])
 {
+    if (argc != 5)
+    { 
+        help();
+        return -1; 
+    }
 	// créer une fenêtre
 	FenetreTP fenetre;
 
@@ -354,34 +392,13 @@ int main(int argc, char *argv[])
 	srand(time(0));
 	std::cout << time(0);
 
-	shapes = new ShapesContainer(15, etat.dimBoite);
+	shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
+    shapes->parseModOptions(argv[3]);
 
-	// affichage
-	fenetre.afficherScene();
-	fenetre.screenshot("Side1Org.bmp");
-    fenetre.swap();
-
-	turnCamera();
-	fenetre.afficherScene();
-    fenetre.screenshot("Side2Org.bmp");
-	fenetre.swap();
-
-	//modifier scène
-	shapes->modify();
-	fenetre.afficherScene();
-    fenetre.screenshot("Side2Diff.bmp");
-	fenetre.swap();
-
-
-	unturnCamera();
-	fenetre.afficherScene();
-    fenetre.screenshot("Side1Diff.bmp");
-	fenetre.swap();
+    générerMultivue(fenetre, argv[4]);
 
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
-    delete shapes;
-    shapes = nullptr;
 
 	return 0;
 }
