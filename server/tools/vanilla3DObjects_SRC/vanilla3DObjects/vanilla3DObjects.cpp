@@ -13,6 +13,7 @@
 #include <time.h> 
 #include "Shape.h"
 #include "Planet.h"
+#include "Spaceship.h"
 #include "ShapesContainer.h"
 #include "Pixel.h"
 #include "Image.h"
@@ -23,7 +24,6 @@ using namespace std;
 GLuint progBase;  // le programme de nuanceurs de base
 
 GLint locNormal;
-GLint locVertex = -1;
 GLint locColor = -1;
 GLint locmatrModel = -1;
 GLint locmatrVisu = -1;
@@ -313,26 +313,42 @@ void FenetreTP::afficherScene()
 	}
 
 	// Mode plein ou en fil
-	glPolygonMode(GL_FRONT_AND_BACK, etat.modePolygone);
-	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, Etat::modePolygone);
+	if (Etat::culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
+	// erreur dans le constructeur
+	glm::vec3 coords = glm::vec3(-1., 0., 4.);
+	GLfloat rotation = 0.;
+	glm::vec3 axis = glm::vec3(0., 0., 0.);
+	GLfloat scale = 1.;
 
 
-	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
-	{
-		if (shape->appear)
-		{	// *********************verifier pour afficher texture ****************//
+	Spaceship spaceship1 = Spaceship(coords, rotation , axis, scale);
+	glVertexAttrib4f(locColor, 1., 0., 0., 0. );
+	 matrModel.PushMatrix(); {
+		 matrModel.Translate(coords);
+		 matrModel.Scale(scale);
+	     //matrModel.Rotate(rotation, axis);
+		 glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+	 	 glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+	 	 spaceship1.DrawBody();
+	}matrModel.PopMatrix();
+	
+	// for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
+	// {
+	// 	if (shape->appear)
+	// 	{	// *********************verifier pour afficher texture ****************//
 
-			glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
-			matrModel.PushMatrix(); {
-				matrModel.Translate(shape->coords_);
-				matrModel.Scale(shape->scale_);
-				matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-				glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-				glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-				shape->Draw();
-			}matrModel.PopMatrix();
-		}
-	}
+	// 		glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
+	// 		matrModel.PushMatrix(); {
+	// 			matrModel.Translate(shape->coords_);
+	// 			matrModel.Scale(shape->scale_);
+	// 			matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+	// 			glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+	// 			glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+	// 			shape->Draw();
+	// 		}matrModel.PopMatrix();
+	// 	}
+	// }
 
 }
 
@@ -442,6 +458,83 @@ void genererMultivue(FenetreTP& fenetre, const char * sortie)
     fenetre.afficherScene();
     fenetre.screenshot((FILENAME + A_POV + MODIFIED).data());
     fenetre.swap();
+glm::ivec2 sourisPosPrec(0, 0);
+static bool pressed = false;
+void FenetreTP::sourisClic(int button, int state, int x, int y)
+{
+	// button est un parmi { TP_BOUTON_GAUCHE, TP_BOUTON_MILIEU, TP_BOUTON_DROIT }
+	// state  est un parmi { TP_PRESSE, DL_RELEASED }
+	pressed = (state == TP_PRESSE);
+	switch (button)
+	{
+	case TP_BOUTON_GAUCHE: // Déplacer (modifier angles) la caméra
+		sourisPosPrec.x = x;
+		sourisPosPrec.y = y;
+		break;
+	}
+}
+ void FenetreTP::sourisMolette(int x, int y)
+{
+	const int sens = +1;
+	camera.dist -= 0.2 * sens*y;
+	if (camera.dist < 15.0) camera.dist = 15.0;
+	else if (camera.dist > 70.0) camera.dist = 70.0;
+}
+ void FenetreTP::sourisMouvement(int x, int y)
+{
+	if (pressed)
+	{
+		int dx = x - sourisPosPrec.x;
+		int dy = y - sourisPosPrec.y;
+		camera.theta -= dx / 3.0;
+		camera.phi -= dy / 3.0;
+		sourisPosPrec.x = x;
+		sourisPosPrec.y = y;
+ 		camera.verifierAngles();
+	}
+}
+void FenetreTP::clavier(TP_touche touche)
+{
+	switch (touche)
+	{
+	case TP_ECHAP:
+	case TP_q: // Quitter l'application
+		quit();
+		break;
+	case TP_x: // Activer/désactiver l'affichage des axes
+		Etat::afficheAxes = !Etat::afficheAxes;
+		std::cout << "// Affichage des axes ? " << (Etat::afficheAxes ? "OUI" : "NON") << std::endl;
+		break;
+	case TP_i: // Réinitiliaser le point de vue
+		camera.phi = phiInit; camera.theta = thetaInit; camera.dist = distInit;
+		break;
+	case TP_g: // Permuter l'affichage en fil de fer ou plein
+		Etat::modePolygone = (Etat::modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
+		break;
+	case TP_c: // Permuter l'affichage des faces arrières
+		Etat::culling = !Etat::culling;
+		break;
+	case TP_SOULIGNE:
+	case TP_MOINS: // Reculer la caméra
+		camera.dist += 0.1;
+		break;
+	case TP_PLUS: // Avancer la caméra
+	case TP_EGAL:
+		if (camera.dist > 1.0) camera.dist -= 0.1;
+		break;
+	case TP_b: // Modifier
+		shapes->modify();
+		break;
+	case TP_h: // Décrémenter la dimension de la boite
+		Etat::dimBoite -= 0.05;
+		if (Etat::dimBoite < 1.0) Etat::dimBoite = 1.0;
+		std::cout << " etat.dimBoite=" << Etat::dimBoite << std::endl;
+		break;
+	default:
+		std::cout << " touche inconnue : " << (char)touche << std::endl;
+		imprimerTouches();
+		break;
+	}
 }
 
 int main(int argc, char *argv[])
