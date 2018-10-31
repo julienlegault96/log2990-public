@@ -353,27 +353,33 @@ void help()
         << "genmulti { geo | theme }   <quantité>	<modification>  <sortie>" << std::endl;
 }
 
-void générerMultivue(FenetreTP& fenetre, const char * sortie)
+void genererMultivue(FenetreTP& fenetre, const char * sortie)
 {
+    const std::string FILENAME(sortie);
+    const std::string A_POV("_a");
+    const std::string B_POV("_b");
+    const std::string ORIGINAL("_ori.bmp");
+    const std::string MODIFIED("_mod.bmp");
+    
     fenetre.afficherScene();
-    fenetre.screenshot("_a_ori.bmp");
+    fenetre.screenshot((FILENAME + A_POV + ORIGINAL).data());
     fenetre.swap();
 
     turnCamera();
     fenetre.afficherScene();
-    fenetre.screenshot("_a_mod.bmp");
+    fenetre.screenshot((FILENAME + B_POV + ORIGINAL).data());
     fenetre.swap();
 
     //modifier scène
     shapes->modify();
     fenetre.afficherScene();
-    fenetre.screenshot("_b_ori.bmp");
+    fenetre.screenshot((FILENAME + B_POV + MODIFIED).data());
     fenetre.swap();
 
 
     unturnCamera();
     fenetre.afficherScene();
-    fenetre.screenshot("_b_mod.bmp");
+    fenetre.screenshot((FILENAME + A_POV + MODIFIED).data());
     fenetre.swap();
 }
 
@@ -395,7 +401,7 @@ int main(int argc, char *argv[])
 	shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
     shapes->parseModOptions(argv[3]);
 
-    générerMultivue(fenetre, argv[4]);
+    genererMultivue(fenetre, argv[4]);
 
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
