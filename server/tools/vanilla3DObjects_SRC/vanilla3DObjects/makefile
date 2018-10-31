@@ -18,13 +18,13 @@ ifeq "$(shell uname)" "Darwin"
 endif
 
 TP="tp1"
-SRC=vanilla3DObjects
+SRC=vanilla3DObjectsInitial
 
 exe : $(SRC).exe
 run : exe
 	./$(SRC).exe
 $(SRC).exe : $(SRC).cpp *.h
-	$(CXX) $(CXXFLAGS) -o$@ $(SRC).cpp Image.cpp ImageHeader.cpp Pixel.cpp Etat.cpp $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o$@ $(SRC).cpp Image.cpp ImageHeader.cpp Pixel.cpp $(LDFLAGS)  #Etat.cpp
 
 sol :  ; make SRC=$(SRC)Solution exe
 runs : ; make SRC=$(SRC)Solution run
