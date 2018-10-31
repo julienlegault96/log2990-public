@@ -6,7 +6,6 @@ enum ShapeThemelist {Earth, Mars, Moon, Sun, Neptune, Saturn };
 class  Planet : public Shape
 {
 public:
-	Planet();
 	Planet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
 	void initPlanet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);		
 	~Planet();		
@@ -71,3 +70,7 @@ void Planet::changeTexture(GLuint texture)
 	this->modified_ = true;
 }
 
+Planet::~Planet()
+{
+	delete forme;
+}

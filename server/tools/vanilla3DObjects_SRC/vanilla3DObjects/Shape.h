@@ -84,7 +84,7 @@ void Shape::hide()
 	this->modified_ = true;
 }
 
-  Shape::~  Shape()
+Shape::~Shape()
 {
 	delete forme;
 }
