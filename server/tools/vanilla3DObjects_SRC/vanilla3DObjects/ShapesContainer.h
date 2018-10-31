@@ -10,11 +10,11 @@ public:
 	void modify();
 	~ShapesContainer();
 private:
-	std::vector<Shape*> shapes_;
+	std::vector<Shape*> _shapes;
 	double const MIN_DISTANCE = 6;
-	double scalingFactor = 1;
-	double dimBoite_;
-	int numberShapes_ = 0;
+	double _scalingFactor = 1;
+	double _dimBoite;
+	int _numberShapes = 0;
 	void generateShapes();
 	float randFloat(const float& min, const float& max);
 	void randCoords(glm::vec3 *coords);
@@ -28,16 +28,16 @@ private:
 
 ShapesContainer::ShapesContainer(int numberShapes, double dimBoite) 
 {
-	this->numberShapes_ = numberShapes;
-	this->dimBoite_ = dimBoite;
-	scalingFactor = pow(dimBoite_, 3) / (49*numberShapes_);
+	this->_numberShapes = numberShapes;
+	this->_dimBoite = dimBoite;
+	_scalingFactor = pow(_dimBoite, 3) / (49*_numberShapes);
 	generateShapes();
 }
 
 void ShapesContainer::generateShapes() 
 {
 
-	for (int index = 0; index < numberShapes_; index++)
+	for (int index = 0; index < _numberShapes; index++)
 	{
 		generateShape();
 	}
@@ -53,18 +53,18 @@ void ShapesContainer::generateShape()
 
 	glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	GLfloat scaleShape = randFloat(0.5*scalingFactor, 1.5*scalingFactor);
+	GLfloat scaleShape = randFloat(0.5*_scalingFactor, 1.5*_scalingFactor);
 	Shape *newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
-	shapes_.push_back(newShape);
+	_shapes.push_back(newShape);
 }
 
 ShapesContainer::~ShapesContainer() 
 {
-	while(!shapes_.empty())
+	while(!_shapes.empty())
 	{
-		Shape *shape = shapes_.back();
+		Shape *shape = _shapes.back();
 		delete shape;
-		shapes_.pop_back();
+		_shapes.pop_back();
 	}
 }
 
@@ -80,9 +80,9 @@ float ShapesContainer::randFloat(const float& min, const float& max)
 void ShapesContainer::randCoords(glm::vec3 *coords) 
 {
 	do {
-		coords->x = randFloat(-dimBoite_ / 2, dimBoite_ / 2);
-		coords->y = randFloat(-dimBoite_  / 2, dimBoite_/ 2);
-		coords->z = randFloat(0, dimBoite_ - 1);
+		coords->x = randFloat(-_dimBoite / 2, _dimBoite / 2);
+		coords->y = randFloat(-_dimBoite  / 2, _dimBoite/ 2);
+		coords->z = randFloat(0, _dimBoite - 1);
 	} while (checkForCollision(coords));
 }
 
@@ -90,18 +90,18 @@ bool ShapesContainer::checkForCollision(glm::vec3 *coords)
 {
 	bool collision = false;
 	double distance = 0;
-	auto shape = begin(shapes_);
-	for (int i = 0; shape != end(shapes_) && !collision; ++shape, ++i)
+	auto shape = begin(_shapes);
+	for (int i = 0; shape != end(_shapes) && !collision; ++shape, ++i)
 	{
 		distance = pow((*shape)->coords_.x - coords->x, 2) + pow((*shape)->coords_.y - coords->y, 2)+ pow((*shape)->coords_.z - coords->z, 2);
-		collision = distance < 12*scalingFactor;
+		collision = distance < 12*_scalingFactor;
 	}
 	return collision;
 }
 
 std::vector<Shape*> ShapesContainer::getShapes() 
 {
-	return shapes_;
+	return _shapes;
 }
 
 void ShapesContainer::modify() 
@@ -110,9 +110,9 @@ void ShapesContainer::modify()
 	{
 
 
-		int index = rand() % this->numberShapes_;
-		while (this->shapes_.at(index)->modified_) {
-			index = rand() % this->numberShapes_;
+		int index = rand() % this->_numberShapes;
+		while (this->_shapes.at(index)->modified_) {
+			index = rand() % this->_numberShapes;
 		}
 		Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
 		switch (mod)
@@ -134,20 +134,20 @@ void ShapesContainer::modify()
 void ShapesContainer::changeColor(int index) 
 {
 	glm::vec4 newColor(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
-	while(this->shapes_.at(index)->baseColor_ == newColor) {
+	while(this->_shapes.at(index)->baseColor_ == newColor) {
 		glm::vec4 newColor(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 	}
-	this->shapes_.at(index)->ChangeColor(newColor);
+	this->_shapes.at(index)->ChangeColor(newColor);
 }
 
 void ShapesContainer::deleteShape(int index) 
 {
-	this->shapes_.at(index)->disappear();
+	this->_shapes.at(index)->disappear();
 }
 
 void ShapesContainer::addShape() 
 {
 	generateShape();
-	this->shapes_.at(this->numberShapes_)->modified_ = true;
-	this->numberShapes_++;
+	this->_shapes.at(this->_numberShapes)->modified_ = true;
+	this->_numberShapes++;
 }

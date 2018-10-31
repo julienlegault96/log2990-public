@@ -381,6 +381,8 @@ int main(int argc, char *argv[])
 
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
+    delete shapes;
+    shapes = nullptr;
 
 	return 0;
 }
