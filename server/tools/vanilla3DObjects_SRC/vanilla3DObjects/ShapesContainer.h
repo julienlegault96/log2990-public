@@ -41,8 +41,8 @@ ShapesContainer::ShapesContainer(int numberShapes, double dimBoite)
 
 void ShapesContainer::parseModOptions(const std::string & optionString) {
     if (optionString.find(ADD_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::AddObject)); }
-    if (optionString.find(COL_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::ColorChange)); }
     if (optionString.find(SUP_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::DeleteObject)); }
+    if (optionString.find(COL_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::ColorChange)); }
 }
 
 ShapesContainer::~ShapesContainer() {
@@ -122,18 +122,20 @@ void ShapesContainer::modify() {
 
 		Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
         // only do unbanned modifications
-        while (_banString.length() != 0 // no ban?
-            && _banString.find_first_of(mod) != std::string::npos) {
+        while (_banString.length() != 0
+            && _banString.find(std::to_string(mod)) != std::string::npos) {
             mod = Modifications(rand() % (Modifications::DeleteObject + 1));
         }
 
-		switch (mod) {
+		switch(mod) {
 		    case ColorChange:
 			    changeColor(index);
 			    break;
+
 		    case AddObject:
 			    addShape();
 			    break;
+
 		    case DeleteObject:
 			    deleteShape(index);
 			    break;
@@ -150,7 +152,7 @@ void ShapesContainer::changeColor(int index) {
 }
 
 void ShapesContainer::deleteShape(int index) {
-	_shapes.at(index)->disappear();
+	_shapes.at(index)->hide();
 }
 
 void ShapesContainer::addShape() {

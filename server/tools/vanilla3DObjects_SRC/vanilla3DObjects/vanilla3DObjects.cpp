@@ -327,8 +327,6 @@ void FenetreTP::screenshot(const char * filename) {
 	bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
 	bmpOutputFile << image;
 	bmpOutputFile.close();
-
-
 }
 
 void turnCamera()
@@ -376,7 +374,6 @@ void genererMultivue(FenetreTP& fenetre, const char * sortie)
     fenetre.screenshot((FILENAME + B_POV + MODIFIED).data());
     fenetre.swap();
 
-
     unturnCamera();
     fenetre.afficherScene();
     fenetre.screenshot((FILENAME + A_POV + MODIFIED).data());
@@ -385,7 +382,8 @@ void genererMultivue(FenetreTP& fenetre, const char * sortie)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 5)
+    const short EXPECTED_ARG_LENGTH = 5;
+    if (argc != EXPECTED_ARG_LENGTH)
     { 
         help();
         return -1; 
