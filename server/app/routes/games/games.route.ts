@@ -17,6 +17,8 @@ import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
 import { ErrorFinder } from "../../services/error-finder/error-finder";
+import { Leaderboard } from "../../../common/game/leaderboard";
+import { request } from "http";
 
 @injectable()
 
@@ -28,8 +30,8 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly FIRST_VIEW_RAW_INDEX: number = 0;
     private readonly FIRST_VIEW_MODIFIED_INDEX: number = 1;
     private readonly FIRST_VIEW_DIFF_INDEX: number = 2;
-    // private readonly SECOND_VIEW_RAW_INDEX: number = 3;
-    // private readonly SECOND_VIEW_MODIFED_INDEX: number = 4;
+    private readonly SECOND_VIEW_RAW_INDEX: number = 3;
+    private readonly SECOND_VIEW_MODIFED_INDEX: number = 4;
     private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
 
     private readonly execPath: string = "./tools/img-diff-generator.exe";
@@ -114,36 +116,51 @@ export class GamesRoute extends AbstractRoute<Game> {
         });
     }
 
-    // tslint:disable-next-line:max-func-body-length
+    private async test(req: Request): Promise<string[]> {
+        return this.doubleViewUpload(req)
+            .then((imagesDiff: [string, string]) => {
+                const imgur: Imgur = new Imgur();
+                const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
+                const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
+                const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_RAW_INDEX]);
+                const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_MODIFED_INDEX]);
+
+                return Promise.all([
+                    imgurPromise1,
+                    imgurPromise2,
+                    imagesDiff[0],
+                    imgurPromise3,
+                    imgurPromise4,
+                    imagesDiff[1]
+                ]);
+            });
+    }
+
     private async doubleViewUpload(req: Request): Promise<string[]> {
-        const isValidCounts: [boolean, boolean] = [false, false];
-        const differenceImages: [string, string] = ["", ""];
+        let differenceImages: [string, string] = ["", ""];
 
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
-            // TODO
+            differenceImages = ["", ""];
+
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     differenceImages[0] = value;
-                    isValidCounts[0] = true;
                 })
-                .catch(() => {
-                    isValidCounts[0] = false;
-                });
+                .catch();
 
-            if (isValidCounts[0]) {
-                await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
-                    .then((value: string) => {
-                        differenceImages[1] = value;
-                        isValidCounts[1] = true;
-                    })
-                    .catch(() => {
-                        isValidCounts[1] = false;
-                    });
+            if (differenceImages[0] === "") {
+                continue;
             }
+
+            await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
+                .then((value: string) => {
+                    differenceImages[1] = value;
+                })
+                .catch();
         }
 
-        if (!isValidCounts[0] || !isValidCounts[1]) {
+        if (differenceImages[0] === "" || differenceImages[1] === "") {
             throw new Error(this.errorCountException);
         }
 
