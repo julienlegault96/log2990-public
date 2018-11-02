@@ -12,7 +12,7 @@ describe("Leaderboard route", () => {
 
     it("should not update scores", async () => {
         const leaderboardRequest: LeaderboardRequest = {
-            id: 1,
+            id: "1",
             partyMode: GamePartyMode.Solo,
             time: 200,
             playerName: "Anon"
@@ -31,7 +31,7 @@ describe("Leaderboard route", () => {
 
     it("should update scores", async () => {
         const leaderboardRequest: LeaderboardRequest = {
-            id: 1,
+            id: "1",
             partyMode: GamePartyMode.Solo,
             time: 20,
             playerName: "Anon"
