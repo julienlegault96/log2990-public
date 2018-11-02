@@ -49,6 +49,8 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly secondViewOriginalPath: string = `./tools/${this.imageGeneratorOutput}_b_ori.bmp`;
     private readonly secondViewModifiedPath: string = `./tools/${this.imageGeneratorOutput}_b_mod.bmp`;
 
+    private readonly imagesGeneratorMaximumTries: number = 4;
+
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
         this.collection = Collections.Games;
@@ -114,50 +116,38 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     // tslint:disable-next-line:max-func-body-length
     private async doubleViewUpload(req: Request): Promise<string[]> {
-        // Sprint 3: Implémenter les fonctions nécessaires pour l'enregistrement du jeu
-        // generate imageDifff
-        // if not valid retry generate
-        // 4 times
-        // throw error
+        const isValidCounts: [boolean, boolean] = [false, false];
+        const differenceImages: [string, string] = ["", ""];
 
-        let isValidCountFirstView: boolean = false;
-        let isValidCountSecondView: boolean = false;
-        let differenceImageFirstView: string = "";
-        let differenceImageSecondView: string = "";
-
-        const maximumTries: number = 4;
-        for (let i: number = 0; i < maximumTries; i++) {
+        for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
             // TODO
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
-                    differenceImageFirstView = value;
-                    isValidCountFirstView = true;
+                    differenceImages[0] = value;
+                    isValidCounts[0] = true;
                 })
                 .catch(() => {
-                    isValidCountFirstView = false;
+                    isValidCounts[0] = false;
                 });
 
-            if (isValidCountFirstView) {
+            if (isValidCounts[0]) {
                 await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                     .then((value: string) => {
-                        differenceImageSecondView = value;
-                        isValidCountSecondView = true;
+                        differenceImages[1] = value;
+                        isValidCounts[1] = true;
                     })
                     .catch(() => {
-                        isValidCountSecondView = false;
+                        isValidCounts[1] = false;
                     });
             }
         }
 
-        if (!isValidCountFirstView || !isValidCountSecondView) {
+        if (!isValidCounts[0] || !isValidCounts[1]) {
             throw new Error(this.errorCountException);
         }
 
-        return [
-            differenceImageFirstView,
-            differenceImageSecondView
-        ];
+        return differenceImages;
     }
 
     private async exec3DImage(): Promise<void> {
