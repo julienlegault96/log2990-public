@@ -3,6 +3,11 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+library.add(fas);
+
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { HomePageComponent } from "./home-page/home-page.component";
@@ -57,6 +62,7 @@ import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-
         BrowserModule,
         HttpClientModule,
         FormsModule,
+        FontAwesomeModule,
     ],
     providers: [
         GameService,

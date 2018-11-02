@@ -22,19 +22,59 @@
 
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-primary btn-block" 
-                        (click)="delete()">
+                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#delete-modal">
                             Supprimer
                         </button>
                     </div>
 
-                    <div class="col">                        
-                        <button class="btn btn-primary btn-block" 
-                        (click)="resetLeaderboard()">
+                    <div class="col">
+                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#reset-modal">
                             Réinitialiser les scores
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
+                    Êtes-vous certain?
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Voulez-vous vraiment supprimer ce jeu? Ceci est une opération permanente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="delete()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reset-modal">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
+                    Êtes-vous certain?
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Voulez-vous réinitialiser le tableau des scores? Ceci est une opération permanente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetLeaderboard()">Réinitialiser</button>
             </div>
         </div>
     </div>
