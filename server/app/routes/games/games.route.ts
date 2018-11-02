@@ -18,7 +18,6 @@ import * as util from "util";
 import * as fs from "fs";
 import { ErrorFinder } from "../../services/error-finder/error-finder";
 import { Leaderboard } from "../../../common/game/leaderboard";
-import { request } from "http";
 
 @injectable()
 
