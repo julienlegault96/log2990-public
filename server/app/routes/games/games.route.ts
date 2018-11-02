@@ -203,27 +203,38 @@ export class GamesRoute extends AbstractRoute<Game> {
         const execPath: string = "./tools/vanilla3DObjects.exe";
 
         // TODO
-        await util.promisify(execFile)(
-            execPath,
-            ["geo", "20", "asc", this.imageGeneratorOutput]
-        ).catch(console.log);
+        await this.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput]).catch(console.log);
+        // await util.promisify(execFile)(
+        //     execPath,
+        //     ["geo", "20", "asc", this.imageGeneratorOutput]
+        // ).catch(console.log);
     }
 
     private generateId(): string {
         return Math.floor(Math.random() * this.ID_RANGE).toString();
     }
 
+    private writeFile(filepath: string, buffer: Buffer): Promise<void> {
+        return util.promisify(fs.writeFile)(filepath, buffer);
+    }
+
+    private execFile(filepath: string, params: Array<string>): Promise<void> {
+        return util.promisify(execFile)(filepath, params).then(() => { return; });
+    }
+
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
         const rawBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(rawImage), "base64");
-        await util.promisify(fs.writeFile)(this.rawImagePath, rawBitmap);
+        await this.writeFile(this.rawImagePath, rawBitmap);
 
         const modifiedBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(modifiedImage), "base64");
-        await util.promisify(fs.writeFile)(this.modifiedImagePath, modifiedBitmap);
+        await this.writeFile(this.modifiedImagePath, modifiedBitmap);
 
-        await util.promisify(execFile)(
-            this.execPath,
-            [this.rawImagePath, this.modifiedImagePath, this.outputPath]
-        );
+        await this.execFile(this.execPath, [this.rawImagePath, this.modifiedImagePath, this.outputPath]);
+
+        // await util.promisify(execFile)(
+        //     this.execPath,
+        //     [this.rawImagePath, this.modifiedImagePath, this.outputPath]
+        // );
 
         const output: string = await this.base64_encode(this.outputPath);
 
