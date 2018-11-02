@@ -361,7 +361,7 @@ public:
    }
 
    // fonction pour allouer les ressources
-   void initialiser( );
+   void initialiser( std::string absolutePath );
    // fonction pour détruire les ressources OpenGL allouées
    void conclure( );
    // fonction appelée pour tracer la scène

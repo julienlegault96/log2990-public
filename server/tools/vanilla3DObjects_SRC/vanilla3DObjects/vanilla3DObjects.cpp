@@ -117,15 +117,28 @@ public:
 	bool modeLookAt;      // on utilise LookAt (au lieu de Rotate et Translate)
 } camera = { thetaInit, phiInit,thetaInit, phiInit, distInit, true };
 
-void chargerNuanceurs()
+std::string getAbsolutePath(const char * argv0)
 {
+	const short PROGRAM_NAME_LENGTH = 12;
+
+	std::string absoluteRef(argv0);
+	absoluteRef = absoluteRef.substr(0, absoluteRef.length() - PROGRAM_NAME_LENGTH);
+
+	return absoluteRef;
+}
+
+void chargerNuanceurs( std::string path)
+{
+	const char * SHADER_NAME = "nuanceurs.glsl";
 	// charger le nuanceur de base
 	{
+		std ::string absoluteRef = path.append(SHADER_NAME);
+
 		// créer le programme
 		progBase = glCreateProgram();
 
 		// attacher le nuanceur de sommets
-		const GLchar *chainesSommets[2] = { "#version 410\n#define NUANCEUR_SOMMETS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
+		const GLchar *chainesSommets[2] = { "#version 410\n#define NUANCEUR_SOMMETS\n", ProgNuanceur::lireNuanceur(absoluteRef.data()) };
 		if (chainesSommets[1] != NULL)
 		{
 			GLuint nuanceurObj = glCreateShader(GL_VERTEX_SHADER);
@@ -136,7 +149,7 @@ void chargerNuanceurs()
 			delete[] chainesSommets[1];
 		}
 		// attacher le nuanceur de fragments
-		const GLchar *chainesFragments[2] = { "#version 410\n#define NUANCEUR_FRAGMENTS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
+		const GLchar *chainesFragments[2] = { "#version 410\n#define NUANCEUR_FRAGMENTS\n", ProgNuanceur::lireNuanceur(absoluteRef.data()) };
 		if (chainesFragments[1] != NULL)
 		{
 			GLuint nuanceurObj = glCreateShader(GL_FRAGMENT_SHADER);
@@ -192,7 +205,7 @@ void chargerNuanceurs()
 	}
 }
 
-void FenetreTP::initialiser()
+void FenetreTP::initialiser(std::string absolutePath)
 {
 	// donner la couleur de fond
 	glClearColor(0.2, 0.21, 0.26, 1.0);
@@ -203,7 +216,7 @@ void FenetreTP::initialiser()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	// charger les nuanceurs
-	chargerNuanceurs();
+	chargerNuanceurs(absolutePath);
 
 	// créer quelques autres formes
 	glUseProgram(progBase);
@@ -347,8 +360,17 @@ void unturnCamera()
 
 void help() 
 {
-    std::cout << "Usage de l'executable :" << std::endl
-        << "genmulti { geo | theme }   <quantite>	<modification>  <sortie>" << std::endl;
+	std::cout << "Usage de l'executable :" << std::endl
+		<< "genmulti { geo | theme }   <quantite>	<modification>  <sortie>" << std::endl
+		<< "Modifications possibles: " << std::endl
+		<< "\t (a)-ajouter des objets a la scene initiale" << std::endl
+		<< "\t (s)-supprimer des objets de la scene initiale" << std::endl
+		<< "\t (c)-changer la couleur ou la texture d'objets de la scene initiale" << std::endl
+		<< "par exemple genmulti geo 15 ac sortie" << std::endl
+		<< "\t utilise des formes geometriques" << std::endl
+		<< "\t la scene originales a 15 objets" << std::endl
+		<< "\t les modifications autorisees sont ajouter et changer couleur" << std::endl
+		<< "\t les fichiers de sortie vont commencer par sortie" << std::endl;
 }
 
 void genererMultivue(FenetreTP& fenetre, const char * sortie)
@@ -390,16 +412,16 @@ int main(int argc, char *argv[])
     }
 	// créer une fenêtre
 	FenetreTP fenetre;
-
 	// allouer des ressources et définir le contexte OpenGL
-	fenetre.initialiser();
+	std::string absoluteRef = getAbsolutePath(argv[0]);
+	fenetre.initialiser(absoluteRef);
 	srand(time(0));
 	std::cout << time(0);
 
 	shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
     shapes->parseModOptions(argv[3]);
 
-    genererMultivue(fenetre, argv[4]);
+    genererMultivue(fenetre, absoluteRef.append(argv[4]).data());
 
 	// détruire les ressources OpenGL allouées
 	fenetre.conclure();
