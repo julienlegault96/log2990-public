@@ -174,10 +174,10 @@ export class GamesRoute extends AbstractRoute<Game> {
             throw new Error(this.errorCountException);
         }
 
-        images[this.FIRST_VIEW_RAW_INDEX] = await this.base64_encode(this.firstViewOriginalPath);
-        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.base64_encode(this.firstViewModifiedPath);
-        images[this.SECOND_VIEW_RAW_INDEX] = await this.base64_encode(this.secondViewOriginalPath);
-        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.base64_encode(this.secondViewModifiedPath);
+        images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.firstViewOriginalPath);
+        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.firstViewModifiedPath);
+        images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.secondViewOriginalPath);
+        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.encodeInBase64(this.secondViewModifiedPath);
 
         await this.deleteFiles(
             this.firstViewOriginalPath,
@@ -240,7 +240,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         //     [this.rawImagePath, this.modifiedImagePath, this.outputPath]
         // );
 
-        const output: string = await this.base64_encode(this.outputPath);
+        const output: string = await this.encodeInBase64(this.outputPath);
 
         const isValidCount: boolean = await this.hasValidDifferenceCount(this.outputPath);
 
@@ -293,7 +293,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         return nbError;
     }
 
-    private async base64_encode(filepath: string): Promise<string> {
+    private async encodeInBase64(filepath: string): Promise<string> {
         const buffer: Buffer = await this.getBitmapBuffer(filepath);
 
         return buffer.toString("base64");
