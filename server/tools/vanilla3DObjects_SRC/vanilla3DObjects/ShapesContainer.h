@@ -2,15 +2,17 @@
 #include <cmath>
 #include <string>
 #include "Shape.h"
+#include "Planet.h"
+#include <math.h>
 enum Modifications { ColorChange, AddObject, DeleteObject};
 class ShapesContainer {
 public:
-	
-	ShapesContainer(int numberShapes, double dimBoite);
-    void parseModOptions( const std::string & optionString);
-    std::vector<Shape*> getShapes() const;
-	void modify();
-	~ShapesContainer();
+  ShapesContainer(int numberShapes, double dimBoite, bool theme);
+  void parseModOptions(const std::string &optionString);
+  std::vector<Shape*> getShapes() const;
+  std::vector<Planet*> getPlanets() const;
+  void modify();
+  ~ShapesContainer();
 private:
 	float const MIN_SIZE_MODIFIER = 0.5;
 	float const MAX_SIZE_MODIFIER = 1.5;
@@ -22,12 +24,14 @@ private:
     const char COL_PARAMETER = 'c';
     std::string _banString;
     std::vector<Shape*> _shapes = {};
-	int _numberShapes = 0;
+    std::vector<Planet*> _planets = {};
+    bool _theme;
+    int _numberShapes = 0;
 	double _scalingFactor = 1;
 	double _dimBoite;
 
-	void generateShapes();
-	float randFloat(const float& min, const float& max) const;
+    void generateShapes();
+    float randFloat(const float& min, const float& max) const;
 	void randCoords(glm::vec3 *coords);
 	bool checkForCollision(glm::vec3 *coords);
 	void changeColor(int index);
@@ -37,10 +41,10 @@ private:
 	void calculateScalingFactor();
 };
 
-ShapesContainer::ShapesContainer(int numberShapes, double dimBoite) 
-    : _numberShapes(numberShapes), _dimBoite(dimBoite) {
-	calculateScalingFactor();
-	generateShapes();
+ShapesContainer::ShapesContainer(int numberShapes, double dimBoite, bool theme) : _numberShapes(numberShapes), _dimBoite(dimBoite), _theme(theme)
+{
+    calculateScalingFactor();
+    generateShapes();
 }
 
 void ShapesContainer::parseModOptions(const std::string & optionString) {
@@ -61,18 +65,35 @@ void ShapesContainer::generateShapes() {
 	}
 }
 
-void ShapesContainer::generateShape()  {
-	Shapelist type = Shapelist(rand() % Shapelist::Cylindre + 1);
-	glm::vec4 color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
+void ShapesContainer::generateShape()
+ {
+     if(this->_theme == false) {
+        Shapelist type = Shapelist(rand() % Shapelist::Cylindre + 1);
+        glm::vec4 color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1), 1);
 
-	glm::vec3 translateShape(0, 0, 0);
-	randCoords(&translateShape);
+        glm::vec3 translateShape(0, 0, 0);
+        randCoords(&translateShape);
 
-	glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+        glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	GLfloat scaleShape = randFloat(MIN_SIZE_MODIFIER * _scalingFactor, MAX_SIZE_MODIFIER*_scalingFactor);
-	Shape * newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
-	_shapes.push_back(newShape);
+        GLfloat scaleShape = randFloat(MIN_SIZE_MODIFIER*_scalingFactor, MAX_SIZE_MODIFIER*_scalingFactor);
+        Shape *newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
+        _shapes.push_back(newShape);
+     } else {
+
+         ShapeThemelist type = ShapeThemelist(rand() % ShapeThemelist::Saturn + 1);
+         glm::vec4 color(0.5, 0.5, 0.5, 1);
+
+         glm::vec3 translateShape(0, 0, 0);
+         randCoords(&translateShape);
+
+         glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
+
+         GLfloat scaleShape = randFloat(MIN_SIZE_MODIFIER * _scalingFactor, MAX_SIZE_MODIFIER * _scalingFactor);
+         Planet *newPlanet = new Planet(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
+         _planets.push_back(newPlanet);
+     }
+    
 }
 
 //fonction retournant un float aleatoire
@@ -111,12 +132,19 @@ std::vector<Shape*> ShapesContainer::getShapes() const {
 	return _shapes;
 }
 
-void ShapesContainer::modify() {
-    if (_banString.length() == Modifications::DeleteObject + 1) {
+
+std::vector<Planet*> ShapesContainer::getPlanets() const {
+    return _planets;
+}
+
+void ShapesContainer::modify()
+{
+
+    if (_banString.length() == Modifications::DeleteObject + 1)
+    {
         return /*all modifications banned*/;
     }
-
-	for (int i = 0; i < MOD_COUNT; i++)
+    for (int i = 0; i < MOD_COUNT; i++)
 	{
 		int index = rand() % this->_numberShapes;
         // only modify unmodified shapes

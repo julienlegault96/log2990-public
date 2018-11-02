@@ -8,6 +8,7 @@
 #include "inf2705-nuanceur.h"
 #include "inf2705-fenetre.h"
 #include "inf2705-forme.h"
+#include "Planet.h"
 #include <stdio.h>
 #include <stdlib.h> 
 #include <time.h> 
@@ -114,8 +115,6 @@ public:
 
 void chargerNuanceurs()
 {
-
-	
 	// charger le nuanceur de base
 	{
 		// créer le programme
@@ -204,8 +203,6 @@ void FenetreTP::initialiser()
 
 	// créer quelques autres formes
 	glUseProgram(progBase);
-	
-
 }
 
 void FenetreTP::conclure()
@@ -267,23 +264,43 @@ void FenetreTP::afficherScene()
 	glPolygonMode(GL_FRONT_AND_BACK, etat.modePolygone);
 	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
 
+    if(_theme == true) {
+        for (auto &planet : _planets->getPlanets()) // access by reference to avoid copying
+        {
+            if (planet->appear)
+            {
+                glVertexAttrib4f(locColor, planet->baseColor_.r, planet->baseColor_.b, planet->baseColor_.g, planet->baseColor_.a);
+                matrModel.PushMatrix();
+                {
+                    matrModel.Translate(planet->coords_);
+                    matrModel.Scale(planet->scale_);
+                    matrModel.Rotate(planet->rotation_, planet->rotationAxis_);
+                    glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+                    glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+                    planet->Draw();
+                }
+                matrModel.PopMatrix();
+            }
+        }
+    } else{
 
-	for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
-	{
-		if (shape->appear)
-		{
-			glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
-			matrModel.PushMatrix(); {
-				matrModel.Translate(shape->coords_);
-				matrModel.Scale(shape->scale_);
-				matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-				glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-				glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-				shape->Draw();
-			}matrModel.PopMatrix();
-		}
-	}
+        for (auto &shape : _shapes->getShapes()) // access by reference to avoid copying
+        {
+            if (shape->appear)
+            {
+                glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
+                matrModel.PushMatrix(); {
+                    matrModel.Translate(shape->coords_);
+                    matrModel.Scale(shape->scale_);
+                    matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+                    glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+                    glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+                    shape->Draw();
+                }matrModel.PopMatrix();
+            }
+        }
 	
+    }
 }
 
 void FenetreTP::redimensionner(GLsizei w, GLsizei h)
@@ -383,7 +400,7 @@ int main(int argc, char *argv[])
 	fenetre.initialiser();
 	srand(time(0));
 	std::cout << time(0);
-	shapes = new ShapesContainer(1, etat.dimBoite);
+	shapes = new ShapesContainer(2, etat.dimBoite, true);
 	
 	bool boucler = true;
 	while (boucler)

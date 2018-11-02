@@ -6,11 +6,11 @@ enum ShapeThemelist {Earth, Mars, Moon, Sun, Neptune, Saturn };
 class  Planet : public Shape
 {
 public:
-	Planet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
-	void initPlanet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);		
+	Planet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	void initPlanet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);		
 	~Planet();		
-	void changeTexture(GLuint texture);
-	GLuint texture_;
+	// void changeTexture(GLuint texture);
+	// GLuint texture_;
 	
 
 private:
@@ -19,17 +19,18 @@ private:
 
 };
 
-Planet::Planet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
+Planet::Planet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
 {
-	initPlanet(type, coords, texture, rotation, rotationAxis, scale);
+	initPlanet(type, coords, color, rotation, rotationAxis, scale);
 }
 
 
 
-void Planet::initPlanet(ShapeThemelist type, glm::vec3 coords, GLuint texture, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
+void Planet::initPlanet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
  {
 	this->coords_ = coords;
-	this->texture_ = texture;
+	// this->texture_ = texture;
+    this->baseColor_ = color;
 	this->rotation_ = rotation;
 	this->rotationAxis_ = rotationAxis;
 	this->scale_ = scale;
@@ -63,12 +64,13 @@ void Planet::initPlanet(ShapeThemelist type, glm::vec3 coords, GLuint texture, G
 	}
 	
 }
-
+/*
 void Planet::changeTexture(GLuint texture) 
 {
 	this->texture_ = texture;
 	this->modified_ = true;
 }
+*/
 
 Planet::~Planet()
 {

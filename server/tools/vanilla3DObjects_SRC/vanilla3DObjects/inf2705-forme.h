@@ -1098,7 +1098,6 @@ private:
    GLint nsommetsStrip_, nsommetsFan_;
    GLuint vbo[3];
 };
-
 //////////
 
 class FormeTore : public FormeBase2705
