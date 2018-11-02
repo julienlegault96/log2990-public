@@ -34,7 +34,7 @@ export abstract class AbstractServerService {
             headers: new HttpHeaders({ "Content-Type": "application/json" })
         };
 
-        return this.http.put<T>(this.getUrl(serverEndpoint), body, options).pipe(
+        return this.http.put<T>(this.getUrl(serverEndpoint, pathParam), body, options).pipe(
             catchError(this.handleError)
         );
     }

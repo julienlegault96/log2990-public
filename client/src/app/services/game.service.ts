@@ -36,6 +36,7 @@ export class GameService extends AbstractServerService {
             generateSoloLeaderboard(),
             generateDuoLeaderboard()
         ];
+        toReset.leaderboards = leaderboards;
 
         return this.putRequest<Leaderboard[]>(Endpoints.Leaderboard, leaderboards, toReset._id);
     }

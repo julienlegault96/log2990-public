@@ -20,7 +20,7 @@ export class AdminViewCardComponent extends AbstractGameCardComponent {
 
     public delete(): void {
         this.gameService.deleteGame(this.game).subscribe();
-        alert("Veuillez actualiser le navigateur pour voir le changement!");
+        location.reload();
     }
 
 }

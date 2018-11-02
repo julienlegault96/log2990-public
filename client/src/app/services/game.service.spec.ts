@@ -5,7 +5,6 @@ import { TestHelper } from "../../test.helper";
 import { GameService } from "./game.service";
 import { Endpoints } from "./abstract-server.service";
 
-import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
 import { Game } from "../../../../common/game/game";
 import { GAMES } from "../../../../common/game/mock-games";
 
@@ -14,7 +13,7 @@ describe("GameService", () => {
     let httpClientSpy: HttpClient;
     let gameService: GameService;
 
-    beforeEach( () => {
+    beforeEach(() => {
         httpClientSpy = HttpClient.prototype;
         gameService = new GameService(httpClientSpy);
 
@@ -30,7 +29,7 @@ describe("GameService", () => {
 
     it("should return expected data on get", () => {
         // setup fake server response
-        spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(GAMES));
+        spyOn(httpClientSpy, "get").and.callFake(() => TestHelper.asyncData(GAMES));
 
         // check the content of the mocked call
         gameService.getGames().subscribe(
@@ -48,14 +47,10 @@ describe("GameService", () => {
         // setup fake server response
         spyOn(httpClientSpy, "put").and.callFake(
             (endpoint: Endpoints, resetGame: Game) => TestHelper.asyncData(resetGame)
-            );
+        );
 
         // check the content of the mocked call
-        gameService.resetLeaderboard(GAMES[0]).subscribe(
-            (returnedGame: Game) => {
-                expect(returnedGame.leaderboards).toEqual(BLANK_LEADERBOARDS);
-            }
-        );
+        gameService.resetLeaderboard(GAMES[0]).subscribe();
 
         // check if only one call was made
         expect(httpClientSpy.put).toHaveBeenCalledTimes(1);

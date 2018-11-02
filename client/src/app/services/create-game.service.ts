@@ -35,8 +35,9 @@ export class CreateGameService extends GameService {
         Promise.all([rawImagePromise, modifiedImagePromise]).then((imageUrls) => {
             const newGame: Game = this.generateGame(name, imageUrls);
             this.addGame(newGame).subscribe(
-                (game: Game) => {
+                () => {
                     alert("Création du jeu réussie");
+                    location.reload();
                 },
                 (error: { message: string, httpError: HttpErrorResponse }) => {
                     const message: string = (error.httpError.status === CODES.BAD_REQUEST) ? "Les images sont invalides" : error.message;

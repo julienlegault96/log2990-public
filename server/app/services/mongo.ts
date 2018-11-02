@@ -12,7 +12,7 @@ import {
 } from "mongodb";
 
 export enum Collections {
-    Games = "Games",
+    Games = "Games_sprint3",
     Users = "Users"
 }
 
