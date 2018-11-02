@@ -103,16 +103,52 @@ export class GamesRoute extends AbstractRoute<Game> {
         });
     }
 
+    // tslint:disable-next-line:max-func-body-length
     private async doubleViewUpload(req: Request): Promise<string[]> {
-        await this.exec3DImage();
-
         // Sprint 3: Implémenter les fonctions nécessaires pour l'enregistrement du jeu
         // generate imageDifff
         // if not valid retry generate
         // 4 times
         // throw error
 
-        return [];
+        let isValidCountFirstView: boolean = false;
+        let isValidCountSecondView: boolean = false;
+        let differenceImageFirstView: string = "";
+        let differenceImageSecondView: string = "";
+
+        const maximumTries: number = 4;
+        for (let i: number = 0; i < maximumTries; i++) {
+            await this.exec3DImage();
+            // TODO
+            await this.generateImageDiff("./path11.bmp", "./path12.bmp")
+                .then((value: string) => {
+                    differenceImageFirstView = value;
+                    isValidCountFirstView = true;
+                })
+                .catch(() => {
+                    isValidCountFirstView = false;
+                });
+
+            if (isValidCountFirstView) {
+                await this.generateImageDiff("./path21.bmp", "./path22.bmp")
+                    .then((value: string) => {
+                        differenceImageSecondView = value;
+                        isValidCountSecondView = true;
+                    })
+                    .catch(() => {
+                        isValidCountSecondView = false;
+                    });
+            }
+        }
+
+        if (!isValidCountFirstView || !isValidCountSecondView) {
+            throw new Error(this.errorCountException);
+        }
+
+        return [
+            differenceImageFirstView,
+            differenceImageSecondView
+        ];
     }
 
     private async exec3DImage(): Promise<void> {
