@@ -259,7 +259,9 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async hasValidDifferenceCount(filepath: string, diffCount: number = 7): Promise<boolean> {
-        return (await this.CountDifferences(filepath)) === diffCount;
+        const differenceCount: number = await this.CountDifferences(filepath);
+
+        return differenceCount === diffCount;
     }
 
     private async CountDifferences(filepath: string): Promise<number> {
@@ -292,7 +294,9 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async base64_encode(filepath: string): Promise<string> {
-        return (await this.getBitmapBuffer(filepath)).toString("base64");
+        const buffer: Buffer = await this.getBitmapBuffer(filepath);
+
+        return buffer.toString("base64");
     }
 
     private async getBitmapBuffer(filepath: string): Promise<Buffer> {
