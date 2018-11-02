@@ -171,12 +171,20 @@ export class GamesRoute extends AbstractRoute<Game> {
         images[this.SECOND_VIEW_RAW_INDEX] = await this.base64_encode(this.secondViewOriginalPath);
         images[this.SECOND_VIEW_MODIFED_INDEX] = await this.base64_encode(this.secondViewModifiedPath);
 
-        await this.deleteFile(this.firstViewOriginalPath);
-        await this.deleteFile(this.firstViewModifiedPath);
-        await this.deleteFile(this.secondViewOriginalPath);
-        await this.deleteFile(this.secondViewModifiedPath);
+        await this.deleteFiles(
+            this.firstViewOriginalPath,
+            this.firstViewModifiedPath,
+            this.secondViewOriginalPath,
+            this.secondViewModifiedPath
+        );
 
         return images;
+    }
+
+    private async deleteFiles(...filepaths: Array<string>): Promise<void> {
+        for (const filepath of filepaths) {
+            await this.deleteFile(filepath);
+        }
     }
 
     private async deleteFile(filepath: string): Promise<void> {
