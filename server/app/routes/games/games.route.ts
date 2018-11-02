@@ -222,11 +222,15 @@ export class GamesRoute extends AbstractRoute<Game> {
         return util.promisify(execFile)(filepath, params).then(() => { return; });
     }
 
+    private getImageBufferFromBase64(base64: string): Buffer {
+        return Buffer.from(ImgDiff.parseBase64(base64), "base64");
+    }
+
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
-        const rawBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(rawImage), "base64");
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(rawImage);
         await this.writeFile(this.rawImagePath, rawBitmap);
 
-        const modifiedBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(modifiedImage), "base64");
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImage);
         await this.writeFile(this.modifiedImagePath, modifiedBitmap);
 
         await this.execFile(this.execPath, [this.rawImagePath, this.modifiedImagePath, this.outputPath]);
