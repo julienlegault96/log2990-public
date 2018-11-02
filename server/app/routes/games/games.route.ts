@@ -33,6 +33,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly SECOND_VIEW_RAW_INDEX: number = 3;
     private readonly SECOND_VIEW_MODIFED_INDEX: number = 4;
     private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
+    private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
 
     private readonly execPath: string = "./tools/img-diff-generator.exe";
     private readonly rawImagePath: string = "./tools/rawImage.bmp";
@@ -118,27 +119,27 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private async doubleViewUpload(req: Request): Promise<string[]> {
         return this.generate3DImagesDiff()
-            .then((imagesDiff: [string, string]) => {
+            .then((imagesDiff: Array<string>) => {
                 const imgur: Imgur = new Imgur();
-                const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
-                const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
-                const imgurPromise3: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_RAW_INDEX]);
-                const imgurPromise4: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.SECOND_VIEW_MODIFED_INDEX]);
+                const imgurPromise1: Promise<string> = imgur.uploadImage(imagesDiff[this.FIRST_VIEW_RAW_INDEX]);
+                const imgurPromise2: Promise<string> = imgur.uploadImage(imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX]);
+                const imgurPromise3: Promise<string> = imgur.uploadImage(imagesDiff[this.SECOND_VIEW_RAW_INDEX]);
+                const imgurPromise4: Promise<string> = imgur.uploadImage(imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]);
 
                 return Promise.all([
                     imgurPromise1,
                     imgurPromise2,
-                    imagesDiff[0],
+                    imagesDiff[this.FIRST_VIEW_DIFF_INDEX],
                     imgurPromise3,
                     imgurPromise4,
-                    imagesDiff[1]
+                    imagesDiff[this.SECOND_VIEW_DIFF_INDEX]
                 ]);
             });
     }
 
     // tslint:disable-next-line:max-func-body-length
     private async generate3DImagesDiff(): Promise<string[]> {
-        const images: [string, string, string, string, string, string] = ["", "", "", "", "", ""];
+        const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
