@@ -69,25 +69,21 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
-        if (req.body.type === GameType.SingleView) {
-            req.body._id = this.generateId();
+        req.body._id = this.generateId();
 
-            const imgurPromise: Promise<string[]> = this.singleViewUpload(req);
+        const imgurPromise: Promise<string[]> = (req.body.type === GameType.SingleView) ?
+            this.singleViewUpload(req) : this.doubleViewUpload(req);
 
-            return imgurPromise
-                .then((imagesUrl: string[]) => {
-                    req.body.imageUrl = imagesUrl;
+        return imgurPromise
+            .then((imagesUrl: string[]) => {
+                req.body.imageUrl = imagesUrl;
 
-                    return super.post(req, res, next);
-                })
-                .catch((error: Error) => {
-                    const errorCode: number = (error.message === this.errorCountException) ? CODES.BAD_REQUEST : CODES.SERVER_ERROR;
-                    res.status(errorCode).send("Failed to create game");
-                });
-        } else {
-            await this.doubleViewUpload(req);
-            res.status(CODES.OK).send();
-        }
+                return super.post(req, res, next);
+            })
+            .catch((error: Error) => {
+                const errorCode: number = (error.message === this.errorCountException) ? CODES.BAD_REQUEST : CODES.SERVER_ERROR;
+                res.status(errorCode).send("Failed to create game");
+            });
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
@@ -107,10 +103,16 @@ export class GamesRoute extends AbstractRoute<Game> {
         });
     }
 
-    private async doubleViewUpload(req: Request): Promise<void> {
+    private async doubleViewUpload(req: Request): Promise<string[]> {
         await this.exec3DImage();
 
         // Sprint 3: Implémenter les fonctions nécessaires pour l'enregistrement du jeu
+        // generate imageDifff
+        // if not valid retry generate
+        // 4 times
+        // throw error
+
+        return [];
     }
 
     private async exec3DImage(): Promise<void> {
