@@ -43,10 +43,11 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly errorCountException: string = "errorCount";
 
     // Generated images from 3D image generator
-    private readonly firstViewOriginalPath: string = "./tools/first-view-ori.bmp";
-    private readonly firstViewModifiedPath: string = "./tools/first-view-mod.bmp";
-    private readonly secondViewOriginalPath: string = "./tools/second-view-ori.bmp";
-    private readonly secondViewModifiedPath: string = "./tools/second-view-mod.bmp";
+    private readonly imageGeneratorOutput: string = "output";
+    private readonly firstViewOriginalPath: string = `./tools/${this.imageGeneratorOutput}_a_ori.bmp`;
+    private readonly firstViewModifiedPath: string = `./tools/${this.imageGeneratorOutput}_a_mod.bmp`;
+    private readonly secondViewOriginalPath: string = `./tools/${this.imageGeneratorOutput}_b_ori.bmp`;
+    private readonly secondViewModifiedPath: string = `./tools/${this.imageGeneratorOutput}_b_mod.bmp`;
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
