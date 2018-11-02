@@ -23,13 +23,15 @@ import { Leaderboard } from "../../../common/game/leaderboard";
 
 export class Games extends AbstractRoute<Game> {
 
+    public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
+
     private readonly ID_RANGE: number = 1000000;
     private readonly FIRST_VIEW_RAW_INDEX: number = 0;
     private readonly FIRST_VIEW_MODIFIED_INDEX: number = 1;
     private readonly FIRST_VIEW_DIFF_INDEX: number = 2;
     // private readonly SECOND_VIEW_RAW_INDEX: number = 3;
     // private readonly SECOND_VIEW_MODIFED_INDEX: number = 4;
-    // private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
+    private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
 
     private readonly execPath: string = "./tools/img-diff-generator.exe";
     private readonly rawImagePath: string = "./tools/rawImage.bmp";
@@ -59,12 +61,22 @@ export class Games extends AbstractRoute<Game> {
             JSON.stringify(
                 (await this.getAll()).map((game: Game) => {
                     game.imageUrl[this.FIRST_VIEW_DIFF_INDEX] = "";
-                    // game.imageUrl[this.SECOND_VIEW_DIFF_INDEX] = "";
+                    game.imageUrl[this.SECOND_VIEW_DIFF_INDEX] = "";
 
                     return game;
                 })
             )
         );
+    }
+
+    public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const game: Game = await this.getOne(req.params.id);
+        if (!Games.cachedDiffImagesMap[game._id] && game) {
+            Games.cachedDiffImagesMap[game._id] =
+                [game.imageUrl[this.FIRST_VIEW_DIFF_INDEX], game.imageUrl[this.SECOND_VIEW_DIFF_INDEX]];
+        }
+
+        res.status(CODES.OK).send(JSON.stringify(game));
     }
 
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
