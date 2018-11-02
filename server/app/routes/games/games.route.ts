@@ -105,36 +105,43 @@ export class GamesRoute extends AbstractRoute<Game> {
             req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
             req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
         ).then((imageDiff: string) => {
-            const imgur: Imgur = new Imgur();
-            const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
-            const imgurPromise2: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
+            return this.uploadImagesImgur(
+                req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
+                req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
+            ).then((imgurLinks: Array<string>) => {
+                imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imageDiff);
 
-            return Promise.all([
-                imgurPromise1,
-                imgurPromise2,
-                imageDiff
-            ]);
+                return imgurLinks;
+            });
         });
     }
 
-    private async doubleViewUpload(req: Request): Promise<string[]> {
+    private doubleViewUpload(req: Request): Promise<string[]> {
         return this.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
-                const imgur: Imgur = new Imgur();
-                const imgurPromise1: Promise<string> = imgur.uploadImage(imagesDiff[this.FIRST_VIEW_RAW_INDEX]);
-                const imgurPromise2: Promise<string> = imgur.uploadImage(imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX]);
-                const imgurPromise3: Promise<string> = imgur.uploadImage(imagesDiff[this.SECOND_VIEW_RAW_INDEX]);
-                const imgurPromise4: Promise<string> = imgur.uploadImage(imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]);
+                return this.uploadImagesImgur(
+                    imagesDiff[this.FIRST_VIEW_RAW_INDEX],
+                    imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX],
+                    imagesDiff[this.SECOND_VIEW_RAW_INDEX],
+                    imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]
+                ).then((imgurLinks: Array<string>) => {
+                    imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imagesDiff[this.FIRST_VIEW_DIFF_INDEX]);
+                    imgurLinks.splice(this.SECOND_VIEW_DIFF_INDEX, 0, imagesDiff[this.SECOND_VIEW_DIFF_INDEX]);
 
-                return Promise.all([
-                    imgurPromise1,
-                    imgurPromise2,
-                    imagesDiff[this.FIRST_VIEW_DIFF_INDEX],
-                    imgurPromise3,
-                    imgurPromise4,
-                    imagesDiff[this.SECOND_VIEW_DIFF_INDEX]
-                ]);
+                    return imgurLinks;
+                });
             });
+    }
+
+    private uploadImagesImgur(...images: Array<string>): Promise<Array<string>> {
+        const promises: Array<Promise<string>> = new Array<Promise<string>>();
+
+        const imgur: Imgur = new Imgur();
+        for (const image of images) {
+            promises.push(imgur.uploadImage(image));
+        }
+
+        return Promise.all(promises);
     }
 
     // tslint:disable-next-line:max-func-body-length
