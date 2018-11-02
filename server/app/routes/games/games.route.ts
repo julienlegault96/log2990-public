@@ -212,10 +212,10 @@ export class GamesRoute extends AbstractRoute<Game> {
 
         const isValidCount: boolean = await this.hasValidDifferenceCount(this.outputPath);
 
-        await util.promisify(fs.unlink)(this.rawImagePath);
-        await util.promisify(fs.unlink)(this.modifiedImagePath);
-        await util.promisify(fs.unlink)(this.outputPath);
-        await util.promisify(fs.unlink)(this.b64Path);
+        await this.deleteFile(this.rawImagePath);
+        await this.deleteFile(this.modifiedImagePath);
+        await this.deleteFile(this.outputPath);
+        await this.deleteFile(this.b64Path);
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
