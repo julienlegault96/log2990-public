@@ -50,6 +50,7 @@ export class ChronoComponent {
         const seconds: number = elapsedTime.getSeconds()
             + elapsedTime.getMinutes() * SECONDS_IN_MINUTE
             + elapsedTime.getUTCHours() * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
+        this.elapsedTime = seconds;
 
         this.formattedTime = getformattedTime(seconds);
 
