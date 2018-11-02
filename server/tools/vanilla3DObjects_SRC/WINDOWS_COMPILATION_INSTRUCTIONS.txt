@@ -1,0 +1,9 @@
+pour compiler sur windows, il faut s'ajouter les packages par NuGet
+https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio#package-manager-ui
+
+Les packages utilisés dans la solution sont définis dans le package.config, soit:
+glm 0.9.9.200
+unofficial-flayan-glew 2.1.0
+sdl2 2.0.5
+
+Normalement Visual Studio devrait les restore lorsqu'il détecte qu'ils ne sont pas présents

@@ -7,7 +7,7 @@ Comparator::Comparator() : _differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DE
 Image Comparator::getImage(const char* input) const
 {
 	ImageParser imageParser;
-	long inputLength = string(input).length();
+	size_t inputLength = strlen(input);
 	return inputLength > BASE_64_LENGTH_THRESHOLD ?
 		imageParser.getImageFromBase64(input) : imageParser.getImageFromUrl(input);
 }

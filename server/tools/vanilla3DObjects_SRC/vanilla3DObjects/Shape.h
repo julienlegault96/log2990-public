@@ -17,7 +17,7 @@ public:
 	  void Draw();
 	~  Shape();
 	void ChangeColor(glm::vec4 baseColor);
-	void disappear();
+	void hide();
 	
 
 private:
@@ -73,7 +73,7 @@ void Shape::ChangeColor(glm::vec4 baseColor)
 	this->modified_ = true;
 }
 
-void Shape::disappear()
+void Shape::hide()
 {
 	this->appear = false;
 	this->modified_ = true;

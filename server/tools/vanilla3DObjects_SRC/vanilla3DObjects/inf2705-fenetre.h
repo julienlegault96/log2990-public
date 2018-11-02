@@ -229,7 +229,7 @@ class FenetreTP
 #endif
 
 public:
-   FenetreTP( std::string nom = "INF2705 TP",
+   FenetreTP( std::string nom = "3D Objects Generator",
               int largeur = 900, int hauteur = 600,
               int xpos = 100, int ypos = 100 )
       : fenetre_(NULL),
@@ -368,6 +368,7 @@ public:
    void afficherScene( );
    // fonction appelée lors d'un événement de redimensionnement
    void redimensionner( GLsizei w, GLsizei h );
+   void screenshot(const char* filename);
    // fonction appelée lors d'un événement de clavier
    void clavier( TP_touche touche );
    // fonctions appelées lors d'un événement de souris
@@ -483,7 +484,7 @@ public:
       return;
    }
 
-   // donner une message et mourir...
+   // donner un message et mourir...
    static void mourir( const char *msg )
    {
 #if defined(FENETRE_glfw3)
