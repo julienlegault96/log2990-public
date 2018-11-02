@@ -202,6 +202,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     private async exec3DImage(): Promise<void> {
         const execPath: string = "./tools/vanilla3DObjects.exe";
 
+        // TODO
         await util.promisify(execFile)(
             execPath,
             ["geo", "20", "asc", this.imageGeneratorOutput]
