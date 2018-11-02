@@ -63,35 +63,6 @@ void Comparator::saveDiffTo(const char*  filename) const
 	file << DEFAULT_24BIT_BMP_HEADER;
 	file << _differenceImage;
 	file.close();
-
-	file.open(filename, ios::ate | ios::in | ios::binary);
-	if (!file.is_open())
-	{
-		throw std::runtime_error("Could not open \"" + string(filename) + "\" for base64 encoding input");
-	}
-	int len = file.tellp();
-
-	//extract bytes for encoding
-	char * bmpData = new char[len];
-	file.read(bmpData, len);
-	string b64Data = base64().encode((const unsigned char *)bmpData, len);
-
-	delete[] bmpData;
-	bmpData = nullptr;
-	file.close();
-	
-	
-	string b64filename(filename);
-	b64filename = b64filename.substr(0, b64filename.length() - 4) + ".B64";
-	// open for b64
-	file.open(b64filename, ios::out | ios::binary);
-	if (!file.is_open())
-	{
-		throw std::runtime_error("Could not open \"" + b64filename + "\" for output");
-	}
-
-	file.write(b64Data.data(), b64Data.length());
-	file.close();
 }
 
 void Comparator::enlargeErrorZone(const int32_t x, const int32_t y)
