@@ -35,10 +35,18 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly execPath: string = "./tools/img-diff-generator.exe";
     private readonly rawImagePath: string = "./tools/rawImage.bmp";
     private readonly modifiedImagePath: string = "./tools/modifiedImage.bmp";
+
+    // Generated images from image difference generator
     private readonly outputPath: string = "./tools/output.bmp";
     private readonly b64Path: string = "./tools/output.B64";
 
     private readonly errorCountException: string = "errorCount";
+
+    // Generated images from 3D image generator
+    private readonly firstViewOriginalPath: string = "./tools/first-view-ori.bmp";
+    private readonly firstViewModifiedPath: string = "./tools/first-view-mod.bmp";
+    private readonly secondViewOriginalPath: string = "./tools/second-view-ori.bmp";
+    private readonly secondViewModifiedPath: string = "./tools/second-view-mod.bmp";
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
@@ -120,7 +128,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         for (let i: number = 0; i < maximumTries; i++) {
             await this.exec3DImage();
             // TODO
-            await this.generateImageDiff("./path11.bmp", "./path12.bmp")
+            await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     differenceImageFirstView = value;
                     isValidCountFirstView = true;
@@ -130,7 +138,7 @@ export class GamesRoute extends AbstractRoute<Game> {
                 });
 
             if (isValidCountFirstView) {
-                await this.generateImageDiff("./path21.bmp", "./path22.bmp")
+                await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                     .then((value: string) => {
                         differenceImageSecondView = value;
                         isValidCountSecondView = true;
