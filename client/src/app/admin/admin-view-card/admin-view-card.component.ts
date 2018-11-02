@@ -5,7 +5,7 @@ import { AbstractGameCardComponent } from "src/app/game/abstract-game-card/abstr
 
 @Component({
     selector: "app-admin-card",
-    templateUrl: "./admin-view-card.component.html",
+    templateUrl: "./admin-view-card.component.html"
 })
 
 export class AdminViewCardComponent extends AbstractGameCardComponent {
@@ -20,7 +20,7 @@ export class AdminViewCardComponent extends AbstractGameCardComponent {
 
     public delete(): void {
         this.gameService.deleteGame(this.game).subscribe();
-        alert("Veuillez actualiser le navigateur pour voir le changement!");
+        location.reload();
     }
 
 }

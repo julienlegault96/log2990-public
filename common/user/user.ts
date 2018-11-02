@@ -1,4 +1,3 @@
-// exterior const to avoid cluttering the db object
 const DEFAULT_USERNAME: string = "";
 
 export class User {
@@ -10,3 +9,56 @@ export class User {
     }
 
 }
+
+export const RANDOM_USER_NAMES: string[] = [
+    "Farrah",
+    "Barb",
+    "Mckinley",
+    "Tameka",
+    "Caroyln",
+    "Anisha",
+    "Kesha",
+    "Werner",
+    "Katina",
+    "Brigette",
+    "Wai",
+    "Nguyet",
+    "Dominick",
+    "Chadwick",
+    "Jazmin",
+    "Jarrett",
+    "Maude",
+    "Aracely",
+    "Kenia",
+    "Sommer",
+    "Barrie",
+    "Stephane",
+    "Noreen",
+    "Ocie",
+    "Shelton",
+    "Broderick",
+    "Artie",
+    "Kristi",
+    "Faustino",
+    "Gloria",
+    "Rosalva",
+    "Lesha",
+    "Kenton",
+    "Taneka",
+    "Monty",
+    "Tonya",
+    "Donnetta",
+    "Deidre",
+    "Daisey",
+    "Caprice",
+    "Porter",
+    "Petra",
+    "Carolyne",
+    "Ricarda",
+    "Louise",
+    "Jerrold",
+    "Mattie",
+    "Darnell",
+    "Nisha",
+    "Ralph",
+];

@@ -1,5 +1,12 @@
 import { Component, Output, EventEmitter } from "@angular/core";
 
+import {
+    getformattedTime,
+    SECONDS_IN_MINUTE,
+    MINUTES_IN_HOUR,
+    MILLISECONDS_IN_SECOND
+} from "../../../../../../common/helpers/time";
+
 @Component({
     selector: "app-chrono",
     templateUrl: "./chrono.component.html",
@@ -14,10 +21,6 @@ export class ChronoComponent {
     private timer: number;
     private isStarted: boolean;
 
-    private readonly MINUTES_IN_HOUR: number = 60;
-    private readonly SECONDS_IN_MINUTE: number = 60;
-    private readonly MILLISECONDS_IN_SECOND: number = 1000;
-    private readonly LIMIT_TO_ADD_ZERO: number = 10;
     private readonly SECONDS_ALERT: number = 30;
     private readonly MODULO_ZERO: number = 0;
 
@@ -29,7 +32,7 @@ export class ChronoComponent {
     public start(): void {
         if (!this.isStarted) {
             this.startTime = new Date();
-            this.timer = window.setInterval(() => this.calculate(), this.MILLISECONDS_IN_SECOND);
+            this.timer = window.setInterval(() => this.calculate(), MILLISECONDS_IN_SECOND);
             this.isStarted = true;
         }
     }
@@ -43,13 +46,14 @@ export class ChronoComponent {
 
     private calculate(): void {
         const elapsedTime: Date = this.getElapsedTime();
-        const seconds: number = elapsedTime.getSeconds();
-        const minutes: number = elapsedTime.getMinutes() + (elapsedTime.getUTCHours() * this.MINUTES_IN_HOUR);
+        const seconds: number = elapsedTime.getSeconds()
+            + elapsedTime.getMinutes() * SECONDS_IN_MINUTE
+            + elapsedTime.getUTCHours() * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
 
-        this.formattedTime = this.getformattedTime(minutes, seconds);
+        this.formattedTime = getformattedTime(seconds);
 
-        if ((seconds >= this.SECONDS_ALERT || minutes > 0) && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
-            this.timerMilestone.emit(`${minutes * this.SECONDS_IN_MINUTE + seconds} secondes se sont écoulées`);
+        if (seconds >= this.SECONDS_ALERT && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
+            this.timerMilestone.emit(`${seconds} secondes se sont écoulées`);
         }
     }
 
@@ -61,15 +65,6 @@ export class ChronoComponent {
         elapsedTime.setHours(elapsedTime.getHours());
 
         return elapsedTime;
-    }
-
-    private getformattedTime(minutes: number, seconds: number): string {
-        let formattedTime: string;
-        formattedTime = minutes < this.LIMIT_TO_ADD_ZERO ? ("0" + minutes) : (String(minutes));
-        formattedTime += ":";
-        formattedTime += seconds < this.LIMIT_TO_ADD_ZERO ? ("0" + seconds) : ("" + seconds);
-
-        return formattedTime;
     }
 
 }

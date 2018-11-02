@@ -7,7 +7,7 @@ describe("Games db services", () => {
     const games: Games = new Games(new Mongo());
 
     it("should generate game id", async () => {
-        const id: number = games["generateId"]();
+        const id: string = games["generateId"]();
 
         expect(id).to.be.a("number");
         expect(id).to.be.at.least(0);

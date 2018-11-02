@@ -17,6 +17,7 @@ import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
 import { ErrorFinder } from "./img-diff/error-finder";
+import { Leaderboard } from "../../../common/game/leaderboard";
 
 @injectable()
 
@@ -43,9 +44,14 @@ export class Games extends AbstractRoute<Game> {
         this.collection = Collections.Games;
     }
 
-    public async resetLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const elem: Game = req.body;
-        await this.updateById(req, res, next, elem._id);
+    public async updateLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const leaderboards: Leaderboard[] = req.body;
+        const game: Game = await this.getOne(req.params.id);
+
+        game.leaderboards = leaderboards;
+        req.body = game;
+
+        await this.updateById(req, res, next, req.params.id);
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -112,8 +118,8 @@ export class Games extends AbstractRoute<Game> {
         await util.promisify(execFile)(execPath).catch(console.log);
     }
 
-    private generateId(): number {
-        return Math.floor(Math.random() * this.ID_RANGE);
+    private generateId(): string {
+        return Math.floor(Math.random() * this.ID_RANGE).toString();
     }
 
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {

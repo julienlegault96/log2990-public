@@ -1,24 +1,19 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
-import { Leaderboard, Score } from "../../../../../../common/game/leaderboard";
+import { Leaderboard } from "../../../../../../common/game/leaderboard";
+import { getformattedTime } from "../../../../../../common/helpers/time";
 
 @Component({
     selector: "app-leaderboard",
     templateUrl: "./leaderboard.component.html",
 })
 
-export class LeaderboardComponent implements OnInit {
+export class LeaderboardComponent {
 
     @Input() public leaderboard: Leaderboard;
 
-    public ngOnInit(): void {
-        this.sortScores(this.leaderboard.scores);
-    }
-
-    public sortScores(pScores: Array<Score>): Array<Score> {
-        return pScores.sort((a: Score, b: Score) => {
-            return a.time - b.time;
-        });
+    public formatLeaderboardTime(seconds: number): string {
+        return getformattedTime(seconds);
     }
 
 }

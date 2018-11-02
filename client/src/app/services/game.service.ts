@@ -4,8 +4,8 @@ import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 
-import { Game, newGameTemplate } from "../../../../common/game/game";
-import { BLANK_LEADERBOARDS } from "../../../../common/game/leaderboard";
+import { Game, generateGameTemplate } from "../../../../common/game/game";
+import { generateSoloLeaderboard, generateDuoLeaderboard, Leaderboard } from "../../../../common/game/leaderboard";
 import { GameType } from "../../../../common/game/game-type";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class GameService extends AbstractServerService {
     }
 
     public generateMultipleView(): Observable<Game> {
-        const newGame: Game = newGameTemplate;
+        const newGame: Game = generateGameTemplate();
         newGame.type = GameType.DoubleView;
 
         return this.postRequest<Game>(Endpoints.Games, newGame);
@@ -31,10 +31,14 @@ export class GameService extends AbstractServerService {
         return this.postRequest<Game>(Endpoints.Games, newGame);
     }
 
-    public resetLeaderboard(toReset: Game): Observable<Game> {
-        toReset.leaderboards = BLANK_LEADERBOARDS;
+    public resetLeaderboard(toReset: Game): Observable<Leaderboard[]> {
+        const leaderboards: Leaderboard[] = [
+            generateSoloLeaderboard(),
+            generateDuoLeaderboard()
+        ];
+        toReset.leaderboards = leaderboards;
 
-        return this.putRequest<Game>(Endpoints.Leaderboard, toReset);
+        return this.putRequest<Leaderboard[]>(Endpoints.Leaderboard, leaderboards, toReset._id);
     }
 
     public isJoinable(game: Game): Observable<boolean> {
@@ -42,7 +46,7 @@ export class GameService extends AbstractServerService {
     }
 
     public deleteGame(game: Game): Observable<{} | Game> {
-        return this.deleteRequest<Game>(Endpoints.Games, game);
+        return this.deleteRequest<Game>(Endpoints.Games, game._id);
     }
 
     protected handleError(error: HttpErrorResponse): Observable<never> {

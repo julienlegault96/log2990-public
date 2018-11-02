@@ -12,7 +12,7 @@ import {
 } from "mongodb";
 
 export enum Collections {
-    Games = "Games",
+    Games = "Games_sprint3",
     Users = "Users"
 }
 
@@ -24,7 +24,7 @@ export class Mongo {
     private client: MongoClient;
     private db: Db;
 
-    public async findDocumentById<Type>(collectionName: Collections, id: number): Promise<Type> {
+    public async findDocumentById<Type>(collectionName: Collections, id: string): Promise<Type> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -75,7 +75,7 @@ export class Mongo {
         return collection.updateOne(filter, update);
     }
 
-    public async updateDocumentById<Type>(collectionName: Collections, id: number, update: Type): Promise<UpdateWriteOpResult> {
+    public async updateDocumentById<Type>(collectionName: Collections, id: string, update: Type): Promise<UpdateWriteOpResult> {
         if (!this.client || !this.client.isConnected) {
             await this.connect();
         }
@@ -93,6 +93,16 @@ export class Mongo {
         const collection: Collection = this.db.collection(collectionName);
 
         return collection.deleteOne(filter);
+    }
+
+    public async removeDocumentById<Type>(collectionName: Collections, id: string): Promise<DeleteWriteOpResultObject> {
+        if (!this.client || !this.client.isConnected) {
+            await this.connect();
+        }
+
+        const collection: Collection = this.db.collection(collectionName);
+
+        return collection.deleteOne({ _id: id });
     }
 
     private async connect(): Promise<void> {
