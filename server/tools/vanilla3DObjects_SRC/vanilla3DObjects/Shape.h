@@ -22,7 +22,7 @@ public:
 	void disappear();
 	
 
-private:
+protected:
 	
 	FormeBase2705 *forme;
 

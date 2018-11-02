@@ -11,6 +11,7 @@ public:
   void parseModOptions(const std::string &optionString);
   std::vector<Shape*> getShapes() const;
   std::vector<Planet*> getPlanets() const;
+  bool getTheme() const;
   void modify();
   ~ShapesContainer();
 private:
@@ -41,7 +42,11 @@ private:
 	void calculateScalingFactor();
 };
 
-ShapesContainer::ShapesContainer(int numberShapes, double dimBoite, bool theme) : _numberShapes(numberShapes), _dimBoite(dimBoite), _theme(theme)
+bool ShapesContainer::getTheme() const
+{
+    return _theme;
+}
+    ShapesContainer::ShapesContainer(int numberShapes, double dimBoite, bool theme) : _numberShapes(numberShapes), _dimBoite(dimBoite), _theme(theme)
 {
     calculateScalingFactor();
     generateShapes();

@@ -11,12 +11,6 @@ public:
 	~Planet();		
 	// void changeTexture(GLuint texture);
 	// GLuint texture_;
-	
-
-private:
-	
-	FormeBase2705 *forme;
-
 };
 
 Planet::Planet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
