@@ -347,8 +347,8 @@ void unturnCamera()
 
 void help() 
 {
-    std::cout << "Usage de l'exécutable :" << std::endl
-        << "genmulti { geo | theme }   <quantité>	<modification>  <sortie>" << std::endl;
+    std::cout << "Usage de l'executable :" << std::endl
+        << "genmulti { geo | theme }   <quantite>	<modification>  <sortie>" << std::endl;
 }
 
 void genererMultivue(FenetreTP& fenetre, const char * sortie)

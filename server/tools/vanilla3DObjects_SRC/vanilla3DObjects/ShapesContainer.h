@@ -12,11 +12,14 @@ public:
 	void modify();
 	~ShapesContainer();
 private:
+	float const MIN_SIZE_MODIFIER = 0.5;
+	float const MAX_SIZE_MODIFIER = 1.5;
     short const MOD_COUNT = 7;
-	short const MIN_DISTANCE = 6;
-    const char ADD_CHAR = 'a';
-    const char SUP_CHAR = 's';
-    const char COL_CHAR = 'c';
+	short const MIN_DISTANCE = 12;
+	short const ALLOCATED_SHAPE_VOLUME = 49;
+    const char ADD_PARAMETER = 'a';
+    const char SUP_PARAMETER = 's';
+    const char COL_PARAMETER = 'c';
     std::string _banString;
     std::vector<Shape*> _shapes = {};
 	int _numberShapes = 0;
@@ -25,24 +28,25 @@ private:
 
 	void generateShapes();
 	float randFloat(const float& min, const float& max) const;
-	void randCoords(glm::vec3 *coords) const;
-	bool checkForCollision(glm::vec3 *coords) const;
+	void randCoords(glm::vec3 *coords);
+	bool checkForCollision(glm::vec3 *coords);
 	void changeColor(int index);
 	void deleteShape(int index);
 	void addShape();
 	void generateShape();
+	void calculateScalingFactor();
 };
 
 ShapesContainer::ShapesContainer(int numberShapes, double dimBoite) 
     : _numberShapes(numberShapes), _dimBoite(dimBoite) {
-	_scalingFactor = pow(_dimBoite, 3) / (49*_numberShapes);
+	calculateScalingFactor();
 	generateShapes();
 }
 
 void ShapesContainer::parseModOptions(const std::string & optionString) {
-    if (optionString.find(ADD_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::AddObject)); }
-    if (optionString.find(SUP_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::DeleteObject)); }
-    if (optionString.find(COL_CHAR) == std::string::npos) { _banString.append(std::to_string((int)Modifications::ColorChange)); }
+    if (optionString.find(ADD_PARAMETER) == std::string::npos) { _banString.append(std::to_string((int)Modifications::AddObject)); }
+    if (optionString.find(SUP_PARAMETER) == std::string::npos) { _banString.append(std::to_string((int)Modifications::DeleteObject)); }
+    if (optionString.find(COL_PARAMETER) == std::string::npos) { _banString.append(std::to_string((int)Modifications::ColorChange)); }
 }
 
 ShapesContainer::~ShapesContainer() {
@@ -66,7 +70,7 @@ void ShapesContainer::generateShape()  {
 
 	glm::vec3 RotateShape(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1));
 
-	GLfloat scaleShape = randFloat(0.5*_scalingFactor, 1.5*_scalingFactor);
+	GLfloat scaleShape = randFloat(MIN_SIZE_MODIFIER * _scalingFactor, MAX_SIZE_MODIFIER*_scalingFactor);
 	Shape * newShape = new Shape(type, translateShape, color, randFloat(0, 360), RotateShape, scaleShape);
 	_shapes.push_back(newShape);
 }
@@ -79,7 +83,7 @@ float ShapesContainer::randFloat(const float& min, const float& max) const {
 	return (num + min);
 }
 
-void ShapesContainer::randCoords(glm::vec3 *coords) const {
+void ShapesContainer::randCoords(glm::vec3 *coords) {
 	do {
 		coords->x = randFloat(-_dimBoite / 2, _dimBoite / 2);
 		coords->y = randFloat(-_dimBoite  / 2, _dimBoite/ 2);
@@ -87,7 +91,7 @@ void ShapesContainer::randCoords(glm::vec3 *coords) const {
 	} while (checkForCollision(coords));
 }
 
-bool ShapesContainer::checkForCollision(glm::vec3 *coords) const {
+bool ShapesContainer::checkForCollision(glm::vec3 *coords) {
 	bool collision = false;
 	double distance = 0;
 	for (Shape* shape : _shapes)
@@ -97,7 +101,7 @@ bool ShapesContainer::checkForCollision(glm::vec3 *coords) const {
             pow(shape->coords_.y - coords->y, 2) +
             pow(shape->coords_.z - coords->z, 2);
 
-		collision = distance < 12*_scalingFactor;
+		collision = distance < MIN_DISTANCE * _scalingFactor;
         if (collision) { break; }
 	}
 	return collision;
@@ -156,6 +160,11 @@ void ShapesContainer::deleteShape(int index) {
 }
 
 void ShapesContainer::addShape() {
+	calculateScalingFactor();
 	generateShape();
 	_shapes.at(_numberShapes++)->modified_ = true;
+}
+
+void ShapesContainer::calculateScalingFactor() {
+	_scalingFactor = pow(_dimBoite, 3) / (ALLOCATED_SHAPE_VOLUME * _numberShapes);
 }
