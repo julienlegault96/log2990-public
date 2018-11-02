@@ -116,8 +116,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         });
     }
 
-    private async test(req: Request): Promise<string[]> {
-        return this.doubleViewUpload(req)
+    private async doubleViewUpload(req: Request): Promise<string[]> {
+        return this.generate3DImagesDiff()
             .then((imagesDiff: [string, string]) => {
                 const imgur: Imgur = new Imgur();
                 const imgurPromise1: Promise<string> = imgur.uploadImage(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
@@ -136,35 +136,51 @@ export class GamesRoute extends AbstractRoute<Game> {
             });
     }
 
-    private async doubleViewUpload(req: Request): Promise<string[]> {
-        let differenceImages: [string, string] = ["", ""];
+    // tslint:disable-next-line:max-func-body-length
+    private async generate3DImagesDiff(): Promise<string[]> {
+        const images: [string, string, string, string, string, string] = ["", "", "", "", "", ""];
 
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
-            differenceImages = ["", ""];
+            images[this.FIRST_VIEW_DIFF_INDEX] = "";
+            images[this.SECOND_VIEW_DIFF_INDEX] = "";
 
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
-                    differenceImages[0] = value;
+                    images[this.FIRST_VIEW_DIFF_INDEX] = value;
                 })
                 .catch();
 
-            if (differenceImages[0] === "") {
+            if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
                 continue;
             }
 
             await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                 .then((value: string) => {
-                    differenceImages[1] = value;
+                    images[this.SECOND_VIEW_DIFF_INDEX] = value;
                 })
                 .catch();
         }
 
-        if (differenceImages[0] === "" || differenceImages[1] === "") {
+        if (images[this.FIRST_VIEW_DIFF_INDEX] === "" || images[this.SECOND_VIEW_DIFF_INDEX] === "") {
             throw new Error(this.errorCountException);
         }
 
-        return differenceImages;
+        images[this.FIRST_VIEW_RAW_INDEX] = await this.base64_encode(this.firstViewOriginalPath);
+        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.base64_encode(this.firstViewModifiedPath);
+        images[this.SECOND_VIEW_RAW_INDEX] = await this.base64_encode(this.secondViewOriginalPath);
+        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.base64_encode(this.secondViewModifiedPath);
+
+        await this.deleteFile(this.firstViewOriginalPath);
+        await this.deleteFile(this.firstViewModifiedPath);
+        await this.deleteFile(this.secondViewOriginalPath);
+        await this.deleteFile(this.secondViewModifiedPath);
+
+        return images;
+    }
+
+    private async deleteFile(filepath: string): Promise<void> {
+        return util.promisify(fs.unlink)(filepath);
     }
 
     private async exec3DImage(): Promise<void> {
