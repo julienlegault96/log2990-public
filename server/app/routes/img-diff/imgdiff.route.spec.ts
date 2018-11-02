@@ -24,7 +24,7 @@ describe("Imgdiff service", () => {
     });
 
     it("should return image data", async () => {
-        imgdiff["getById"] = async () => [GAMES[0]];
+        imgdiff["getById"] = async () => GAMES[0];
 
         // ce test retourne toujours un string
         const imgDiffData: string = await imgdiff["getDiffImgData"]("gameId", ImageView.FirstView) as string;

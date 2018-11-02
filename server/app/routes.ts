@@ -45,11 +45,11 @@ export class Routes {
         );
         router.delete(
             "/games/:id",
-            (req: Request, res: Response, next: NextFunction) => this.games.deleteById(req, res, next)
+            (req: Request, res: Response, next: NextFunction) => this.gamesRoute.deleteById(req, res, next)
         );
         router.put(
             "/leaderboard/:id",
-            (req: Request, res: Response, next: NextFunction) => this.games.updateLeaderboard(req, res, next)
+            (req: Request, res: Response, next: NextFunction) => this.gamesRoute.updateLeaderboard(req, res, next)
         );
 
         // USERS
@@ -63,7 +63,7 @@ export class Routes {
         );
         router.delete(
             "/users/:id",
-            (req: Request, res: Response, next: NextFunction) => this.users.deleteById(req, res, next)
+            (req: Request, res: Response, next: NextFunction) => this.usersRoute.deleteById(req, res, next)
         );
 
         return router;

@@ -9,9 +9,7 @@ describe("Games db services", () => {
     it("should generate game id", async () => {
         const id: string = games["generateId"]();
 
-        expect(id).to.be.a("number");
-        expect(id).to.be.at.least(0);
-        expect(id).to.be.at.most(games["ID_RANGE"]);
+        expect(id).to.be.a("string");
     });
 
     it("should not have valid error count", async () => {
