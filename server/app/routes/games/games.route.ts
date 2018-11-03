@@ -175,7 +175,6 @@ export class GamesRoute extends AbstractRoute<Game> {
             }
         }
 
-
         images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.firstViewOriginalPath);
         images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.firstViewModifiedPath);
         images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.secondViewOriginalPath);
