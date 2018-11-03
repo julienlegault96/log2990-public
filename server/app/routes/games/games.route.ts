@@ -16,7 +16,6 @@ import { Coordinates } from "../../../../common/game/coordinates";
 import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { Leaderboard } from "../../../../common/game/leaderboard";
 import { ErrorFinder } from "../../services/error-finder/error-finder";
 
 @injectable()
