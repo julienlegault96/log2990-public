@@ -175,9 +175,6 @@ export class GamesRoute extends AbstractRoute<Game> {
             }
         }
 
-        if (!this.isValidGeneratedImages(images)) {
-            throw new Error(this.errorCountException);
-        }
 
         images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.firstViewOriginalPath);
         images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.firstViewModifiedPath);
@@ -188,8 +185,14 @@ export class GamesRoute extends AbstractRoute<Game> {
             this.firstViewOriginalPath,
             this.firstViewModifiedPath,
             this.secondViewOriginalPath,
-            this.secondViewModifiedPath
+            this.secondViewModifiedPath,
+            this.outputPath,
+            this.b64Path
         );
+
+        if (!this.isValidGeneratedImages(images)) {
+            throw new Error(this.errorCountException);
+        }
 
         return images;
     }
