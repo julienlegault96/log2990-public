@@ -47,15 +47,14 @@ export class ChronoComponent {
 
     private calculate(): void {
         const elapsedTime: Date = this.getElapsedTime();
-        const seconds: number = elapsedTime.getSeconds()
+        this.elapsedTime = elapsedTime.getSeconds()
             + elapsedTime.getMinutes() * SECONDS_IN_MINUTE
             + elapsedTime.getUTCHours() * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
-        this.elapsedTime = seconds;
 
-        this.formattedTime = getformattedTime(seconds);
+        this.formattedTime = getformattedTime(this.elapsedTime);
 
-        if (seconds >= this.SECONDS_ALERT && seconds % this.SECONDS_ALERT === this.MODULO_ZERO) {
-            this.timerMilestone.emit(`${seconds} secondes se sont écoulées`);
+        if (this.elapsedTime >= this.SECONDS_ALERT && this.elapsedTime % this.SECONDS_ALERT === this.MODULO_ZERO) {
+            this.timerMilestone.emit(`${this.elapsedTime} secondes se sont écoulées`);
         }
     }
 
