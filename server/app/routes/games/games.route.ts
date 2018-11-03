@@ -154,33 +154,40 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     // tslint:disable-next-line:max-func-body-length
     private async generate3DImagesDiff(): Promise<string[]> {
-        console.log("Generator started...");
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
-        for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
+        for (let i: number = 0; i < this.imagesGeneratorMaximumTries ; i++) {
+            console.log("3D generator started...");
             await this.exec3DImage();
-            console.log("Generated")
+            console.log("Done!")
             images[this.FIRST_VIEW_DIFF_INDEX] = "";
             images[this.SECOND_VIEW_DIFF_INDEX] = "";
-            console.log("Diff started...");
+            console.log("1st diff started...");
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     images[this.FIRST_VIEW_DIFF_INDEX] = value;
                 })
                 .catch(console.log);
-            console.log("Diff generated!");
+            console.log("Done!");
             if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
+                console.log("Invalid diff count :(");
                 continue;
             }
-
+            console.log("2nd diff started...")
             await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                 .then((value: string) => {
                     images[this.SECOND_VIEW_DIFF_INDEX] = value;
                 })
                 .catch();
+            console.log("Done!");
+            if (this.isValidGeneratedImages(images)) {
+                console.log("Valid images!");
+                break;
+            }
         }
 
-        if (images[this.FIRST_VIEW_DIFF_INDEX] === "" || images[this.SECOND_VIEW_DIFF_INDEX] === "") {
+        if (!this.isValidGeneratedImages(images)) {
+            console.log("Invalid images :(");
             throw new Error(this.errorCountException);
         }
 
@@ -197,6 +204,10 @@ export class GamesRoute extends AbstractRoute<Game> {
         );
 
         return images;
+    }
+
+    private isValidGeneratedImages(images: string[]): boolean {
+        return images[this.FIRST_VIEW_DIFF_INDEX] !== "" && images[this.SECOND_VIEW_DIFF_INDEX] !== "";
     }
 
     private async deleteFiles(...filepaths: Array<string>): Promise<void> {
