@@ -46,16 +46,6 @@ export class GamesRoute extends AbstractRoute<Game> {
         this.collection = Collections.Games;
     }
 
-    public async updateLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const leaderboards: Leaderboard[] = req.body;
-        const game: Game = await this.getOne(req.params.id);
-
-        game.leaderboards = leaderboards;
-        req.body = game;
-
-        await this.updateById(req, res, next, req.params.id);
-    }
-
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
         res.status(CODES.OK).send(
             JSON.stringify(
