@@ -124,15 +124,12 @@ export class GamesRoute extends AbstractRoute<Game> {
     private doubleViewUpload(req: Request): Promise<string[]> {
         return this.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
-                console.log("Generated!");
-
                 return this.uploadImagesImgur(
                     imagesDiff[this.FIRST_VIEW_RAW_INDEX],
                     imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX],
                     imagesDiff[this.SECOND_VIEW_RAW_INDEX],
                     imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]
                 ).then((imgurLinks: Array<string>) => {
-                    console.log("Imgur uploaded!");
                     imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imagesDiff[this.FIRST_VIEW_DIFF_INDEX]);
                     imgurLinks.splice(this.SECOND_VIEW_DIFF_INDEX, 0, imagesDiff[this.SECOND_VIEW_DIFF_INDEX]);
 
@@ -168,6 +165,7 @@ export class GamesRoute extends AbstractRoute<Game> {
                 })
                 .catch();
 
+            // first view has valid difference count
             if (images[this.FIRST_VIEW_DIFF_INDEX] !== "") {
                 await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                     .then((value: string) => {
@@ -214,7 +212,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         const execPath: string = "./tools/genmulti.exe";
 
         // TODO
-        await this.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput]).catch(console.log);
+        await this.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput])
+            .catch(console.log);
     }
 
     private generateId(): string {
