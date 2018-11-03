@@ -13,8 +13,11 @@
 #include <time.h> 
 #include "Shape.h"
 #include "ShapesContainer.h"
+#include "Pixel.h"
+#include "Image.h"
+#include "ImageHeader.h"
 
-
+using namespace std;
 // variables pour l'utilisation des nuanceurs
 GLuint progBase;  // le programme de nuanceurs de base
 GLint locVertex = -1;
@@ -87,125 +90,158 @@ struct Etat {
 
 // variables pour définir le point de vue
 const GLdouble thetaInit = 0., phiInit = 80., distInit = 40.;
+
 class Camera
 {
-public:
-	void definir()
-	{
-		matrVisu.LookAt(dist*cos(glm::radians(theta))*sin(glm::radians(phi)),
-			dist*sin(glm::radians(theta))*sin(glm::radians(phi)),
-			dist*cos(glm::radians(phi)) + 5., // <= prennez note du +5
-			0., 0., 5.,  // <= prenez note du 5
-			0., 0., 1.);
+  public:
+    void definir()
+    {
+        matrVisu.LookAt(dist * cos(glm::radians(theta)) * sin(glm::radians(phi)),
+                        dist * sin(glm::radians(theta)) * sin(glm::radians(phi)),
+                        dist * cos(glm::radians(phi)) + 5., // <= prennez note du +5
+                        0., 0., 5.,                         // <= prenez note du 5
+                        0., 0., 1.);
+    }
 
-	}
+    void verifierAngles() // vérifier que les angles ne débordent pas les valeurs permises
+    {
+        const GLdouble MINPHI = 0.01, MAXPHI = 180.0 - 0.01;
+        if (phi > MAXPHI)
+            phi = MAXPHI;
+        else if (phi < MINPHI)
+            phi = MINPHI;
+        if (theta > 360.0)
+            theta -= 360.0;
+        else if (theta < 0.0)
+            theta += 360.0;
+    }
+    double theta; // angle de rotation de la caméra (coord. sphériques)
+    double phi;   // angle de rotation de la caméra (coord. sphériques)
+    double previousTheta;
+    double previousPhi;
+    double dist;     // distance (coord. sphériques)
+    bool modeLookAt; // on utilise LookAt (au lieu de Rotate et Translate)
+}
+camera = {thetaInit, phiInit, thetaInit, phiInit, distInit, true};
 
-	void verifierAngles() // vérifier que les angles ne débordent pas les valeurs permises
-	{
-		const GLdouble MINPHI = 0.01, MAXPHI = 180.0 - 0.01;
-		if (phi > MAXPHI) phi = MAXPHI; else if (phi < MINPHI) phi = MINPHI;
-		if (theta > 360.0) theta -= 360.0; else if (theta < 0.0) theta += 360.0;
-	}
-	double theta;         // angle de rotation de la caméra (coord. sphériques)
-	double phi;           // angle de rotation de la caméra (coord. sphériques)
-	double dist;          // distance (coord. sphériques)
-	bool modeLookAt;      // on utilise LookAt (au lieu de Rotate et Translate)
-} camera = { thetaInit, phiInit, distInit, true };
-
-void chargerNuanceurs()
+std::string getAbsolutePath(const char *argv0)
 {
+    const short PROGRAM_NAME_LENGTH = 12;
 
-	
-	// charger le nuanceur de base
-	{
-		// créer le programme
-		progBase = glCreateProgram();
+    std::string absoluteRef(argv0);
+    absoluteRef = absoluteRef.substr(0, absoluteRef.length() - PROGRAM_NAME_LENGTH);
 
-		// attacher le nuanceur de sommets
-		const GLchar *chainesSommets[2] = { "#version 410\n#define NUANCEUR_SOMMETS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
-		if (chainesSommets[1] != NULL)
-		{
-			GLuint nuanceurObj = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(nuanceurObj, 2, chainesSommets, NULL);
-			glCompileShader(nuanceurObj);
-			glAttachShader(progBase, nuanceurObj);
-			ProgNuanceur::afficherLogCompile(nuanceurObj);
-			delete[] chainesSommets[1];
-		}
-		// attacher le nuanceur de fragments
-		const GLchar *chainesFragments[2] = { "#version 410\n#define NUANCEUR_FRAGMENTS\n", ProgNuanceur::lireNuanceur("nuanceurs.glsl") };
-		if (chainesFragments[1] != NULL)
-		{
-			GLuint nuanceurObj = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(nuanceurObj, 2, chainesFragments, NULL);
-			glCompileShader(nuanceurObj);
-			glAttachShader(progBase, nuanceurObj);
-			ProgNuanceur::afficherLogCompile(nuanceurObj);
-			delete[] chainesFragments[1];
-		}
-
-		// faire l'édition des liens du programme
-		glLinkProgram(progBase);
-		ProgNuanceur::afficherLogLink(progBase);
-
-		// demander la "Location" des variables
-		if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
-		if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
-		if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
-		if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
-		if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
-		if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
-		if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
-		if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
-		if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
-		if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de FrontMaterial" << std::endl;
-		if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
-
-		// charger les ubo
-		{
-			glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(LightSource), &LightSource, GL_DYNAMIC_COPY);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
-			const GLuint bindingIndex = 0;
-			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[0]);
-			glUniformBlockBinding(progBase, indLightSource, bindingIndex);
-		}
-		{
-			glBindBuffer(GL_UNIFORM_BUFFER, ubo[1]);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(FrontMaterial), &FrontMaterial, GL_DYNAMIC_COPY);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
-			const GLuint bindingIndex = 1;
-			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[1]);
-			glUniformBlockBinding(progBase, indFrontMaterial, bindingIndex);
-		}
-		{
-			glBindBuffer(GL_UNIFORM_BUFFER, ubo[2]);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(LightModel), &LightModel, GL_DYNAMIC_COPY);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
-			const GLuint bindingIndex = 2;
-			glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[2]);
-			glUniformBlockBinding(progBase, indLightModel, bindingIndex);
-		}
-	}
+    return absoluteRef;
 }
 
-void FenetreTP::initialiser()
+void chargerNuanceurs(std::string path)
 {
-	// donner la couleur de fond
-	glClearColor(0.2, 0.21, 0.26, 1.0);
-	// allouer les UBO pour les variables uniformes
-	glGenBuffers(3, ubo);
-	// activer les etats openGL
-	glEnable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	// charger les nuanceurs
-	chargerNuanceurs();
+    const char *SHADER_NAME = "nuanceurs.glsl";
+    // charger le nuanceur de base
+    {
+        std ::string absoluteRef = path.append(SHADER_NAME);
 
-	// créer quelques autres formes
-	glUseProgram(progBase);
-	
+        // créer le programme
+        progBase = glCreateProgram();
 
+        // attacher le nuanceur de sommets
+        const GLchar *chainesSommets[2] = {"#version 410\n#define NUANCEUR_SOMMETS\n", ProgNuanceur::lireNuanceur(absoluteRef.data())};
+        if (chainesSommets[1] != NULL)
+            {
+                GLuint nuanceurObj = glCreateShader(GL_VERTEX_SHADER);
+                glShaderSource(nuanceurObj, 2, chainesSommets, NULL);
+                glCompileShader(nuanceurObj);
+                glAttachShader(progBase, nuanceurObj);
+                ProgNuanceur::afficherLogCompile(nuanceurObj);
+                delete[] chainesSommets[1];
+            }
+        // attacher le nuanceur de fragments
+        const GLchar *chainesFragments[2] = {"#version 410\n#define NUANCEUR_FRAGMENTS\n", ProgNuanceur::lireNuanceur(absoluteRef.data())};
+        if (chainesFragments[1] != NULL)
+        {
+            GLuint nuanceurObj = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(nuanceurObj, 2, chainesFragments, NULL);
+            glCompileShader(nuanceurObj);
+            glAttachShader(progBase, nuanceurObj);
+            ProgNuanceur::afficherLogCompile(nuanceurObj);
+            delete[] chainesFragments[1];
+        }
+
+        // faire l'édition des liens du programme
+        glLinkProgram(progBase);
+        ProgNuanceur::afficherLogLink(progBase);
+
+        // demander la "Location" des variables
+        if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
+        if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
+        if ((locColor = glGetAttribLocation(progBase, "Color")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
+        if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
+        if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
+        if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
+        if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
+        if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1)
+            std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
+        if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX)
+            std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
+        if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX)
+            std::cerr << "!!! pas trouvé l'\"index\" de FrontMaterial" << std::endl;
+        if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX)
+            std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
+
+        // charger les ubo
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
+            glBufferData(GL_UNIFORM_BUFFER, sizeof(LightSource), &LightSource, GL_DYNAMIC_COPY);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            const GLuint bindingIndex = 0;
+            glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[0]);
+            glUniformBlockBinding(progBase, indLightSource, bindingIndex);
+        }
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, ubo[1]);
+            glBufferData(GL_UNIFORM_BUFFER, sizeof(FrontMaterial), &FrontMaterial, GL_DYNAMIC_COPY);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            const GLuint bindingIndex = 1;
+            glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[1]);
+            glUniformBlockBinding(progBase, indFrontMaterial, bindingIndex);
+        }
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, ubo[2]);
+            glBufferData(GL_UNIFORM_BUFFER, sizeof(LightModel), &LightModel, GL_DYNAMIC_COPY);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            const GLuint bindingIndex = 2;
+            glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, ubo[2]);
+            glUniformBlockBinding(progBase, indLightModel, bindingIndex);
+        }
+    }
+}
+
+void FenetreTP::initialiser(std::string absolutePath)
+{
+    // donner la couleur de fond
+    glClearColor(0.2, 0.21, 0.26, 1.0);
+    // allouer les UBO pour les variables uniformes
+    glGenBuffers(3, ubo);
+    // activer les etats openGL
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    // charger les nuanceurs
+    chargerNuanceurs(absolutePath);
+
+    //////////// charger les textures ////////
+    // chargerTextures(); // Provisoirement
+    ////////////////////////////////////////
+
+    // créer quelques autres formes
+    glUseProgram(progBase);
 }
 
 void FenetreTP::conclure()
@@ -313,6 +349,79 @@ void FenetreTP::redimensionner(GLsizei w, GLsizei h)
 	glViewport(0, 0, w, h);
 }
 
+void FenetreTP::screenshot(const char *filename)
+{
+    const short PIXEL_BYTE_SIZE = 3;
+    const int32_t arraysize = PIXEL_BYTE_SIZE * DEFAULT_24BIT_BMP_HEADER.biWidth * DEFAULT_24BIT_BMP_HEADER.biHeight;
+    GLubyte *imageBytes = new GLubyte[arraysize];
+
+    // center then find lower left corner of DEFAULT_HEADER w x h
+    int adjustedX = std::fmax(0, (this->largeur_ / 2) - DEFAULT_24BIT_BMP_HEADER.biWidth / 2);
+    int adjustedY = std::fmax(0, (this->hauteur_ / 2) - DEFAULT_24BIT_BMP_HEADER.biHeight / 2);
+
+    glReadPixels(
+        adjustedX, adjustedY,
+        DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight,
+        GL_RGB, GL_UNSIGNED_BYTE,
+        imageBytes);
+
+    uint64_t offset = 0;
+
+    // glReadPixel reads lowest to highest row, left to right
+    Image image(DEFAULT_24BIT_BMP_HEADER.biWidth, DEFAULT_24BIT_BMP_HEADER.biHeight);
+    for (int32_t y = DEFAULT_24BIT_BMP_HEADER.biHeight; y > 0; --y)
+    {
+        for (int32_t x = 0; x < DEFAULT_24BIT_BMP_HEADER.biWidth; ++x)
+        {
+            Pixel pixel(imageBytes[offset], imageBytes[offset + 1], imageBytes[offset + 2]);
+            image.setPixel(x, DEFAULT_24BIT_BMP_HEADER.biHeight - y, pixel);
+            offset = offset + PIXEL_BYTE_SIZE;
+        }
+    }
+
+    delete[] imageBytes;
+    imageBytes = nullptr;
+
+    ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
+    header.biClrUsed = (uint32_t)image.colorsUsed.size();
+    ofstream bmpOutputFile;
+    bmpOutputFile.open(filename, ios::out | ios::binary | ios::trunc);
+    bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
+    bmpOutputFile << image;
+    bmpOutputFile.close();
+}
+
+void turnCamera()
+{
+    camera.previousPhi = camera.phi;
+    camera.previousTheta = camera.theta;
+    camera.phi = glm::mix(0, 360, rand() / ((double)RAND_MAX));
+    camera.theta = glm::mix(0.1, 180 - 0.1, rand() / ((double)RAND_MAX));
+    camera.verifierAngles();
+}
+
+void unturnCamera()
+{
+    camera.phi = camera.previousPhi;
+    camera.theta = camera.previousTheta;
+    camera.verifierAngles();
+}
+
+void help()
+{
+    std::cout << "Usage de l'executable :" << std::endl
+              << "genmulti { geo | theme }   <quantite>	<modification>  <sortie>" << std::endl
+              << "Modifications possibles: " << std::endl
+              << "\t (a)-ajouter des objets a la scene initiale" << std::endl
+              << "\t (s)-supprimer des objets de la scene initiale" << std::endl
+              << "\t (c)-changer la couleur ou la texture d'objets de la scene initiale" << std::endl
+              << "par exemple genmulti geo 15 ac sortie" << std::endl
+              << "\t utilise des formes geometriques" << std::endl
+              << "\t la scene originales a 15 objets" << std::endl
+              << "\t les modifications autorisees sont ajouter et changer couleur" << std::endl
+              << "\t les fichiers de sortie vont commencer par sortie" << std::endl;
+}
+
 void FenetreTP::clavier(TP_touche touche)
 {
 	switch (touche)
@@ -396,31 +505,84 @@ void FenetreTP::sourisMouvement(int x, int y)
 	}
 }
 
+void genererMultivue(FenetreTP &fenetre, const char *sortie)
+{
+    const std::string FILENAME(sortie);
+    const std::string A_POV("_a");
+    const std::string B_POV("_b");
+    const std::string ORIGINAL("_ori.bmp");
+    const std::string MODIFIED("_mod.bmp");
+
+    fenetre.afficherScene();
+    fenetre.screenshot((FILENAME + A_POV + ORIGINAL).data());
+    fenetre.swap();
+
+    turnCamera();
+    fenetre.afficherScene();
+    fenetre.screenshot((FILENAME + B_POV + ORIGINAL).data());
+    fenetre.swap();
+
+    //modifier scène
+    shapes->modify();
+    fenetre.afficherScene();
+    fenetre.screenshot((FILENAME + B_POV + MODIFIED).data());
+    fenetre.swap();
+
+    unturnCamera();
+    fenetre.afficherScene();
+    fenetre.screenshot((FILENAME + A_POV + MODIFIED).data());
+    fenetre.swap();
+}
+
 int main(int argc, char *argv[])
 {
-	// créer une fenêtre
-	FenetreTP fenetre("LOG2990");
+    // créer une fenêtre
+    FenetreTP fenetre("LOG2990");
+    // allouer des ressources et définir le contexte OpenGL
+    std::string absoluteRef = getAbsolutePath(argv[0]);
+    fenetre.initialiser(absoluteRef);
+    srand(time(0));
+    std::cout << time(0);
+    shapes = new ShapesContainer(5, etat.dimBoite, false);
+    // shapes = new ShapesContainer(1, etat.dimBoite, true);
 
-	// allouer des ressources et définir le contexte OpenGL
-	fenetre.initialiser();
-	srand(time(0));
-	std::cout << time(0);
-	// shapes = new ShapesContainer(1, etat.dimBoite, false);
-    shapes = new ShapesContainer(1, etat.dimBoite, true);
     bool boucler = true;
-	while (boucler)
-	{
+    while (boucler)
+    {
+        // affichage
+        fenetre.afficherScene();
+        fenetre.swap();
 
-		// affichage
-		fenetre.afficherScene();
-		fenetre.swap();
+        // récupérer les événements et appeler la fonction de rappel
+        boucler = fenetre.gererEvenement();
+    }
+    //=================================
+    // détruire les ressources OpenGL allouées
+    fenetre.conclure();
 
-		// récupérer les événements et appeler la fonction de rappel
-		boucler = fenetre.gererEvenement();
-	}
+    return 0;
 
+    /*
+	screenshot("Side1Org.bmp");
+
+	turnCamera();
+	fenetre.afficherScene();
+	fenetre.swap();
+	//screenshot("Side2Org.bmp");
+	//modifier scène
+	shapes->modify();
+	fenetre.afficherScene();
+	fenetre.swap();
+	//screenshot("Side2Diff.bmp");
+	unturnCamera();
+	fenetre.afficherScene();
+	fenetre.swap();
+	//screenshot("Side1Diff.bmp");
 	// détruire les ressources OpenGL allouées
+	
 	fenetre.conclure();
+	
 
 	return 0;
+	*/
 }
