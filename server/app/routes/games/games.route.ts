@@ -100,9 +100,15 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
+        await this.writeFile(this.rawImagePath, rawBitmap);
+
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
+        await this.writeFile(this.modifiedImagePath, modifiedBitmap);
+
         return this.generateImageDiff(
-            req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
-            req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
+            this.rawImagePath,
+            this.modifiedImagePath
         ).then((imageDiff: string) => {
             return this.uploadImagesImgur(
                 req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
@@ -118,12 +124,15 @@ export class GamesRoute extends AbstractRoute<Game> {
     private doubleViewUpload(req: Request): Promise<string[]> {
         return this.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
+                console.log("Generated!");
+
                 return this.uploadImagesImgur(
                     imagesDiff[this.FIRST_VIEW_RAW_INDEX],
                     imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX],
                     imagesDiff[this.SECOND_VIEW_RAW_INDEX],
                     imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]
                 ).then((imgurLinks: Array<string>) => {
+                    console.log("Imgur uploaded!");
                     imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imagesDiff[this.FIRST_VIEW_DIFF_INDEX]);
                     imgurLinks.splice(this.SECOND_VIEW_DIFF_INDEX, 0, imagesDiff[this.SECOND_VIEW_DIFF_INDEX]);
 
@@ -145,19 +154,21 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     // tslint:disable-next-line:max-func-body-length
     private async generate3DImagesDiff(): Promise<string[]> {
+        console.log("Generator started...");
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
+            console.log("Generated")
             images[this.FIRST_VIEW_DIFF_INDEX] = "";
             images[this.SECOND_VIEW_DIFF_INDEX] = "";
-
+            console.log("Diff started...");
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     images[this.FIRST_VIEW_DIFF_INDEX] = value;
                 })
-                .catch();
-
+                .catch(console.log);
+            console.log("Diff generated!");
             if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
                 continue;
             }
@@ -199,14 +210,10 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async exec3DImage(): Promise<void> {
-        const execPath: string = "./tools/vanilla3DObjects.exe";
+        const execPath: string = "./tools/genmulti.exe";
 
         // TODO
         await this.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput]).catch(console.log);
-        // await util.promisify(execFile)(
-        //     execPath,
-        //     ["geo", "20", "asc", this.imageGeneratorOutput]
-        // ).catch(console.log);
     }
 
     private generateId(): string {
@@ -225,30 +232,13 @@ export class GamesRoute extends AbstractRoute<Game> {
         return Buffer.from(ImgDiff.parseBase64(base64), "base64");
     }
 
-    private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(rawImage);
-        await this.writeFile(this.rawImagePath, rawBitmap);
+    private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
 
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImage);
-        await this.writeFile(this.modifiedImagePath, modifiedBitmap);
-
-        await this.execFile(this.execPath, [this.rawImagePath, this.modifiedImagePath, this.outputPath]);
-
-        // await util.promisify(execFile)(
-        //     this.execPath,
-        //     [this.rawImagePath, this.modifiedImagePath, this.outputPath]
-        // );
+        await this.execFile(this.execPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
         const output: string = await this.encodeInBase64(this.outputPath);
 
         const isValidCount: boolean = await this.hasValidDifferenceCount(this.outputPath);
-
-        await this.deleteFiles(
-            this.rawImagePath,
-            this.modifiedImagePath,
-            this.outputPath,
-            this.b64Path
-        );
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
