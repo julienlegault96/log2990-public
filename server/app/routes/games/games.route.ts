@@ -156,38 +156,28 @@ export class GamesRoute extends AbstractRoute<Game> {
     private async generate3DImagesDiff(): Promise<string[]> {
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
-        for (let i: number = 0; i < this.imagesGeneratorMaximumTries ; i++) {
-            console.log("3D generator started...");
+        for (let i: number = 0; (i < this.imagesGeneratorMaximumTries) && (!this.isValidGeneratedImages(images)); i++) {
             await this.exec3DImage();
-            console.log("Done!")
+
             images[this.FIRST_VIEW_DIFF_INDEX] = "";
             images[this.SECOND_VIEW_DIFF_INDEX] = "";
-            console.log("1st diff started...");
+
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     images[this.FIRST_VIEW_DIFF_INDEX] = value;
                 })
-                .catch(console.log);
-            console.log("Done!");
-            if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
-                console.log("Invalid diff count :(");
-                continue;
-            }
-            console.log("2nd diff started...")
-            await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
-                .then((value: string) => {
-                    images[this.SECOND_VIEW_DIFF_INDEX] = value;
-                })
                 .catch();
-            console.log("Done!");
-            if (this.isValidGeneratedImages(images)) {
-                console.log("Valid images!");
-                break;
+
+            if (images[this.FIRST_VIEW_DIFF_INDEX] !== "") {
+                await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
+                    .then((value: string) => {
+                        images[this.SECOND_VIEW_DIFF_INDEX] = value;
+                    })
+                    .catch();
             }
         }
 
         if (!this.isValidGeneratedImages(images)) {
-            console.log("Invalid images :(");
             throw new Error(this.errorCountException);
         }
 
