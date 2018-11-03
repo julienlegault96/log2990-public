@@ -11,7 +11,7 @@ import { LeaderboardRequest } from "../../../../../common/communication/leaderbo
 export class LeaderboardService extends AbstractServerService {
 
     public sendGameScore(leaderboardRequest: LeaderboardRequest): void {
-        this.postRequest<LeaderboardRequest>(Endpoints.Score, leaderboardRequest)
+        this.postRequest<LeaderboardRequest>(Endpoints.Leaderboard, leaderboardRequest)
             .subscribe();
     }
 

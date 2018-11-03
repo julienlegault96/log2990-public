@@ -21,12 +21,7 @@ export class Routes {
     public get routes(): Router {
         const router: Router = Router();
 
-        router.get(
-            "/imgdiff",
-            (req: Request, res: Response, next: NextFunction) => this.imgDiffRoute.get(req, res, next)
-        );
-
-        // GAMES
+        // Games
         router.get(
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.gamesRoute.get(req, res, next)
@@ -39,20 +34,28 @@ export class Routes {
             "/games",
             (req: Request, res: Response, next: NextFunction) => this.gamesRoute.post(req, res, next)
         );
-        router.post(
-            "/score",
-            (req: Request, res: Response, next: NextFunction) => this.leaderboardRoute.post(req, res, next)
-        );
         router.delete(
             "/games/:id",
             (req: Request, res: Response, next: NextFunction) => this.gamesRoute.deleteById(req, res, next)
         );
-        router.put(
-            "/leaderboard/:id",
-            (req: Request, res: Response, next: NextFunction) => this.gamesRoute.updateLeaderboard(req, res, next)
+
+        // ImgDiff
+        router.get(
+            "/imgdiff",
+            (req: Request, res: Response, next: NextFunction) => this.imgDiffRoute.get(req, res, next)
         );
 
-        // USERS
+        // Leaderboard
+        router.post(
+            "/leaderboard",
+            (req: Request, res: Response, next: NextFunction) => this.leaderboardRoute.post(req, res, next)
+        );
+        router.put(
+            "/leaderboard/:id",
+            (req: Request, res: Response, next: NextFunction) => this.leaderboardRoute.put(req, res, next)
+        );
+
+        // Users
         router.get(
             "/users",
             (req: Request, res: Response, next: NextFunction) => this.usersRoute.get(req, res, next)

@@ -88,7 +88,6 @@ export enum Endpoints {
     Users = "users",
     Leaderboard = "leaderboard",
     ImgDiff = "imgdiff",
-    Score = "score",
 }
 
 export class Query {

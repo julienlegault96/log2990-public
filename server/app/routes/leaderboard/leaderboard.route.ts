@@ -6,7 +6,7 @@ import { Mongo, Collections } from "../../services/mongo";
 import { AbstractRoute } from "../abstract-route/abstract-route";
 
 import { Game } from "../../../../common/game/game";
-import { Score } from "../../../../common/game/leaderboard";
+import { Score, Leaderboard } from "../../../../common/game/leaderboard";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
@@ -33,6 +33,16 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         } catch (e) {
             res.status(CODES.BAD_REQUEST).send("Element provided does not follow the valid format...");
         }
+    }
+
+    public async put(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const leaderboards: Leaderboard[] = req.body;
+        const game: Game = await this.getOne(req.params.id);
+
+        game.leaderboards = leaderboards;
+        req.body = game;
+
+        await this.updateById(req, res, next, req.params.id);
     }
 
     private async updateScores(leaderboardRequest: LeaderboardRequest): Promise<UpdateWriteOpResult> {
