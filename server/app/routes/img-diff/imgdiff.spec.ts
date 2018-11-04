@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ImgDiff } from "./imgdiff";
-import { Mongo } from "../../services/mongo";
 import { GAMES } from "../../../../common/game/mock-games";
 import { ImageView } from "../../../../common/game/image-view";
 import { Coordinates } from "../../../../common/game/coordinates";
@@ -8,7 +7,7 @@ import * as util from "util";
 import * as fs from "fs";
 
 describe("Imgdiff service", () => {
-    const imgdiff: ImgDiff = new ImgDiff(new Mongo());
+    const imgdiff: ImgDiff = new ImgDiff();
 
     it("should parse base64", async () => {
         const data: string = "data:image/bmp;base64,-----";
