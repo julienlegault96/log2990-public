@@ -60,8 +60,8 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
         const game: Game = await this.getOne(req.params.id);
-        if (!Games.cachedDiffImagesMap[game._id] && game) {
-            Games.cachedDiffImagesMap[game._id] =
+        if (!GamesRoute.cachedDiffImagesMap[game._id] && game) {
+            GamesRoute.cachedDiffImagesMap[game._id] =
                 [game.imageUrl[this.FIRST_VIEW_DIFF_INDEX], game.imageUrl[this.SECOND_VIEW_DIFF_INDEX]];
         }
 

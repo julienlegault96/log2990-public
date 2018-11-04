@@ -7,7 +7,7 @@ import { CODES } from "../../../../common/communication/response-codes";
 import { Coordinates } from "../../../../common/game/coordinates";
 import { ImageView } from "../../../../common/game/image-view";
 
-import { Games } from "../games";
+import { GamesRoute } from "../games/games.route";
 
 @injectable()
 export class ImgDiffRoute {
@@ -52,7 +52,7 @@ export class ImgDiffRoute {
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
-        return Games.cachedDiffImagesMap[id][Number(imageView)];
+        return GamesRoute.cachedDiffImagesMap[id][Number(imageView)];
     }
 
 }
