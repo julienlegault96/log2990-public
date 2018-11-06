@@ -15,8 +15,8 @@ void Camera::executeChanges(MatricePipeline& matrVisu)
 
 void Camera::validateAngles()
 {
-        if (phi > MAXIMUM_PHI) phi = MAXIMUM_PHI; else if (phi < MINIMUM_PHI) phi = MINIMUM_PHI;
-        if (theta > 360.0) theta -= 360.0; else if (theta < 0.0) theta += 360.0;
+    if (phi > MAXIMUM_PHI) { phi = MAXIMUM_PHI; } else if (phi < MINIMUM_PHI) { phi = MINIMUM_PHI; }
+    if (theta > 360.0) { theta -= 360.0; } else if (theta < 0.0) { theta += 360.0; }
 }
 
 void Camera::randomTurn()
@@ -30,12 +30,17 @@ void Camera::randomTurn()
 
 void Camera::turn(double phi, double theta)
 {
+    this->previousPhi = this->phi;
+    this->previousTheta = this->theta;
     this->phi = phi;
     this->theta = theta;
+    validateAngles();
 }
 
 void Camera::unturn()
 {
+    previousPhi = phi;
+    previousTheta = theta;
     phi = previousPhi;
     theta = previousTheta;
     validateAngles();
