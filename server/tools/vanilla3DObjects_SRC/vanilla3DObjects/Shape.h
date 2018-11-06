@@ -19,7 +19,7 @@ public:
 	void Draw();
 	~Shape();
 	void ChangeColor(glm::vec4 baseColor);
-	void disappear();
+	void hide();
 	
 
 protected:

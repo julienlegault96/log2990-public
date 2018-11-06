@@ -4,13 +4,14 @@
 #pragma comment(lib,"opengl32.lib")
 #include <iostream>
 #include <math.h>
+#include "inf2705-texture.h"
 #include "inf2705-matrice.h"
 #include "inf2705-nuanceur.h"
 #include "inf2705-fenetre.h"
 #include "inf2705-forme.h"
 #include <stdio.h>
 #include <stdlib.h> 
-#include <time.h> 
+#include <time.h>
 #include "Shape.h"
 #include "Planet.h"
 #include "Spaceship.h"
@@ -86,7 +87,7 @@ struct LightModelParameters
 struct Etat {
 	bool afficheAxes;     // indique si on affiche les axes
 	bool culling;         // indique si on veut ne pas afficher les faces arrières
-	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL)
+	GLenum modePolygone;  // comment afficher les polygones (GL_LINE ou GL_FILL);
 	double dimBoite;      // la dimension de la boite
 } etat = { false, false, GL_FILL, 9.9 };
 
@@ -119,25 +120,15 @@ public:
 	bool modeLookAt;      // on utilise LookAt (au lieu de Rotate et Translate)
 } camera = { thetaInit, phiInit,thetaInit, phiInit, distInit, true };
 
-////// Texture //////
 void chargerTextures()
 {
+    /*
     unsigned char *pixels;
     GLsizei largeur, hauteur;
-   /* if ((pixels = ChargerImage("avendre.bmp", largeur, hauteur)) != NULL)
-    {
-        glGenTextures(1, &Etat::maTextureAVendre);
-        glBindTexture(GL_TEXTURE_2D, Etat::maTextureAVendre);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        delete[] pixels;
-    } */
     if ((pixels = ChargerImage("../images/echiquier.bmp", largeur, hauteur)) != NULL)
     {
-        glGenTextures(1, &Etat::maTextureEchiquier);
-        glBindTexture(GL_TEXTURE_2D, Etat::maTextureEchiquier);
+        glGenTextures(1, &etat.maTextureEchiquier);
+        glBindTexture(GL_TEXTURE_2D, etat.maTextureEchiquier);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -145,14 +136,10 @@ void chargerTextures()
         delete[] pixels;
     }
 
-    /*// assigner chaque image dans une unité de texture différente
-    glActiveTexture(GL_TEXTURE0); // l'unité de texture 0
-    glBindTexture(GL_TEXTURE_2D, Etat::maTextureAVendre); */
-
     glActiveTexture(GL_TEXTURE1); // l'unité de texture 1
-    glBindTexture(GL_TEXTURE_2D, Etat::maTextureEchiquier);
+    glBindTexture(GL_TEXTURE_2D, etat.maTextureEchiquier);
+    */
 }
-////////////////////
 
 std::string getAbsolutePath(const char * argv0)
 {
@@ -313,15 +300,15 @@ void FenetreTP::afficherScene()
 	}
 
 	// Mode plein ou en fil
-	glPolygonMode(GL_FRONT_AND_BACK, Etat::modePolygone);
-	if (Etat::culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, etat.modePolygone);
+	if (etat.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
 	// erreur dans le constructeur
 	glm::vec3 coords = glm::vec3(-1., 0., 4.);
 	GLfloat rotation = 0.;
 	glm::vec3 axis = glm::vec3(0., 0., 0.);
 	GLfloat scale = 1.;
 
-
+    /*
 	Spaceship spaceship1 = Spaceship(coords, rotation , axis, scale);
 	glVertexAttrib4f(locColor, 1., 0., 0., 0. );
 	 matrModel.PushMatrix(); {
@@ -332,24 +319,23 @@ void FenetreTP::afficherScene()
 	 	 glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
 	 	 spaceship1.DrawBody();
 	}matrModel.PopMatrix();
-	
-	// for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
-	// {
-	// 	if (shape->appear)
-	// 	{	// *********************verifier pour afficher texture ****************//
+    */
 
-	// 		glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
-	// 		matrModel.PushMatrix(); {
-	// 			matrModel.Translate(shape->coords_);
-	// 			matrModel.Scale(shape->scale_);
-	// 			matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-	// 			glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-	// 			glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-	// 			shape->Draw();
-	// 		}matrModel.PopMatrix();
-	// 	}
-	// }
-
+    for (auto &shape : shapes->getShapes()) // access by reference to avoid copying
+    {
+        if (shape->appear)
+        {	// *********************verifier pour afficher texture ****************//
+ 	        glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
+ 	        matrModel.PushMatrix(); {
+ 		        matrModel.Translate(shape->coords_);
+ 		        matrModel.Scale(shape->scale_);
+ 		        matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+ 		        glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+ 		        glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+ 		        shape->Draw();
+ 	        }matrModel.PopMatrix();
+        }
+    }
 }
 
 void FenetreTP::redimensionner(GLsizei w, GLsizei h)
@@ -438,7 +424,7 @@ void genererMultivue(FenetreTP& fenetre, const char * sortie)
     const std::string B_POV("_b");
     const std::string ORIGINAL("_ori.bmp");
     const std::string MODIFIED("_mod.bmp");
-    
+
     fenetre.afficherScene();
     fenetre.screenshot((FILENAME + A_POV + ORIGINAL).data());
     fenetre.swap();
@@ -458,6 +444,8 @@ void genererMultivue(FenetreTP& fenetre, const char * sortie)
     fenetre.afficherScene();
     fenetre.screenshot((FILENAME + A_POV + MODIFIED).data());
     fenetre.swap();
+}
+
 glm::ivec2 sourisPosPrec(0, 0);
 static bool pressed = false;
 void FenetreTP::sourisClic(int button, int state, int x, int y)
@@ -502,17 +490,17 @@ void FenetreTP::clavier(TP_touche touche)
 		quit();
 		break;
 	case TP_x: // Activer/désactiver l'affichage des axes
-		Etat::afficheAxes = !Etat::afficheAxes;
-		std::cout << "// Affichage des axes ? " << (Etat::afficheAxes ? "OUI" : "NON") << std::endl;
+		etat.afficheAxes = !etat.afficheAxes;
+		std::cout << "// Affichage des axes ? " << (etat.afficheAxes ? "OUI" : "NON") << std::endl;
 		break;
 	case TP_i: // Réinitiliaser le point de vue
 		camera.phi = phiInit; camera.theta = thetaInit; camera.dist = distInit;
 		break;
 	case TP_g: // Permuter l'affichage en fil de fer ou plein
-		Etat::modePolygone = (Etat::modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
+		etat.modePolygone = (etat.modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
 		break;
 	case TP_c: // Permuter l'affichage des faces arrières
-		Etat::culling = !Etat::culling;
+		etat.culling = !etat.culling;
 		break;
 	case TP_SOULIGNE:
 	case TP_MOINS: // Reculer la caméra
@@ -526,9 +514,9 @@ void FenetreTP::clavier(TP_touche touche)
 		shapes->modify();
 		break;
 	case TP_h: // Décrémenter la dimension de la boite
-		Etat::dimBoite -= 0.05;
-		if (Etat::dimBoite < 1.0) Etat::dimBoite = 1.0;
-		std::cout << " etat.dimBoite=" << Etat::dimBoite << std::endl;
+		etat.dimBoite -= 0.05;
+		if (etat.dimBoite < 1.0) etat.dimBoite = 1.0;
+		std::cout << " etat.dimBoite=" << etat.dimBoite << std::endl;
 		break;
 	default:
 		std::cout << " touche inconnue : " << (char)touche << std::endl;
@@ -548,15 +536,15 @@ int main(int argc, char *argv[])
 	// créer une fenêtre
 	FenetreTP fenetre;
 	// allouer des ressources et définir le contexte OpenGL
-	std::string absoluteRef = getAbsolutePath(argv[0]);
+	const std::string absoluteRef = getAbsolutePath(argv[0]);
 	fenetre.initialiser(absoluteRef);
 	srand(time(0));
 	std::cout << time(0);
 
-    shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite);
+    shapes = new ShapesContainer(std::stoi(argv[2]), etat.dimBoite, false);
     shapes->parseModOptions(argv[3]);
 
-    genererMultivue(fenetre, absoluteRef.append(argv[4]).data());
+    genererMultivue(fenetre, (absoluteRef+ argv[4]).data());
 
    bool boucler = true;
    while ( boucler )
