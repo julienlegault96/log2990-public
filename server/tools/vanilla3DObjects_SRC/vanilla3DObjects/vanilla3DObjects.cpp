@@ -143,10 +143,10 @@ void chargerTextures()
 
 std::string getAbsolutePath(const char * argv0)
 {
-	const short PROGRAM_NAME_LENGTH = 12;
+	const char * PROGRAM_NAME = "genmulti";
 
 	std::string absoluteRef(argv0);
-	absoluteRef = absoluteRef.substr(0, absoluteRef.length() - PROGRAM_NAME_LENGTH);
+    absoluteRef = absoluteRef.substr(0, absoluteRef.find(PROGRAM_NAME));
 
 	return absoluteRef;
 }
