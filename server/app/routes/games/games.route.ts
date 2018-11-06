@@ -33,22 +33,23 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
 
-    private readonly execPath: string = "./tools/img-diff-generator.exe";
-    private readonly rawImagePath: string = "./tools/rawImage.bmp";
-    private readonly modifiedImagePath: string = "./tools/modifiedImage.bmp";
+    private readonly toolsPath: string = "./tools/";
+
+    private readonly execPath: string = `${this.toolsPath}bmpdiff.exe`;
+    private readonly rawImagePath: string = `rawImage.bmp`;
+    private readonly modifiedImagePath: string = `modifiedImage.bmp`;
 
     // Generated images from image difference generator
-    private readonly outputPath: string = "./tools/output.bmp";
-    private readonly b64Path: string = "./tools/output.B64";
+    private readonly outputPath: string = `output.bmp`;
 
     private readonly errorCountException: string = "errorCount";
 
     // Generated images from 3D image generator
     private readonly imageGeneratorOutput: string = "output";
-    private readonly firstViewOriginalPath: string = `./tools/${this.imageGeneratorOutput}_a_ori.bmp`;
-    private readonly firstViewModifiedPath: string = `./tools/${this.imageGeneratorOutput}_a_mod.bmp`;
-    private readonly secondViewOriginalPath: string = `./tools/${this.imageGeneratorOutput}_b_ori.bmp`;
-    private readonly secondViewModifiedPath: string = `./tools/${this.imageGeneratorOutput}_b_mod.bmp`;
+    private readonly firstViewOriginalPath: string = `${this.imageGeneratorOutput}_a_ori.bmp`;
+    private readonly firstViewModifiedPath: string = `${this.imageGeneratorOutput}_a_mod.bmp`;
+    private readonly secondViewOriginalPath: string = `${this.imageGeneratorOutput}_b_ori.bmp`;
+    private readonly secondViewModifiedPath: string = `${this.imageGeneratorOutput}_b_mod.bmp`;
 
     private readonly imagesGeneratorMaximumTries: number = 4;
 
@@ -174,18 +175,17 @@ export class GamesRoute extends AbstractRoute<Game> {
             }
         }
 
-        images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.firstViewOriginalPath);
-        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.firstViewModifiedPath);
-        images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.secondViewOriginalPath);
-        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.encodeInBase64(this.secondViewModifiedPath);
+        images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewOriginalPath));
+        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewModifiedPath));
+        images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
+        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
 
         await this.deleteFiles(
-            this.firstViewOriginalPath,
-            this.firstViewModifiedPath,
-            this.secondViewOriginalPath,
-            this.secondViewModifiedPath,
-            this.outputPath,
-            this.b64Path
+            this.getRelativeToolsPath(this.firstViewOriginalPath),
+            this.getRelativeToolsPath(this.firstViewModifiedPath),
+            this.getRelativeToolsPath(this.secondViewOriginalPath),
+            this.getRelativeToolsPath(this.secondViewModifiedPath),
+            this.getRelativeToolsPath(this.outputPath),
         );
 
         if (!this.isValidGeneratedImages(images)) {
@@ -193,6 +193,10 @@ export class GamesRoute extends AbstractRoute<Game> {
         }
 
         return images;
+    }
+
+    private getRelativeToolsPath(filename: string): string {
+        return `${this.toolsPath}${filename}`;
     }
 
     private isValidGeneratedImages(images: string[]): boolean {
@@ -234,12 +238,11 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
-
         await this.execFile(this.execPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
-        const output: string = await this.encodeInBase64(this.outputPath);
+        const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
 
-        const isValidCount: boolean = await this.hasValidDifferenceCount(this.outputPath);
+        const isValidCount: boolean = await this.hasValidDifferenceCount(this.getRelativeToolsPath(this.outputPath));
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
