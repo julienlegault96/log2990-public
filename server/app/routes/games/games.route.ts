@@ -17,7 +17,6 @@ import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
 import { ErrorFinder } from "../../services/error-finder/error-finder";
-import { Leaderboard } from "../../../common/game/leaderboard";
 
 @injectable()
 
@@ -231,7 +230,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private getImageBufferFromBase64(base64: string): Buffer {
-        return Buffer.from(ImgDiff.parseBase64(base64), "base64");
+        return Buffer.from(ImgDiffRoute.parseBase64(base64), "base64");
     }
 
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
