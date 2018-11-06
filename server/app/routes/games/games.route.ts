@@ -13,10 +13,8 @@ import { ImgDiffRoute } from "../img-diff/imgdiff.route";
 import { CODES } from "../../../../common/communication/response-codes";
 import { Coordinates } from "../../../../common/game/coordinates";
 
-import { execFile } from "child_process";
-import * as util from "util";
-import * as fs from "fs";
 import { ErrorFinder } from "../../services/error-finder/error-finder";
+import { FileService } from "../../services/file/file.service";
 
 @injectable()
 
@@ -100,21 +98,26 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
+        const fileService: FileService = new FileService();
         const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
-        await this.writeFile(this.rawImagePath, rawBitmap);
+        await fileService.writeFile(this.getRelativeToolsPath(this.rawImagePath), rawBitmap);
 
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
-        await this.writeFile(this.modifiedImagePath, modifiedBitmap);
+        await fileService.writeFile(this.getRelativeToolsPath(this.modifiedImagePath), modifiedBitmap);
 
         return this.generateImageDiff(
             this.rawImagePath,
             this.modifiedImagePath
-        ).then((imageDiff: string) => {
+        ).then(async (imageDiff: string) => {
             return this.uploadImagesImgur(
                 req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
                 req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
-            ).then((imgurLinks: Array<string>) => {
+            ).then(async (imgurLinks: Array<string>) => {
                 imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imageDiff);
+                await fileService.deleteFiles(
+                    this.getRelativeToolsPath(this.rawImagePath),
+                    this.getRelativeToolsPath(this.modifiedImagePath),
+                );
 
                 return imgurLinks;
             });
@@ -180,12 +183,12 @@ export class GamesRoute extends AbstractRoute<Game> {
         images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
         images[this.SECOND_VIEW_MODIFED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
 
-        await this.deleteFiles(
+        const fileService: FileService = new FileService();
+        await fileService.deleteFiles(
             this.getRelativeToolsPath(this.firstViewOriginalPath),
             this.getRelativeToolsPath(this.firstViewModifiedPath),
             this.getRelativeToolsPath(this.secondViewOriginalPath),
             this.getRelativeToolsPath(this.secondViewModifiedPath),
-            this.getRelativeToolsPath(this.outputPath),
         );
 
         if (!this.isValidGeneratedImages(images)) {
@@ -203,21 +206,12 @@ export class GamesRoute extends AbstractRoute<Game> {
         return images[this.FIRST_VIEW_DIFF_INDEX] !== "" && images[this.SECOND_VIEW_DIFF_INDEX] !== "";
     }
 
-    private async deleteFiles(...filepaths: Array<string>): Promise<void> {
-        for (const filepath of filepaths) {
-            await this.deleteFile(filepath);
-        }
-    }
-
-    private async deleteFile(filepath: string): Promise<void> {
-        return util.promisify(fs.unlink)(filepath);
-    }
-
     private async exec3DImage(): Promise<void> {
         const execPath: string = "./tools/genmulti.exe";
 
         // TODO
-        await this.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput])
+        const fileService: FileService = new FileService();
+        await fileService.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput])
             .catch(console.log);
     }
 
@@ -225,20 +219,13 @@ export class GamesRoute extends AbstractRoute<Game> {
         return Math.floor(Math.random() * this.ID_RANGE).toString();
     }
 
-    private writeFile(filepath: string, buffer: Buffer): Promise<void> {
-        return util.promisify(fs.writeFile)(filepath, buffer);
-    }
-
-    private execFile(filepath: string, params: Array<string>): Promise<void> {
-        return util.promisify(execFile)(filepath, params).then(() => { return; });
-    }
-
     private getImageBufferFromBase64(base64: string): Buffer {
         return Buffer.from(ImgDiffRoute.parseBase64(base64), "base64");
     }
 
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
-        await this.execFile(this.execPath, [originalImagePath, modifiedImagePath, this.outputPath]);
+        const fileService: FileService = new FileService();
+        await fileService.execFile(this.execPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
         const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
 
@@ -247,6 +234,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         if (!isValidCount) {
             throw new Error(this.errorCountException);
         }
+
+        await fileService.deleteFile(this.getRelativeToolsPath(this.outputPath));
 
         return output;
     }
@@ -261,7 +250,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         const seen: Object = {};
         let nbError: number = 0;
 
-        const bitmapBuffer: Buffer = await this.getBitmapBuffer(filepath);
+        const fileService: FileService = new FileService();
+        const bitmapBuffer: Buffer = await fileService.readFile(filepath);
         const errorFinder: ErrorFinder = new ErrorFinder();
 
         for (let i: number = 0; i < ErrorFinder.getImageWidth(bitmapBuffer); i++) {
@@ -287,13 +277,10 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async encodeInBase64(filepath: string): Promise<string> {
-        const buffer: Buffer = await this.getBitmapBuffer(filepath);
+        const fileService: FileService = new FileService();
+        const buffer: Buffer = await fileService.readFile(filepath);
 
         return buffer.toString("base64");
-    }
-
-    private async getBitmapBuffer(filepath: string): Promise<Buffer> {
-        return util.promisify(fs.readFile)(filepath);
     }
 
 }
