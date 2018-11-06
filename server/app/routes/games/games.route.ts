@@ -1,27 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
 
-import Types from "../types";
-import { Mongo, Collections } from "../services/mongo";
-import { AbstractRoute } from "./abstract-route/abstract-route";
-import { Imgur } from "./imgur/imgur";
+import Types from "../../types";
+import { Mongo, Collections } from "../../services/mongo";
+import { AbstractRoute } from "../abstract-route/abstract-route";
+import { Imgur } from "../../services/imgur/imgur";
 
-import { Game } from "../../../common/game/game";
-import { GameType } from "../../../common/game/game-type";
+import { Game } from "../../../../common/game/game";
+import { GameType } from "../../../../common/game/game-type";
 
-import { ImgDiff } from "./img-diff/imgdiff";
-import { CODES } from "../../../common/communication/response-codes";
-import { Coordinates } from "../../../common/game/coordinates";
+import { ImgDiffRoute } from "../img-diff/imgdiff.route";
+import { CODES } from "../../../../common/communication/response-codes";
+import { Coordinates } from "../../../../common/game/coordinates";
 
 import { execFile } from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { ErrorFinder } from "./img-diff/error-finder";
-import { Leaderboard } from "../../../common/game/leaderboard";
+import { ErrorFinder } from "../../services/error-finder/error-finder";
 
 @injectable()
 
-export class Games extends AbstractRoute<Game> {
+export class GamesRoute extends AbstractRoute<Game> {
 
     public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
 
@@ -46,16 +45,6 @@ export class Games extends AbstractRoute<Game> {
         this.collection = Collections.Games;
     }
 
-    public async updateLeaderboard(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const leaderboards: Leaderboard[] = req.body;
-        const game: Game = await this.getOne(req.params.id);
-
-        game.leaderboards = leaderboards;
-        req.body = game;
-
-        await this.updateById(req, res, next, req.params.id);
-    }
-
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
         res.status(CODES.OK).send(
             JSON.stringify(
@@ -71,8 +60,8 @@ export class Games extends AbstractRoute<Game> {
 
     public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
         const game: Game = await this.getOne(req.params.id);
-        if (!Games.cachedDiffImagesMap[game._id] && game) {
-            Games.cachedDiffImagesMap[game._id] =
+        if (!GamesRoute.cachedDiffImagesMap[game._id] && game) {
+            GamesRoute.cachedDiffImagesMap[game._id] =
                 [game.imageUrl[this.FIRST_VIEW_DIFF_INDEX], game.imageUrl[this.SECOND_VIEW_DIFF_INDEX]];
         }
 
@@ -135,10 +124,10 @@ export class Games extends AbstractRoute<Game> {
     }
 
     private async generateImageDiff(rawImage: string, modifiedImage: string): Promise<string> {
-        const rawBitmap: Buffer = Buffer.from(ImgDiff.parseBase64(rawImage), "base64");
+        const rawBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(rawImage), "base64");
         await util.promisify(fs.writeFile)(this.rawImagePath, rawBitmap);
 
-        const modifiedBitmap: Buffer = Buffer.from(ImgDiff.parseBase64(modifiedImage), "base64");
+        const modifiedBitmap: Buffer = Buffer.from(ImgDiffRoute.parseBase64(modifiedImage), "base64");
         await util.promisify(fs.writeFile)(this.modifiedImagePath, modifiedBitmap);
 
         await util.promisify(execFile)(

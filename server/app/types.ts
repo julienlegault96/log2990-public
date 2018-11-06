@@ -2,9 +2,10 @@ export default {
     Server: Symbol("Server"),
     Application: Symbol("Application"),
     Routes: Symbol("Routes"),
-    Games: Symbol("Games"),
-    Users: Symbol("Users"),
+    GamesRoute: Symbol("Games"),
+    UsersRoute: Symbol("Users"),
     Mongo: Symbol("Mongo"),
     Imgur: Symbol("Imgur"),
-    ImgDiff: Symbol("ImgDiff"),
+    ImgDiffRoute: Symbol("ImgDiff"),
+    LeaderboardRoute: Symbol("LeaderboardRoute"),
 };

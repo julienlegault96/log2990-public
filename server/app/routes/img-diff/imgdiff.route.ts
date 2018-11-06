@@ -1,15 +1,16 @@
 import { injectable } from "inversify";
 import { Request, Response, NextFunction } from "express";
 
+import { ErrorFinder } from "../../services/error-finder/error-finder";
+
 import { CODES } from "../../../../common/communication/response-codes";
 import { Coordinates } from "../../../../common/game/coordinates";
 import { ImageView } from "../../../../common/game/image-view";
 
-import { Games } from "../games";
-import { ErrorFinder } from "./error-finder";
+import { GamesRoute } from "../games/games.route";
 
 @injectable()
-export class ImgDiff {
+export class ImgDiffRoute {
 
     public static parseBase64(base64Data: string): string {
         const base64Prefix: string = "data:image/bmp;base64,";
@@ -47,11 +48,11 @@ export class ImgDiff {
     }
 
     private getImgBuffer(imgData: string): Buffer {
-        return Buffer.from(ImgDiff.parseBase64(imgData), "base64");
+        return Buffer.from(ImgDiffRoute.parseBase64(imgData), "base64");
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
-        return Games.cachedDiffImagesMap[id][Number(imageView)];
+        return GamesRoute.cachedDiffImagesMap[id][Number(imageView)];
     }
 
 }
