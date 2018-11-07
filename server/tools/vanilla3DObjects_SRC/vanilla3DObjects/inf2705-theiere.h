@@ -1,3 +1,4 @@
+#pragma once
 /*
  * freeglut_teapot_data.h
  *

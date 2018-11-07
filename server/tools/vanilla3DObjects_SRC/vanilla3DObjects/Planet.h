@@ -1,7 +1,6 @@
 #pragma once
-#include "inf2705-forme.h"
+
 #include "Shape.h"
-#include <GL/glew.h>
 enum ShapeThemelist {Earth, Mars, Moon, Sun, Neptune, Saturn };
 class  Planet : public Shape
 {

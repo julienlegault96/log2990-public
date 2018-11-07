@@ -1,8 +1,8 @@
 #pragma once
+
 #include "Shape.h"
 #include "inf2705-theiere.h"
-#include <GL/glew.h>
-class  Spaceship //: public Shape
+class  Spaceship : public Shape
 {
 public:
 	Spaceship(glm::vec3 coords/* GLuint texture*/, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);

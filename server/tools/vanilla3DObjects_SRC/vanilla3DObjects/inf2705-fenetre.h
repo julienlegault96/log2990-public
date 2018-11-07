@@ -19,6 +19,7 @@
 #endif
 #include <string.h>
 #include <stdlib.h>
+#include "Scene.h"
 
 typedef enum {
 #if defined(FENETRE_glfw3)
@@ -168,34 +169,34 @@ typedef enum {
 
 
 // la fenêtre graphique
-class FenetreTP
+class Fenetre
 {
 #if defined(FENETRE_glfw3)
    static void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       if ( action == GLFW_PRESS )
          fen->clavier( (TP_touche) key );
    }
    static void mouse_button_callback( GLFWwindow* window, int button, int action, int mods )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       double xpos, ypos; glfwGetCursorPos( window, &xpos, &ypos );
       fen->sourisClic( button, action, xpos, ypos );
    }
    static void cursor_position_callback( GLFWwindow* window, double xpos, double ypos )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       fen->sourisMouvement( xpos, ypos );
    }
    static void scroll_callback( GLFWwindow* window, double xoffset, double yoffset )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       fen->sourisMolette( xoffset, yoffset );
    }
    static void window_refresh_callback( GLFWwindow* window )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       // int left, top, right, bottom;
       // glfwGetWindowFrameSize( window, &left, &top, &right, &bottom );
       // fen->redimensionner( right-left, top-bottom );
@@ -207,7 +208,7 @@ class FenetreTP
    }
    static void window_size_callback( GLFWwindow* window, int width, int height )
    {
-      FenetreTP *fen = (FenetreTP*) glfwGetWindowUserPointer( window );
+      Fenetre *fen = (Fenetre*) glfwGetWindowUserPointer( window );
       fen->redimensionner( width, height );
       fen->afficherScene();
       fen->swap();
@@ -229,7 +230,7 @@ class FenetreTP
 #endif
 
 public:
-   FenetreTP( std::string nom = "3D Objects Generator",
+   Fenetre( std::string nom = "3D Objects Generator",
               int largeur = 900, int hauteur = 600,
               int xpos = 100, int ypos = 100 )
       : fenetre_(NULL),
@@ -340,7 +341,7 @@ public:
 #endif
    }
 
-   ~FenetreTP( )
+   ~Fenetre( )
    {
 #if defined(FENETRE_glfw3)
       quit();
@@ -361,14 +362,17 @@ public:
    }
 
    // fonction pour allouer les ressources
-   void initialiser( std::string absolutePath );
+   void initialiser(std::string absolutePath, bool geo, int objectsAmount, const char * sceneOptions);
+   void chargerTextures();
+   void chargerNuanceurs(std::string path);
    // fonction pour détruire les ressources OpenGL allouées
    void conclure( );
    // fonction appelée pour tracer la scène
    void afficherScene( );
    // fonction appelée lors d'un événement de redimensionnement
    void redimensionner( GLsizei w, GLsizei h );
-   void screenshot(const char* filename);
+   void screenshot( const char * filename );
+   void genererMultivue( const char * sortie );
    // fonction appelée lors d'un événement de clavier
    void clavier( TP_touche touche );
    // fonctions appelées lors d'un événement de souris
@@ -404,7 +408,7 @@ public:
                redimensionner( largeur_, hauteur_ );
             }
             //else
-            //   std::cout << "//@FenetreTP,WINDOWEVENT;" << " e.window.event=" << e.window.event << std::endl;
+            //   std::cout << "//@Fenetre,WINDOWEVENT;" << " e.window.event=" << e.window.event << std::endl;
             break;
             // Code en bas pour la rotation avec la souris de la camera (jusqua default) 
              case SDL_KEYDOWN: // une touche est pressée
@@ -423,7 +427,7 @@ public:
             sourisMolette( e.wheel.x, e.wheel.y );
             break;
          default:
-            //std::cerr << "//@FenetreTP," << __LINE__ << ";" << " e.type=" << e.type << std::endl;
+            //std::cerr << "//@Fenetre," << __LINE__ << ";" << " e.type=" << e.type << std::endl;
             break;
          }
       }
@@ -624,6 +628,7 @@ private:
 #endif
    GLsizei largeur_; // la largeur de la fenêtre
    GLsizei hauteur_; // la hauteur de la fenêtre
+   Scene * scene = nullptr;
 };
 
 #endif

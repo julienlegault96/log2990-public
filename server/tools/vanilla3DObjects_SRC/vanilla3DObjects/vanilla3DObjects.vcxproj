@@ -126,6 +126,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractFactory.h" />
+    <ClInclude Include="AbstractShape.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Default3DProgramState.h" />
+    <ClInclude Include="GeoFactory.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageHeader.h" />
     <ClInclude Include="inf2705-fenetre.h" />
@@ -134,21 +139,30 @@
     <ClInclude Include="inf2705-nuanceur.h" />
     <ClInclude Include="inf2705-texture.h" />
     <ClInclude Include="inf2705-theiere.h" />
+    <ClInclude Include="CompositeShape.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Shape.h" />
-    <ClInclude Include="ShapesContainer.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Etat.cpp" />
+    <ClCompile Include="AbstractFactory.cpp" />
+    <ClCompile Include="AbstractShape.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GeoFactory.cpp" />
+    <ClCompile Include="inf2701-fenetre.cpp" />
+    <ClCompile Include="Default3DProgramState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageHeader.cpp" />
+    <ClCompile Include="CompositeShape.cpp" />
     <ClCompile Include="Pixel.cpp" />
-    <ClCompile Include="vanilla3DObjects.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuanceurs.glsl" />

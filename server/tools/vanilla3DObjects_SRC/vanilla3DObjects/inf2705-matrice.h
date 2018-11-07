@@ -26,7 +26,6 @@
 # define GLM_ENABLE_EXPERIMENTAL 1
 #endif
 
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>

@@ -56,10 +56,13 @@
 
    OpenGL(TM) is a trademark of Silicon Graphics, Inc.
 */
-
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
 #include <assert.h>
+
+#define GLM_ENABLE_EXPERIMENTAL 1
+#include <glm/gtx/string_cast.hpp>
 
 static GLfloat dodec[20][3];
 
