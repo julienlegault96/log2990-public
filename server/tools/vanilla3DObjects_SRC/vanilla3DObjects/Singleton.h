@@ -13,12 +13,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 /// @class Singleton
-/// @brief Cette classe représente une base générique pour la déclaration
+/// @brief Cette classe reprÃ©sente une base gÃ©nÃ©rique pour la dÃ©claration
 ///        de singleton.
 ///
-///        Les singletons qui dériveront de cette classe générique et qui
-///        utiliseront les macros appropriées auront déjà les parties communes
-///        à pratiquement tous les singletons, soit la gestion de l'instance
+///        Les singletons qui dÃ©riveront de cette classe gÃ©nÃ©rique et qui
+///        utiliseront les macros appropriÃ©es auront dÃ©jÃ  les parties communes
+///        Ã  pratiquement tous les singletons, soit la gestion de l'instance
 ///        unique.
 ///
 /// @author Martin Bisson
@@ -30,28 +30,28 @@ class Singleton
 public:
    /// Obtient l'instance unique de la classe.
    static T* obtenirInstance();
-   /// Libère l'instance unique de la classe.
+   /// LibÃ¨re l'instance unique de la classe.
    static void libererInstance();
 
 protected:
-   /// Constructeur vide déclaré protected.
+   /// Constructeur vide dÃ©clarÃ© protected.
    Singleton() {}
-   /// Destructeur vide déclaré protected.
+   /// Destructeur vide dÃ©clarÃ© protected.
    ~Singleton() {}
 
 private:
    /// Instance unique de la classe.
    static T* instance_;
 
-   /// Constructeur par copie déclaré mais non défini.
+   /// Constructeur par copie dÃ©clarÃ© mais non dÃ©fini.
    Singleton(const Singleton&) = delete;
-   /// Opérateur d'assignation déclaré mais non défini.
+   /// OpÃ©rateur d'assignation dÃ©clarÃ© mais non dÃ©fini.
    Singleton& operator=(const Singleton&) = delete;
 
 };
 
-/// Cette macro doit être incluse dans les classes dérivées de Singleton.  Elle
-/// déclare les constructeurs et destructeurs privés.
+/// Cette macro doit Ãªtre incluse dans les classes dÃ©rivÃ©es de Singleton.  Elle
+/// dÃ©clare les constructeurs et destructeurs privÃ©s.
 #define SINGLETON_DECLARATION_CLASSE(Classe)    \
    private:                                     \
    Classe() {}                                  \
@@ -60,17 +60,17 @@ private:
    Classe & operator = (const Classe&);         \
    friend class Singleton< Classe >;            \
 
-/// Cette macro doit être incluse dans les classes dérivées de Singleton.  Elle
-/// déclare le constructeur copie et l'opérateur d'assignation privé, en
-/// laissant à la classe dérivée le soin de définir le constructeur par défaut
-/// et le destructeur afin de faire le traitement souhaité.
+/// Cette macro doit Ãªtre incluse dans les classes dÃ©rivÃ©es de Singleton.  Elle
+/// dÃ©clare le constructeur copie et l'opÃ©rateur d'assignation privÃ©, en
+/// laissant Ã  la classe dÃ©rivÃ©e le soin de dÃ©finir le constructeur par dÃ©faut
+/// et le destructeur afin de faire le traitement souhaitÃ©.
 #define SINGLETON_DECLARATION_CLASSE_SANS_CONSTRUCTEUR(Classe)  \
    private:                                                     \
    Classe(const Classe&);                                       \
    Classe& operator=(const Classe&);                            \
    friend class Singleton< Classe >;                            \
 
-// Cette macro doit être incluse dans un fichier source (.cpp).  Elle déclare
+// Cette macro doit Ãªtre incluse dans un fichier source (.cpp).  Elle dÃ©clare
 // l'instance unique de la classe.
 #define SINGLETON_DECLARATION_CPP(Classe)                       \
    template<>   Classe * Singleton< Classe >::instance_ = 0;    \
@@ -81,7 +81,7 @@ private:
 /// @fn inline T* Singleton<T>::obtenirInstance()
 ///
 /// Cette fonction retourne l'instance unique de la classe. Si l'instance
-/// n'existe pas, elle est créée. Ainsi, une seule instance sera créée.
+/// n'existe pas, elle est crÃ©Ã©e. Ainsi, une seule instance sera crÃ©Ã©e.
 /// Cette fonction n'est pas "thread-safe".
 ///
 /// @return L'instance unique de la classe.
@@ -100,7 +100,7 @@ inline T* Singleton<T>::obtenirInstance()
 ///
 /// @fn inline void Singleton<T>::libererInstance()
 ///
-/// Détruit l'instance unique de la classe.  Cette fonction n'est pas
+/// DÃ©truit l'instance unique de la classe.  Cette fonction n'est pas
 /// "thread-safe".
 ///
 /// @return Aucune.

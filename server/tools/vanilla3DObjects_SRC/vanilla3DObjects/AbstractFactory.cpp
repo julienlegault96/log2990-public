@@ -2,7 +2,7 @@
 
 AbstractFactory::AbstractFactory(std::vector<AbstractShape*>& container, double & dimboite)
     : shippingContainer_(&container), dimboite_(&dimboite) {
-    calculateScalingFactor();
+    calculateScalingFactor(DEFAULT_COMMAND_AMOUNT);
 }
 
 //fonction retournant un float aleatoire

@@ -13,6 +13,10 @@ void AbstractShape::setModified()
     modified_ = true;
 }
 
+glm::vec3 AbstractShape::getCoordinates()
+{
+	return coords_;
+}
 void AbstractShape::hide()
 {
     appear_ = false;

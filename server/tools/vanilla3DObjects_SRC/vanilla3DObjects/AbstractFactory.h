@@ -17,5 +17,6 @@ protected:
     float const MIN_SIZE_MODIFIER = 0.5;
     float const MAX_SIZE_MODIFIER = 1.5;
     short const ALLOCATED_SHAPE_VOLUME = 49;
+	short const DEFAULT_COMMAND_AMOUNT = 10;
 };
 

@@ -28,11 +28,11 @@ static Default3DProgramState * etat = Default3DProgramState::obtenirInstance();
 // matrices du pipeline graphique
 MatricePipeline matrModel, matrVisu, matrProj;
 // les formes
-// définition des lumières
+// dÃ©finition des lumiÃ¨res
 
 GLuint textureId;
 
-// variables pour définir le point de vue
+// variables pour dÃ©finir le point de vue
 Camera camera;
 
 glm::ivec2 sourisPosPrec(0, 0);
@@ -53,7 +53,7 @@ void Fenetre::initialiser(std::string absolutePath, bool geo, int objectsAmount,
     chargerNuanceurs(absolutePath);
     chargerTextures();
 
-    // créer quelques autres formes
+    // crÃ©er quelques autres formes
     glUseProgram(progBase);
 
     scene = new Scene(objectsAmount, geo);
@@ -74,22 +74,22 @@ void Fenetre::afficherScene()
 
     glUseProgram(progBase);
 
-    // définir le pipeline graphique
+    // dÃ©finir le pipeline graphique
     matrProj.Perspective(20.0, (GLdouble)largeur_ / (GLdouble)hauteur_, 0.1, 100.0);
-    glUniformMatrix4fv(locmatrProj, 1, GL_FALSE, matrProj); // informer la carte graphique des changements faits à la matrice
+    glUniformMatrix4fv(locmatrProj, 1, GL_FALSE, matrProj); // informer la carte graphique des changements faits Ã  la matrice
 
     camera.executeChanges(matrVisu);
-    glUniformMatrix4fv(locmatrVisu, 1, GL_FALSE, matrVisu); // informer la carte graphique des changements faits à la matrice
+    glUniformMatrix4fv(locmatrVisu, 1, GL_FALSE, matrVisu); // informer la carte graphique des changements faits Ã  la matrice
 
     matrModel.LoadIdentity();
-    glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel); // informer la carte graphique des changements faits à la matrice
+    glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel); // informer la carte graphique des changements faits Ã  la matrice
 
     glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
 
     // afficher les axes
     if (etat->state.afficheAxes) Fenetre::afficherAxes();
 
-    // mettre à jour les blocs de variables uniformes
+    // mettre Ã  jour les blocs de variables uniformes
     {
         glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
         GLvoid *p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
@@ -155,7 +155,7 @@ void Fenetre::chargerNuanceurs(std::string path)
     {
         std::string absoluteRef = path.append(SHADER_NAME);
 
-        // créer le programme
+        // crÃ©er le programme
         progBase = glCreateProgram();
 
         // attacher le nuanceur de sommets
@@ -181,22 +181,22 @@ void Fenetre::chargerNuanceurs(std::string path)
             delete[] chainesFragments[1];
         }
 
-        // faire l'édition des liens du programme
+        // faire l'Ã©dition des liens du programme
         glLinkProgram(progBase);
         ProgNuanceur::afficherLogLink(progBase);
 
         // demander la "Location" des variables
-        if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
-        if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
-        if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
-        if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
-        if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
-        if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
-        if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
-        if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
-        if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
-        if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de etat->FrontMaterial" << std::endl;
-        if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
+        if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de Vertex" << std::endl;
+        if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de Normal (partie 1)" << std::endl;
+        if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de Color" << std::endl;
+        if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de matrModel" << std::endl;
+        if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de matrVisu" << std::endl;
+        if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de matrProj" << std::endl;
+        if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de matrNormale (partie 1)" << std::endl;
+        if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvÃ© la \"Location\" de planCoupe" << std::endl;
+        if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvÃ© l'\"index\" de LightSource" << std::endl;
+        if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvÃ© l'\"index\" de etat->FrontMaterial" << std::endl;
+        if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvÃ© l'\"index\" de LightModel" << std::endl;
 
         // charger les ubo
         {
@@ -242,7 +242,7 @@ void Fenetre::chargerTextures()
         delete[] pixels;
     }
 
-    glActiveTexture(GL_TEXTURE1); // l'unité de texture 1
+    glActiveTexture(GL_TEXTURE1); // l'unitÃ© de texture 1
     glBindTexture(GL_TEXTURE_2D, etat->state.textureId);
     */
 }
@@ -312,7 +312,7 @@ void Fenetre::genererMultivue(const char * sortie)
     screenshot((FILENAME + B_POV + ORIGINAL).data());
     swap();
 
-    //modifier scène
+    //modifier scÃ¨ne
     scene->modify();
 
     afficherScene();
@@ -334,25 +334,25 @@ void Fenetre::clavier(TP_touche touche)
     case TP_q: // Quitter l'application
         quit();
         break;
-    case TP_x: // Activer/désactiver l'affichage des axes
+    case TP_x: // Activer/dÃ©sactiver l'affichage des axes
         etat->state.afficheAxes = !etat->state.afficheAxes;
         std::cout << "// Affichage des axes ? " << (etat->state.afficheAxes ? "OUI" : "NON") << std::endl;
         break;
-    case TP_i: // Réinitiliaser le point de vue
+    case TP_i: // RÃ©initiliaser le point de vue
         camera.turn(camera.INITIAL_PHI, camera.INITIAL_THETA);
         camera.setDistance(camera.INITIAL_DISTANCE);
         break;
     case TP_g: // Permuter l'affichage en fil de fer ou plein
         etat->state.modePolygone = (etat->state.modePolygone == GL_FILL) ? GL_LINE : GL_FILL;
         break;
-    case TP_c: // Permuter l'affichage des faces arrières
+    case TP_c: // Permuter l'affichage des faces arriÃ¨res
         etat->state.culling = !etat->state.culling;
         break;
     case TP_SOULIGNE:
-    case TP_MOINS: // Reculer la caméra
+    case TP_MOINS: // Reculer la camÃ©ra
         camera.incrDistance(0.1);
         break;
-    case TP_PLUS: // Avancer la caméra
+    case TP_PLUS: // Avancer la camÃ©ra
         camera.incrDistance(-0.1);
         break;
     case TP_EGAL:
@@ -361,7 +361,7 @@ void Fenetre::clavier(TP_touche touche)
     case TP_b: // Modifier
         scene->modify();
         break;
-    case TP_h: // Décrémenter la dimension de la boite
+    case TP_h: // DÃ©crÃ©menter la dimension de la boite
         etat->state.dimBoite -= 0.05;
         if (etat->state.dimBoite < 1.0) etat->state.dimBoite = 1.0;
         std::cout << " etat->state.dimBoite=" << etat->state.dimBoite << std::endl;
@@ -380,7 +380,7 @@ void Fenetre::sourisClic(int button, int state, int x, int y)
     pressed = (state == TP_PRESSE);
     switch (button)
     {
-    case TP_BOUTON_GAUCHE: // Déplacer (modifier angles) la caméra
+    case TP_BOUTON_GAUCHE: // DÃ©placer (modifier angles) la camÃ©ra
         sourisPosPrec.x = x;
         sourisPosPrec.y = y;
         break;

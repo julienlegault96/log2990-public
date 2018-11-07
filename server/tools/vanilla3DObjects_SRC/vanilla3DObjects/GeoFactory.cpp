@@ -29,9 +29,9 @@ bool GeoFactory::checkForCollision(const glm::vec3 & coords) {
     double distance = 0;
     for (AbstractShape* shape : *shippingContainer_) {
         distance =
-            pow(shape->getCoordinates.x - coords.x, 2) +
-            pow(shape->getCoordinates.y - coords.y, 2) +
-            pow(shape->getCoordinates.z - coords.z, 2);
+            pow(shape->getCoordinates().x - coords.x, 2) +
+            pow(shape->getCoordinates().y - coords.y, 2) +
+            pow(shape->getCoordinates().z - coords.z, 2);
 
         collision = distance < MIN_DISTANCE * scalingFactor_;
         if (collision) { break; }

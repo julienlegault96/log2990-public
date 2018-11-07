@@ -8,7 +8,7 @@ public:
     AbstractShape(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale);
     bool isModded() const ;
     void setModified();
-
+	glm::vec3 getCoordinates();
     void hide();
 
     virtual void accept(Drawer& visitor) = 0;
