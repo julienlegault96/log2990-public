@@ -1,5 +1,4 @@
-#ifndef __ETAT_H__
-#define __ETAT_H__
+#pragma once
 
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
@@ -73,5 +72,3 @@ class Default3DProgramState : public Singleton<Default3DProgramState>
 
         LightModelParameters LightModel = { glm::vec4(0,0,0,1), false, false };
 };
-
-#endif
