@@ -26,7 +26,7 @@ void GeoFactory::generateShape()
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
 
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
-	Shape *newShape = new Shape(type, translate, color, generateFloat(0, 360), rotate, scale);
+	Shape *newShape = new Shape(type, color, translate, rotate, generateFloat(0, 360),  scale);
 	shippingContainer_->push_back(newShape);
 }
 

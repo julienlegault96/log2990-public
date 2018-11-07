@@ -9,7 +9,7 @@ bool Scene::isThematic() const
 Scene::Scene(int numberShapes, bool theme) : numberShapes_(numberShapes), theme_(theme)
 {
     factory_ = theme_ ? ThemeFactory() : GeoFactory(objects_, dimBoite_);
-    factory_->generateShape(numberShapes_);
+    factory_->generateShapes(numberShapes_);
 }
 
 void Scene::parseModOptions(const std::string & optionString) {
@@ -76,6 +76,6 @@ void Scene::deleteShape(int index) {
 }
 
 void Scene::addShape() {
-    factory_->generateShape();
+    factory_->generateShapes();
     objects_.at(numberShapes_++)->setModified();
 }

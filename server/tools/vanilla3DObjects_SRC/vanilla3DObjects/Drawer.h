@@ -10,6 +10,5 @@ public:
     ~Drawer();
     void visit(const AbstractShape& shape);
     void visit(const Scene& scene)
-private:
 };
 
