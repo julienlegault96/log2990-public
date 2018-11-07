@@ -16,10 +16,12 @@ public:
 
     void randomTurn();
     void turn(double phi, double theta);
+    void incrAngles(double phiDelta, double thetaDelta);
     void unturn();
 
     void setDistance(double distance);
-    
+    double getDistance();
+    void incrDistance(double delta);
 
 private:
     void validateAngles();
@@ -29,4 +31,4 @@ private:
     double previousTheta;
     double previousPhi;
     double dist;          // distance (coord. sphériques)
-}
+};

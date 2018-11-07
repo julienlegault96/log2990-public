@@ -37,6 +37,15 @@ void Camera::turn(double phi, double theta)
     validateAngles();
 }
 
+void Camera::incrAngles(double phiDelta, double thetaDelta)
+{
+    this->previousPhi = this->phi;
+    this->previousTheta = this->theta;
+    this->phi += phiDelta;
+    this->theta += thetaDelta;
+    validateAngles();
+}
+
 void Camera::unturn()
 {
     previousPhi = phi;
@@ -48,5 +57,15 @@ void Camera::unturn()
 
 void Camera::setDistance(double distance)
 {
-    dist = distance
+    dist = distance;
+}
+
+double Camera::getDistance() 
+{
+    return dist;
+}
+
+void Camera::incrDistance(double delta)
+{
+    dist += delta;
 }
