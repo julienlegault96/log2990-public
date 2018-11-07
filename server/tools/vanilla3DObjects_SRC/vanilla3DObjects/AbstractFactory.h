@@ -5,7 +5,8 @@
 class AbstractFactory {
 public:
     AbstractFactory(std::vector<AbstractShape*>& container, double& dimboite);
-    virtual void generateShape(const int commandAmount) = 0;
+    virtual void generateShapes(const int commandAmount) = 0;
+	virtual void generateShape() = 0;
     float generateFloat(const float & min, const float & max) const;
     void generateCoordinates(glm::vec3 & coords);
     void calculateScalingFactor(const int commandAmount);
