@@ -130,6 +130,7 @@
     <ClInclude Include="AbstractShape.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Default3DProgramState.h" />
+    <ClInclude Include="Drawer.h" />
     <ClInclude Include="GeoFactory.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageHeader.h" />
@@ -148,11 +149,13 @@
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="ThemeFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp" />
     <ClCompile Include="AbstractShape.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="GeoFactory.cpp" />
     <ClCompile Include="inf2701-fenetre.cpp" />
     <ClCompile Include="Default3DProgramState.cpp" />
@@ -163,6 +166,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="ThemeFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuanceurs.glsl" />

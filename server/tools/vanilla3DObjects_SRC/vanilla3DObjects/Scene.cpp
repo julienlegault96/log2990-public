@@ -2,7 +2,7 @@
 #include "GeoFactory.h"
 #include "ThemeFactory.h"
 
-bool Scene::getTheme() const
+bool Scene::isThematic() const
 {
     return theme_;
 }

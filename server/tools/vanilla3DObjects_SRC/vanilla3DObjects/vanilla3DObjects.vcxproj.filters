@@ -81,6 +81,12 @@
     <ClInclude Include="GeoFactory.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="ThemeFactory.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Image.cpp">
@@ -120,6 +126,12 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="GeoFactory.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ThemeFactory.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
