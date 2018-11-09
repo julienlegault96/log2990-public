@@ -1,34 +1,30 @@
-<div class="card mb-3 border-0 custom-shadow">
-    <h4 class="card-header">
-        {{ game.title }}
-    </h4>
-
+<div class="card bg-light custom-shadow border-0 mb-3">
     <div class="card-body">
+        <h4>
+            {{ game.title }}
+        </h4>
+        <hr />
         <div class="row">
             <div class="col-md-4">
                 <img src="{{ game.imageUrl[0] }}" alt="Image" class="img-fluid rounded custom-shadow-sm">
             </div>
 
             <div class="col-md-8">
-                <h5 class="text-center">
-                    Top 3
-                </h5>
-
                 <div class="row">
                     <div *ngFor="let leaderboard of game.leaderboards" class="col">
                         <app-leaderboard [leaderboard]="leaderboard"></app-leaderboard>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col">
-                        <button class="btn btn-primary btn-block" [routerLink]="['/game/' + game._id]">
+                        <button class="btn btn-primary btn-block btn-pill" [routerLink]="['/game/' + game._id]">
                             Jouer en solo
                         </button>
                     </div>
 
                     <div class="col">
-                        <button class="btn btn-primary btn-block">
+                        <button class="btn btn-primary btn-block btn-pill">
                             <span *ngIf="isJoinable; else elseBlock">
                                 Joindre la partie
                             </span>
