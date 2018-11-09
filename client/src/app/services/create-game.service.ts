@@ -34,7 +34,7 @@ export class CreateGameService extends GameService {
 
         Promise.all([rawImagePromise, modifiedImagePromise]).then((imageUrls) => {
             const newGame: Game = this.generateGame(name, imageUrls);
-            this.addGame(newGame).subscribe(
+            this.createSingleViewGame(newGame).subscribe(
                 () => {
                     alert("Création du jeu réussie");
                     location.reload();

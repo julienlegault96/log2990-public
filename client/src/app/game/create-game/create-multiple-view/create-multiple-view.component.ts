@@ -29,7 +29,17 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
             return;
         }
 
-        this.gameService.generateMultipleView().subscribe();
+        const options: GenMultiParameters = {
+            type: this.gameType,
+            quantity: this.objectNumber,
+            modifications: {
+                add: this.add,
+                delete: this.remove,
+                color: this.color
+            }
+        };
+
+        this.gameService.createMultipleViewGame(options).subscribe();
     }
 
     public onRangeChange(event: Event): void {

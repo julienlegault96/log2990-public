@@ -7,6 +7,8 @@ import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { Game, generateGameTemplate } from "../../../../common/game/game";
 import { generateSoloLeaderboard, generateDuoLeaderboard, Leaderboard } from "../../../../common/game/leaderboard";
 import { GameType } from "../../../../common/game/game-type";
+import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
+import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
 
 @Injectable()
 
@@ -20,15 +22,16 @@ export class GameService extends AbstractServerService {
         return this.getRequest<Game[]>(Endpoints.Games);
     }
 
-    public generateMultipleView(): Observable<Game> {
+    public createMultipleViewGame(options: GenMultiParameters): Observable<GameCreationRequest> {
         const newGame: Game = generateGameTemplate();
         newGame.type = GameType.DoubleView;
+        const request: GameCreationRequest = { newGame, options };
 
-        return this.postRequest<Game>(Endpoints.Games, newGame);
+        return this.postRequest<GameCreationRequest>(Endpoints.Games, request);
     }
 
-    public addGame(newGame: Game): Observable<{} | Game> {
-        return this.postRequest<Game>(Endpoints.Games, newGame);
+    public createSingleViewGame(newGame: Game): Observable<{} | GameCreationRequest> {
+        return this.postRequest<GameCreationRequest>(Endpoints.Games, { newGame });
     }
 
     public resetLeaderboard(toReset: Game): Observable<Leaderboard[]> {
