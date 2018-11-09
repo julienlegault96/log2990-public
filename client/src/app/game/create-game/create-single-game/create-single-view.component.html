@@ -18,7 +18,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Nom du jeu *</label>
+                    <label>Nom du jeu</label>
                     <input [(ngModel)]="name" (change)="verifyName" [class.is-invalid]="!isValidName()" type="text"
                         class="form-control" placeholder="Entrez un nom">
                 </div>
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label>1. Image non modifiée *</label>
+                            <label>Image originale</label>
                             <div class="custom-file">
                                 <input ngModel (change)="setRawImage($event)" type="file" class="custom-file-input" id="raw-image">
                                 <label class="custom-file-label" for="raw-image">
@@ -38,7 +38,7 @@
 
                     <div class="col">
                         <div class="form-group">
-                            <label>2. Image modifiée *</label>
+                            <label>Image modifiée</label>
                             <div class="custom-file">
                                 <input ngModel (change)="setModifiedImage($event)" type="file" class="custom-file-input"
                                     id="modified-image">

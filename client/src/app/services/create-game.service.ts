@@ -19,13 +19,13 @@ export class CreateGameService extends GameService {
         this.validator = new Validator();
     }
 
-    public isValidInputList(name: string, images: File[]): boolean {
+    public isValidSingleViewInputList(name: string, images: File[]): boolean {
         return this.validator.isStandardStringLength(name)
             && this.isValidInputImageList(images);
     }
 
     public submit(name: string, images: File[]): void {
-        if (!this.isValidInputList(name, images)) {
+        if (!this.isValidSingleViewInputList(name, images)) {
             return;
         }
 

@@ -27,13 +27,13 @@ import { UserComponent } from "./user/user-component/user.component";
 
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";
-
 import { CreateGameService } from "./services/create-game.service";
-import { CreateGameComponent } from "./game/create-game/create-game.component";
+
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff.service";
 
-import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+import { CreateSingleViewComponent } from "./game/create-game/create-single-game/create-single-view.component";
+import { CreateMultipleViewComponent } from "./game/create-game/create-multiple-view/create-multiple-view.component";
 import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
 
 @NgModule({
@@ -49,7 +49,7 @@ import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
         UserComponent,
         AdminViewComponent,
         AdminViewCardComponent,
-        CreateGameComponent,
+        CreateSingleViewComponent,
         GameViewComponent,
         CreateMultipleViewComponent,
         HomePageComponent,
