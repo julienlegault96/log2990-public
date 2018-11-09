@@ -135,17 +135,6 @@ export class GamesRoute extends AbstractRoute<Game> {
             });
     }
 
-    // private uploadImagesImgur(...images: Array<string>): Promise<Array<string>> {
-    //     const promises: Array<Promise<string>> = new Array<Promise<string>>();
-
-    //     const imgur: Imgur = new Imgur();
-    //     for (const image of images) {
-    //         promises.push(imgur.uploadImage(image));
-    //     }
-
-    //     return Promise.all(promises);
-    // }
-
     // tslint:disable-next-line:max-func-body-length
     private async generate3DImagesDiff(): Promise<string[]> {
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
