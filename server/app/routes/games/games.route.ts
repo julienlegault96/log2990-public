@@ -11,11 +11,10 @@ import { GameType } from "../../../../common/game/game-type";
 
 import { ImgDiffRoute } from "../img-diff/imgdiff.route";
 import { CODES } from "../../../../common/communication/response-codes";
-import { Coordinates } from "../../../../common/game/coordinates";
 
-import { ErrorFinder } from "../../services/error-finder/error-finder";
 import { FileService } from "../../services/file/file.service";
 import { GameImagesIndex } from "./game-images-index";
+import { DifferenceCounter } from "../../services/difference-counter/difference-counter";
 
 @injectable()
 
@@ -25,6 +24,7 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private readonly ID_RANGE: number = 1000000;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
+    private readonly DIFFERENCE_REQUIRED: number = 7;
 
     private readonly errorCountException: string = "errorCount";
 
@@ -223,7 +223,8 @@ export class GamesRoute extends AbstractRoute<Game> {
 
         const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
 
-        const isValidCount: boolean = await this.hasValidDifferenceCount(this.getRelativeToolsPath(this.outputPath));
+        const isValidCount: boolean = await new DifferenceCounter(this.DIFFERENCE_REQUIRED)
+            .hasValidDifferenceCount(this.getRelativeToolsPath(this.outputPath));
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
@@ -232,42 +233,6 @@ export class GamesRoute extends AbstractRoute<Game> {
         await fileService.deleteFile(this.getRelativeToolsPath(this.outputPath));
 
         return output;
-    }
-
-    private async hasValidDifferenceCount(filepath: string, diffCount: number = 7): Promise<boolean> {
-        const differenceCount: number = await this.CountDifferences(filepath);
-
-        return differenceCount === diffCount;
-    }
-
-    private async CountDifferences(filepath: string): Promise<number> {
-        const seen: Object = {};
-        let nbError: number = 0;
-
-        const fileService: FileService = new FileService();
-        const bitmapBuffer: Buffer = await fileService.readFile(filepath);
-        const errorFinder: ErrorFinder = new ErrorFinder();
-
-        for (let i: number = 0; i < ErrorFinder.getImageWidth(bitmapBuffer); i++) {
-            for (let j: number = 0; j < ErrorFinder.getImageHeight(bitmapBuffer); j++) {
-                const coordinates: Coordinates = { x: i, y: j };
-
-                if (!seen[`${coordinates.x},${coordinates.y}`]) {
-                    const errorPixels: Array<Coordinates> = errorFinder.findError(coordinates, bitmapBuffer);
-
-                    if (errorPixels.length > 0) {
-                        nbError++;
-                        errorPixels.forEach((errorCoordinates: Coordinates) => {
-                            seen[`${errorCoordinates.x},${errorCoordinates.y}`] = true;
-                        });
-                    } else {
-                        seen[`${coordinates.x},${coordinates.y}`] = true;
-                    }
-                }
-            }
-        }
-
-        return nbError;
     }
 
     private async encodeInBase64(filepath: string): Promise<string> {
