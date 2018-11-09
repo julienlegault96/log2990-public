@@ -23,14 +23,14 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
 
-    private gameC: GameCreator;
+    private gameCreator: GameCreator;
     private readonly ID_RANGE: number = 1000000;
     private readonly errorCountException: string = "errorCount";
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
         this.collection = Collections.Games;
-        this.gameC = new GameCreator();
+        this.gameCreator = new GameCreator();
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -60,7 +60,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         req.body._id = this.generateId();
 
         const imgurPromise: Promise<string[]> = (req.body.type === GameType.SingleView) ?
-            this.gameC.singleViewUpload(req) : this.gameC.doubleViewUpload(req);
+            this.gameCreator.singleViewUpload(req)
+            : this.gameCreator.doubleViewUpload({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } });
 
         return imgurPromise
             .then((imagesUrl: string[]) => {

@@ -5,11 +5,12 @@ import { FileService } from "../file/file.service";
 import { ImageGenerator } from "../image-generator/image-generator";
 import { Imgur } from "../imgur/imgur";
 import { ImgDiffRoute } from "../../routes/img-diff/imgdiff.route";
+import { GenMultiParameters } from "./gen-multi-parameters";
 
 export class GameCreator {
 
     private fileService: FileService;
-    private gameCreator: ImageGenerator;
+    private imageGenerator: ImageGenerator;
     private imgur: Imgur;
 
     // Executables
@@ -22,7 +23,7 @@ export class GameCreator {
 
     public constructor() {
         this.fileService = new FileService();
-        this.gameCreator = new ImageGenerator();
+        this.imageGenerator = new ImageGenerator();
         this.imgur = new Imgur();
     }
 
@@ -33,7 +34,7 @@ export class GameCreator {
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewModified]);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
-        return this.gameCreator.generateImage(
+        return this.imageGenerator.generateImage(
             this.firstViewOriginalPath,
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
@@ -52,8 +53,8 @@ export class GameCreator {
         });
     }
 
-    public async doubleViewUpload(req: Request): Promise<string[]> {
-        return this.gameCreator.generateImages({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
+    public async doubleViewUpload(parameters: GenMultiParameters): Promise<string[]> {
+        return this.imageGenerator.generateImages(parameters)
             .then(async (imagesDiff: Array<string>) => {
                 return this.imgur.uploadImages(
                     imagesDiff[ImagesIndex.FirstViewOriginal],
