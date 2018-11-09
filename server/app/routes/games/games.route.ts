@@ -13,7 +13,7 @@ import { ImgDiffRoute } from "../img-diff/imgdiff.route";
 import { CODES } from "../../../../common/communication/response-codes";
 
 import { FileService } from "../../services/file/file.service";
-import { GameImagesIndex } from "./game-images-index";
+import { ImagesIndex } from "./images-index";
 import { GameCreator } from "../../services/game-creator/game-creator";
 
 @injectable()
@@ -49,8 +49,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         res.status(CODES.OK).send(
             JSON.stringify(
                 (await this.getAll()).map((game: Game) => {
-                    game.imageUrl[GameImagesIndex.FirstViewDifference] = "";
-                    game.imageUrl[GameImagesIndex.SecondViewDifference] = "";
+                    game.imageUrl[ImagesIndex.FirstViewDifference] = "";
+                    game.imageUrl[ImagesIndex.SecondViewDifference] = "";
 
                     return game;
                 })
@@ -62,7 +62,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         const game: Game = await this.getOne(req.params.id);
         if (!GamesRoute.cachedDiffImagesMap[game._id] && game) {
             GamesRoute.cachedDiffImagesMap[game._id] =
-                [game.imageUrl[GameImagesIndex.FirstViewDifference], game.imageUrl[GameImagesIndex.SecondViewDifference]];
+                [game.imageUrl[ImagesIndex.FirstViewDifference], game.imageUrl[ImagesIndex.SecondViewDifference]];
         }
 
         res.status(CODES.OK).send(JSON.stringify(game));
@@ -87,10 +87,10 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewOriginal]);
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewOriginal]);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
 
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewModified]);
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewModified]);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.gameCreator.generateImageDiff(
@@ -98,10 +98,10 @@ export class GamesRoute extends AbstractRoute<Game> {
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
             return this.imgur.uploadImages(
-                req.body.imageUrl[GameImagesIndex.FirstViewOriginal],
-                req.body.imageUrl[GameImagesIndex.FirstViewModified]
+                req.body.imageUrl[ImagesIndex.FirstViewOriginal],
+                req.body.imageUrl[ImagesIndex.FirstViewModified]
             ).then(async (imgurLinks: Array<string>) => {
-                imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imageDiff);
+                imgurLinks.splice(ImagesIndex.FirstViewDifference, 0, imageDiff);
                 await this.fileService.deleteFiles(
                     this.getToolsPath(this.firstViewOriginalPath),
                     this.getToolsPath(this.firstViewModifiedPath),
@@ -116,13 +116,13 @@ export class GamesRoute extends AbstractRoute<Game> {
         return this.gameCreator.generateImagesDiff({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
             .then(async (imagesDiff: Array<string>) => {
                 return this.imgur.uploadImages(
-                    imagesDiff[GameImagesIndex.FirstViewOriginal],
-                    imagesDiff[GameImagesIndex.FirstViewModified],
-                    imagesDiff[GameImagesIndex.SecondViewOriginal],
-                    imagesDiff[GameImagesIndex.SecondViewModified]
+                    imagesDiff[ImagesIndex.FirstViewOriginal],
+                    imagesDiff[ImagesIndex.FirstViewModified],
+                    imagesDiff[ImagesIndex.SecondViewOriginal],
+                    imagesDiff[ImagesIndex.SecondViewModified]
                 ).then((imgurLinks: Array<string>) => {
-                    imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imagesDiff[GameImagesIndex.FirstViewDifference]);
-                    imgurLinks.splice(GameImagesIndex.SecondViewDifference, 0, imagesDiff[GameImagesIndex.SecondViewDifference]);
+                    imgurLinks.splice(ImagesIndex.FirstViewDifference, 0, imagesDiff[ImagesIndex.FirstViewDifference]);
+                    imgurLinks.splice(ImagesIndex.SecondViewDifference, 0, imagesDiff[ImagesIndex.SecondViewDifference]);
 
                     return imgurLinks;
                 });

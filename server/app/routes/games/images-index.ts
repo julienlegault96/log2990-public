@@ -1,4 +1,4 @@
-export enum GameImagesIndex {
+export enum ImagesIndex {
     FirstViewOriginal,
     FirstViewModified,
     FirstViewDifference,

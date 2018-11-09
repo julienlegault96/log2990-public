@@ -1,6 +1,6 @@
 import { FileService } from "../file/file.service";
 import { DifferenceCounter } from "../difference-counter/difference-counter";
-import { GameImagesIndex } from "../../routes/games/game-images-index";
+import { ImagesIndex } from "../../routes/games/images-index";
 import { GenMultiParameters } from "./gen-multi-parameters";
 
 export class GameCreator {
@@ -51,9 +51,9 @@ export class GameCreator {
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
             await this.generateMultipleViewImages(genMultiParameters);
 
-            const viewsPath: Array<[GameImagesIndex, [string, string]]> = [
-                [GameImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
-                [GameImagesIndex.SecondViewDifference, [this.secondViewOriginalPath, this.secondViewModifiedPath]],
+            const viewsPath: Array<[ImagesIndex, [string, string]]> = [
+                [ImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
+                [ImagesIndex.SecondViewDifference, [this.secondViewOriginalPath, this.secondViewModifiedPath]],
             ];
 
             for (const currentView of viewsPath) {
@@ -84,16 +84,16 @@ export class GameCreator {
     }
 
     private async getGenerateImages(images: Array<string>): Promise<Array<string>> {
-        images[GameImagesIndex.FirstViewOriginal] = await
+        images[ImagesIndex.FirstViewOriginal] = await
             this.fileService.readFileInBase64(this.getToolsPath(this.firstViewOriginalPath));
 
-        images[GameImagesIndex.FirstViewModified] = await
+        images[ImagesIndex.FirstViewModified] = await
             this.fileService.readFileInBase64(this.getToolsPath(this.firstViewModifiedPath));
 
-        images[GameImagesIndex.SecondViewOriginal] = await
+        images[ImagesIndex.SecondViewOriginal] = await
             this.fileService.readFileInBase64(this.getToolsPath(this.secondViewOriginalPath));
 
-        images[GameImagesIndex.SecondViewModified] = await
+        images[ImagesIndex.SecondViewModified] = await
             this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
 
         await this.fileService.deleteFiles(
@@ -107,7 +107,7 @@ export class GameCreator {
     }
 
     private isValidGeneratedImages(images: string[]): boolean {
-        return images[GameImagesIndex.FirstViewDifference] !== "" && images[GameImagesIndex.SecondViewDifference] !== "";
+        return images[ImagesIndex.FirstViewDifference] !== "" && images[ImagesIndex.SecondViewDifference] !== "";
     }
 
     private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
