@@ -9,7 +9,6 @@ import { GameCreator } from "../../services/game-creator/game-creator";
 import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
 
 import { Game } from "../../../../common/game/game";
-import { GameType } from "../../../../common/game/game-type";
 import { CODES } from "../../../../common/communication/response-codes";
 
 @injectable()
