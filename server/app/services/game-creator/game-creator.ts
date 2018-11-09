@@ -13,10 +13,8 @@ export class GameCreator {
     private imageGenerator: ImageGenerator;
     private imgur: Imgur;
 
-    // Executables
+    // Single view images
     private readonly toolsPath: string = "./tools/";
-
-    // Generated images from genmulti
     private readonly outputPrefix: string = "output";
     private readonly firstViewOriginalPath: string = `${this.outputPrefix}_a_ori.bmp`;
     private readonly firstViewModifiedPath: string = `${this.outputPrefix}_a_mod.bmp`;
@@ -27,12 +25,8 @@ export class GameCreator {
         this.imgur = new Imgur();
     }
 
-    public async singleViewUpload(originalImageBase64: string, modifiedImageBase64: string): Promise<string[]> {
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(originalImageBase64);
-        await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
-
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImageBase64);
-        await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
+    public async singleViewUpload(originalImageBase64: string, modifiedImageBase64: string): Promise<Array<string>> {
+        await this.writeImages(originalImageBase64, modifiedImageBase64);
 
         return this.imageGenerator.generateImage(
             this.firstViewOriginalPath,
@@ -53,7 +47,7 @@ export class GameCreator {
         });
     }
 
-    public async doubleViewUpload(parameters: GenMultiParameters): Promise<string[]> {
+    public async doubleViewUpload(parameters: GenMultiParameters): Promise<Array<string>> {
         return this.imageGenerator.generateImages(parameters)
             .then(async (imagesDiff: Array<string>) => {
                 return this.imgur.uploadImages(
@@ -68,6 +62,14 @@ export class GameCreator {
                     return imgurLinks;
                 });
             });
+    }
+
+    private async writeImages(originalImageBase64: string, modifiedImageBase64: string): Promise<void> {
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(originalImageBase64);
+        await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
+
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImageBase64);
+        await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
     }
 
     private getToolsPath(filename: string): string {
