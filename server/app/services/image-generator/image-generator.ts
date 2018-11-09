@@ -48,7 +48,7 @@ export class ImageGenerator {
     public async generateImages(genMultiParameters: GenMultiParameters): Promise<Array<string>> {
         let images: Array<string> = ["", "", "", "", "", ""];
 
-        for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
+        for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidDifferenceImages(images)); i++) {
             await this.generateMultipleViewImages(genMultiParameters);
 
             images = await this.generateDiffImages();
@@ -56,7 +56,7 @@ export class ImageGenerator {
 
         images = await this.getGenerateImages(images);
 
-        if (!this.isValidGeneratedImages(images)) {
+        if (!this.isValidDifferenceImages(images)) {
             throw new Error(this.errorCountException);
         }
 
@@ -72,7 +72,7 @@ export class ImageGenerator {
         ];
 
         for (const currentView of viewsPath) {
-            await this.generateImage(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
+            await this.generateImage(currentView[1][0], currentView[1][1])
                 .then((value: string) => {
                     images[currentView[0]] = value;
                 })
@@ -80,10 +80,10 @@ export class ImageGenerator {
                     if (error.message !== this.errorCountException) {
                         throw error;
                     }
-                    images[currentView[0]] = ""; // impossible de break ici...
+                    images[currentView[0]] = "";
                 });
 
-            if (images[currentView[0]] === "") {
+            if (!this.isValidDifferenceImage(images[currentView[0]])) {
                 break;
             }
         }
@@ -114,8 +114,13 @@ export class ImageGenerator {
         return images;
     }
 
-    private isValidGeneratedImages(images: string[]): boolean {
-        return images[ImagesIndex.FirstViewDifference] !== "" && images[ImagesIndex.SecondViewDifference] !== "";
+    private isValidDifferenceImages(images: string[]): boolean {
+        return this.isValidDifferenceImage(images[ImagesIndex.FirstViewDifference])
+            && this.isValidDifferenceImage(images[ImagesIndex.SecondViewDifference]);
+    }
+
+    private isValidDifferenceImage(image: string): boolean {
+        return image !== "";
     }
 
     private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
