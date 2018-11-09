@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { FileService } from "./file.service";
 
-describe("ImgDiff route", () => {
+describe("File service", () => {
 
     let fileSerive: FileService;
     beforeEach(() => {

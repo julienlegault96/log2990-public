@@ -2,9 +2,11 @@ import { expect } from "chai";
 import { Imgur } from "./imgur";
 
 describe("Imgur service", () => {
-    // set up fixtures
 
-    const imgur: Imgur = new Imgur();
+    let imgur: Imgur;
+    beforeEach(() => {
+        imgur = new Imgur();
+    });
 
     it("should parse base64", async () => {
         const data: string = "data:image/bmp;base64,-----";
