@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 
 import { GenMultiParameters } from "../../../../../../common/communication/gen-multi-parameters";
-import { GameService } from "../../../services/game.service";
 import { CreateGameComponent } from "../create-game.component";
 import { CreateGameService } from "src/app/services/create-game.service";
 
@@ -18,7 +17,7 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
     public remove: boolean = false;
     public color: boolean = false;
 
-    public constructor(private gameService: GameService, createGameService: CreateGameService) {
+    public constructor(createGameService: CreateGameService) {
         super(createGameService);
     }
 
@@ -39,7 +38,7 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
             }
         };
 
-        this.gameService.createMultipleViewGame(options).subscribe();
+        this.createGameService.submitMultiple(this.name, options);
     }
 
     public onRangeChange(event: Event): void {

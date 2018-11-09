@@ -22,15 +22,11 @@ export class GameService extends AbstractServerService {
         return this.getRequest<Game[]>(Endpoints.Games);
     }
 
-    public createMultipleViewGame(options: GenMultiParameters): Observable<GameCreationRequest> {
-        const newGame: Game = generateGameTemplate();
-        newGame.type = GameType.DoubleView;
-        const request: GameCreationRequest = { newGame, options };
-
-        return this.postRequest<GameCreationRequest>(Endpoints.Games, request);
+    public postMultipleViewGame(newGameRequest: GameCreationRequest): Observable<GameCreationRequest> {
+        return this.postRequest<GameCreationRequest>(Endpoints.Games, newGameRequest);
     }
 
-    public createSingleViewGame(newGame: Game): Observable<{} | GameCreationRequest> {
+    public postSingleViewGame(newGame: Game): Observable<{} | GameCreationRequest> {
         return this.postRequest<GameCreationRequest>(Endpoints.Games, { newGame });
     }
 

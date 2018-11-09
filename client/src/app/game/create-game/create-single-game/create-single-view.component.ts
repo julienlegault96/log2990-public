@@ -30,7 +30,7 @@ export class CreateSingleViewComponent extends CreateGameComponent {
         }
 
         const imageList: Array<File> = this.getImageListForSubmit();
-        this.createGameService.submit(this.name, imageList);
+        this.createGameService.submitSingle(this.name, imageList);
     }
 
     public setRawImage(event: Event): void {
