@@ -95,10 +95,10 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private async singleViewUpload(req: Request): Promise<string[]> {
         const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewOriginal]);
-        await this.fileService.writeFile(this.getRelativeToolsPath(this.firstViewOriginalPath), rawBitmap);
+        await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
 
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewModified]);
-        await this.fileService.writeFile(this.getRelativeToolsPath(this.firstViewModifiedPath), modifiedBitmap);
+        await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.generateImageDiff(
             this.firstViewOriginalPath,
@@ -110,8 +110,8 @@ export class GamesRoute extends AbstractRoute<Game> {
             ).then(async (imgurLinks: Array<string>) => {
                 imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imageDiff);
                 await this.fileService.deleteFiles(
-                    this.getRelativeToolsPath(this.firstViewOriginalPath),
-                    this.getRelativeToolsPath(this.firstViewModifiedPath),
+                    this.getToolsPath(this.firstViewOriginalPath),
+                    this.getToolsPath(this.firstViewModifiedPath),
                 );
 
                 return imgurLinks;
@@ -175,16 +175,16 @@ export class GamesRoute extends AbstractRoute<Game> {
                 break;
             }
         }
-        images[GameImagesIndex.FirstViewOriginal] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewOriginalPath));
-        images[GameImagesIndex.FirstViewModified] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewModifiedPath));
-        images[GameImagesIndex.SecondViewOriginal] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
-        images[GameImagesIndex.SecondViewModified] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
+        images[GameImagesIndex.FirstViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewOriginalPath));
+        images[GameImagesIndex.FirstViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewModifiedPath));
+        images[GameImagesIndex.SecondViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewOriginalPath));
+        images[GameImagesIndex.SecondViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
 
         await this.fileService.deleteFiles(
-            this.getRelativeToolsPath(this.firstViewOriginalPath),
-            this.getRelativeToolsPath(this.firstViewModifiedPath),
-            this.getRelativeToolsPath(this.secondViewOriginalPath),
-            this.getRelativeToolsPath(this.secondViewModifiedPath),
+            this.getToolsPath(this.firstViewOriginalPath),
+            this.getToolsPath(this.firstViewModifiedPath),
+            this.getToolsPath(this.secondViewOriginalPath),
+            this.getToolsPath(this.secondViewModifiedPath),
         );
 
         if (!this.isValidGeneratedImages(images)) {
@@ -194,7 +194,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         return images;
     }
 
-    private getRelativeToolsPath(filename: string): string {
+    private getToolsPath(filename: string): string {
         return `${this.toolsPath}${filename}`;
     }
 
@@ -219,24 +219,18 @@ export class GamesRoute extends AbstractRoute<Game> {
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
         await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
-        const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
+        const output: string = await this.fileService.readFileInBase64(this.getToolsPath(this.outputPath));
 
         const isValidCount: boolean = await new DifferenceCounter(this.DIFFERENCE_REQUIRED)
-            .hasValidDifferenceCount(this.getRelativeToolsPath(this.outputPath));
+            .hasValidDifferenceCount(this.getToolsPath(this.outputPath));
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
         }
 
-        await this.fileService.deleteFile(this.getRelativeToolsPath(this.outputPath));
+        await this.fileService.deleteFile(this.getToolsPath(this.outputPath));
 
         return output;
-    }
-
-    private async encodeInBase64(filepath: string): Promise<string> {
-        const buffer: Buffer = await this.fileService.readFile(filepath);
-
-        return buffer.toString("base64");
     }
 
 }

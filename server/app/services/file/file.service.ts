@@ -8,6 +8,12 @@ export class FileService {
         return util.promisify(fs.readFile)(filepath);
     }
 
+    public async readFileInBase64(filepath: string): Promise<string> {
+        const buffer: Buffer = await this.readFile(filepath);
+
+        return buffer.toString("base64");
+    }
+
     public async writeFile(filepath: string, buffer: Buffer): Promise<void> {
         return util.promisify(fs.writeFile)(filepath, buffer);
     }
