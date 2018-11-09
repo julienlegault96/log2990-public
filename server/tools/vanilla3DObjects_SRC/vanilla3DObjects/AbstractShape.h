@@ -8,12 +8,23 @@ class Drawer;
 class AbstractShape {
 public:
     AbstractShape(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale);
-    bool isModded() const ;
-    void setModified();
-	glm::vec3 getCoordinates();
-    void hide();
+    
+	glm::vec3 getCoordinates() const;
+	glm::vec3 getRotationAxis() const;
+	GLfloat getRotation() const;
+	GLfloat getScale() const;
+	bool isVisible() const;
+	bool isModded() const;
 
-    void accept(Drawer& drawer);
+	void setCoords(glm::vec3 coords);
+	void setRotationAxis(glm::vec3 rotationAxis);
+	void setRotation(GLfloat rotation);
+	void setScale(GLfloat scale);
+	void setModified();
+
+    void hide();
+    virtual void accept(const Drawer *drawer) const = 0;
+
 protected:
     glm::vec3 coords_;
     glm::vec3 rotationAxis_;

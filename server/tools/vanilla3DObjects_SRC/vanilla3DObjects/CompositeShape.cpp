@@ -7,7 +7,7 @@ CompositeShape::~CompositeShape(){
     shapes_.clear();
 }
 
-void CompositeShape::accept(Drawer & visitor) {
+void CompositeShape::accept(const Drawer  *visitor) const {
     for (AbstractShape* shape : shapes_) {
         shape->accept(visitor);
     }

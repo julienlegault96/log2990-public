@@ -45,7 +45,12 @@ void Shape::setColor(glm::vec4 baseColor)
     setModified();
 }
 
-void Shape::accept(Drawer& visitor) {
+glm::vec4 Shape::getColor() const
+{
+	return color_;
+}
+
+void Shape::accept(const Drawer* visitor) const{
 
     forme->afficher();
 }

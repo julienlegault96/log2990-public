@@ -13,9 +13,21 @@ void AbstractShape::setModified()
     modified_ = true;
 }
 
-glm::vec3 AbstractShape::getCoordinates()
+glm::vec3 AbstractShape::getCoordinates() const
 {
 	return coords_;
+}
+glm::vec3 AbstractShape::getRotationAxis() const
+{
+	return rotationAxis_;
+}
+GLfloat AbstractShape::getRotation() const
+{
+	return rotation_;
+}
+GLfloat AbstractShape::getScale() const
+{
+	return scale_;
 }
 void AbstractShape::hide()
 {
@@ -23,6 +35,27 @@ void AbstractShape::hide()
     setModified();
 }
 
-void AbstractShape::accept(Drawer & drawer)
+bool AbstractShape::isVisible() const
 {
+	return appear_;
+}
+
+void AbstractShape::setCoords(glm::vec3 coords)
+{
+	coords_ = coords;
+}
+
+void AbstractShape::setRotationAxis(glm::vec3 rotationAxis)
+{
+	rotationAxis_ = rotationAxis;
+}
+
+void AbstractShape::setRotation(GLfloat rotation)
+{
+	rotation_ = rotation;
+}
+
+void AbstractShape::setScale(GLfloat scale)
+{
+	scale_ = scale;
 }
