@@ -31,25 +31,24 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
 
-    private readonly toolsPath: string = "./tools/";
-
-    private readonly execPath: string = `${this.toolsPath}bmpdiff.exe`;
-    private readonly rawImagePath: string = `rawImage.bmp`;
-    private readonly modifiedImagePath: string = `modifiedImage.bmp`;
-
-    // Generated images from image difference generator
-    private readonly outputPath: string = `output.bmp`;
-
     private readonly errorCountException: string = "errorCount";
 
-    // Generated images from 3D image generator
-    private readonly imageGeneratorOutput: string = "output";
-    private readonly firstViewOriginalPath: string = `${this.imageGeneratorOutput}_a_ori.bmp`;
-    private readonly firstViewModifiedPath: string = `${this.imageGeneratorOutput}_a_mod.bmp`;
-    private readonly secondViewOriginalPath: string = `${this.imageGeneratorOutput}_b_ori.bmp`;
-    private readonly secondViewModifiedPath: string = `${this.imageGeneratorOutput}_b_mod.bmp`;
+    // Executables
+    private readonly toolsPath: string = "./tools/";
 
+    private readonly bmpDiffExecPath: string = `${this.toolsPath}bmpdiff.exe`;
+    private readonly genMultiExecPath: string = `${this.toolsPath}genmulti.exe`;
     private readonly imagesGeneratorMaximumTries: number = 4;
+
+    // Generated images from genmulti
+    private readonly outputPrefix: string = "output";
+    private readonly firstViewOriginalPath: string = `${this.outputPrefix}_a_ori.bmp`;
+    private readonly firstViewModifiedPath: string = `${this.outputPrefix}_a_mod.bmp`;
+    private readonly secondViewOriginalPath: string = `${this.outputPrefix}_b_ori.bmp`;
+    private readonly secondViewModifiedPath: string = `${this.outputPrefix}_b_mod.bmp`;
+
+    // Generated image from bmpdiff
+    private readonly outputPath: string = `${this.outputPrefix}.bmp`;
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
@@ -100,14 +99,14 @@ export class GamesRoute extends AbstractRoute<Game> {
     private async singleViewUpload(req: Request): Promise<string[]> {
         const fileService: FileService = new FileService();
         const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
-        await fileService.writeFile(this.getRelativeToolsPath(this.rawImagePath), rawBitmap);
+        await fileService.writeFile(this.getRelativeToolsPath(this.firstViewOriginalPath), rawBitmap);
 
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
-        await fileService.writeFile(this.getRelativeToolsPath(this.modifiedImagePath), modifiedBitmap);
+        await fileService.writeFile(this.getRelativeToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.generateImageDiff(
-            this.rawImagePath,
-            this.modifiedImagePath
+            this.firstViewOriginalPath,
+            this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
             return this.uploadImagesImgur(
                 req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
@@ -115,8 +114,8 @@ export class GamesRoute extends AbstractRoute<Game> {
             ).then(async (imgurLinks: Array<string>) => {
                 imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imageDiff);
                 await fileService.deleteFiles(
-                    this.getRelativeToolsPath(this.rawImagePath),
-                    this.getRelativeToolsPath(this.modifiedImagePath),
+                    this.getRelativeToolsPath(this.firstViewOriginalPath),
+                    this.getRelativeToolsPath(this.firstViewModifiedPath),
                 );
 
                 return imgurLinks;
@@ -207,11 +206,9 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async exec3DImage(): Promise<void> {
-        const execPath: string = "./tools/genmulti.exe";
-
         // TODO
         const fileService: FileService = new FileService();
-        await fileService.execFile(execPath, ["geo", "20", "asc", this.imageGeneratorOutput])
+        await fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
             .catch(console.log);
     }
 
@@ -225,7 +222,7 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
         const fileService: FileService = new FileService();
-        await fileService.execFile(this.execPath, [originalImagePath, modifiedImagePath, this.outputPath]);
+        await fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
         const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
 
