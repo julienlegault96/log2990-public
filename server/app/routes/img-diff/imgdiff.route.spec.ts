@@ -5,7 +5,7 @@ import { Coordinates } from "../../../../common/game/coordinates";
 import * as util from "util";
 import * as fs from "fs";
 
-describe("Imgdiff service", () => {
+describe("ImgDiff route", () => {
 
     let imgDiffRoute: ImgDiffRoute;
     beforeEach(() => {

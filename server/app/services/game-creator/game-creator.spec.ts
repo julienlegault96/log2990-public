@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { GameCreator } from "./game-creator";
 
-describe("Game creator service", () => {
+describe("GameCreator service", () => {
 
     let gameCreator: GameCreator;
     beforeEach(() => {

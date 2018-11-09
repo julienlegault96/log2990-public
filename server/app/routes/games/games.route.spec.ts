@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { GamesRoute } from "./games.route";
 import { Mongo } from "../../services/mongo";
 
-describe("Games db services", () => {
+describe("Games route", () => {
     // set up fixtures
     const games: GamesRoute = new GamesRoute(new Mongo());
 

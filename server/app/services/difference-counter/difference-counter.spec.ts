@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { DifferenceCounter } from "./difference-counter";
 
-describe("Difference counter service", () => {
+describe("DifferenceCounter service", () => {
 
     let differenceCounter: DifferenceCounter;
     beforeEach(() => {
