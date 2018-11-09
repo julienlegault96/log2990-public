@@ -14,7 +14,7 @@ import { CODES } from "../../../../common/communication/response-codes";
 
 import { FileService } from "../../services/file/file.service";
 import { ImagesIndex } from "./images-index";
-import { GameCreator } from "../../services/game-creator/game-creator";
+import { ImageGenerator } from "../../services/image-generator/image-generator";
 
 @injectable()
 
@@ -24,7 +24,7 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private readonly ID_RANGE: number = 1000000;
     private fileService: FileService;
-    private gameCreator: GameCreator;
+    private gameCreator: ImageGenerator;
     private imgur: Imgur;
 
     private readonly errorCountException: string = "errorCount";
@@ -41,7 +41,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         super(mongo);
         this.collection = Collections.Games;
         this.fileService = new FileService();
-        this.gameCreator = new GameCreator();
+        this.gameCreator = new ImageGenerator();
         this.imgur = new Imgur();
     }
 

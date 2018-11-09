@@ -1,9 +1,9 @@
 import { FileService } from "../file/file.service";
 import { DifferenceCounter } from "../difference-counter/difference-counter";
 import { ImagesIndex } from "../../routes/games/images-index";
-import { GenMultiParameters } from "./gen-multi-parameters";
+import { GenMultiParameters } from "../game-creator/gen-multi-parameters";
 
-export class GameCreator {
+export class ImageGenerator {
 
     private fileService: FileService;
 

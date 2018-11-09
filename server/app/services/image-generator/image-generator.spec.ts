@@ -1,11 +1,11 @@
 import { expect } from "chai";
-import { GameCreator } from "./game-creator";
+import { ImageGenerator } from "./image-generator";
 
 describe("GameCreator service", () => {
 
-    let gameCreator: GameCreator;
+    let gameCreator: ImageGenerator;
     beforeEach(() => {
-        gameCreator = new GameCreator();
+        gameCreator = new ImageGenerator();
     });
 
     it("should not have valid generated images", async () => {
