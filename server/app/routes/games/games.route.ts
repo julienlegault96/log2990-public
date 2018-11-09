@@ -15,6 +15,7 @@ import { Coordinates } from "../../../../common/game/coordinates";
 
 import { ErrorFinder } from "../../services/error-finder/error-finder";
 import { FileService } from "../../services/file/file.service";
+import { GameImagesIndex } from "./game-images-index";
 
 @injectable()
 
@@ -23,12 +24,6 @@ export class GamesRoute extends AbstractRoute<Game> {
     public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
 
     private readonly ID_RANGE: number = 1000000;
-    private readonly FIRST_VIEW_RAW_INDEX: number = 0;
-    private readonly FIRST_VIEW_MODIFIED_INDEX: number = 1;
-    private readonly FIRST_VIEW_DIFF_INDEX: number = 2;
-    private readonly SECOND_VIEW_RAW_INDEX: number = 3;
-    private readonly SECOND_VIEW_MODIFED_INDEX: number = 4;
-    private readonly SECOND_VIEW_DIFF_INDEX: number = 5;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
 
     private readonly errorCountException: string = "errorCount";
@@ -59,8 +54,8 @@ export class GamesRoute extends AbstractRoute<Game> {
         res.status(CODES.OK).send(
             JSON.stringify(
                 (await this.getAll()).map((game: Game) => {
-                    game.imageUrl[this.FIRST_VIEW_DIFF_INDEX] = "";
-                    game.imageUrl[this.SECOND_VIEW_DIFF_INDEX] = "";
+                    game.imageUrl[GameImagesIndex.FirstViewDifference] = "";
+                    game.imageUrl[GameImagesIndex.SecondViewDifference] = "";
 
                     return game;
                 })
@@ -72,7 +67,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         const game: Game = await this.getOne(req.params.id);
         if (!GamesRoute.cachedDiffImagesMap[game._id] && game) {
             GamesRoute.cachedDiffImagesMap[game._id] =
-                [game.imageUrl[this.FIRST_VIEW_DIFF_INDEX], game.imageUrl[this.SECOND_VIEW_DIFF_INDEX]];
+                [game.imageUrl[GameImagesIndex.FirstViewDifference], game.imageUrl[GameImagesIndex.SecondViewDifference]];
         }
 
         res.status(CODES.OK).send(JSON.stringify(game));
@@ -98,10 +93,10 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private async singleViewUpload(req: Request): Promise<string[]> {
         const fileService: FileService = new FileService();
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX]);
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewOriginal]);
         await fileService.writeFile(this.getRelativeToolsPath(this.firstViewOriginalPath), rawBitmap);
 
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]);
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewModified]);
         await fileService.writeFile(this.getRelativeToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.generateImageDiff(
@@ -109,10 +104,10 @@ export class GamesRoute extends AbstractRoute<Game> {
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
             return new Imgur().uploadImages(
-                req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
-                req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
+                req.body.imageUrl[GameImagesIndex.FirstViewOriginal],
+                req.body.imageUrl[GameImagesIndex.FirstViewModified]
             ).then(async (imgurLinks: Array<string>) => {
-                imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imageDiff);
+                imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imageDiff);
                 await fileService.deleteFiles(
                     this.getRelativeToolsPath(this.firstViewOriginalPath),
                     this.getRelativeToolsPath(this.firstViewModifiedPath),
@@ -127,13 +122,13 @@ export class GamesRoute extends AbstractRoute<Game> {
         return this.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
                 return new Imgur().uploadImages(
-                    imagesDiff[this.FIRST_VIEW_RAW_INDEX],
-                    imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX],
-                    imagesDiff[this.SECOND_VIEW_RAW_INDEX],
-                    imagesDiff[this.SECOND_VIEW_MODIFED_INDEX]
+                    imagesDiff[GameImagesIndex.FirstViewOriginal],
+                    imagesDiff[GameImagesIndex.FirstViewModified],
+                    imagesDiff[GameImagesIndex.SecondViewOriginal],
+                    imagesDiff[GameImagesIndex.SecondViewModified]
                 ).then((imgurLinks: Array<string>) => {
-                    imgurLinks.splice(this.FIRST_VIEW_DIFF_INDEX, 0, imagesDiff[this.FIRST_VIEW_DIFF_INDEX]);
-                    imgurLinks.splice(this.SECOND_VIEW_DIFF_INDEX, 0, imagesDiff[this.SECOND_VIEW_DIFF_INDEX]);
+                    imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imagesDiff[GameImagesIndex.FirstViewDifference]);
+                    imgurLinks.splice(GameImagesIndex.SecondViewDifference, 0, imagesDiff[GameImagesIndex.SecondViewDifference]);
 
                     return imgurLinks;
                 });
@@ -158,12 +153,12 @@ export class GamesRoute extends AbstractRoute<Game> {
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
             await this.exec3DImage();
 
-            images[this.FIRST_VIEW_DIFF_INDEX] = "";
-            images[this.SECOND_VIEW_DIFF_INDEX] = "";
+            images[GameImagesIndex.FirstViewDifference] = "";
+            images[GameImagesIndex.SecondViewDifference] = "";
 
             await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
-                    images[this.FIRST_VIEW_DIFF_INDEX] = value;
+                    images[GameImagesIndex.FirstViewDifference] = value;
                 })
                 .catch((error: Error) => {
                     if (error.message !== this.errorCountException) {
@@ -172,13 +167,13 @@ export class GamesRoute extends AbstractRoute<Game> {
                 });
 
             // first view has invalid difference count, skip
-            if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
+            if (images[GameImagesIndex.FirstViewDifference] === "") {
                 continue;
             }
 
             await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                 .then((value: string) => {
-                    images[this.SECOND_VIEW_DIFF_INDEX] = value;
+                    images[GameImagesIndex.SecondViewDifference] = value;
                 })
                 .catch((error: Error) => {
                     if (error.message !== this.errorCountException) {
@@ -190,10 +185,10 @@ export class GamesRoute extends AbstractRoute<Game> {
                 break;
             }
         }
-        images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewOriginalPath));
-        images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewModifiedPath));
-        images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
-        images[this.SECOND_VIEW_MODIFED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
+        images[GameImagesIndex.FirstViewOriginal] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewOriginalPath));
+        images[GameImagesIndex.FirstViewModified] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewModifiedPath));
+        images[GameImagesIndex.SecondViewOriginal] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
+        images[GameImagesIndex.SecondViewModified] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
 
         const fileService: FileService = new FileService();
         await fileService.deleteFiles(
@@ -215,7 +210,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private isValidGeneratedImages(images: string[]): boolean {
-        return images[this.FIRST_VIEW_DIFF_INDEX] !== "" && images[this.SECOND_VIEW_DIFF_INDEX] !== "";
+        return images[GameImagesIndex.FirstViewDifference] !== "" && images[GameImagesIndex.SecondViewDifference] !== "";
     }
 
     private async exec3DImage(): Promise<void> {
