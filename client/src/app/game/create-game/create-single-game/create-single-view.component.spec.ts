@@ -5,8 +5,9 @@ import { HttpClientModule } from "@angular/common/http";
 import { CreateSingleViewComponent } from "./create-single-view.component";
 import { GameService } from "../../../services/game.service";
 import { CreateGameService } from "../../../services/create-game.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
-describe("CreateGameComponent", () => {
+describe("CreateSingleViewComponent", () => {
     let component: CreateSingleViewComponent;
     let fixture: ComponentFixture<CreateSingleViewComponent>;
 
@@ -16,6 +17,7 @@ describe("CreateGameComponent", () => {
             imports: [
                 FormsModule,
                 HttpClientModule,
+                FontAwesomeModule,
             ],
             providers: [
                 GameService,
