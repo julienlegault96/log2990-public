@@ -12,14 +12,4 @@ describe("Games db services", () => {
         expect(id).to.be.a("string");
     });
 
-    it("should not have valid error count", async () => {
-        const result: boolean = await games["hasValidDifferenceCount"]("./test_assets/oneError.bmp");
-        expect(result).to.equal(false);
-    });
-
-    it("should have valid error count", async () => {
-        const result: boolean = await games["hasValidDifferenceCount"]("./test_assets/sevenErrors.bmp");
-        expect(result).to.equal(true);
-    });
-
 });
