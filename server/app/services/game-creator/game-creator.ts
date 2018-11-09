@@ -51,33 +51,41 @@ export class GameCreator {
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
             await this.generateMultipleViewImages(genMultiParameters);
 
-            const viewsPath: Array<[ImagesIndex, [string, string]]> = [
-                [ImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
-                [ImagesIndex.SecondViewDifference, [this.secondViewOriginalPath, this.secondViewModifiedPath]],
-            ];
-
-            for (const currentView of viewsPath) {
-                await this.generateImageDiff(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
-                    .then((value: string) => {
-                        images[currentView[0]] = value;
-                    })
-                    .catch((error: Error) => {
-                        if (error.message !== this.errorCountException) {
-                            throw error;
-                        }
-                        images[currentView[0]] = ""; // impossible de break ici...
-                    });
-
-                if (images[currentView[0]] === "") {
-                    break;
-                }
-            }
+            images = await this.generateDiffImages();
         }
 
         images = await this.getGenerateImages(images);
 
         if (!this.isValidGeneratedImages(images)) {
             throw new Error(this.errorCountException);
+        }
+
+        return images;
+    }
+
+    private async generateDiffImages(): Promise<Array<string>> {
+        const images: Array<string> = ["", "", "", "", "", ""];
+
+        const viewsPath: Array<[ImagesIndex, [string, string]]> = [
+            [ImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
+            [ImagesIndex.SecondViewDifference, [this.secondViewOriginalPath, this.secondViewModifiedPath]],
+        ];
+
+        for (const currentView of viewsPath) {
+            await this.generateImageDiff(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
+                .then((value: string) => {
+                    images[currentView[0]] = value;
+                })
+                .catch((error: Error) => {
+                    if (error.message !== this.errorCountException) {
+                        throw error;
+                    }
+                    images[currentView[0]] = ""; // impossible de break ici...
+                });
+
+            if (images[currentView[0]] === "") {
+                break;
+            }
         }
 
         return images;
