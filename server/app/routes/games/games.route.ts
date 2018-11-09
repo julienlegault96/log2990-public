@@ -11,7 +11,6 @@ import { Game } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { CODES } from "../../../../common/communication/response-codes";
 
-
 @injectable()
 
 export class GamesRoute extends AbstractRoute<Game> {

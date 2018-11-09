@@ -33,4 +33,17 @@ export class FileService {
         }
     }
 
+    public getBufferFromBase64(data: string): Buffer {
+        return Buffer.from(this.parseBase64(data), "base64");
+    }
+
+    private parseBase64(data: string): string {
+        const base64Prefix: string = "data:image/bmp;base64,";
+        if (data.startsWith(base64Prefix)) {
+            return data.substr(base64Prefix.length);
+        } else {
+            return data;
+        }
+    }
+
 }

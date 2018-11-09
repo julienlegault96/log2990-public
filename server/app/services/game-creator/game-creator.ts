@@ -1,5 +1,3 @@
-import { ImgDiffRoute } from "../../routes/img-diff/imgdiff.route";
-
 import { FileService } from "../file/file.service";
 import { ImageGenerator } from "../image-generator/image-generator";
 import { Imgur } from "../imgur/imgur";
@@ -65,19 +63,15 @@ export class GameCreator {
     }
 
     private async writeImages(originalImageBase64: string, modifiedImageBase64: string): Promise<void> {
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(originalImageBase64);
+        const rawBitmap: Buffer = this.fileService.getBufferFromBase64(originalImageBase64);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
 
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImageBase64);
+        const modifiedBitmap: Buffer = this.fileService.getBufferFromBase64(modifiedImageBase64);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
     }
 
     private getToolsPath(filename: string): string {
         return `${this.toolsPath}${filename}`;
-    }
-
-    private getImageBufferFromBase64(base64: string): Buffer {
-        return Buffer.from(ImgDiffRoute.parseBase64(base64), "base64");
     }
 
 }

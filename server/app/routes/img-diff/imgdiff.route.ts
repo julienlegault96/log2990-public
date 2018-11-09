@@ -8,17 +8,15 @@ import { Coordinates } from "../../../../common/game/coordinates";
 import { ImageView } from "../../../../common/game/image-view";
 
 import { GamesRoute } from "../games/games.route";
+import { FileService } from "../../services/file/file.service";
 
 @injectable()
 export class ImgDiffRoute {
 
-    public static parseBase64(base64Data: string): string {
-        const base64Prefix: string = "data:image/bmp;base64,";
-        if (base64Data.startsWith(base64Prefix)) {
-            return base64Data.substr(base64Prefix.length);
-        } else {
-            return base64Data;
-        }
+    private fileService: FileService;
+
+    public constructor() {
+        this.fileService = new FileService();
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -41,14 +39,10 @@ export class ImgDiffRoute {
         if (imgData) {
             const errorFinder: ErrorFinder = new ErrorFinder();
 
-            return errorFinder.findError(coordinates, this.getImgBuffer(imgData));
+            return errorFinder.findError(coordinates, this.fileService.getBufferFromBase64(imgData));
         }
 
         return [];
-    }
-
-    private getImgBuffer(imgData: string): Buffer {
-        return Buffer.from(ImgDiffRoute.parseBase64(imgData), "base64");
     }
 
     private async getDiffImgData(id: string, imageView: ImageView): Promise<string | undefined> {
