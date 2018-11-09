@@ -44,7 +44,6 @@ export class GameCreator {
         return output;
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public async generateImagesDiff(genMultiParameters: GenMultiParameters): Promise<Array<string>> {
         let images: Array<string> = ["", "", "", "", "", ""];
 
