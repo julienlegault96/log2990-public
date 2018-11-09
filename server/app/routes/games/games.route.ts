@@ -23,7 +23,6 @@ export class GamesRoute extends AbstractRoute<Game> {
     public static readonly cachedDiffImagesMap: { [key: string]: string[]; } = {};
 
     private readonly ID_RANGE: number = 1000000;
-    private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
     private fileService: FileService;
     private gameCreator: GameCreator;
 
@@ -32,15 +31,10 @@ export class GamesRoute extends AbstractRoute<Game> {
     // Executables
     private readonly toolsPath: string = "./tools/";
 
-    private readonly genMultiExecPath: string = `${this.toolsPath}genmulti.exe`;
-    private readonly imagesGeneratorMaximumTries: number = 4;
-
     // Generated images from genmulti
     private readonly outputPrefix: string = "output";
     private readonly firstViewOriginalPath: string = `${this.outputPrefix}_a_ori.bmp`;
     private readonly firstViewModifiedPath: string = `${this.outputPrefix}_a_mod.bmp`;
-    private readonly secondViewOriginalPath: string = `${this.outputPrefix}_b_ori.bmp`;
-    private readonly secondViewModifiedPath: string = `${this.outputPrefix}_b_mod.bmp`;
 
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
@@ -117,7 +111,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private doubleViewUpload(req: Request): Promise<string[]> {
-        return this.generate3DImagesDiff()
+        return this.gameCreator.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
                 return new Imgur().uploadImages(
                     imagesDiff[GameImagesIndex.FirstViewOriginal],
@@ -133,76 +127,8 @@ export class GamesRoute extends AbstractRoute<Game> {
             });
     }
 
-    // tslint:disable-next-line:max-func-body-length
-    private async generate3DImagesDiff(): Promise<string[]> {
-        const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
-
-        for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
-            await this.exec3DImage();
-
-            images[GameImagesIndex.FirstViewDifference] = "";
-            images[GameImagesIndex.SecondViewDifference] = "";
-
-            await this.gameCreator.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
-                .then((value: string) => {
-                    images[GameImagesIndex.FirstViewDifference] = value;
-                })
-                .catch((error: Error) => {
-                    if (error.message !== this.errorCountException) {
-                        throw error;
-                    }
-                });
-
-            // first view has invalid difference count, skip
-            if (images[GameImagesIndex.FirstViewDifference] === "") {
-                continue;
-            }
-
-            await this.gameCreator.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
-                .then((value: string) => {
-                    images[GameImagesIndex.SecondViewDifference] = value;
-                })
-                .catch((error: Error) => {
-                    if (error.message !== this.errorCountException) {
-                        throw error;
-                    }
-                });
-
-            if (this.isValidGeneratedImages(images)) {
-                break;
-            }
-        }
-        images[GameImagesIndex.FirstViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewOriginalPath));
-        images[GameImagesIndex.FirstViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewModifiedPath));
-        images[GameImagesIndex.SecondViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewOriginalPath));
-        images[GameImagesIndex.SecondViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
-
-        await this.fileService.deleteFiles(
-            this.getToolsPath(this.firstViewOriginalPath),
-            this.getToolsPath(this.firstViewModifiedPath),
-            this.getToolsPath(this.secondViewOriginalPath),
-            this.getToolsPath(this.secondViewModifiedPath),
-        );
-
-        if (!this.isValidGeneratedImages(images)) {
-            throw new Error(this.errorCountException);
-        }
-
-        return images;
-    }
-
     private getToolsPath(filename: string): string {
         return `${this.toolsPath}${filename}`;
-    }
-
-    private isValidGeneratedImages(images: string[]): boolean {
-        return images[GameImagesIndex.FirstViewDifference] !== "" && images[GameImagesIndex.SecondViewDifference] !== "";
-    }
-
-    private async exec3DImage(): Promise<void> {
-        // TODO
-        await this.fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
-            .catch(console.log);
     }
 
     private generateId(): string {
