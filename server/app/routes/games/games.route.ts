@@ -14,7 +14,7 @@ import { CODES } from "../../../../common/communication/response-codes";
 
 import { FileService } from "../../services/file/file.service";
 import { GameImagesIndex } from "./game-images-index";
-import { DifferenceCounter } from "../../services/difference-counter/difference-counter";
+import { GameCreator } from "../../services/game-creator/game-creator";
 
 @injectable()
 
@@ -24,15 +24,14 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private readonly ID_RANGE: number = 1000000;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
-    private readonly DIFFERENCE_REQUIRED: number = 7;
     private fileService: FileService;
+    private gameCreator: GameCreator;
 
     private readonly errorCountException: string = "errorCount";
 
     // Executables
     private readonly toolsPath: string = "./tools/";
 
-    private readonly bmpDiffExecPath: string = `${this.toolsPath}bmpdiff.exe`;
     private readonly genMultiExecPath: string = `${this.toolsPath}genmulti.exe`;
     private readonly imagesGeneratorMaximumTries: number = 4;
 
@@ -43,13 +42,11 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly secondViewOriginalPath: string = `${this.outputPrefix}_b_ori.bmp`;
     private readonly secondViewModifiedPath: string = `${this.outputPrefix}_b_mod.bmp`;
 
-    // Generated image from bmpdiff
-    private readonly outputPath: string = `${this.outputPrefix}.bmp`;
-
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
         this.collection = Collections.Games;
         this.fileService = new FileService();
+        this.gameCreator = new GameCreator();
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -100,7 +97,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewModified]);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
-        return this.generateImageDiff(
+        return this.gameCreator.generateImageDiff(
             this.firstViewOriginalPath,
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
@@ -146,7 +143,7 @@ export class GamesRoute extends AbstractRoute<Game> {
             images[GameImagesIndex.FirstViewDifference] = "";
             images[GameImagesIndex.SecondViewDifference] = "";
 
-            await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
+            await this.gameCreator.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
                 .then((value: string) => {
                     images[GameImagesIndex.FirstViewDifference] = value;
                 })
@@ -161,7 +158,7 @@ export class GamesRoute extends AbstractRoute<Game> {
                 continue;
             }
 
-            await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
+            await this.gameCreator.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
                 .then((value: string) => {
                     images[GameImagesIndex.SecondViewDifference] = value;
                 })
@@ -214,23 +211,6 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private getImageBufferFromBase64(base64: string): Buffer {
         return Buffer.from(ImgDiffRoute.parseBase64(base64), "base64");
-    }
-
-    private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
-        await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
-
-        const output: string = await this.fileService.readFileInBase64(this.getToolsPath(this.outputPath));
-
-        const isValidCount: boolean = await new DifferenceCounter(this.DIFFERENCE_REQUIRED)
-            .hasValidDifferenceCount(this.getToolsPath(this.outputPath));
-
-        if (!isValidCount) {
-            throw new Error(this.errorCountException);
-        }
-
-        await this.fileService.deleteFile(this.getToolsPath(this.outputPath));
-
-        return output;
     }
 
 }
