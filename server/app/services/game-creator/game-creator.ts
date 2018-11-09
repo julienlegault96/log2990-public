@@ -27,7 +27,7 @@ export class GameCreator {
         this.fileService = new FileService();
     }
 
-    public async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
+    public async generateImage(originalImagePath: string, modifiedImagePath: string): Promise<string> {
         await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.differenceOutputPath]);
 
         const output: string = await this.fileService.readFileInBase64(this.getToolsPath(this.differenceOutputPath));
@@ -44,7 +44,7 @@ export class GameCreator {
         return output;
     }
 
-    public async generateImagesDiff(genMultiParameters: GenMultiParameters): Promise<Array<string>> {
+    public async generateImages(genMultiParameters: GenMultiParameters): Promise<Array<string>> {
         let images: Array<string> = ["", "", "", "", "", ""];
 
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
@@ -71,7 +71,7 @@ export class GameCreator {
         ];
 
         for (const currentView of viewsPath) {
-            await this.generateImageDiff(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
+            await this.generateImage(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
                 .then((value: string) => {
                     images[currentView[0]] = value;
                 })

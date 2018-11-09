@@ -93,7 +93,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewModified]);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
-        return this.gameCreator.generateImageDiff(
+        return this.gameCreator.generateImage(
             this.firstViewOriginalPath,
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
@@ -113,7 +113,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async doubleViewUpload(req: Request): Promise<string[]> {
-        return this.gameCreator.generateImagesDiff({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
+        return this.gameCreator.generateImages({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
             .then(async (imagesDiff: Array<string>) => {
                 return this.imgur.uploadImages(
                     imagesDiff[ImagesIndex.FirstViewOriginal],
