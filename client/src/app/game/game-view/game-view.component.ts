@@ -67,7 +67,6 @@ export class GameViewComponent implements OnInit {
         };
         this.leaderboardService.sendGameScore(leaderboardRequest);
 
-        // Pour ne pas mettre en attente le script
         alert("Bravo!");
     }
 
