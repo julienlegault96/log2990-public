@@ -8,6 +8,7 @@ import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
 import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
 import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
+import { MULTIPLE_VIEW_BASE_TIME, SINGLE_VIEW_BASE_TIME } from "../../../../common/game/leaderboard";
 
 @Injectable()
 
@@ -64,7 +65,7 @@ export class CreateGameService extends GameService {
     }
 
     private generateSingleViewGame(name: string, imageUrls: Array<string>): Game {
-        const newGame: Game = generateGameTemplate();
+        const newGame: Game = generateGameTemplate(SINGLE_VIEW_BASE_TIME);
         newGame.type = GameType.SingleView;
         newGame.title = name;
         newGame.imageUrl = [
@@ -76,7 +77,7 @@ export class CreateGameService extends GameService {
     }
 
     public generateMultipleViewGame(name: string): Game {
-        const newGame: Game = generateGameTemplate();
+        const newGame: Game = generateGameTemplate(MULTIPLE_VIEW_BASE_TIME);
         newGame.type = GameType.DoubleView;
         newGame.title = name;
 

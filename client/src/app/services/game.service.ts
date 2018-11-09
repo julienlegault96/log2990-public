@@ -3,11 +3,15 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
-
-import { Game, generateGameTemplate } from "../../../../common/game/game";
-import { generateSoloLeaderboard, generateDuoLeaderboard, Leaderboard } from "../../../../common/game/leaderboard";
+import { Game } from "../../../../common/game/game";
+import {
+    generateSoloLeaderboard,
+    generateDuoLeaderboard,
+    Leaderboard,
+    SINGLE_VIEW_BASE_TIME,
+    MULTIPLE_VIEW_BASE_TIME
+} from "../../../../common/game/leaderboard";
 import { GameType } from "../../../../common/game/game-type";
-import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
 import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
 
 @Injectable()
@@ -31,9 +35,10 @@ export class GameService extends AbstractServerService {
     }
 
     public resetLeaderboard(toReset: Game): Observable<Leaderboard[]> {
+        const baseTime: number = toReset.type === GameType.SingleView ? SINGLE_VIEW_BASE_TIME : MULTIPLE_VIEW_BASE_TIME;
         const leaderboards: Leaderboard[] = [
-            generateSoloLeaderboard(),
-            generateDuoLeaderboard()
+            generateSoloLeaderboard(baseTime),
+            generateDuoLeaderboard(baseTime)
         ];
         toReset.leaderboards = leaderboards;
 

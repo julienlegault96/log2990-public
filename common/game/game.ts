@@ -9,10 +9,10 @@ export class Game {
     leaderboards: Leaderboard[] = [];
 }
 
-export function generateGameTemplate(): Game {
+export function generateGameTemplate(leaderboardBaseTime: number): Game {
     const gameTemplate = new Game();
-    gameTemplate.leaderboards.push(generateSoloLeaderboard());
-    gameTemplate.leaderboards.push(generateDuoLeaderboard());
+    gameTemplate.leaderboards.push(generateSoloLeaderboard(leaderboardBaseTime));
+    gameTemplate.leaderboards.push(generateDuoLeaderboard(leaderboardBaseTime));
 
     return gameTemplate;
 };
