@@ -46,48 +46,57 @@ export class GameCreator {
     }
 
     // tslint:disable-next-line:max-func-body-length
-    public async generate3DImagesDiff(): Promise<string[]> {
-        const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
+    public async generate3DImagesDiff(): Promise<Array<string>> {
+        let images: Array<string> = ["", "", "", "", "", ""];
 
-        for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
+        for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
             await this.exec3DImage();
 
-            images[GameImagesIndex.FirstViewDifference] = "";
-            images[GameImagesIndex.SecondViewDifference] = "";
+            const viewsPath: Array<[string, string]> = [
+                [this.firstViewOriginalPath, this.firstViewModifiedPath],
+                [this.secondViewOriginalPath, this.secondViewModifiedPath],
+            ];
+            const differencesIndex: Array<GameImagesIndex> = [GameImagesIndex.FirstViewDifference, GameImagesIndex.SecondViewDifference];
 
-            await this.generateImageDiff(this.firstViewOriginalPath, this.firstViewModifiedPath)
-                .then((value: string) => {
-                    images[GameImagesIndex.FirstViewDifference] = value;
-                })
-                .catch((error: Error) => {
-                    if (error.message !== this.errorCountException) {
-                        throw error;
-                    }
-                });
+            for (let currentView: number = 0; currentView < viewsPath.length; currentView++) {
+                await this.generateImageDiff(...viewsPath[currentView])
+                    .then((value: string) => {
+                        images[differencesIndex[currentView]] = value;
+                    })
+                    .catch((error: Error) => {
+                        if (error.message !== this.errorCountException) {
+                            throw error;
+                        }
+                        images[differencesIndex[currentView]] = "";
+                    });
 
-            // first view has invalid difference count, skip
-            if (images[GameImagesIndex.FirstViewDifference] === "") {
-                continue;
-            }
-
-            await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
-                .then((value: string) => {
-                    images[GameImagesIndex.SecondViewDifference] = value;
-                })
-                .catch((error: Error) => {
-                    if (error.message !== this.errorCountException) {
-                        throw error;
-                    }
-                });
-
-            if (this.isValidGeneratedImages(images)) {
-                break;
+                if (images[differencesIndex[currentView]] === "") {
+                    break;
+                }
             }
         }
-        images[GameImagesIndex.FirstViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewOriginalPath));
-        images[GameImagesIndex.FirstViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.firstViewModifiedPath));
-        images[GameImagesIndex.SecondViewOriginal] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewOriginalPath));
-        images[GameImagesIndex.SecondViewModified] = await this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
+
+        images = await this.getGenerateImages(images);
+
+        if (!this.isValidGeneratedImages(images)) {
+            throw new Error(this.errorCountException);
+        }
+
+        return images;
+    }
+
+    private async getGenerateImages(images: Array<string>): Promise<Array<string>> {
+        images[GameImagesIndex.FirstViewOriginal] = await
+            this.fileService.readFileInBase64(this.getToolsPath(this.firstViewOriginalPath));
+
+        images[GameImagesIndex.FirstViewModified] = await
+            this.fileService.readFileInBase64(this.getToolsPath(this.firstViewModifiedPath));
+
+        images[GameImagesIndex.SecondViewOriginal] = await
+            this.fileService.readFileInBase64(this.getToolsPath(this.secondViewOriginalPath));
+
+        images[GameImagesIndex.SecondViewModified] = await
+            this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
 
         await this.fileService.deleteFiles(
             this.getToolsPath(this.firstViewOriginalPath),
@@ -95,10 +104,6 @@ export class GameCreator {
             this.getToolsPath(this.secondViewOriginalPath),
             this.getToolsPath(this.secondViewModifiedPath),
         );
-
-        if (!this.isValidGeneratedImages(images)) {
-            throw new Error(this.errorCountException);
-        }
 
         return images;
     }
