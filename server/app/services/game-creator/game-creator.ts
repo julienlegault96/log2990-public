@@ -45,7 +45,7 @@ export class GameCreator {
     }
 
     // tslint:disable-next-line:max-func-body-length
-    public async generate3DImagesDiff(): Promise<Array<string>> {
+    public async generateImagesDiff(): Promise<Array<string>> {
         let images: Array<string> = ["", "", "", "", "", ""];
 
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
