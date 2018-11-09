@@ -1,8 +1,8 @@
 import { FileService } from "../file/file.service";
 import { DifferenceCounter } from "../difference-counter/difference-counter";
-import { ImagesIndex } from "../../routes/games/images-index";
+import { ImagesIndex } from "../../assets/images-index";
 
-import { GenMultiParameters } from "../game-creator/gen-multi-parameters";
+import { GenMultiParameters } from "../../assets/gen-multi-parameters";
 
 export class ImageGenerator {
 

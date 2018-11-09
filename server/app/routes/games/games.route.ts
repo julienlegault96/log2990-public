@@ -4,7 +4,7 @@ import { inject, injectable } from "inversify";
 import Types from "../../types";
 import { Mongo, Collections } from "../../services/mongo";
 import { AbstractRoute } from "../abstract-route/abstract-route";
-import { ImagesIndex } from "./images-index";
+import { ImagesIndex } from "../../assets/images-index";
 import { GameCreator } from "../../services/game-creator/game-creator";
 
 import { Game } from "../../../../common/game/game";

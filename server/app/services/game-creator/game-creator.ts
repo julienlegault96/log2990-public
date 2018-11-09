@@ -2,8 +2,8 @@ import { FileService } from "../file/file.service";
 import { ImageGenerator } from "../image-generator/image-generator";
 import { Imgur } from "../imgur/imgur";
 
-import { ImagesIndex } from "../../routes/games/images-index";
-import { GenMultiParameters } from "./gen-multi-parameters";
+import { ImagesIndex } from "../../assets/images-index";
+import { GenMultiParameters } from "../../assets/gen-multi-parameters";
 
 export class GameCreator {
 
