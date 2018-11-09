@@ -51,25 +51,24 @@ export class GameCreator {
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
             await this.exec3DImage();
 
-            const viewsPath: Array<[string, string]> = [
-                [this.firstViewOriginalPath, this.firstViewModifiedPath],
-                [this.secondViewOriginalPath, this.secondViewModifiedPath],
+            const viewsPath: Array<[GameImagesIndex, [string, string]]> = [
+                [GameImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
+                [GameImagesIndex.SecondViewDifference, [this.secondViewOriginalPath, this.secondViewModifiedPath]],
             ];
-            const differencesIndex: Array<GameImagesIndex> = [GameImagesIndex.FirstViewDifference, GameImagesIndex.SecondViewDifference];
 
-            for (let currentView: number = 0; currentView < viewsPath.length; currentView++) {
-                await this.generateImageDiff(...viewsPath[currentView])
+            for (const currentView of viewsPath) {
+                await this.generateImageDiff(currentView[1][0], currentView[1][1]) // ...currentView[1] lance un tslint
                     .then((value: string) => {
-                        images[differencesIndex[currentView]] = value;
+                        images[currentView[0]] = value;
                     })
                     .catch((error: Error) => {
                         if (error.message !== this.errorCountException) {
                             throw error;
                         }
-                        images[differencesIndex[currentView]] = "";
+                        images[currentView[0]] = ""; // impossible de break ici...
                     });
 
-                if (images[differencesIndex[currentView]] === "") {
+                if (images[currentView[0]] === "") {
                     break;
                 }
             }
