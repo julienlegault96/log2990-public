@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { LeaderboardRoute } from "./leaderboard.route";
-import { Mongo } from "../../services/mongo";
+import { Mongo } from "../../services/mongo/mongo";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
 import { GamePartyMode } from "../../../../common/game/game-party-mode";
 import { GAMES } from "../../../../common/game/mock-games";

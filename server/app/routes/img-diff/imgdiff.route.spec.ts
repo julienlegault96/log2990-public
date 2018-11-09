@@ -5,32 +5,18 @@ import { Coordinates } from "../../../../common/game/coordinates";
 import * as util from "util";
 import * as fs from "fs";
 
-describe("Imgdiff service", () => {
+describe("ImgDiff route", () => {
 
     let imgDiffRoute: ImgDiffRoute;
     beforeEach(() => {
         imgDiffRoute = new ImgDiffRoute();
     });
 
-    it("should parse base64", async () => {
-        const data: string = "data:image/bmp;base64,-----";
-        const parsedData: string = ImgDiffRoute.parseBase64(data);
-
-        expect(parsedData).to.be.equal("-----");
-    });
-
-    it("should parse base64", async () => {
-        const data: string = "-----";
-        const parsedData: string = ImgDiffRoute.parseBase64(data);
-
-        expect(parsedData).to.be.equal("-----");
-    });
-
     it("should return empty error coordinates", async () => {
         imgDiffRoute["getDiffImgData"] = async () => "imageData";
 
         const buffer: Buffer = await util.promisify(fs.readFile)("./test_assets/sevenErrors.bmp");
-        imgDiffRoute["getImgBuffer"] = () => buffer;
+        imgDiffRoute["fileService"]["getBufferFromBase64"] = () => buffer;
 
         const coordinates: Coordinates = { x: 0, y: 0 };
         const errorPixels: Array<Coordinates> = await imgDiffRoute["getDifferencePixel"]("gameId", ImageView.FirstView, coordinates);
@@ -49,7 +35,7 @@ describe("Imgdiff service", () => {
         imgDiffRoute["getDiffImgData"] = async () => "imageData";
 
         const buffer: Buffer = await util.promisify(fs.readFile)("./test_assets/sevenErrors.bmp");
-        imgDiffRoute["getImgBuffer"] = () => buffer;
+        imgDiffRoute["fileService"]["getBufferFromBase64"] = () => buffer;
 
         const coordinates: Coordinates = { x: 9, y: 9 };
         const errorPixels: Array<Coordinates> = await imgDiffRoute["getDifferencePixel"]("gameId", ImageView.FirstView, coordinates);

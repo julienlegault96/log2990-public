@@ -1,23 +1,23 @@
 import { expect } from "chai";
-import { Imgur } from "./imgur";
+import { FileService } from "./file.service";
 
-describe("Imgur service", () => {
+describe("File service", () => {
 
-    let imgur: Imgur;
+    let fileSerive: FileService;
     beforeEach(() => {
-        imgur = new Imgur();
+        fileSerive = new FileService();
     });
 
     it("should parse base64", async () => {
         const data: string = "data:image/bmp;base64,-----";
-        const parsedData: string = imgur["parseBase64"](data);
+        const parsedData: string = fileSerive["parseBase64"](data);
 
         expect(parsedData).to.be.equal("-----");
     });
 
     it("should parse base64", async () => {
         const data: string = "-----";
-        const parsedData: string = imgur["parseBase64"](data);
+        const parsedData: string = fileSerive["parseBase64"](data);
 
         expect(parsedData).to.be.equal("-----");
     });

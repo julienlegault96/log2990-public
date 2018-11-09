@@ -50,8 +50,9 @@ export class GameViewComponent implements OnInit {
         if ((this.game.type === GameType.SingleView
             && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxSingleViewErrorCount)
             || (this.game.type === GameType.DoubleView
-            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxDoubleViewErrorCount)) {
-            this.endGame();
+                && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxDoubleViewErrorCount)) {
+            const timeout: number = 100;
+            setTimeout(() => this.endGame(), timeout);
         }
     }
 
@@ -66,8 +67,7 @@ export class GameViewComponent implements OnInit {
         };
         this.leaderboardService.sendGameScore(leaderboardRequest);
 
-        // Pour ne pas mettre en attente le script
-        setTimeout(() => alert("Bravo!"), 0);
+        alert("Bravo!");
     }
 
 }

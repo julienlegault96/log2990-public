@@ -12,6 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
 import { GameService } from "src/app/services/game.service";
 import { UserService } from "src/app/services/user.service";
+import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 
 describe("GameViewComponent", () => {
     let component: GameViewComponent;
@@ -32,6 +33,7 @@ describe("GameViewComponent", () => {
                 ImgDiffService,
                 GameService,
                 UserService,
+                LeaderboardService,
             ],
             imports: [
                 HttpClientModule,

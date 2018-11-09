@@ -29,6 +29,7 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff.service";
 import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 describe("AppComponent", () => {
     // tslint:disable-next-line:max-func-body-length
@@ -57,6 +58,7 @@ describe("AppComponent", () => {
                 HttpClientModule,
                 RouterTestingModule,
                 FormsModule,
+                FontAwesomeModule,
             ],
             providers: [
                 AbstractServerService,

@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { GamesRoute } from "./games.route";
-import { Mongo } from "../../services/mongo";
+import { Mongo } from "../../services/mongo/mongo";
 
-describe("Games db services", () => {
+describe("Games route", () => {
     // set up fixtures
     const games: GamesRoute = new GamesRoute(new Mongo());
 
@@ -10,16 +10,6 @@ describe("Games db services", () => {
         const id: string = games["generateId"]();
 
         expect(id).to.be.a("string");
-    });
-
-    it("should not have valid error count", async () => {
-        const result: boolean = await games["hasValidDifferenceCount"]("./test_assets/oneError.bmp");
-        expect(result).to.equal(false);
-    });
-
-    it("should have valid error count", async () => {
-        const result: boolean = await games["hasValidDifferenceCount"]("./test_assets/sevenErrors.bmp");
-        expect(result).to.equal(true);
     });
 
 });

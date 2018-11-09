@@ -5,6 +5,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { CreateGameComponent } from "./create-game.component";
 import { GameService } from "../../services/game.service";
 import { CreateGameService } from "../../services/create-game.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 describe("CreateGameComponent", () => {
     let component: CreateGameComponent;
@@ -16,6 +17,7 @@ describe("CreateGameComponent", () => {
             imports: [
                 FormsModule,
                 HttpClientModule,
+                FontAwesomeModule,
             ],
             providers: [
                 GameService,

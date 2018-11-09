@@ -7,7 +7,7 @@ import { Coordinates } from "../../../../common/game/coordinates";
 import { Pixel } from "./pixel";
 
 describe("ErrorFinder service", () => {
-    // set up fixtures
+
     const errorFinder: ErrorFinder = new ErrorFinder();
     let buffer: Buffer;
     before(async () => {
