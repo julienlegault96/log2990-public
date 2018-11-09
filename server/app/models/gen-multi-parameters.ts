@@ -1,5 +1,5 @@
 export interface GenMultiParameters {
-    type: string;
+    type: "geo" | "theme";
     quantity: number;
     modifications: {
         add: boolean;
