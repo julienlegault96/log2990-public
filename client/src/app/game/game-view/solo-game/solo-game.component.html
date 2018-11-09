@@ -1,5 +1,9 @@
 <div *ngIf="game">
+    <div class="custom-fixed-top p-3">
+        <app-diff-counter [playerOneId]="playerId" [nbViews]="game.type + 1"></app-diff-counter>
+    </div>
 
+    <div class="spacer"></div>
     <h3>{{game.title}}</h3>
 
     <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
@@ -8,5 +12,4 @@
     <app-image-diff *ngIf="game.type==1" [gameId]="game._id" [imageView]="secondView" [originalImageSrc]="game.imageUrl[3]"
         [modifiedImageSrc]="game.imageUrl[4]" (errorFound)="errorWasFound()"></app-image-diff>
 
-    <app-diff-counter [playerOneId]="playerId" [nbViews]="game.type + 1"></app-diff-counter>
 </div>

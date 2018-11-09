@@ -6,6 +6,7 @@ import { ImageView } from "../../../../../../common/game/image-view";
 @Component({
     selector: "app-solo-game",
     templateUrl: "./solo-game.component.html",
+    styleUrls: ["./solo-game.component.css"]
 })
 
 export class SoloGameComponent {
