@@ -111,7 +111,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private doubleViewUpload(req: Request): Promise<string[]> {
-        return this.gameCreator.generateImagesDiff()
+        return this.gameCreator.generateImagesDiff({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
             .then((imagesDiff: Array<string>) => {
                 return new Imgur().uploadImages(
                     imagesDiff[GameImagesIndex.FirstViewOriginal],

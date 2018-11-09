@@ -1,6 +1,7 @@
 import { FileService } from "../file/file.service";
 import { DifferenceCounter } from "../difference-counter/difference-counter";
 import { GameImagesIndex } from "../../routes/games/game-images-index";
+import { GenMultiParameters } from "./gen-multi-parameters";
 
 export class GameCreator {
 
@@ -17,8 +18,7 @@ export class GameCreator {
     private readonly firstViewModifiedPath: string = `${this.outputPrefix}_a_mod.bmp`;
     private readonly secondViewOriginalPath: string = `${this.outputPrefix}_b_ori.bmp`;
     private readonly secondViewModifiedPath: string = `${this.outputPrefix}_b_mod.bmp`;
-
-    private readonly outputPath: string = `${this.outputPrefix}.bmp`;
+    private readonly differenceOutputPath: string = `${this.outputPrefix}.bmp`;
 
     private readonly DIFFERENCE_REQUIRED: number = 7;
     private readonly errorCountException: string = "errorCount";
@@ -28,28 +28,28 @@ export class GameCreator {
     }
 
     public async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
-        await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
+        await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.differenceOutputPath]);
 
-        const output: string = await this.fileService.readFileInBase64(this.getToolsPath(this.outputPath));
+        const output: string = await this.fileService.readFileInBase64(this.getToolsPath(this.differenceOutputPath));
 
         const isValidCount: boolean = await new DifferenceCounter(this.DIFFERENCE_REQUIRED)
-            .hasValidDifferenceCount(this.getToolsPath(this.outputPath));
+            .hasValidDifferenceCount(this.getToolsPath(this.differenceOutputPath));
 
         if (!isValidCount) {
             throw new Error(this.errorCountException);
         }
 
-        await this.fileService.deleteFile(this.getToolsPath(this.outputPath));
+        await this.fileService.deleteFile(this.getToolsPath(this.differenceOutputPath));
 
         return output;
     }
 
     // tslint:disable-next-line:max-func-body-length
-    public async generateImagesDiff(): Promise<Array<string>> {
+    public async generateImagesDiff(genMultiParameters: GenMultiParameters): Promise<Array<string>> {
         let images: Array<string> = ["", "", "", "", "", ""];
 
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
-            await this.generateMultipleViewImages();
+            await this.generateMultipleViewImages(genMultiParameters);
 
             const viewsPath: Array<[GameImagesIndex, [string, string]]> = [
                 [GameImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
@@ -110,10 +110,18 @@ export class GameCreator {
         return images[GameImagesIndex.FirstViewDifference] !== "" && images[GameImagesIndex.SecondViewDifference] !== "";
     }
 
-    private async generateMultipleViewImages(): Promise<void> {
-        // TODO
-        await this.fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
-            .catch(console.log);
+    private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
+        const modificationsParameter: string =
+            `${parameters.modifications.add ? "a" : ""}
+            ${parameters.modifications.delete ? "s" : ""}
+            ${parameters.modifications.color ? "c" : ""}`;
+
+        await this.fileService.execFile(this.genMultiExecPath, [
+            parameters.type,
+            parameters.quantity.toString(),
+            modificationsParameter,
+            this.outputPrefix]
+        ).catch(console.log);
     }
 
     private getToolsPath(filename: string): string {
