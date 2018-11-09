@@ -49,7 +49,7 @@ export class GameCreator {
         let images: Array<string> = ["", "", "", "", "", ""];
 
         for (let i: number = 0; ((i < this.imagesGeneratorMaximumTries) && !this.isValidGeneratedImages(images)); i++) {
-            await this.exec3DImage();
+            await this.generateMultipleViewImages();
 
             const viewsPath: Array<[GameImagesIndex, [string, string]]> = [
                 [GameImagesIndex.FirstViewDifference, [this.firstViewOriginalPath, this.firstViewModifiedPath]],
@@ -110,7 +110,7 @@ export class GameCreator {
         return images[GameImagesIndex.FirstViewDifference] !== "" && images[GameImagesIndex.SecondViewDifference] !== "";
     }
 
-    private async exec3DImage(): Promise<void> {
+    private async generateMultipleViewImages(): Promise<void> {
         // TODO
         await this.fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
             .catch(console.log);
