@@ -10,7 +10,6 @@ export class GameCreator {
     private readonly bmpDiffExecPath: string = `${this.toolsPath}bmpdiff.exe`;
     private readonly genMultiExecPath: string = `${this.toolsPath}genmulti.exe`;
     private readonly imagesGeneratorMaximumTries: number = 4;
-    private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
 
     // Generated images from genmulti
     private readonly outputPrefix: string = "output";
