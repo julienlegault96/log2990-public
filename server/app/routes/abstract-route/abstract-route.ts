@@ -3,7 +3,7 @@ import { InsertOneWriteOpResult, DeleteWriteOpResultObject, UpdateWriteOpResult 
 import { Request, Response, NextFunction } from "express";
 
 import Types from "../../types";
-import { Mongo, Collections } from "../../services/mongo";
+import { Mongo, Collections } from "../../services/mongo/mongo";
 
 import { CODES } from "../../../../common/communication/response-codes";
 

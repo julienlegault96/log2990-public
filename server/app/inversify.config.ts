@@ -4,7 +4,7 @@ import Types from "./types";
 import { Server } from "./server";
 import { Application } from "./app";
 import { Routes } from "./routes";
-import { Mongo } from "./services/mongo";
+import { Mongo } from "./services/mongo/mongo";
 import { GamesRoute } from "./routes/games/games.route";
 import { UsersRoute } from "./routes/user/users.route";
 import { Imgur } from "./services/imgur/imgur";

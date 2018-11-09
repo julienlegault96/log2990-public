@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
 
 import Types from "../../types";
-import { Mongo, Collections } from "../../services/mongo";
+import { Mongo, Collections } from "../../services/mongo/mongo";
 import { AbstractRoute } from "../abstract-route/abstract-route";
 
 import { Game } from "../../../../common/game/game";

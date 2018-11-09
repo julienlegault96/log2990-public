@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { GamesRoute } from "./games.route";
-import { Mongo } from "../../services/mongo";
+import { Mongo } from "../../services/mongo/mongo";
 
 describe("Games route", () => {
     // set up fixtures
