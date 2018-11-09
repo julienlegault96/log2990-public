@@ -156,7 +156,6 @@ export class GamesRoute extends AbstractRoute<Game> {
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
         for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
-            console.log(i);
             await this.exec3DImage();
 
             images[this.FIRST_VIEW_DIFF_INDEX] = "";
