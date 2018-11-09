@@ -20,6 +20,16 @@ export class Imgur {
         this.imgurApi.setCredentials(this.IMGUR_USERNAME, this.IMGUR_PASSWORD, this.IMGUR_CLIENT_ID);
     }
 
+    public uploadImages(...images: Array<string>): Promise<Array<string>> {
+        const promises: Array<Promise<string>> = [];
+
+        for (const image of images) {
+            promises.push(this.uploadImage(image));
+        }
+
+        return Promise.all(promises);
+    }
+
     public async uploadImage(imgBase64: string): Promise<string> {
         return new Promise<string>((resolve: Function, reject: Function) => {
             this.imgurApi.uploadBase64(this.parseBase64(imgBase64))

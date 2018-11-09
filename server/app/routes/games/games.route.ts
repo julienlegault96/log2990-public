@@ -108,7 +108,7 @@ export class GamesRoute extends AbstractRoute<Game> {
             this.firstViewOriginalPath,
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
-            return this.uploadImagesImgur(
+            return new Imgur().uploadImages(
                 req.body.imageUrl[this.FIRST_VIEW_RAW_INDEX],
                 req.body.imageUrl[this.FIRST_VIEW_MODIFIED_INDEX]
             ).then(async (imgurLinks: Array<string>) => {
@@ -126,7 +126,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     private doubleViewUpload(req: Request): Promise<string[]> {
         return this.generate3DImagesDiff()
             .then((imagesDiff: Array<string>) => {
-                return this.uploadImagesImgur(
+                return new Imgur().uploadImages(
                     imagesDiff[this.FIRST_VIEW_RAW_INDEX],
                     imagesDiff[this.FIRST_VIEW_MODIFIED_INDEX],
                     imagesDiff[this.SECOND_VIEW_RAW_INDEX],
@@ -140,22 +140,23 @@ export class GamesRoute extends AbstractRoute<Game> {
             });
     }
 
-    private uploadImagesImgur(...images: Array<string>): Promise<Array<string>> {
-        const promises: Array<Promise<string>> = new Array<Promise<string>>();
+    // private uploadImagesImgur(...images: Array<string>): Promise<Array<string>> {
+    //     const promises: Array<Promise<string>> = new Array<Promise<string>>();
 
-        const imgur: Imgur = new Imgur();
-        for (const image of images) {
-            promises.push(imgur.uploadImage(image));
-        }
+    //     const imgur: Imgur = new Imgur();
+    //     for (const image of images) {
+    //         promises.push(imgur.uploadImage(image));
+    //     }
 
-        return Promise.all(promises);
-    }
+    //     return Promise.all(promises);
+    // }
 
     // tslint:disable-next-line:max-func-body-length
     private async generate3DImagesDiff(): Promise<string[]> {
         const images: Array<string> = new Array<string>(this.IMAGES_SIZE_DOUBLE_VIEW).fill("");
 
-        for (let i: number = 0; (i < this.imagesGeneratorMaximumTries) && (!this.isValidGeneratedImages(images)); i++) {
+        for (let i: number = 0; i < this.imagesGeneratorMaximumTries; i++) {
+            console.log(i);
             await this.exec3DImage();
 
             images[this.FIRST_VIEW_DIFF_INDEX] = "";
@@ -165,18 +166,31 @@ export class GamesRoute extends AbstractRoute<Game> {
                 .then((value: string) => {
                     images[this.FIRST_VIEW_DIFF_INDEX] = value;
                 })
-                .catch();
+                .catch((error: Error) => {
+                    if (error.message !== this.errorCountException) {
+                        throw error;
+                    }
+                });
 
-            // first view has valid difference count
-            if (images[this.FIRST_VIEW_DIFF_INDEX] !== "") {
-                await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
-                    .then((value: string) => {
-                        images[this.SECOND_VIEW_DIFF_INDEX] = value;
-                    })
-                    .catch();
+            // first view has invalid difference count, skip
+            if (images[this.FIRST_VIEW_DIFF_INDEX] === "") {
+                continue;
+            }
+
+            await this.generateImageDiff(this.secondViewOriginalPath, this.secondViewModifiedPath)
+                .then((value: string) => {
+                    images[this.SECOND_VIEW_DIFF_INDEX] = value;
+                })
+                .catch((error: Error) => {
+                    if (error.message !== this.errorCountException) {
+                        throw error;
+                    }
+                });
+
+            if (this.isValidGeneratedImages(images)) {
+                break;
             }
         }
-
         images[this.FIRST_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewOriginalPath));
         images[this.FIRST_VIEW_MODIFIED_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.firstViewModifiedPath));
         images[this.SECOND_VIEW_RAW_INDEX] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
