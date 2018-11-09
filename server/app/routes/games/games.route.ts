@@ -25,6 +25,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly ID_RANGE: number = 1000000;
     private readonly IMAGES_SIZE_DOUBLE_VIEW: number = 6;
     private readonly DIFFERENCE_REQUIRED: number = 7;
+    private fileService: FileService;
 
     private readonly errorCountException: string = "errorCount";
 
@@ -48,6 +49,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     public constructor(@inject(Types.Mongo) mongo: Mongo) {
         super(mongo);
         this.collection = Collections.Games;
+        this.fileService = new FileService();
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -92,12 +94,11 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async singleViewUpload(req: Request): Promise<string[]> {
-        const fileService: FileService = new FileService();
         const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewOriginal]);
-        await fileService.writeFile(this.getRelativeToolsPath(this.firstViewOriginalPath), rawBitmap);
+        await this.fileService.writeFile(this.getRelativeToolsPath(this.firstViewOriginalPath), rawBitmap);
 
         const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[GameImagesIndex.FirstViewModified]);
-        await fileService.writeFile(this.getRelativeToolsPath(this.firstViewModifiedPath), modifiedBitmap);
+        await this.fileService.writeFile(this.getRelativeToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.generateImageDiff(
             this.firstViewOriginalPath,
@@ -108,7 +109,7 @@ export class GamesRoute extends AbstractRoute<Game> {
                 req.body.imageUrl[GameImagesIndex.FirstViewModified]
             ).then(async (imgurLinks: Array<string>) => {
                 imgurLinks.splice(GameImagesIndex.FirstViewDifference, 0, imageDiff);
-                await fileService.deleteFiles(
+                await this.fileService.deleteFiles(
                     this.getRelativeToolsPath(this.firstViewOriginalPath),
                     this.getRelativeToolsPath(this.firstViewModifiedPath),
                 );
@@ -179,8 +180,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         images[GameImagesIndex.SecondViewOriginal] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewOriginalPath));
         images[GameImagesIndex.SecondViewModified] = await this.encodeInBase64(this.getRelativeToolsPath(this.secondViewModifiedPath));
 
-        const fileService: FileService = new FileService();
-        await fileService.deleteFiles(
+        await this.fileService.deleteFiles(
             this.getRelativeToolsPath(this.firstViewOriginalPath),
             this.getRelativeToolsPath(this.firstViewModifiedPath),
             this.getRelativeToolsPath(this.secondViewOriginalPath),
@@ -204,8 +204,7 @@ export class GamesRoute extends AbstractRoute<Game> {
 
     private async exec3DImage(): Promise<void> {
         // TODO
-        const fileService: FileService = new FileService();
-        await fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
+        await this.fileService.execFile(this.genMultiExecPath, ["geo", "20", "asc", this.outputPrefix])
             .catch(console.log);
     }
 
@@ -218,8 +217,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     private async generateImageDiff(originalImagePath: string, modifiedImagePath: string): Promise<string> {
-        const fileService: FileService = new FileService();
-        await fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
+        await this.fileService.execFile(this.bmpDiffExecPath, [originalImagePath, modifiedImagePath, this.outputPath]);
 
         const output: string = await this.encodeInBase64(this.getRelativeToolsPath(this.outputPath));
 
@@ -230,14 +228,13 @@ export class GamesRoute extends AbstractRoute<Game> {
             throw new Error(this.errorCountException);
         }
 
-        await fileService.deleteFile(this.getRelativeToolsPath(this.outputPath));
+        await this.fileService.deleteFile(this.getRelativeToolsPath(this.outputPath));
 
         return output;
     }
 
     private async encodeInBase64(filepath: string): Promise<string> {
-        const fileService: FileService = new FileService();
-        const buffer: Buffer = await fileService.readFile(filepath);
+        const buffer: Buffer = await this.fileService.readFile(filepath);
 
         return buffer.toString("base64");
     }
