@@ -1,13 +1,14 @@
 #pragma once
+#include <GL/glew.h>
 class ObjetLoc
 {
 public: 
-	GLint locVertex = -1;
+	GLint locVertex;
 	GLint locNormal;
-	GLint locColor = -1;
-	GLint locmatrModel = -1;
-	GLint locmatrVisu = -1;
-	GLint locmatrProj = -1;
+	GLint locColor;
+	GLint locmatrModel;
+	GLint locmatrVisu;
+	GLint locmatrProj;
 	GLint locmatrNormale;
 	GLint locplanCoupe;
 	GLuint indLightSource;

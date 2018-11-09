@@ -22,3 +22,7 @@ void AbstractShape::hide()
     appear_ = false;
     setModified();
 }
+
+void AbstractShape::accept(Drawer & drawer)
+{
+}

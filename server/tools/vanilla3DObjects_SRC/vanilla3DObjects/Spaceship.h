@@ -1,8 +1,10 @@
-#pragma once
+#ifndef SPACESHIP_H
+#define SPACESHIP_H
 
 #include "Shape.h"
+#include "CompositeShape.h"
 #include "inf2705-theiere.h"
-class  Spaceship : public Shape
+class  Spaceship : public CompositeShape
 {
 public:
 	Spaceship(glm::vec3 coords/* GLuint texture*/, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
@@ -20,6 +22,7 @@ public:
 };
 
 Spaceship::Spaceship(glm::vec3 coords/*GLuint texture */, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
+	:CompositeShape(coords, rotationAxis, rotation, scale)
 {
 	initSpaceship(coords /*texture*/, rotation, rotationAxis, scale);
 }
@@ -87,4 +90,5 @@ void Spaceship::DrawBody()
    glDeleteBuffers( 1, &vboTheiereSommets );
    glDeleteBuffers( 1, &vboTheiereConnec );
 }
+#endif
 

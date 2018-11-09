@@ -1,12 +1,13 @@
-#pragma once
+#ifndef THEME_FACTORY_H
+#define THEME_FACTORY_H
 #include "AbstractFactory.h"
 class ThemeFactory : public AbstractFactory
 {
 public:
-public:
-    ThemeFactory(std::vector<AbstractShape*>& container, double & scalingFactor);
-    void generateShapes(const int commandAmount);
-	void generateShape();
+    ThemeFactory(const int & numberOfObject, const double& dimboite);
+	void generateShapes(std::vector<AbstractShape*> & objects);
+	AbstractShape* generateShape();
     bool checkForCollision(const glm::vec3 & coords);
 };
+#endif
 

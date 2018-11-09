@@ -14,6 +14,9 @@ Shape::~Shape()
 void Shape::init(Shapelist type) {
     switch (type)
     {
+	case(Tore):
+		forme = new FormeTore(0.5, 8, 8, true);
+		break;
     case(Sphere):
         forme = new FormeSphere(0.5, 8, 8, true);
         break;

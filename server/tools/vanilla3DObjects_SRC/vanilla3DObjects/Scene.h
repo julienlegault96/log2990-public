@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
 #include <cmath>
 #include <string>
@@ -8,19 +9,20 @@
 #include "Default3DProgramState.h"
 #include "AbstractShape.h"
 #include "AbstractFactory.h"
-#include "Drawer.h"
+#include "GeoFactory.h"
+#include "ThemeFactory.h"
 
-
+class Drawer;
 enum Modifications { ColorChange, AddObject, DeleteObject};
 class Scene {
 public:
-  Scene(int numberShapes, bool theme);
-  ~Scene();
-  void modify();
-  void parseModOptions(const std::string &optionString);
-  std::vector<AbstractShape*> getObjects() const;
-  bool isThematic() const;
-  void accept(Drawer& visitor);
+	Scene(int numberShapes, bool theme);
+	~Scene();
+	void modify();
+	void parseModOptions(const std::string &optionString);
+	std::vector<AbstractShape*> getObjects() const;
+	bool isThematic() const;
+	void accept(Drawer &visitor);
 
 private:
     short const MOD_COUNT = 7;
@@ -28,7 +30,7 @@ private:
     const char SUP_PARAMETER = 's';
     const char COL_PARAMETER = 'c';
     std::string _banString;
-    AbstractFactory* factory_;
+    AbstractFactory *factory_;
     std::vector<AbstractShape*> objects_ = {};
     bool theme_;
     int numberShapes_ = 0;
@@ -38,3 +40,5 @@ private:
 	void deleteShape(int index);
 	void addShape();
 };
+
+#endif

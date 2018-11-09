@@ -1,8 +1,10 @@
-#pragma once
+#ifndef ABSTRACT_SHAPE_H
+#define ABSTRACT_SHAPE_H
 #include <GL/glew.h>
-#include <glm/vec3.hpp>
-#include "Drawer.h"
 
+#include <glm/vec3.hpp>
+
+class Drawer;
 class AbstractShape {
 public:
     AbstractShape(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale);
@@ -11,7 +13,7 @@ public:
 	glm::vec3 getCoordinates();
     void hide();
 
-    virtual void accept(Drawer& visitor) = 0;
+    void accept(Drawer& drawer);
 protected:
     glm::vec3 coords_;
     glm::vec3 rotationAxis_;
@@ -21,3 +23,5 @@ private:
     bool modified_ = false;
     bool appear_ = true;
 };
+
+#endif

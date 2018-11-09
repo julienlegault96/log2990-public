@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include<glm/common.hpp>
 #include<glm/trigonometric.hpp>
@@ -32,3 +33,5 @@ private:
     double previousPhi;
     double dist;          // distance (coord. sphériques)
 };
+
+#endif

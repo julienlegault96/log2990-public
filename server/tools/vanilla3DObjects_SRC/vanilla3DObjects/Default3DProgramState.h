@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DEFAULT_3D_PROGRAM_STATE_H
+#define DEFAULT_3D_PROGRAM_STATE_H
 
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
@@ -72,3 +73,4 @@ class Default3DProgramState : public Singleton<Default3DProgramState>
 
         LightModelParameters LightModel = { glm::vec4(0,0,0,1), false, false };
 };
+#endif

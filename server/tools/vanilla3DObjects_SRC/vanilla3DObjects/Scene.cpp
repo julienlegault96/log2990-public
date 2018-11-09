@@ -1,15 +1,19 @@
 #include"Scene.h"
-#include "GeoFactory.h"
-#include "ThemeFactory.h"
 
 bool Scene::isThematic() const
 {
     return theme_;
 }
+void Scene::accept(Drawer & visitor)
+{
+}
 Scene::Scene(int numberShapes, bool theme) : numberShapes_(numberShapes), theme_(theme)
 {
-    factory_ = theme_ ? ThemeFactory() : GeoFactory(objects_, dimBoite_);
-    factory_->generateShapes(numberShapes_);
+	if (this->theme_)
+		this->factory_ = new ThemeFactory(numberShapes_, dimBoite_);
+	else
+		this->factory_ = new GeoFactory(numberShapes_, dimBoite_);
+    factory_->generateShapes(this->objects_);
 }
 
 void Scene::parseModOptions(const std::string & optionString) {
@@ -64,11 +68,11 @@ void Scene::modify()
 }
 
 void Scene::changeColor(int index) {
-    glm::vec4 newColor;
+   /* glm::vec4 newColor;
     do {
         newColor = glm::vec4(factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), 1);
     } while (this->objects_.at(index)->getColor() == newColor);
-    objects_.at(index)->setColor(newColor);
+    objects_.at(index)->setColor(newColor);*/
 }
 
 void Scene::deleteShape(int index) {
@@ -76,6 +80,6 @@ void Scene::deleteShape(int index) {
 }
 
 void Scene::addShape() {
-    factory_->generateShapes();
+    factory_->addShape(this->objects_);
     objects_.at(numberShapes_++)->setModified();
 }

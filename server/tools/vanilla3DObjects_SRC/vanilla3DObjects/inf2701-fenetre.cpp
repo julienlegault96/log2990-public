@@ -131,21 +131,21 @@ void Fenetre::afficherScene()
     }matrModel.PopMatrix();
     */
 
-    for (Shape* shape : scene->getShapes()) // access by reference to avoid copying
-    {
-        if (shape->appear)
-        {	// *********************verifier pour afficher texture ****************//
-            glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
-            matrModel.PushMatrix(); {
-                matrModel.Translate(shape->coords_);
-                matrModel.Scale(shape->scale_);
-                matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-                glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-                glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-                shape->Draw();
-            }matrModel.PopMatrix();
-        }
-    }
+    //for (Shape* shape : scene->getObjects()) // access by reference to avoid copying
+    //{
+    //    if (shape->appear)
+    //    {	// *********************verifier pour afficher texture ****************//
+    //        glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
+    //        matrModel.PushMatrix(); {
+    //            matrModel.Translate(shape->coords_);
+    //            matrModel.Scale(shape->scale_);
+    //            matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
+    //            glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
+    //            glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
+    //            shape->Draw();
+    //        }matrModel.PopMatrix();
+    //    }
+    //}
 }
 
 void Fenetre::chargerNuanceurs(std::string path)

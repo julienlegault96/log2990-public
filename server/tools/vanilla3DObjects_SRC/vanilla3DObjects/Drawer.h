@@ -1,14 +1,17 @@
-#pragma once
+#ifndef DRAWER_H
+#define DRAWER_H
 #include "ObjetLoc.h"
-#include "AbstractShape.h"
-#include "Scene.h"
+#include "Shape.h"
+#include "CompositeShape.h"
 
+class Shape;
+class CompositeShape;
 class Drawer
 {
 public:
     Drawer();
     ~Drawer();
-    void visit(const AbstractShape& shape);
-    void visit(const Scene& scene)
+    void draw(const Shape &shape);
+	void draw(const CompositeShape &compositeShape);
 };
-
+#endif
