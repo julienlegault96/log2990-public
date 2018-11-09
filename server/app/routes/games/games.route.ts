@@ -25,6 +25,7 @@ export class GamesRoute extends AbstractRoute<Game> {
     private readonly ID_RANGE: number = 1000000;
     private fileService: FileService;
     private gameCreator: GameCreator;
+    private imgur: Imgur;
 
     private readonly errorCountException: string = "errorCount";
 
@@ -41,6 +42,7 @@ export class GamesRoute extends AbstractRoute<Game> {
         this.collection = Collections.Games;
         this.fileService = new FileService();
         this.gameCreator = new GameCreator();
+        this.imgur = new Imgur();
     }
 
     public async get(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -95,7 +97,7 @@ export class GamesRoute extends AbstractRoute<Game> {
             this.firstViewOriginalPath,
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
-            return new Imgur().uploadImages(
+            return this.imgur.uploadImages(
                 req.body.imageUrl[GameImagesIndex.FirstViewOriginal],
                 req.body.imageUrl[GameImagesIndex.FirstViewModified]
             ).then(async (imgurLinks: Array<string>) => {
@@ -110,10 +112,10 @@ export class GamesRoute extends AbstractRoute<Game> {
         });
     }
 
-    private doubleViewUpload(req: Request): Promise<string[]> {
+    private async doubleViewUpload(req: Request): Promise<string[]> {
         return this.gameCreator.generateImagesDiff({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } })
-            .then((imagesDiff: Array<string>) => {
-                return new Imgur().uploadImages(
+            .then(async (imagesDiff: Array<string>) => {
+                return this.imgur.uploadImages(
                     imagesDiff[GameImagesIndex.FirstViewOriginal],
                     imagesDiff[GameImagesIndex.FirstViewModified],
                     imagesDiff[GameImagesIndex.SecondViewOriginal],
