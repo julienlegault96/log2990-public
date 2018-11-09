@@ -3,7 +3,7 @@ import { ImageGenerator } from "../image-generator/image-generator";
 import { Imgur } from "../imgur/imgur";
 
 import { ImagesIndex } from "../../models/images-index";
-import { GenMultiParameters } from "../../models/gen-multi-parameters";
+import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
 
 export class GameCreator {
 

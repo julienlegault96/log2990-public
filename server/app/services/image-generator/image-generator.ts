@@ -2,7 +2,7 @@ import { FileService } from "../file/file.service";
 import { DifferenceCounter } from "../difference-counter/difference-counter";
 import { ImagesIndex } from "../../models/images-index";
 
-import { GenMultiParameters } from "../../models/gen-multi-parameters";
+import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
 
 export class ImageGenerator {
 
