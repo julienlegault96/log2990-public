@@ -1,10 +1,10 @@
-import { Request } from "express";
+import { ImgDiffRoute } from "../../routes/img-diff/imgdiff.route";
 
-import { ImagesIndex } from "../../routes/games/images-index";
 import { FileService } from "../file/file.service";
 import { ImageGenerator } from "../image-generator/image-generator";
 import { Imgur } from "../imgur/imgur";
-import { ImgDiffRoute } from "../../routes/img-diff/imgdiff.route";
+
+import { ImagesIndex } from "../../routes/games/images-index";
 import { GenMultiParameters } from "./gen-multi-parameters";
 
 export class GameCreator {
@@ -27,11 +27,11 @@ export class GameCreator {
         this.imgur = new Imgur();
     }
 
-    public async singleViewUpload(req: Request): Promise<string[]> {
-        const rawBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewOriginal]);
+    public async singleViewUpload(originalImageBase64: string, modifiedImageBase64: string): Promise<string[]> {
+        const rawBitmap: Buffer = this.getImageBufferFromBase64(originalImageBase64);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewOriginalPath), rawBitmap);
 
-        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(req.body.imageUrl[ImagesIndex.FirstViewModified]);
+        const modifiedBitmap: Buffer = this.getImageBufferFromBase64(modifiedImageBase64);
         await this.fileService.writeFile(this.getToolsPath(this.firstViewModifiedPath), modifiedBitmap);
 
         return this.imageGenerator.generateImage(
@@ -39,8 +39,8 @@ export class GameCreator {
             this.firstViewModifiedPath
         ).then(async (imageDiff: string) => {
             return this.imgur.uploadImages(
-                req.body.imageUrl[ImagesIndex.FirstViewOriginal],
-                req.body.imageUrl[ImagesIndex.FirstViewModified]
+                originalImageBase64,
+                modifiedImageBase64
             ).then(async (imgurLinks: Array<string>) => {
                 imgurLinks.splice(ImagesIndex.FirstViewDifference, 0, imageDiff);
                 await this.fileService.deleteFiles(
