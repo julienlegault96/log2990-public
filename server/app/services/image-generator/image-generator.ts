@@ -114,15 +114,6 @@ export class ImageGenerator {
         return images;
     }
 
-    private isValidDifferenceImages(images: string[]): boolean {
-        return this.isValidDifferenceImage(images[ImagesIndex.FirstViewDifference])
-            && this.isValidDifferenceImage(images[ImagesIndex.SecondViewDifference]);
-    }
-
-    private isValidDifferenceImage(image: string): boolean {
-        return image !== "";
-    }
-
     private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
         const modificationsParameter: string =
             `${parameters.modifications.add ? "a" : ""}
@@ -135,6 +126,15 @@ export class ImageGenerator {
             modificationsParameter,
             this.outputPrefix]
         ).catch(console.log);
+    }
+
+    private isValidDifferenceImages(images: string[]): boolean {
+        return this.isValidDifferenceImage(images[ImagesIndex.FirstViewDifference])
+            && this.isValidDifferenceImage(images[ImagesIndex.SecondViewDifference]);
+    }
+
+    private isValidDifferenceImage(image: string): boolean {
+        return image !== "";
     }
 
     private getToolsPath(filename: string): string {
