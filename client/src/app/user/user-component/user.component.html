@@ -12,7 +12,10 @@
                 <label>
                     Nom d'utilisateur
                 </label>
-                <input [(ngModel)]="username" type="text" class="form-control" placeholder="Entrez un nom d'utilisateur">
+                <input [(ngModel)]="username" [class.is-invalid]="errorMessages[0] !== ''" type="text" class="form-control" placeholder="Entrez un nom d'utilisateur">
+                <div class="invalid-feedback">
+                    {{ errorMessages[0] }}
+                </div>
             </div>
 
             <div class="float-right">

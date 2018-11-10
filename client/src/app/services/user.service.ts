@@ -23,11 +23,11 @@ export class UserService extends AbstractServerService {
 
     private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
-        "\n- Seul des caractères alphanumériques sont acceptés.";
+        "Seul des caractères alphanumériques sont acceptés.\n";
     private readonly LENGTH_ERROR_MESSAGE: string =
-        "\n- Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.";
+        "Le nom d'utilisateur doit comprendre entre 1 et 20 caractères.\n";
     private readonly DUPLICATE_USER_MESSAGE: string =
-        "\n- Un utilisateur est déjà connecté avec un tel nom.";
+        "Un utilisateur est déjà connecté avec un tel nom.\n";
 
     public constructor(protected http: HttpClient) {
         super(http);
@@ -110,17 +110,17 @@ export class UserService extends AbstractServerService {
     private buildErrorString(username: string): string {
         let errorString: string = "";
 
-        if (!this.validator.isAlphanumericString(username)) {
-            errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
+        if (!this.isUniqueUsername(username)) {
+            errorString += this.DUPLICATE_USER_MESSAGE;
         }
         if (!this.validator.isStandardStringLength(username)) {
             errorString += this.LENGTH_ERROR_MESSAGE;
         }
-        if (!this.isUniqueUsername(username)) {
-            errorString += this.DUPLICATE_USER_MESSAGE;
+        if (!this.validator.isAlphanumericString(username)) {
+            errorString += this.ALPHANUMERIC_ERROR_MESSAGE;
         }
 
-        return this.ERROR_HEADER + errorString;
+        return errorString;
     }
 
     private isUniqueUsername(username: string): boolean {

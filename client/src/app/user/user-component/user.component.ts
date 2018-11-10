@@ -13,9 +13,11 @@ import { Router } from "@angular/router";
  */
 export class UserComponent {
 
+    public errorMessages: Array<string>;
     private username: string;
 
     public constructor(private userService: UserService, private router: Router) {
+        this.errorMessages = [""];
         this.username = "";
     }
 
@@ -24,7 +26,7 @@ export class UserComponent {
             this.userService.submitUsername(this.username);
             this.router.navigate(["/", "gameList"]);
         } catch (error) {
-            alert(error.message);
+            this.errorMessages = error.message.split("\n");
         }
     }
 
