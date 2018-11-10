@@ -3,8 +3,11 @@
         <app-diff-counter [playerOneId]="playerId" [nbViews]="game.type + 1"></app-diff-counter>
     </div>
 
-    <div class="spacer"></div>
-    <h3>{{game.title}}</h3>
+    <h3>
+        {{ game.title }}
+    </h3>
+
+    <hr />
 
     <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
         [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorWasFound()"></app-image-diff>
