@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 
-import { UserComponent } from "../User/user-component/user.component";
+import { UserComponent } from "./user/user.component";
 import { HomePageComponent } from "./home-page.component";
 
 describe("HomePageComponent", () => {
