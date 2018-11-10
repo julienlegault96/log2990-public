@@ -24,7 +24,7 @@ export function generateSoloLeaderboard(baseTime: number): Leaderboard {
 
 export function generateDuoLeaderboard(baseTime: number): Leaderboard {
     let leaderboard = generateLeaderboardTemplate(baseTime);
-    leaderboard.title = "1 vs 1";
+    leaderboard.title = "Duel";
 
     return leaderboard;
 }
