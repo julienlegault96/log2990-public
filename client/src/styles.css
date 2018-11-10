@@ -25,3 +25,7 @@ body > .container-fluid {
     border-radius: 10em;
     padding: 0.70em 1em;
 }
+
+.btn-round {
+    border-radius: 10em;    
+}

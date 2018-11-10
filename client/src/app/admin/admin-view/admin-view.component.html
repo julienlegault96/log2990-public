@@ -1,10 +1,13 @@
 <div class="p-3">
     <div class="row">
         <div class="col">
-            <h3 class="text-center mb-3">
-                Jeux à point de vue simple
+
+            <div class="mb-3">
+                <h3 class="text-center">
+                    Jeux à point de vue simple
+                </h3>
                 <app-create-game></app-create-game>
-            </h3>
+            </div>
 
             <div *ngIf="singleViewGames.length === 0; else hasSingleViewGames">
                 <div class="card custom-shadow border-0 mb-3">
@@ -24,10 +27,12 @@
         </div>
 
         <div class="col">
-            <h3 class="text-center mb-3">
-                Jeux à point de vue double 
+            <div class="mb-3">
+                <h3 class="text-center">
+                    Jeux à point de vue double
+                </h3>
                 <app-create-multiple-view></app-create-multiple-view>
-            </h3>
+            </div>
 
             <div *ngIf="doubleViewGames.length === 0; else hasDoubleViewGames">
                 <div class="card custom-shadow border-0 mb-3">
