@@ -24,7 +24,7 @@ export class UserComponent {
             this.userService.submitUsername(this.username);
             this.router.navigate(["/", "gameList"]);
         } catch (error) {
-            alert(error);
+            alert(error.message);
         }
     }
 
