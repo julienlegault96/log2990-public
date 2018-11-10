@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Scene.h"
+#include "Drawer.h"
 
 typedef enum {
 #if defined(FENETRE_glfw3)
@@ -629,6 +630,7 @@ private:
    GLsizei largeur_; // la largeur de la fenêtre
    GLsizei hauteur_; // la hauteur de la fenêtre
    Scene * scene = nullptr;
+   Drawer * drawer = nullptr;
 };
 
 #endif

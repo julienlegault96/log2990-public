@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
 	// allouer des ressources et définir le contexte OpenGL
 	const std::string absoluteRef = getAbsolutePath(argv[0]);
 	fenetre.initialiser(absoluteRef, false, std::stoi(argv[2]), argv[3]);
-
     fenetre.genererMultivue((absoluteRef+ argv[4]).data());
 
    bool boucler = true;

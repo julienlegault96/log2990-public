@@ -2,6 +2,7 @@
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite)
 {
+	
 }
 
 void ThemeFactory::generateShapes(std::vector<AbstractShape*>& objects)

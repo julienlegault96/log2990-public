@@ -4,8 +4,12 @@ bool Scene::isThematic() const
 {
     return theme_;
 }
-void Scene::accept(Drawer & visitor)
+void Scene::accept(Drawer  *drawer)
 {
+	for(AbstractShape *shape : objects_  )
+	{
+		shape->accept(drawer);
+	}
 }
 Scene::Scene(int numberShapes, bool theme) : numberShapes_(numberShapes), theme_(theme)
 {

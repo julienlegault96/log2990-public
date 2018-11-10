@@ -9,16 +9,16 @@ class AbstractShape;
 class AbstractFactory {
 public:
     AbstractFactory(const int & numberOfObject, const double& dimboite);
-    void generateShapes(std::vector<AbstractShape*> & objects);
-	AbstractShape* generateShape();
+    virtual void generateShapes(std::vector<AbstractShape*> & objects) = 0;
+	virtual AbstractShape* generateShape()=0;
     float generateFloat(const float & min, const float & max) const;
     void generateCoordinates(glm::vec3 & coords);
     void calculateScalingFactor();
-    bool checkForCollision(const glm::vec3 & coords);
+    virtual bool checkForCollision(const glm::vec3 & coords)=0;
 	void addShape(std::vector<AbstractShape*> & objects);
 protected:
     std::vector<AbstractShape*> shippingContainer_;
-    double* dimboite_;
+    double dimboite_;
     float scalingFactor_;
 	int numberOfObject_;
     const float MIN_SIZE_MODIFIER = 0.5;

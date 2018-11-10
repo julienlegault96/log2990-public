@@ -40,6 +40,7 @@ static bool pressed = false;
 
 void Fenetre::initialiser(std::string absolutePath, bool geo, int objectsAmount, const char * sceneOptions)
 {
+	
     // donner la couleur de fond
     glClearColor(0.2, 0.21, 0.26, 1.0);
     // allouer les UBO pour les variables uniformes
@@ -55,7 +56,7 @@ void Fenetre::initialiser(std::string absolutePath, bool geo, int objectsAmount,
 
     // créer quelques autres formes
     glUseProgram(progBase);
-
+	drawer = new Drawer(progBase, &matrModel, &matrVisu, &matrProj);
     scene = new Scene(objectsAmount, geo);
     scene->parseModOptions(sceneOptions);
 }
@@ -64,7 +65,9 @@ void Fenetre::conclure()
 {
     glDeleteBuffers(3, ubo);
     delete scene;
+	delete drawer;
     scene = nullptr;
+	drawer = nullptr;
 }
 
 void Fenetre::afficherScene()
@@ -118,34 +121,7 @@ void Fenetre::afficherScene()
     glm::vec3 axis = glm::vec3(0., 0., 0.);
     GLfloat scale = 1.;
 
-    /*
-    Spaceship spaceship1 = Spaceship(coords, rotation , axis, scale);
-    glVertexAttrib4f(locColor, 1., 0., 0., 0. );
-     matrModel.PushMatrix(); {
-         matrModel.Translate(coords);
-         matrModel.Scale(scale);
-         //matrModel.Rotate(rotation, axis);
-         glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-         glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-         spaceship1.DrawBody();
-    }matrModel.PopMatrix();
-    */
-
-    //for (Shape* shape : scene->getObjects()) // access by reference to avoid copying
-    //{
-    //    if (shape->appear)
-    //    {	// *********************verifier pour afficher texture ****************//
-    //        glVertexAttrib4f(locColor, shape->baseColor_.r, shape->baseColor_.b, shape->baseColor_.g, shape->baseColor_.a);
-    //        matrModel.PushMatrix(); {
-    //            matrModel.Translate(shape->coords_);
-    //            matrModel.Scale(shape->scale_);
-    //            matrModel.Rotate(shape->rotation_, shape->rotationAxis_);
-    //            glUniformMatrix4fv(locmatrModel, 1, GL_FALSE, matrModel);
-    //            glUniformMatrix3fv(locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu.getMatr() * matrModel.getMatr()))));
-    //            shape->Draw();
-    //        }matrModel.PopMatrix();
-    //    }
-    //}
+	scene->accept(drawer);
 }
 
 void Fenetre::chargerNuanceurs(std::string path)
@@ -184,20 +160,20 @@ void Fenetre::chargerNuanceurs(std::string path)
         // faire l'édition des liens du programme
         glLinkProgram(progBase);
         ProgNuanceur::afficherLogLink(progBase);
+		// demander la "Location" des variables
+		if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
+		if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
+		if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
+		if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
+		if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
+		if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
+		if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
+		if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
+		if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
+		if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de etat->FrontMaterial" << std::endl;
+		if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
 
-        // demander la "Location" des variables
-        if ((locVertex = glGetAttribLocation(progBase, "Vertex")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Vertex" << std::endl;
-        if ((locNormal = glGetAttribLocation(progBase, "Normal")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Normal (partie 1)" << std::endl;
-        if ((locColor = glGetAttribLocation(progBase, "Color")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de Color" << std::endl;
-        if ((locmatrModel = glGetUniformLocation(progBase, "matrModel")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrModel" << std::endl;
-        if ((locmatrVisu = glGetUniformLocation(progBase, "matrVisu")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrVisu" << std::endl;
-        if ((locmatrProj = glGetUniformLocation(progBase, "matrProj")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrProj" << std::endl;
-        if ((locmatrNormale = glGetUniformLocation(progBase, "matrNormale")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de matrNormale (partie 1)" << std::endl;
-        if ((locplanCoupe = glGetUniformLocation(progBase, "planCoupe")) == -1) std::cerr << "!!! pas trouvé la \"Location\" de planCoupe" << std::endl;
-        if ((indLightSource = glGetUniformBlockIndex(progBase, "LightSourceParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightSource" << std::endl;
-        if ((indFrontMaterial = glGetUniformBlockIndex(progBase, "MaterialParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de etat->FrontMaterial" << std::endl;
-        if ((indLightModel = glGetUniformBlockIndex(progBase, "LightModelParameters")) == GL_INVALID_INDEX) std::cerr << "!!! pas trouvé l'\"index\" de LightModel" << std::endl;
-
+        
         // charger les ubo
         {
             glBindBuffer(GL_UNIFORM_BUFFER, ubo[0]);
@@ -313,7 +289,7 @@ void Fenetre::genererMultivue(const char * sortie)
     swap();
 
     //modifier scène
-    scene->modify();
+    /*scene->modify();
 
     afficherScene();
     screenshot((FILENAME + B_POV + MODIFIED).data());
@@ -322,7 +298,7 @@ void Fenetre::genererMultivue(const char * sortie)
     camera.unturn();
     afficherScene();
     screenshot((FILENAME + A_POV + MODIFIED).data());
-    swap();
+    swap();*/
 }
 
 

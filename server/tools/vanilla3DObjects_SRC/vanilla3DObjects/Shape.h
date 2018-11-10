@@ -7,7 +7,6 @@
 
 
 #include "AbstractShape.h"
-#include "Drawer.h"
 
 enum Shapelist {Tore, Sphere, Cone, Cube, Tetrahedre, Cylindre };
 
@@ -24,10 +23,10 @@ public:
 	glm::vec4 getColor() const;
     /*void setTexture(Texture texture);*/
     void accept(const Drawer * visitor) const;
-
+	void show() const;
 
 private:
-	FormeBase2705 *forme;
+	FormeBase2705 *forme_;
 	glm::vec4 color_;
 };
 

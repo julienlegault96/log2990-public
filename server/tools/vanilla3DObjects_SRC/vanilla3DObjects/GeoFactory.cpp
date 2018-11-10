@@ -13,7 +13,7 @@ void GeoFactory::generateShapes(std::vector<AbstractShape*> & objects)
     calculateScalingFactor();
     for (int i = 0; i < this->numberOfObject_; i++)
     {
-		generateShape();
+		objects.push_back(generateShape());
     }
 }
 

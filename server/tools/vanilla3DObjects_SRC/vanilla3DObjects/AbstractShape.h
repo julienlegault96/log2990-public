@@ -1,9 +1,10 @@
 #ifndef ABSTRACT_SHAPE_H
 #define ABSTRACT_SHAPE_H
 #include <GL/glew.h>
-
 #include <glm/vec3.hpp>
 
+
+// circular
 class Drawer;
 class AbstractShape {
 public:

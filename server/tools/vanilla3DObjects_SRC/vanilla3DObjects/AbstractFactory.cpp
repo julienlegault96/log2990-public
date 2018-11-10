@@ -2,20 +2,10 @@
 #include "AbstractFactory.h"
 
 AbstractFactory::AbstractFactory(const int & numberOfObject, const double& dimboite){
-
+	this->dimboite_ = dimboite;
 	this->numberOfObject_ = numberOfObject;
     calculateScalingFactor();
 }
-
-void AbstractFactory::generateShapes(std::vector<AbstractShape*>& objects)
-{
-}
-
-AbstractShape * AbstractFactory::generateShape()
-{
-	return nullptr;
-}
-
 
 //fonction retournant un float aleatoire
 //source : https://www.gamedev.net/forums/topic/41147-random-glfloat-value/
@@ -27,19 +17,14 @@ float AbstractFactory::generateFloat(const float& min, const float& max) const {
 
 void AbstractFactory::generateCoordinates(glm::vec3 & coords) {
     do {
-        coords.x = generateFloat(-*dimboite_ / 2, *dimboite_ / 2);
-        coords.y = generateFloat(-*dimboite_ / 2, *dimboite_ / 2);
-        coords.z = generateFloat(0, *dimboite_ - 1);
+        coords.x = generateFloat(-dimboite_ / 2, dimboite_ / 2);
+        coords.y = generateFloat(-dimboite_ / 2, dimboite_ / 2);
+        coords.z = generateFloat(0, dimboite_ - 1);
     } while (checkForCollision(coords));
 }
 
 void AbstractFactory::calculateScalingFactor() {
-    scalingFactor_ = pow(*dimboite_, 3) / (ALLOCATED_SHAPE_VOLUME * this->numberOfObject_);
-}
-
-bool AbstractFactory::checkForCollision(const glm::vec3 & coords)
-{
-	return false;
+    scalingFactor_ = pow(dimboite_, 3) / (ALLOCATED_SHAPE_VOLUME * this->numberOfObject_);
 }
 
 void AbstractFactory::addShape(std::vector<AbstractShape*>& objects)

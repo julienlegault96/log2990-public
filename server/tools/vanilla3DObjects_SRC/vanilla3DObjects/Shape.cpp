@@ -1,5 +1,5 @@
 #include "Shape.h"
-
+#include "Drawer.h"
 
 Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
     : AbstractShape(coords, rotationAxis, rotation, scale), color_(color) {
@@ -8,33 +8,33 @@ Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotati
 
 Shape::~Shape()
 {
-    delete forme;
+    delete forme_;
 }
 
 void Shape::init(Shapelist type) {
     switch (type)
     {
 	case(Tore):
-		forme = new FormeTore(0.5, 8, 8, true);
+		forme_ = new FormeTore(0.5, 8, 8, true);
 		break;
     case(Sphere):
-        forme = new FormeSphere(0.5, 8, 8, true);
+        forme_ = new FormeSphere(0.5, 8, 8, true);
         break;
 
     case(Cone):
-        forme = new FormeCylindre(0.5, 0.0, 0.8, 10, 1, true);
+        forme_ = new FormeCylindre(0.5, 0.0, 0.8, 10, 1, true);
         break;
 
     case(Cube):
-        forme = new FormeCube(0.75, true);
+        forme_ = new FormeCube(0.75, true);
         break;
 
     case(Cylindre):
-        forme = new FormeCylindre(0.4, 0.4, 0.6, 10, 1, true);
+        forme_ = new FormeCylindre(0.4, 0.4, 0.6, 10, 1, true);
         break;
 
     case(Tetrahedre):
-        forme = new FormeTetraedre(1.0, true);
+        forme_ = new FormeTetraedre(1.0, true);
         break;
     }
 }
@@ -50,7 +50,12 @@ glm::vec4 Shape::getColor() const
 	return color_;
 }
 
-void Shape::accept(const Drawer* visitor) const{
+void Shape::accept(const Drawer* visitor) const 
+{
+	visitor->draw(this);
+}
 
-    forme->afficher();
+void Shape::show() const
+{
+	forme_->afficher();
 }
