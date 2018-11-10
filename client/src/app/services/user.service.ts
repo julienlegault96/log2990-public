@@ -21,7 +21,6 @@ export class UserService extends AbstractServerService {
     public loggedUser: User;
     public loggedIn: boolean;
 
-    private readonly ERROR_HEADER: string = "Nom invalide \n ERREURS DÉTECTÉES";
     private readonly ALPHANUMERIC_ERROR_MESSAGE: string =
         "Seul des caractères alphanumériques sont acceptés.\n";
     private readonly LENGTH_ERROR_MESSAGE: string =
