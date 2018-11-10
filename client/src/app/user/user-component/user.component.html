@@ -1,13 +1,17 @@
-<div class="">
-    <div class="col-sm-6 mx-auto card bg-light mb-3">
+<div class="col-sm-6 mx-auto">
+    <div class=" card custom-shadow border-0 mb-4">
         <div class="card-body">
+            <h4>
+                Se connecter
+            </h4>
 
+            <hr />
+
+            <label>
+                Nom d'utilisateur
+            </label>
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Nom:</span>
-                </div>
-
-                <input [(ngModel)]="username" type="text" class="form-control" placeholder="Rentrez votre nom d'utilisateur (ex: MrBidon)">
+                <input [(ngModel)]="username" type="text" class="form-control" placeholder="Entrez un nom d'utilisateur">
 
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" (click)="submit()">
@@ -19,17 +23,29 @@
             <a *ngIf="userService.loggedIn" class="btn btn-success btn-block" routerLink="/gameList">
                 Passer aux jeux
             </a>
-
-            <h5 class="">
-                <button class="badge badge-secondary pb-1" type="button" (click)="userService.refreshUserList()">
-                   &#x21bb;
-                </button>
+        </div>
+    </div>
+    <div class=" card custom-shadow border-0">
+        <div class="card-body">
+            <span class="h4">
                 Utilisateurs connectés:
-            </h5>
-            
-            <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
-                {{user._id}}
+                <div class="float-right">
+                    <button class="btn btn-info btn-round" type="button" (click)="userService.refreshUserList()">
+                        <fa-icon [icon]="['fas', 'redo-alt']" size="sm"></fa-icon>
+                        Rafraichir
+                    </button>
+                </div>
+                <div class="clearfix"></div>
             </span>
+
+            <hr />
+
+            <div>
+                <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
+                    {{user._id}}
+                </span>
+            </div>
+
 
         </div>
     </div>
