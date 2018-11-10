@@ -2,37 +2,42 @@
     <div class=" card custom-shadow border-0 mb-4">
         <div class="card-body">
             <h4>
-                Se connecter
+                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                Connexion
             </h4>
 
             <hr />
 
-            <label>
-                Nom d'utilisateur
-            </label>
-            <div class="input-group mb-3">
+            <div class="form-group">
+                <label>
+                    Nom d'utilisateur
+                </label>
                 <input [(ngModel)]="username" type="text" class="form-control" placeholder="Entrez un nom d'utilisateur">
-
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" (click)="submit()">
-                        Soumettre
-                    </button>
-                </div>
             </div>
 
+            <div class="float-right">
+                <button class="btn btn-success btn-pill" type="button" (click)="submit()">
+                    Suivant&nbsp;
+                    <fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+<!-- 
             <a *ngIf="userService.loggedIn" class="btn btn-success btn-block" routerLink="/gameList">
                 Passer aux jeux
-            </a>
+            </a> -->
         </div>
     </div>
     <div class=" card custom-shadow border-0">
         <div class="card-body">
             <span class="h4">
+                <fa-icon [icon]="['fas', 'users']"></fa-icon>
                 Utilisateurs connectés:
                 <div class="float-right">
                     <button class="btn btn-info btn-round" type="button" (click)="userService.refreshUserList()">
+                        &nbsp;
                         <fa-icon [icon]="['fas', 'redo-alt']" size="sm"></fa-icon>
-                        Rafraichir
+                        &nbsp;
                     </button>
                 </div>
                 <div class="clearfix"></div>
