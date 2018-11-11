@@ -8,16 +8,14 @@
 <div class="modal fade" id="create-multiple-view-modal">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-body">
                 <h5 class="modal-title">
                     <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"></fa-icon>
                     Créer un jeu à points de vue multiples
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+
+                <hr />
+
                 <div class="form-group text-left">
                     <label>Nom du jeu</label>
                     <input [(ngModel)]="name" (change)="verifyName" [class.is-invalid]="!isValidName()" type="text"
@@ -26,7 +24,9 @@
 
                 <div class="text-left">
                     <div class="pb-3">
-                        <label for="multiview-game-type">Game Type</label>
+                        <label for="multiview-game-type">
+                            Thème de la scène
+                        </label>
                         <div id="multiview-game-type">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input [(ngModel)]="gameType" type="radio" id="geo-type" name="game-type" value="geo"
@@ -42,21 +42,29 @@
                     </div>
 
                     <div class="pb-3">
-                        <label for="multiview-game-options">Game Options</label>
+                        <label for="multiview-game-options">
+                            Options de la génération de la scène
+                        </label>
                         <div id="multiview-game-options">
                             <div class="custom-control custom-checkbox custom-control-inline">
                                 <input [(ngModel)]="add" type="checkbox" class="custom-control-input" id="add-option">
-                                <label class="custom-control-label" for="add-option">Add Objects</label>
+                                <label class="custom-control-label" for="add-option">
+                                    Ajout
+                                </label>
                             </div>
 
                             <div class="custom-control custom-checkbox custom-control-inline">
                                 <input [(ngModel)]="remove" type="checkbox" class="custom-control-input" id="remove-option">
-                                <label class="custom-control-label" for="remove-option">Remove Objects</label>
+                                <label class="custom-control-label" for="remove-option">
+                                    Suppression
+                                </label>
                             </div>
 
                             <div class="custom-control custom-checkbox custom-control-inline">
                                 <input [(ngModel)]="color" type="checkbox" class="custom-control-input" id="color-option">
-                                <label class="custom-control-label" for="color-option"> Change Objects Color</label>
+                                <label class="custom-control-label" for="color-option">
+                                    Changement de couleur
+                                </label>
                             </div>
                         </div>
                     </div>
