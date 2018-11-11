@@ -1,6 +1,6 @@
 <div class="container-fluid h-100">
     <div class="row h-100">
-        <div class="col-2 p-3 h-100 overflow-auto bg-white custom-shadow">
+        <div class="col-2 p-3 h-100 overflow-auto bg-white custom-shadow z-top">
             <app-chrono (timerMilestone)="messageBar.addMessage($event)"></app-chrono>
             <hr>
             <app-message-bar [messages]></app-message-bar>

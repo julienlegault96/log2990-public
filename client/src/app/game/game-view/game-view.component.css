@@ -1,3 +1,7 @@
 .overflow-auto {
     overflow: auto
 }
+
+.z-top {
+    z-index: 1500;
+}
