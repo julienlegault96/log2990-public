@@ -2,18 +2,18 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 
-import { CreateGameComponent } from "./create-game.component";
-import { GameService } from "../../services/game.service";
-import { CreateGameService } from "../../services/create-game.service";
+import { CreateSingleViewComponent } from "./create-single-view.component";
+import { GameService } from "../../../services/game.service";
+import { CreateGameService } from "../../../services/create-game.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
-describe("CreateGameComponent", () => {
-    let component: CreateGameComponent;
-    let fixture: ComponentFixture<CreateGameComponent>;
+describe("CreateSingleViewComponent", () => {
+    let component: CreateSingleViewComponent;
+    let fixture: ComponentFixture<CreateSingleViewComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CreateGameComponent],
+            declarations: [CreateSingleViewComponent],
             imports: [
                 FormsModule,
                 HttpClientModule,
@@ -27,7 +27,7 @@ describe("CreateGameComponent", () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CreateGameComponent);
+        fixture = TestBed.createComponent(CreateSingleViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -89,55 +89,4 @@ describe("CreateGameComponent", () => {
         expect(component.modifiedImageMessage).toBe("Choisir un fichier");
     });
 
-    // // Non fonctionnel
-    // it("should accept .bmp rawImage", () => {
-    //     const filename: string = "image.bmp";
-
-    //     const files: FileList = {
-    //         length: 1,
-    //         item: () => ({
-    //             name: filename,
-    //             lastModified: 1,
-    //             size: 1,
-    //             type: "bmp",
-    //             slice: () => (new Blob()),
-    //         }),
-    //     };
-
-    //     const htmlInputElement: HTMLInputElement = Object.create(HTMLInputElement.prototype);
-    //     Object.defineProperty(htmlInputElement, "files", files);
-
-    //     // Impossible de definir un fichier en modifiant l'attribut
-    //     const event: Event = Object.create(Event.prototype);
-    //     Object.defineProperty(event, "target", htmlInputElement);
-
-    //     component.setRawImage(event);
-    //     expect(component.rawImageMessage).toBe(filename);
-    // });
-
-    // // Non fonctionnel
-    // it("should accept .bmp modifiedImage", () => {
-    //     const filename: string = "image.bmp";
-
-    //     const files: FileList = {
-    //         length: 1,
-    //         item: () => ({
-    //             name: filename,
-    //             lastModified: 1,
-    //             size: 1,
-    //             type: "bmp",
-    //             slice: () => (new Blob()),
-    //         }),
-    //     };
-
-    //     const htmlInputElement: HTMLInputElement = Object.create(HTMLInputElement.prototype);
-    //     Object.defineProperty(htmlInputElement, "files", files);
-
-    //     // Impossible de definir un fichier en modifiant l'attribut
-    //     const event: Event = Object.create(Event.prototype);
-    //     Object.defineProperty(event, "target", htmlInputElement);
-
-    //     component.setModifiedImage(event);
-    //     expect(component.modifiedImageMessage).toBe(filename);
-    // });
 });

@@ -3,10 +3,16 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
-
-import { Game, generateGameTemplate } from "../../../../common/game/game";
-import { generateSoloLeaderboard, generateDuoLeaderboard, Leaderboard } from "../../../../common/game/leaderboard";
+import { Game } from "../../../../common/game/game";
+import {
+    generateSoloLeaderboard,
+    generateDuoLeaderboard,
+    Leaderboard,
+    SINGLE_VIEW_BASE_TIME,
+    MULTIPLE_VIEW_BASE_TIME
+} from "../../../../common/game/leaderboard";
 import { GameType } from "../../../../common/game/game-type";
+import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
 
 @Injectable()
 
@@ -20,21 +26,19 @@ export class GameService extends AbstractServerService {
         return this.getRequest<Game[]>(Endpoints.Games);
     }
 
-    public generateMultipleView(): Observable<Game> {
-        const newGame: Game = generateGameTemplate();
-        newGame.type = GameType.DoubleView;
-
-        return this.postRequest<Game>(Endpoints.Games, newGame);
+    public postMultipleViewGame(newGameRequest: GameCreationRequest): Observable<GameCreationRequest> {
+        return this.postRequest<GameCreationRequest>(Endpoints.Games, newGameRequest);
     }
 
-    public addGame(newGame: Game): Observable<{} | Game> {
-        return this.postRequest<Game>(Endpoints.Games, newGame);
+    public postSingleViewGame(newGame: Game): Observable<{} | GameCreationRequest> {
+        return this.postRequest<GameCreationRequest>(Endpoints.Games, { newGame });
     }
 
     public resetLeaderboard(toReset: Game): Observable<Leaderboard[]> {
+        const baseTime: number = toReset.type === GameType.SingleView ? SINGLE_VIEW_BASE_TIME : MULTIPLE_VIEW_BASE_TIME;
         const leaderboards: Leaderboard[] = [
-            generateSoloLeaderboard(),
-            generateDuoLeaderboard()
+            generateSoloLeaderboard(baseTime),
+            generateDuoLeaderboard(baseTime)
         ];
         toReset.leaderboards = leaderboards;
 

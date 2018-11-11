@@ -6,9 +6,9 @@ import { Mongo, Collections } from "../../services/mongo/mongo";
 import { AbstractRoute } from "../abstract-route/abstract-route";
 import { ImagesIndex } from "../../models/images-index";
 import { GameCreator } from "../../services/game-creator/game-creator";
+import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
 
 import { Game } from "../../../../common/game/game";
-import { GameType } from "../../../../common/game/game-type";
 import { CODES } from "../../../../common/communication/response-codes";
 
 @injectable()
@@ -51,16 +51,23 @@ export class GamesRoute extends AbstractRoute<Game> {
     }
 
     public async post(req: Request, res: Response, next: NextFunction): Promise<void> {
-        req.body._id = this.generateId();
+        const request: GameCreationRequest = req.body as GameCreationRequest;
 
-        const imgurPromise: Promise<string[]> = (req.body.type === GameType.SingleView) ?
-            this.gameCreator
-                .singleViewUpload(req.body.imageUrl[ImagesIndex.FirstViewOriginal], req.body.imageUrl[ImagesIndex.FirstViewModified])
-            : this.gameCreator
-                .doubleViewUpload({ type: "geo", quantity: 20, modifications: { add: true, delete: true, color: true } });
+        let imgurPromise: Promise<Array<string>>;
+
+        if (request.options) {
+            imgurPromise = this.gameCreator.doubleViewUpload(request.options);
+        } else {
+            imgurPromise = this.gameCreator.singleViewUpload(
+                request.newGame.imageUrl[ImagesIndex.FirstViewOriginal],
+                request.newGame.imageUrl[ImagesIndex.FirstViewModified]
+            );
+        }
 
         return imgurPromise
-            .then((imagesUrl: string[]) => {
+            .then((imagesUrl: Array<string>) => {
+                req.body = req.body.newGame;
+                req.body._id = this.generateId();
                 req.body.imageUrl = imagesUrl;
 
                 return super.post(req, res, next);

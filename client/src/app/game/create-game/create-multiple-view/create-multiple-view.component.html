@@ -1,0 +1,90 @@
+<div class="text-center">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-multiple-view-modal">
+        Créer un jeu à vues multiples
+    </button>
+</div>
+
+<div class="modal fade" id="create-multiple-view-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"></fa-icon>
+                    Créer un jeu à points de vue multiples
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group text-left">
+                    <label>Nom du jeu</label>
+                    <input [(ngModel)]="name" (change)="verifyName" [class.is-invalid]="!isValidName()" type="text"
+                        class="form-control" placeholder="Entrez un nom">
+                </div>
+
+                <div class="text-left">
+                    <div class="pb-3">
+                        <label for="multiview-game-type">Game Type</label>
+                        <div id="multiview-game-type">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input [(ngModel)]="gameType" type="radio" id="geo-type" name="game-type" value="geo"
+                                    class="custom-control-input">
+                                <label class="custom-control-label" for="geo-type">Geo</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input [(ngModel)]="gameType" type="radio" id="theme-type" name="game-type" value="theme"
+                                    class="custom-control-input">
+                                <label class="custom-control-label" for="theme-type">Theme</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pb-3">
+                        <label for="multiview-game-options">Game Options</label>
+                        <div id="multiview-game-options">
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input [(ngModel)]="add" type="checkbox" class="custom-control-input" id="add-option">
+                                <label class="custom-control-label" for="add-option">Add Objects</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input [(ngModel)]="remove" type="checkbox" class="custom-control-input" id="remove-option">
+                                <label class="custom-control-label" for="remove-option">Remove Objects</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input [(ngModel)]="color" type="checkbox" class="custom-control-input" id="color-option">
+                                <label class="custom-control-label" for="color-option"> Change Objects Color</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pb-3">
+                        <label for="object-number-range">Nombre d'objets</label>
+                        <div class="row">
+                            <div class="col-10">
+                                <input [(ngModel)]="objectNumber" type="range" class="custom-range" min="10" max="200"
+                                    id="object-number-range" (change)="onRangeChange($event);">
+                            </div>
+                            <div class="col-2">
+                                {{objectNumber}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="float-right">
+                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-success" (click)="submit()">
+                        Générer des images
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
