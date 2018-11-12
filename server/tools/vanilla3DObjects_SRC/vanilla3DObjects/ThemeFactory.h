@@ -8,6 +8,8 @@ public:
 	void generateShapes(std::vector<AbstractShape*> & objects);
 	AbstractShape* generateShape();
     bool checkForCollision(const glm::vec3 & coords);
+private: 
+	short const MIN_DISTANCE = 12;
 };
 #endif
 

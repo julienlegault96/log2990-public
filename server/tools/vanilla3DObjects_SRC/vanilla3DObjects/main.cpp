@@ -36,6 +36,15 @@ void help()
 		<< "\t les fichiers de sortie vont commencer par sortie" << std::endl;
 }
 
+bool isTheme(char *argv[])
+{
+	if (argv[1] == "geo") {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
 int main(int argc, char *argv[])
 {
     const short EXPECTED_ARG_LENGTH = 5;
@@ -45,6 +54,8 @@ int main(int argc, char *argv[])
         return -1; 
     }
 
+
+
     //initialiser random
     srand(time(0));
     std::cout << "Generation begin: program seed is " << time(0);
@@ -52,7 +63,7 @@ int main(int argc, char *argv[])
 	Fenetre fenetre;
 	// allouer des ressources et définir le contexte OpenGL
 	const std::string absoluteRef = getAbsolutePath(argv[0]);
-	fenetre.initialiser(absoluteRef, false, std::stoi(argv[2]), argv[3]);
+	fenetre.initialiser(absoluteRef, isTheme(argv), std::stoi(argv[2]), argv[3]);
     fenetre.genererMultivue((absoluteRef+ argv[4]).data());
 
    bool boucler = true;

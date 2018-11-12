@@ -4,7 +4,7 @@
 #include"Default3DProgramState.h"
 #include "Camera.h"
 #include "Planet.h"
-#include "Spaceship.h"
+//#include "Spaceship.h"
 #include "Image.h"
 
 // variables pour l'utilisation des nuanceurs
@@ -12,6 +12,7 @@ GLuint progBase;  // le programme de nuanceurs de base
 GLuint ubo[3];
 
 GLint locNormal;
+GLint locVertex = -1;
 GLint locColor = -1;
 GLint locmatrModel = -1;
 GLint locmatrVisu = -1;
