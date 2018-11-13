@@ -95,8 +95,7 @@ Sunny::Sunny(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat
 	shapes_.push_back(
 		new Shape(
 			Shapelist::Tetrahedre,
-			//GRIS_CLAIR_POUR_TEXTURES,
-			glm::vec4(0.5, 0.5, 0.5, 1.0), //gris
+			GRIS_CLAIR_POUR_TEXTURES,
 			coords_ + glm::vec3(-scale_ / 4, scale_ / 4, scale_ / 4),
 			rotationAxis_ + glm::vec3(0.0, 0.0, 7),
 			rotation_,
