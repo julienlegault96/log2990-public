@@ -26,9 +26,12 @@ public:
 
 private:
     short const MOD_COUNT = 7;
+    short const MIN_OBJECT_AMOUNT = 10;
+    short const MAX_OBJECT_AMOUNT = 200;
     const char ADD_PARAMETER = 'a';
     const char SUP_PARAMETER = 's';
     const char COL_PARAMETER = 'c';
+    
     std::string _banString;
     AbstractFactory *factory_;
     std::vector<AbstractShape*> objects_ = {};

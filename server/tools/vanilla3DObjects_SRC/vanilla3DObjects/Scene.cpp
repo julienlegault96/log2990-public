@@ -13,11 +13,17 @@ void Scene::accept(Drawer  *drawer)
 }
 Scene::Scene(int numberShapes, bool theme) : numberShapes_(numberShapes), theme_(theme)
 {
-	if (this->theme_)
-		this->factory_ = new ThemeFactory(numberShapes_, dimBoite_);
-	else
-		this->factory_ = new GeoFactory(numberShapes_, dimBoite_);
-    factory_->generateShapes(this->objects_);
+    if (numberShapes_ < MIN_OBJECT_AMOUNT || numberShapes_ > MAX_OBJECT_AMOUNT) {
+        throw std::invalid_argument("the amount of objects you can ask of the program must be between 10 and 200");
+    }
+
+    if (theme_) {
+        factory_ = new ThemeFactory(numberShapes_, dimBoite_);
+    }
+    else {
+        factory_ = new GeoFactory(numberShapes_, dimBoite_);
+    }
+    factory_->generateShapes(objects_);
 }
 
 void Scene::parseModOptions(const std::string & optionString) {
@@ -42,10 +48,10 @@ void Scene::modify()
     }
     for (int i = 0; i < MOD_COUNT; i++)
     {
-        int index = rand() % this->numberShapes_;
+        int index = rand() % numberShapes_;
         // only modify unmodified shapes
-        while (this->objects_.at(index)->isModded()) {
-            index = rand() % this->numberShapes_;
+        while (objects_.at(index)->isModded()) {
+            index = rand() % numberShapes_;
         }
 
         Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
@@ -75,7 +81,7 @@ void Scene::changeColor(int index) {
    /* glm::vec4 newColor;
     do {
         newColor = glm::vec4(factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), 1);
-    } while (this->objects_.at(index)->getColor() == newColor);
+    } while (objects_.at(index)->getColor() == newColor);
     objects_.at(index)->setColor(newColor);*/
 }
 
@@ -84,6 +90,6 @@ void Scene::deleteShape(int index) {
 }
 
 void Scene::addShape() {
-    factory_->addShape(this->objects_);
+    factory_->addShape(objects_);
     objects_.at(numberShapes_++)->setModified();
 }
