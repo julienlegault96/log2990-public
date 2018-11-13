@@ -141,6 +141,7 @@
     <ClInclude Include="inf2705-texture.h" />
     <ClInclude Include="inf2705-theiere.h" />
     <ClInclude Include="CompositeShape.h" />
+    <ClInclude Include="ObjectLoc.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Shape.h" />
@@ -162,8 +163,11 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageHeader.cpp" />
     <ClCompile Include="CompositeShape.cpp" />
+    <ClCompile Include="inf2705-forme.cpp" />
+    <ClCompile Include="ObjectLoc.cpp" />
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="ThemeFactory.cpp" />
