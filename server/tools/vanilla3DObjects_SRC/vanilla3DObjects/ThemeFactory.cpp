@@ -1,5 +1,6 @@
 #include "ThemeFactory.h"
 #include "Planet.h"
+#include "Asteroid.h"
 // #include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
@@ -17,7 +18,7 @@ void ThemeFactory::generateShapes(std::vector<AbstractShape*>& objects)
 
 AbstractShape * ThemeFactory::generateShape()
 {
-	ShapeThemelist type = ShapeThemelist(rand() % ShapeThemelist::Saturn + 1);
+    CompositeShape* generatedObject = nullptr;
 	glm::vec4 color(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
 
 	glm::vec3 translate(0, 0, 0);
@@ -25,8 +26,20 @@ AbstractShape * ThemeFactory::generateShape()
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
 
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
-	CompositeShape *newPlanet = new Planet(type, translate, color, generateFloat(0, 360), rotate, scale);
-	return newPlanet;
+
+    //TODO remettre random
+    switch (possibleShapes(possibleShapes::asteroid/*rand() % possibleShapes::enumSize*/)) {
+    case asteroid:
+        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+        break;
+    case planet:
+        //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
+        break;
+    default:
+        throw std::exception("shape was not listed in the possible shapes");
+    };
+    
+    return generatedObject;
 }
 
 bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
