@@ -9,7 +9,7 @@ public:
 	AbstractShape* generateShape();
     bool checkForCollision(const glm::vec3 & coords);
 private: 
-    enum possibleShapes { asteroid, planet, flyingSaucer, alienShip, enumSize };
+    enum possibleShapes { asteroid, planet, flyingSaucer, alienShip, enumSize, fusee };
 	short const MIN_DISTANCE = 12;
 };
 #endif
