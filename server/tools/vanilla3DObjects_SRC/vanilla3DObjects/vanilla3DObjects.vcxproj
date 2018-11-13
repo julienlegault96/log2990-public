@@ -135,6 +135,7 @@
     <ClInclude Include="Default3DProgramState.h" />
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="FlyingSaucer.h" />
+    <ClInclude Include="Fusee.h" />
     <ClInclude Include="GeoFactory.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageHeader.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="FlyingSaucer.cpp" />
+    <ClCompile Include="Fusee.cpp" />
     <ClCompile Include="GeoFactory.cpp" />
     <ClCompile Include="inf2701-fenetre.cpp" />
     <ClCompile Include="Default3DProgramState.cpp" />

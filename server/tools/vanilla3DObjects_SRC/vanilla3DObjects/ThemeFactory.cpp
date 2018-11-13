@@ -3,6 +3,7 @@
 #include "Asteroid.h"
 #include "AlienShip.h"
 #include "FlyingSaucer.h"
+#include "Sun.h"
 #include "Fusee.h"
 // #include "Spaceship.h"
 
@@ -31,7 +32,7 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-	switch (possibleShapes(possibleShapes::flyingSaucer/*rand() % possibleShapes::enumSize*/)){
+	switch (possibleShapes(rand() % possibleShapes::enumSize)){
     case asteroid:
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
