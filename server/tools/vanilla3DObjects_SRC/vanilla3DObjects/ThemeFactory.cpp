@@ -3,6 +3,7 @@
 #include "Asteroid.h"
 #include "AlienShip.h"
 #include "FlyingSaucer.h"
+#include "Sun.h"
 // #include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
@@ -30,7 +31,7 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-    switch (possibleShapes(possibleShapes::flyingSaucer/*rand() % possibleShapes::enumSize*/)) {
+	switch (possibleShapes(possibleShapes::flyingSaucer/*rand() % possibleShapes::enumSize*/)){
     case asteroid:
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
@@ -40,6 +41,14 @@ AbstractShape * ThemeFactory::generateShape()
     case planet:
         //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
         break;
+	case sun:
+		if (isSun_ == false) {
+			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
+			isSun_ = true;
+			break;
+		}
+		else
+			break;
 	case flyingSaucer:
 		glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
 		glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));

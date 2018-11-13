@@ -96,6 +96,9 @@
     <ClInclude Include="AlienShip.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Sun.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Image.cpp">
@@ -159,6 +162,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="AlienShip.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sun.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
