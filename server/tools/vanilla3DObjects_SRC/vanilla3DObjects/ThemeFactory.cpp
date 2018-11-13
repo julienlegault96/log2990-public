@@ -3,6 +3,8 @@
 #include "Asteroid.h"
 #include "AlienShip.h"
 #include "FlyingSaucer.h"
+#include "Sun.h"
+#include "Fusee.h"
 // #include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
@@ -41,10 +43,22 @@ AbstractShape * ThemeFactory::generateShape()
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
         break;
+	case sun:
+		if (isSun_ == false) {
+			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
+			isSun_ = true;
+			break;
+		}
+		else
+			break;
 	case flyingSaucer:
 		glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 		glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 0.2);
 		generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
+		break;
+	case fusee:
+		generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
+
 		break;
     default:
         throw std::exception("shape was not listed in the possible shapes");
