@@ -32,7 +32,7 @@ AbstractShape * ThemeFactory::generateShape()
     //TODO remettre random
     switch (possibleShapes(possibleShapes::flyingSaucer/*rand() % possibleShapes::enumSize*/)) {
     case asteroid:
-        //generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
 	case alienShip:
 		generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
@@ -54,7 +54,6 @@ AbstractShape * ThemeFactory::generateShape()
 
 bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
 {
-	bool collision = false;
 	double distance = 0;
 	for (AbstractShape* shape : shippingContainer_) {
 		distance =
@@ -62,8 +61,7 @@ bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
 			pow(shape->getCoordinates().y - coords.y, 2) +
 			pow(shape->getCoordinates().y - coords.y, 2);
 
-		collision = distance < MIN_DISTANCE * scalingFactor_;
-		if (collision) { break; }
+        if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
 	}
-	return collision;
+	return false;
 }
