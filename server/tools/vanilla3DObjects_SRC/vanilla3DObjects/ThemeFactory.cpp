@@ -1,6 +1,7 @@
 #include "ThemeFactory.h"
 #include "Planet.h"
 #include "Asteroid.h"
+#include "AlienShip.h"
 #include "FlyingSaucer.h"
 // #include "Spaceship.h"
 
@@ -33,6 +34,9 @@ AbstractShape * ThemeFactory::generateShape()
     case asteroid:
         //generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
+	case alienShip:
+		generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
+		break;
     case planet:
         //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
         break;
