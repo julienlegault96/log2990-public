@@ -48,6 +48,9 @@ public:
    void Scale(GLfloat scale) {
 	 matr_.top() = glm::scale(matr_.top(), glm::vec3(scale, scale, scale));
    }
+   void Scale(glm::vec3 scale) {
+	   matr_.top() = glm::scale(matr_.top(), scale);
+   }
    void Translate( GLfloat tx, GLfloat ty, GLfloat tz )
    { matr_.top() = glm::translate( matr_.top(), glm::vec3(tx,ty,tz) ); }
    void Translate(glm::vec3 move) {

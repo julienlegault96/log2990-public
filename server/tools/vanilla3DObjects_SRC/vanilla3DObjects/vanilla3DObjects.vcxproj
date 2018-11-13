@@ -95,6 +95,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>R:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\lib\onecore\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,6 +133,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Default3DProgramState.h" />
     <ClInclude Include="Drawer.h" />
+    <ClInclude Include="FlyingSaucer.h" />
     <ClInclude Include="GeoFactory.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageHeader.h" />
@@ -159,6 +161,7 @@
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawer.cpp" />
+    <ClCompile Include="FlyingSaucer.cpp" />
     <ClCompile Include="GeoFactory.cpp" />
     <ClCompile Include="inf2701-fenetre.cpp" />
     <ClCompile Include="Default3DProgramState.cpp" />

@@ -1,6 +1,7 @@
 #include "ThemeFactory.h"
 #include "Planet.h"
 #include "Asteroid.h"
+#include "FlyingSaucer.h"
 // #include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
@@ -28,13 +29,18 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-    switch (possibleShapes(possibleShapes::asteroid/*rand() % possibleShapes::enumSize*/)) {
+    switch (possibleShapes(possibleShapes::flyingSaucer/*rand() % possibleShapes::enumSize*/)) {
     case asteroid:
-        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+        //generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
     case planet:
         //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
         break;
+	case flyingSaucer:
+		glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
+		glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
+		generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
+		break;
     default:
         throw std::exception("shape was not listed in the possible shapes");
     };
