@@ -6,7 +6,7 @@
 #include "Sun.h"
 #include "Fusee.h"
 #include "HeatShield.h"
-// #include "Spaceship.h"
+#include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -33,7 +33,7 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-    switch (possibleShapes::heatShield/*possibleShapes(rand() % possibleShapes::enumSize)*/) {
+    switch (possibleShapes::spaceship/*possibleShapes(rand() % possibleShapes::enumSize)*/) {
     case asteroid:
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
@@ -62,6 +62,9 @@ AbstractShape * ThemeFactory::generateShape()
 		break;
 	case heatShield:
 		generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
+		break;
+	case spaceship:
+		generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
 		break;
     default:
         throw std::exception("shape was not listed in the possible shapes");

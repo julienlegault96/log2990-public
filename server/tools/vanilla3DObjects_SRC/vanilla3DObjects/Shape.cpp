@@ -46,6 +46,10 @@ void Shape::init(Shapelist type) {
 	case(HeatShield):
 		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
 		break;
+
+	case(Theiere):
+		forme_ = new FormeTheiere();
+		break;
     }
 }
 
