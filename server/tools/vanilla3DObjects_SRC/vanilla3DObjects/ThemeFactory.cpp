@@ -56,7 +56,7 @@ AbstractShape * ThemeFactory::generateShape()
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (possibleShapes::sun/*generateCoherentContentChoice()*/) {
+    switch (possibleShapes::asteroid/*generateCoherentContentChoice()*/) {
         case asteroid:
             generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
             break;
