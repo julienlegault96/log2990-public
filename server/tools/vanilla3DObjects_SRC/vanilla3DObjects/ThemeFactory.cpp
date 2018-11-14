@@ -1,4 +1,5 @@
 #include "ThemeFactory.h"
+#include "Default3DProgramState.h"
 #include "Planet.h"
 #include "Asteroid.h"
 #include "AlienShip.h"
@@ -21,6 +22,27 @@ void ThemeFactory::generateShapes(std::vector<AbstractShape*>& objects)
 	}
 }
 
+short ThemeFactory::generateCoherentContentChoice() const {
+
+    short choice;
+    bool ok = false;
+
+    do {
+        // Implement case specific rules;
+        choice = rand() % possibleShapes::enumSize;
+        switch (choice) {
+            case sun:
+                ok = !sunPresent_;
+                break;
+            default:
+                ok = true;
+                break;
+        };
+    } while (!ok);
+
+    return choice;
+}
+
 AbstractShape * ThemeFactory::generateShape()
 {
     CompositeShape* generatedObject = nullptr;
@@ -32,7 +54,9 @@ AbstractShape * ThemeFactory::generateShape()
 
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
+    Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
+<<<<<<< HEAD
     switch (possibleShapes::fusee/*possibleShapes(rand() % possibleShapes::enumSize)*/) {
     case asteroid:
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
@@ -46,8 +70,23 @@ AbstractShape * ThemeFactory::generateShape()
         break;
 	case sun:
 		if (isSun_ == false) {
+=======
+    switch (possibleShapes::sun/*generateCoherentContentChoice()*/) {
+        case asteroid:
+            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+            break;
+	    case alienShip:
+		    generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+        case planet:
+            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+            //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
+            break;
+	    case sun:
+>>>>>>> 5c2ca7830df2816fd7f756020ae088edfa1de95d
 			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
-			isSun_ = true;
+			sunPresent_ = true;
+            state->LightSource.position = glm::vec4(translate, 1.0);
 			break;
 		}
 		else

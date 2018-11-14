@@ -12,6 +12,9 @@ private:
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip, enumSize, sun, fusee, heatShield, spaceship };
 	short const MIN_DISTANCE = 12;
 	bool isSun_ = false;
+	bool sunPresent_ = false;
+
+    short generateCoherentContentChoice() const;
 };
 #endif
 

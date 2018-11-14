@@ -68,7 +68,7 @@ class Default3DProgramState : public Singleton<Default3DProgramState>
                                                 glm::vec4(0.2, 0.2, 0.2, 1.0),
                                                 glm::vec4(1.0, 1.0, 1.0, 1.0),
                                                 glm::vec4(1.0, 1.0, 1.0, 1.0),
-                                                20.0 
+                                                10.0 
                                             };
 
         LightModelParameters LightModel = { glm::vec4(0,0,0,1), false, false };
