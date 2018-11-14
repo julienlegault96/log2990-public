@@ -6,13 +6,26 @@ Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotatio
 {
 	shapes_.push_back(
 		new Shape(
-			Shapelist::HeatShield,
+			Shapelist::ConeTronque,
 			GRIS_CLAIR_POUR_TEXTURES,
-			coords_,
+			glm::vec3(0.0),
 			rotationAxis_,
-			rotation_,
-			scale_ * (GLfloat) 0.5
+            (GLfloat) 0,
+			(GLfloat) 1
 		)
 	);
+
+    shapes_.push_back(
+        new Shape(
+            Shapelist::Sphere,
+            //teinte rouge
+            GRIS_CLAIR_POUR_TEXTURES + glm::vec4(0.3, 0.0, 0.0, 0.0),
+            glm::vec3(0.0, 0.0 , 0.0),
+            rotationAxis_,
+            (GLfloat) 0,
+            (GLfloat) 1,
+            glm::vec3(1, 1, 0.2)
+        )
+    );
 
 }

@@ -8,7 +8,7 @@
 
 #include "AbstractShape.h"
 
-enum Shapelist {Tore, Sphere, Cone, Cube, Tetrahedre, Cylindre, Theiere, HeatShield};
+enum Shapelist {Tore, Sphere, Cone, Cube, Tetrahedre, Cylindre, Theiere, ConeTronque};
 
 class  Shape : public AbstractShape {
 public:

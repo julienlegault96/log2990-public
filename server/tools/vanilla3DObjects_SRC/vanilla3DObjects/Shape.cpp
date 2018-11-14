@@ -43,7 +43,7 @@ void Shape::init(Shapelist type) {
         forme_ = new FormeTetraedre(1.0, true);
         break;
 
-	case(HeatShield):
+	case(ConeTronque):
 		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
 		break;
 
