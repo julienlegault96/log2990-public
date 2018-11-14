@@ -1,4 +1,5 @@
 #include "ThemeFactory.h"
+#include "Default3DProgramState.h"
 #include "Planet.h"
 #include "Asteroid.h"
 #include "AlienShip.h"
@@ -31,7 +32,7 @@ short ThemeFactory::generateCoherentContentChoice() const {
         choice = rand() % possibleShapes::enumSize;
         switch (choice) {
             case sun:
-                ok = !isSun_;
+                ok = !sunPresent_;
                 break;
             default:
                 ok = true;
@@ -53,8 +54,9 @@ AbstractShape * ThemeFactory::generateShape()
 
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
+    Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (possibleShapes::spaceship/*(generateCoherentContentChoice())*/) {
+    switch (possibleShapes::sun/*generateCoherentContentChoice()*/) {
         case asteroid:
             generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
             break;
@@ -67,7 +69,8 @@ AbstractShape * ThemeFactory::generateShape()
             break;
 	    case sun:
 			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
-			isSun_ = true;
+			sunPresent_ = true;
+            state->LightSource.position = glm::vec4(translate, 1.0);
 			break;
 	    case flyingSaucer:
 		    glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
