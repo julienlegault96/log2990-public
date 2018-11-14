@@ -3,13 +3,7 @@
 
 Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
     : AbstractShape(coords, rotationAxis, rotation, scale), color_(color) {
-	deformation_ = glm::vec3(1, 1, 1);
     init(type);
-}
-
-Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec3 deformation) 
-	: AbstractShape(coords, rotationAxis, rotation, scale), color_(color), deformation_(deformation) {
-	init(type);
 }
 
 Shape::~Shape()
@@ -42,14 +36,6 @@ void Shape::init(Shapelist type) {
     case(Tetrahedre):
         forme_ = new FormeTetraedre(1.0, true);
         break;
-
-	case(HeatShield):
-		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
-		break;
-
-	case(Theiere):
-		forme_ = new FormeTheiere();
-		break;
     }
 }
 
@@ -62,11 +48,6 @@ void Shape::setColor(glm::vec4 baseColor)
 glm::vec4 Shape::getColor() const
 {
 	return color_;
-}
-
-glm::vec3 Shape::getDeformation() const
-{
-	return deformation_;
 }
 
 void Shape::accept(const Drawer* visitor) const 

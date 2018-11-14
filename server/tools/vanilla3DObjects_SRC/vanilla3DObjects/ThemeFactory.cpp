@@ -1,12 +1,7 @@
 #include "ThemeFactory.h"
 #include "Planet.h"
 #include "Asteroid.h"
-#include "AlienShip.h"
-#include "FlyingSaucer.h"
-#include "Sun.h"
-#include "Fusee.h"
-#include "HeatShield.h"
-#include "Spaceship.h"
+// #include "Spaceship.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -33,39 +28,13 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-    switch (possibleShapes::spaceship/*possibleShapes(rand() % possibleShapes::enumSize)*/) {
+    switch (possibleShapes(possibleShapes::asteroid/*rand() % possibleShapes::enumSize*/)) {
     case asteroid:
         generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         break;
-	case alienShip:
-		generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
-		break;
     case planet:
-        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
         //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
         break;
-	case sun:
-		if (isSun_ == false) {
-			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
-			isSun_ = true;
-			break;
-		}
-		else
-			break;
-	case flyingSaucer:
-		glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-		glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 0.2);
-		generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
-		break;
-	case fusee:
-		generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
-		break;
-	case heatShield:
-		generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
-		break;
-	case spaceship:
-		generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
-		break;
     default:
         throw std::exception("shape was not listed in the possible shapes");
     };
@@ -75,6 +44,7 @@ AbstractShape * ThemeFactory::generateShape()
 
 bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
 {
+	bool collision = false;
 	double distance = 0;
 	for (AbstractShape* shape : shippingContainer_) {
 		distance =
@@ -82,7 +52,8 @@ bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
 			pow(shape->getCoordinates().y - coords.y, 2) +
 			pow(shape->getCoordinates().y - coords.y, 2);
 
-        if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
+		collision = distance < MIN_DISTANCE * scalingFactor_;
+		if (collision) { break; }
 	}
-	return false;
+	return collision;
 }

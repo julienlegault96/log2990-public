@@ -27,11 +27,11 @@ public:
 private:
     void validateAngles();
     
-    double theta_;         // angle de rotation de la caméra (coord. sphériques)
-    double phi_;           // angle de rotation de la caméra (coord. sphériques)
-    double previousTheta_;
-    double previousPhi_;
-    double dist_;          // distance (coord. sphériques)
+    double theta;         // angle de rotation de la caméra (coord. sphériques)
+    double phi;           // angle de rotation de la caméra (coord. sphériques)
+    double previousTheta;
+    double previousPhi;
+    double dist;          // distance (coord. sphériques)
 };
 
 #endif
