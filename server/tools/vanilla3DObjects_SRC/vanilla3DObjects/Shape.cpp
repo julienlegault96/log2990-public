@@ -22,7 +22,7 @@ void Shape::init(Shapelist type) {
         break;
 
     case(Cone):
-        forme_ = new FormeCylindre(0.5, 0.0, 0.8, 10, 1, true);
+        forme_ = new FormeCylindre(0.4, 0.0, 0.6, 10, 1, true);
         break;
 
     case(Cube):
@@ -36,6 +36,14 @@ void Shape::init(Shapelist type) {
     case(Tetrahedre):
         forme_ = new FormeTetraedre(1.0, true);
         break;
+
+	case(ConeTronque):
+		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
+		break;
+
+	case(Theiere):
+		forme_ = new FormeTheiere();
+		break;
     }
 }
 

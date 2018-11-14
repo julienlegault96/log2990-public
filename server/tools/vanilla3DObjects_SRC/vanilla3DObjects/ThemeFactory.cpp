@@ -16,6 +16,27 @@ void ThemeFactory::generateShapes(std::vector<AbstractShape*>& objects)
 	}
 }
 
+short ThemeFactory::generateCoherentContentChoice() const {
+
+    short choice;
+    bool ok = false;
+
+    do {
+        // Implement case specific rules;
+        choice = rand() % possibleShapes::enumSize;
+        switch (choice) {
+            case sun:
+                ok = !isSun_;
+                break;
+            default:
+                ok = true;
+                break;
+        };
+    } while (!ok);
+
+    return choice;
+}
+
 AbstractShape * ThemeFactory::generateShape()
 {
     CompositeShape* generatedObject = nullptr;
@@ -28,15 +49,37 @@ AbstractShape * ThemeFactory::generateShape()
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     //TODO remettre random
-    switch (possibleShapes(possibleShapes::asteroid/*rand() % possibleShapes::enumSize*/)) {
-    case asteroid:
-        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
-        break;
-    case planet:
-        //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
-        break;
-    default:
-        throw std::exception("shape was not listed in the possible shapes");
+    switch (possibleShapes::spaceship/*(generateCoherentContentChoice())*/) {
+        case asteroid:
+            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+            break;
+	    case alienShip:
+		    generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+        case planet:
+            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+            //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
+            break;
+	    case sun:
+			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
+			isSun_ = true;
+			break;
+	    case flyingSaucer:
+		    glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
+		    glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 0.2);
+		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
+		    break;
+	    case fusee:
+		    generatedObject = new Fusee(translate, rotate, 0, scale);		// Arguments have to be changed. Just for test.
+		    break;
+	    case heatShield:
+		    generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+	    case spaceship:
+		    generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+        default:
+            throw std::exception("shape was not listed in the possible shapes");
     };
     
     return generatedObject;

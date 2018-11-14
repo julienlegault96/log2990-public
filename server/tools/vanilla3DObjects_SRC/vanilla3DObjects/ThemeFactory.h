@@ -11,6 +11,9 @@ public:
 private: 
     enum possibleShapes { asteroid, planet, enumSize };
 	short const MIN_DISTANCE = 12;
+	bool isSun_ = false;
+
+    short generateCoherentContentChoice() const;
 };
 #endif
 
