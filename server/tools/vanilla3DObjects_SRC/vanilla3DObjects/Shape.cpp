@@ -42,6 +42,10 @@ void Shape::init(Shapelist type) {
     case(Tetrahedre):
         forme_ = new FormeTetraedre(1.0, true);
         break;
+
+	case(HeatShield):
+		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
+		break;
     }
 }
 
