@@ -3,30 +3,37 @@
 
 TeslaCar::TeslaCar(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale) :CompositeShape(coords, rotationAxis, rotation, scale) {
 
-glm::vec4 colorCyl = glm::vec4(0.2, 0.2, 0.5, 1);
-glm::vec4 colorConeH = glm::vec4(0.5, 0.5, 0.2, 1);
-glm::vec4 colorConeB = glm::vec4(0.2, 0.5, 0.2, 1);
-glm::vec4 colorConeD = glm::vec4(1, 0.5, 0.2, 1);
-/*
+glm::vec4 colorSph = glm::vec4(0.6, 0.5, 0.4, 1);
+glm::vec4 colorH = glm::vec4(0.2, 0.2, 0.2, 0.7);
+glm::vec3 deformationCyl = glm::vec3(0.4, 1.2, 0.4);
+glm::vec3 deformationSph = glm::vec3(1.0, 0.5, 0.5);
+glm::vec3 deformationH = glm::vec3(1.0, 1.0, 1.0);
+glm::vec4 colorCyl = glm::vec4(0.0, 0.4, 0.3, 1);
+
+glm::vec3 axisRotation = glm::vec3(1.0, 0.0, 0.0);
+GLfloat rotate = 90;
+
 shapes_.push_back(
 	new Shape(
 		Shapelist::Sphere,
-		colorCyl,
+		colorSph,
 		coords_,
 		rotationAxis_,
 		rotation_,
-		scale_ * (GLfloat) 1.0
+		scale_ * (GLfloat) 1.2,
+		deformationSph
 	)
 );
 
 shapes_.push_back(
 	new Shape(
-		Shapelist::Cylindre,
-		colorConeH,
-		coords_ - glm::vec3(0.0, 0.0, scale_ * (GLfloat) 0.6),			//  + glm::vec3(0.0, 0.0, scale_ * (GLfloat) 0.6)
+		Shapelist::Sphere,
+		colorH,
+		coords_ + glm::vec3(scale_ * (GLfloat) 0.1, 0.0, scale_ * (GLfloat) 0.15),
 		rotationAxis_,
-		rotation_,
-		scale_ * (GLfloat) 1.0
+		rotation_ ,
+		scale_ * (GLfloat) 0.6,
+		deformationH
 	)
 );
 
@@ -34,23 +41,26 @@ shapes_.push_back(
 	new Shape(
 		Shapelist::Cylindre,
 		colorCyl,
-		coords_ + glm::vec3(0.0, 0.0, scale_ * (GLfloat) 0.6),
-		rotationAxis_,
-		rotation_,
-		scale_ * (GLfloat) 1.0
+		coords_ + glm::vec3(scale_ * (GLfloat) 0.3, scale_ * (GLfloat) 0.35, scale_ * (GLfloat) -0.1),
+		axisRotation,
+		rotate,
+		scale_ * (GLfloat) 1.0,
+		deformationCyl
 	)
 );
-*/
+
 shapes_.push_back(
 	new Shape(
 		Shapelist::Cylindre,
-		colorConeD,
-		DEFAULT_COORDS - glm::vec3(0.0, 0.0, 0.6),
-		DEFAULT_ROTATION_AXIS,
-		DEFAULT_ROTATION,
-		glm::vec3(0.5,0.5,0.01)
+		colorCyl,
+		coords_ - glm::vec3(scale_ * (GLfloat) 0.3, scale_ * (GLfloat) -0.35, scale_ * (GLfloat)0.1),
+		axisRotation,
+		rotate,
+		scale_ * (GLfloat) 1.0,
+		deformationCyl
 	)
 );
+
 }
 
 TeslaCar::~TeslaCar() {
