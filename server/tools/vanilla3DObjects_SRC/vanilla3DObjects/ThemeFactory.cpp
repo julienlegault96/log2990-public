@@ -13,6 +13,7 @@
 #include "SpaceStation.h"
 #include "TeslaCar.h"
 #include "Mars.h"
+#include "Robot.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -62,7 +63,10 @@ AbstractShape * ThemeFactory::generateShape()
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (generateCoherentContentChoice()) {
+    switch (possibleShapes::robot) {
+		case robot:
+			generatedObject = new Robot(translate, rotate, rotateAngle, scale);
+			break;
         case asteroid:
             generatedObject = new Asteroid(translate, rotate, rotateAngle, scale);
             break;

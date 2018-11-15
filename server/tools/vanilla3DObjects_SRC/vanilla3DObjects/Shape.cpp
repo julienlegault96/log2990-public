@@ -3,12 +3,11 @@
 
 Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
     : AbstractShape(coords, rotationAxis, rotation, scale), color_(color) {
-	deformation_ = glm::vec3(1, 1, 1);
     init(type);
 }
 
-Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec3 deformation) 
-	: AbstractShape(coords, rotationAxis, rotation, scale), color_(color), deformation_(deformation) {
+Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, glm::vec3 deformation) 
+	: AbstractShape(coords, rotationAxis, rotation, deformation), color_(color) {
 	init(type);
 }
 
@@ -48,9 +47,6 @@ void Shape::init(Shapelist type) {
     case (Theiere):
         forme_ = new FormeTheiere();
         break;
-    case(Disque):
-		forme_ = new FormeDisque(1.4, 1.5, 0.5, true);			
-		break;
     }
 	 
 
@@ -65,11 +61,6 @@ void Shape::setColor(glm::vec4 baseColor)
 glm::vec4 Shape::getColor() const
 {
 	return color_;
-}
-
-glm::vec3 Shape::getDeformation() const
-{
-	return deformation_;
 }
 
 void Shape::accept(const Drawer* visitor) const 
