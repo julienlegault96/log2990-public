@@ -11,6 +11,8 @@
 #include "Satelite.h"
 #include "EntreprisingSpaceship.h"
 #include "SpaceStation.h"
+#include "TeslaCar.h"
+#include "Mars.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -71,31 +73,37 @@ AbstractShape * ThemeFactory::generateShape()
             generatedObject = new Planet(rand(), translate, baseColor, rotateAngle, rotate, scale);
             break;
 	    case sun:
-			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
+			generatedObject = new Sunny(translate, rotate, rotateAngle, scale);
 			sunPresent_ = true;
             state->LightSource.position = glm::vec4(translate, 1.0);
 			break;
 	    case flyingSaucer:		    
-		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, baseColor, secondaryColor);
+		    generatedObject = new FlyingSaucer(translate, rotate, rotateAngle, scale, baseColor, secondaryColor);
 		    break;
 	    case fusee:
-		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);
+		    generatedObject = new Fusee(translate, rotate, rotateAngle, scale);
 		    break;
 	    case heatShield:
-		    generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
+		    generatedObject = new Heatshield(translate, rotate, rotateAngle, scale);
 		    break;
 	    case spaceship:
-		    generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
+		    generatedObject = new Spaceship(translate, rotate, rotateAngle, scale);
 		    break;
 		case satellite:
-			generatedObject = new Satellite(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
+			generatedObject = new Satellite(translate, rotate, rotateAngle, scale, secondaryColor, baseColor);
 			break;
 		case entreprisingSpaceship:
-			generatedObject = new EntreprisingSpaceship(translate, rotate, generateFloat(0, 360), scale, baseColor);
+			generatedObject = new EntreprisingSpaceship(translate, rotate, rotateAngle, scale, baseColor);
 			break;
 		case spaceStation:
-			generatedObject = new SpaceStation(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
+			generatedObject = new SpaceStation(translate, rotate, rotateAngle, scale, secondaryColor, baseColor);
 			break;
+		case teslaCar:
+		    generatedObject = new TeslaCar(translate, rotate, rotateAngle, scale);
+		    break;
+	    case mars:
+		    generatedObject = new Mars(translate, rotate, rotateAngle, scale);
+		    break;
         default:
             throw std::exception("shape was not listed in the possible shapes");
     };

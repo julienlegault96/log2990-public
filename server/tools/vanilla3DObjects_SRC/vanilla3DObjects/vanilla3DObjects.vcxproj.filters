@@ -114,6 +114,15 @@
     <ClInclude Include="SpaceStation.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Mars.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="TeslaCar.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Image.cpp">
@@ -198,6 +207,12 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="SpaceStation.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mars.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TeslaCar.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
