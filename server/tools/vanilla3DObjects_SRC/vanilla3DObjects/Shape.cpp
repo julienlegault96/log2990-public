@@ -3,11 +3,12 @@
 
 Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
     : AbstractShape(coords, rotationAxis, rotation, scale), color_(color) {
+	deformation_ = glm::vec3(1, 1, 1);
     init(type);
 }
 
-Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, glm::vec3 deformation) 
-	: AbstractShape(coords, rotationAxis, rotation, deformation), color_(color) {
+Shape::Shape(Shapelist type, glm::vec4 color, glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec3 deformation) 
+	: AbstractShape(coords, rotationAxis, rotation, scale), color_(color), deformation_(deformation) {
 	init(type);
 }
 
@@ -20,14 +21,14 @@ void Shape::init(Shapelist type) {
     switch (type)
     {
 	case(Tore):
-		forme_ = new FormeTore(0.5, 8, 8, true);
+		forme_ = new FormeTore(0.1, 5.0, 4, 64);	
 		break;
     case(Sphere):
         forme_ = new FormeSphere(0.5, 8, 8, true);
         break;
 
     case(Cone):
-        forme_ = new FormeCylindre(0.5, 0.0, 0.8, 10, 1, true);
+        forme_ = new FormeCylindre(0.4, 0.0, 0.6, 10, 1, true);
         break;
 
     case(Cube):
@@ -41,15 +42,18 @@ void Shape::init(Shapelist type) {
     case(Tetrahedre):
         forme_ = new FormeTetraedre(1.0, true);
         break;
-
-	case(ConeTronque):
-		forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
-		break;
-
-	case(Theiere):
-		forme_ = new FormeTheiere();
+    case (ConeTronque):
+        forme_ = new FormeCylindre(0.50, 0.10, 0.50, 10, 1, true);
+        break;
+    case (Theiere):
+        forme_ = new FormeTheiere();
+        break;
+    case(Disque):
+		forme_ = new FormeDisque(1.4, 1.5, 0.5, true);			
 		break;
     }
+	 
+
 }
 
 void Shape::setColor(glm::vec4 baseColor)
@@ -61,6 +65,11 @@ void Shape::setColor(glm::vec4 baseColor)
 glm::vec4 Shape::getColor() const
 {
 	return color_;
+}
+
+glm::vec3 Shape::getDeformation() const
+{
+	return deformation_;
 }
 
 void Shape::accept(const Drawer* visitor) const 
