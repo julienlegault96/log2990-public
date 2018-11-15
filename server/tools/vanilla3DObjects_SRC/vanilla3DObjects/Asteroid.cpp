@@ -8,10 +8,10 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
         new Shape(
             Shapelist::Cube,
             GRIS_CLAIR_POUR_TEXTURES,
-            glm::vec3(0.2, 0.0, 0.0),
+            glm::vec3(0.1, 0.0, 0.0),
             DEFAULT_ROTATION_AXIS,
             DEFAULT_ROTATION,
-            (GLfloat) 0.7
+            (GLfloat) 0.35
         )
     );
 
@@ -19,10 +19,10 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
         new Shape(
             Shapelist::Sphere,
             GRIS_CLAIR_POUR_TEXTURES,
-            glm::vec3(-0.2, 0.0, 0.0),
+            glm::vec3(-0.1, 0.0, 0.0),
             glm::vec3(0.0, 0.0, -77),
             rotation_,
-            (GLfloat) 0.54
+            (GLfloat) 0.27
         )
     );
 
@@ -30,10 +30,10 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
         new Shape(
             Shapelist::Sphere,
             GRIS_CLAIR_POUR_TEXTURES,
-            glm::vec3(0.0, 0.0, -0.4),
+            glm::vec3(0.0, 0.0, -0.2),
             glm::vec3(0.0, 0.0, 7),
             rotation_,
-            (GLfloat) 1.2
+            (GLfloat) 0.6
         )
     );
 
@@ -41,10 +41,10 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
         new Shape(
             Shapelist::Sphere,
             GRIS_CLAIR_POUR_TEXTURES,
-            glm::vec3(0.3, 0.3, 0.0),
+            glm::vec3(0.15, 0.15, 0.0),
             glm::vec3(0.0, 0.0, -77),
             rotation_,
-            (GLfloat) 0.5
+            (GLfloat) 0.25
         )
     );
 }
