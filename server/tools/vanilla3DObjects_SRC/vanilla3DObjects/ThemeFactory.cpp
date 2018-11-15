@@ -82,7 +82,7 @@ AbstractShape * ThemeFactory::generateShape()
 		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, baseColor, secondaryColor);
 		    break;
 	    case fusee:
-		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
+		    generatedObject = new Fusee(translate, rotate, 0, scale);
 		    break;
 	    case heatShield:
 		    generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
