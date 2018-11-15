@@ -14,7 +14,7 @@ void GeoFactory::generateShapes(std::vector<AbstractShape*> * objects)
 
 void GeoFactory::generateShape(std::vector<AbstractShape*> * objects)
 {
-	Shapelist type = Shapelist(rand() % Shapelist::ConeTronque + 1);
+	Shapelist type = Shapelist(rand() % Shapelist::Cylindre + 1);
 	glm::vec4 color(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 
 	glm::vec3 translate(0, 0, 0);
