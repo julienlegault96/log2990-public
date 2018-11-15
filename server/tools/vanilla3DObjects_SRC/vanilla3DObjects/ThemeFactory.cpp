@@ -14,16 +14,14 @@
 #include "TeslaCar.h"
 #include "Mars.h"
 
-ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
+ThemeFactory::ThemeFactory(const int & numberOfObject): AbstractFactory(numberOfObject){ }
 
-void ThemeFactory::generateShapes(std::vector<AbstractShape*>& objects)
+void ThemeFactory::generateShapes(std::vector<AbstractShape*>* objects)
 {
-	this->shippingContainer_ = objects;
-	objects.clear();
 	calculateScalingFactor();
 	for (int i = 0; i < this->numberOfObject_; i++)
 	{
-		objects.push_back(generateShape());
+		generateShape(objects);
 	}
 }
 
@@ -48,13 +46,13 @@ short ThemeFactory::generateCoherentContentChoice() const {
     return choice;
 }
 
-AbstractShape * ThemeFactory::generateShape()
+void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 {
     CompositeShape* generatedObject = nullptr;
 	glm::vec4 baseColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 	glm::vec4 secondaryColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 	glm::vec3 translate(0, 0, 0);
-	generateCoordinates(translate);
+	generateCoordinates(translate, objects);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
     GLfloat rotateAngle(generateFloat(0, 360));
 
@@ -107,14 +105,15 @@ AbstractShape * ThemeFactory::generateShape()
         default:
             throw std::exception("shape was not listed in the possible shapes");
     };
-    
-    return generatedObject;
+    if (modMode_) { generatedObject->setModified(); };
+
+    objects->push_back(generatedObject);
 }
 
-bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
+bool ThemeFactory::checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const
 {
 	double distance = 0;
-	for (AbstractShape* shape : shippingContainer_) {
+	for (AbstractShape* shape : *objects) {
         if (shape->isVisible()) {
             distance =
                 pow(shape->getCoordinates().x - coords.x, 2) +

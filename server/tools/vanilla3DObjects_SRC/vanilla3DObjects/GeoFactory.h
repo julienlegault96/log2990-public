@@ -5,10 +5,10 @@
 class GeoFactory : public AbstractFactory
 {
 public:
-    GeoFactory(const int &numberOfObject, const double& dimboite);
-    void generateShapes(std::vector<AbstractShape*> & objects);
-	AbstractShape* generateShape();
-    bool checkForCollision(const glm::vec3 & coords);
+    GeoFactory(const int &numberOfObject);
+    void generateShapes(std::vector<AbstractShape*> * objects);
+	void generateShape(std::vector<AbstractShape*> * objects);
+    bool checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const;
 private:
     short const MIN_DISTANCE = 12;
 };

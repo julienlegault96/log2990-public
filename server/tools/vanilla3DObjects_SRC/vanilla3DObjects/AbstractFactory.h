@@ -8,22 +8,30 @@
 class AbstractShape;
 class AbstractFactory {
 public:
-    AbstractFactory(const int & numberOfObject, const double& dimboite);
-    virtual void generateShapes(std::vector<AbstractShape*> & objects) = 0;
-	virtual AbstractShape* generateShape()=0;
+    AbstractFactory(const int & numberOfObject);
+    virtual void generateShapes(std::vector<AbstractShape*> * objects) = 0;
+	virtual void generateShape(std::vector<AbstractShape*> * objects) = 0;
     float generateFloat(const float & min, const float & max) const;
-    void generateCoordinates(glm::vec3 & coords);
+    void generateCoordinates(glm::vec3 & coords, std::vector<AbstractShape*> * objects);
+
+    int getNumberOfObjects() const;
+    void incrNumberOfObjects();
+    void decrNumberOfObjects();
+
     void calculateScalingFactor();
-    virtual bool checkForCollision(const glm::vec3 & coords)=0;
-	void addShape(std::vector<AbstractShape*> & objects);
+    virtual bool checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const = 0;
+
+	void addShape(std::vector<AbstractShape*> * objects);
 protected:
-    std::vector<AbstractShape*> shippingContainer_;
-    double dimboite_;
-    float scalingFactor_;
-	int numberOfObject_;
+    const int DEFAULT_BOX_DIMENTIONS = 10;
     const float MIN_SIZE_MODIFIER = 0.5;
 	const float MAX_SIZE_MODIFIER = 1.5;
 	const short ALLOCATED_SHAPE_VOLUME = 49;
+
+    bool modMode_ = false;
+    int dimboite_;
+	int numberOfObject_;
+    float scalingFactor_;
 };
 
 #endif

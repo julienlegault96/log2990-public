@@ -1,9 +1,9 @@
 
 #include "AbstractFactory.h"
 
-AbstractFactory::AbstractFactory(const int & numberOfObject, const double& dimboite){
-	this->dimboite_ = dimboite;
-	this->numberOfObject_ = numberOfObject;
+AbstractFactory::AbstractFactory(const int & numberOfObject){
+	dimboite_ = DEFAULT_BOX_DIMENTIONS;
+	numberOfObject_ = numberOfObject;
     calculateScalingFactor();
 }
 
@@ -15,21 +15,40 @@ float AbstractFactory::generateFloat(const float& min, const float& max) const {
     return (num + min);
 }
 
-void AbstractFactory::generateCoordinates(glm::vec3 & coords) {
+void AbstractFactory::generateCoordinates(glm::vec3 & coords, std::vector<AbstractShape*> * objects) {
     do {
         coords.x = generateFloat(-dimboite_ / 2, dimboite_ / 2);
         coords.y = generateFloat(-dimboite_ / 2, dimboite_ / 2);
         coords.z = generateFloat(0, dimboite_ - 1);
-    } while (checkForCollision(coords));
+    } while (checkForCollision(coords, objects));
 }
 
 void AbstractFactory::calculateScalingFactor() {
-    scalingFactor_ = pow(dimboite_, 3) / (ALLOCATED_SHAPE_VOLUME * this->numberOfObject_);
+    scalingFactor_ = pow(dimboite_, 3) / (ALLOCATED_SHAPE_VOLUME * numberOfObject_);
 }
 
-void AbstractFactory::addShape(std::vector<AbstractShape*>& objects)
+int AbstractFactory::getNumberOfObjects() const
 {
-	numberOfObject_++;
-	calculateScalingFactor();
-	objects.push_back(generateShape());
+    return numberOfObject_;
+}
+
+void AbstractFactory::incrNumberOfObjects()
+{
+    modMode_ = true;
+    numberOfObject_++;
+    calculateScalingFactor();
+}
+
+void AbstractFactory::decrNumberOfObjects()
+{
+    modMode_ = true;
+    numberOfObject_--;
+    calculateScalingFactor();
+}
+
+void AbstractFactory::addShape(std::vector<AbstractShape*> * objects)
+{
+    modMode_ = true;
+    incrNumberOfObjects();
+	generateShape(objects);
 }

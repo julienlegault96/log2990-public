@@ -4,10 +4,10 @@
 class ThemeFactory : public AbstractFactory
 {
 public:
-    ThemeFactory(const int & numberOfObject, const double& dimboite);
-	void generateShapes(std::vector<AbstractShape*> & objects);
-	AbstractShape* generateShape();
-    bool checkForCollision(const glm::vec3 & coords);
+    ThemeFactory(const int & numberOfObject);
+	void generateShapes(std::vector<AbstractShape*> * objects);
+	void generateShape(std::vector<AbstractShape*> * objects);
+    bool checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const;
 private: 
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip, sun, fusee, heatShield, spaceship, satellite, entreprisingSpaceship, spaceStation, teslaCar, mars, enumSize};
 	short const MIN_DISTANCE = 12;
