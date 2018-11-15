@@ -290,7 +290,7 @@ void Fenetre::genererMultivue(const char * sortie)
     swap();
 
     //modifier scène
-    /*scene->modify();
+    scene->modify();
 
     afficherScene();
     screenshot((FILENAME + B_POV + MODIFIED).data());
@@ -299,7 +299,7 @@ void Fenetre::genererMultivue(const char * sortie)
     camera.unturn();
     afficherScene();
     screenshot((FILENAME + A_POV + MODIFIED).data());
-    swap();*/
+    swap();
 }
 
 
