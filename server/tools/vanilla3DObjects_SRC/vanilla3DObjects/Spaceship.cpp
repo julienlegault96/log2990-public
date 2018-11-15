@@ -22,7 +22,7 @@ Spaceship::Spaceship(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 			glm::vec3(0., 0., 0.2),
 			glm::vec3(1., 0., 0.),
 			(GLfloat)5,
-			glm::vec3(0.4, 1.6, 0.08)
+			glm::vec3(0.4, 1.0, 0.08)
 		)
 	);
 }
