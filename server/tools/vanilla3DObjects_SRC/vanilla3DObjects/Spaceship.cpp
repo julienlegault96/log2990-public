@@ -11,7 +11,7 @@ Spaceship::Spaceship(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 			DEFAULT_COORDS,
 			DEFAULT_ROTATION_AXIS,
 			DEFAULT_ROTATION,
-			(GLfloat) 0.1
+			(GLfloat) 0.2
 		)
 	);
 
@@ -19,10 +19,10 @@ Spaceship::Spaceship(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 		new Shape(
 			Shapelist::Cube,
 			glm::vec4(0.1, 0.1, 0.1, 1.0),
-			glm::vec3(0., 0., 0.2),
+			glm::vec3(0., 0., 0.4),
 			glm::vec3(1., 0., 0.),
 			(GLfloat)5,
-			glm::vec3(0.4, 1.0, 0.08)
+			glm::vec3(0.8, 2.0, 0.16)
 		)
 	);
 }
