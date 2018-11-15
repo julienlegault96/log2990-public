@@ -9,6 +9,8 @@
 #include "HeatShield.h"
 #include "Spaceship.h"
 #include "Satelite.h"
+#include "EntreprisingSpaceship.h"
+#include "SpaceStation.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -47,8 +49,8 @@ short ThemeFactory::generateCoherentContentChoice() const {
 AbstractShape * ThemeFactory::generateShape()
 {
     CompositeShape* generatedObject = nullptr;
-	glm::vec4 color(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
-
+	glm::vec4 baseColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
+	glm::vec4 secondaryColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 	glm::vec3 translate(0, 0, 0);
 	generateCoordinates(translate);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
@@ -57,7 +59,7 @@ AbstractShape * ThemeFactory::generateShape()
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (possibleShapes::satellite/*generateCoherentContentChoice()*/) {
+    switch (possibleShapes::spaceStation/*generateCoherentContentChoice()*/) {
         case asteroid:
             generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
             break;
@@ -73,10 +75,8 @@ AbstractShape * ThemeFactory::generateShape()
 			sunPresent_ = true;
             state->LightSource.position = glm::vec4(translate, 1.0);
 			break;
-	    case flyingSaucer:
-		    glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-		    glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
+	    case flyingSaucer:		    
+		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, baseColor, secondaryColor);
 		    break;
 	    case fusee:
 		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
@@ -88,9 +88,13 @@ AbstractShape * ThemeFactory::generateShape()
 		    generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
 		    break;
 		case satellite:
-			glm::vec4 bodyColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-			glm::vec4 pannelColor (generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-			generatedObject = new Satellite(translate, rotate, generateFloat(0, 360), scale, pannelColor, bodyColor);
+			generatedObject = new Satellite(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
+			break;
+		case entreprisingSpaceship:
+			generatedObject = new EntreprisingSpaceship(translate, rotate, generateFloat(0, 360), scale, baseColor);
+			break;
+		case spaceStation:
+			generatedObject = new SpaceStation(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
 			break;
         default:
             throw std::exception("shape was not listed in the possible shapes");
