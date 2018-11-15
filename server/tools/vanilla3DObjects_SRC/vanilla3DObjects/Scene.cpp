@@ -1,9 +1,5 @@
 #include"Scene.h"
 
-bool Scene::isThematic() const
-{
-    return theme_;
-}
 void Scene::accept(Drawer  *drawer)
 {
 	for(AbstractShape *shape : objects_  )
@@ -11,19 +7,19 @@ void Scene::accept(Drawer  *drawer)
 		shape->accept(drawer);
 	}
 }
-Scene::Scene(int numberShapes, bool theme) : numberShapes_(numberShapes), theme_(theme)
+Scene::Scene(int numberShapes, bool theme)
 {
-    if (numberShapes_ < MIN_OBJECT_AMOUNT || numberShapes_ > MAX_OBJECT_AMOUNT) {
+    if (numberShapes < MIN_OBJECT_AMOUNT || numberShapes > MAX_OBJECT_AMOUNT) {
         throw std::invalid_argument("the amount of objects you can ask of the program must be between 10 and 200");
     }
 
-    if (theme_) {
-        factory_ = new ThemeFactory(numberShapes_, dimBoite_);
+    if (theme) {
+        factory_ = new ThemeFactory(numberShapes);
     }
     else {
-        factory_ = new GeoFactory(numberShapes_, dimBoite_);
+        factory_ = new GeoFactory(numberShapes);
     }
-    factory_->generateShapes(objects_);
+    factory_->generateShapes(&objects_);
 }
 
 void Scene::parseModOptions(const std::string & optionString) {
@@ -48,10 +44,10 @@ void Scene::modify()
     }
     for (int i = 0; i < MOD_COUNT; i++)
     {
-        int index = rand() % numberShapes_;
+        int index = rand() % factory_->getNumberOfObjects();
         // only modify unmodified shapes
         while (objects_.at(index)->isModded()) {
-            index = rand() % numberShapes_;
+            index = rand() % factory_->getNumberOfObjects();
         }
 
         Modifications mod = Modifications(rand() % (Modifications::DeleteObject + 1));
@@ -87,9 +83,9 @@ void Scene::changeColor(int index) {
 
 void Scene::deleteShape(int index) {
     objects_.at(index)->hide();
+    factory_->decrNumberOfObjects();
 }
 
 void Scene::addShape() {
-    factory_->addShape(objects_);
-    objects_.at(numberShapes_++)->setModified();
+    factory_->addShape(&objects_);
 }

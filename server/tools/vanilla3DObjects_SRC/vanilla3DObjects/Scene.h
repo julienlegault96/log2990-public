@@ -21,7 +21,6 @@ public:
 	void modify();
 	void parseModOptions(const std::string &optionString);
 	std::vector<AbstractShape*> getObjects() const;
-	bool isThematic() const;
 	void accept(Drawer *visitor);
 
 private:
@@ -35,9 +34,6 @@ private:
     std::string _banString;
     AbstractFactory *factory_;
     std::vector<AbstractShape*> objects_ = {};
-    bool theme_;
-    int numberShapes_ = 0;
-	double dimBoite_=9.9;
 
 	void changeColor(int index);
 	void deleteShape(int index);
