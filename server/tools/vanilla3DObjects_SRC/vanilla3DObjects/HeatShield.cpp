@@ -11,7 +11,7 @@ Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotatio
 			DEFAULT_COORDS,
             DEFAULT_ROTATION_AXIS,
             DEFAULT_ROTATION,
-			(GLfloat) 0.4
+			(GLfloat) 0.6
 		)
 	);
 
@@ -22,7 +22,7 @@ Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotatio
             DEFAULT_COORDS,
             DEFAULT_ROTATION_AXIS,
             DEFAULT_ROTATION,
-            glm::vec3(0.4, 0.4, 0.12)
+            glm::vec3(0.6, 0.6, 0.18)
         )
     );
 
