@@ -54,21 +54,21 @@ AbstractShape * ThemeFactory::generateShape()
 	glm::vec3 translate(0, 0, 0);
 	generateCoordinates(translate);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
+    GLfloat rotateAngle(generateFloat(0, 360));
 
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (possibleShapes::spaceStation/*generateCoherentContentChoice()*/) {
+    switch (generateCoherentContentChoice()) {
         case asteroid:
-            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
+            generatedObject = new Asteroid(translate, rotate, rotateAngle, scale);
             break;
 	    case alienShip:
-		    generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
+		    generatedObject = new AlienShip(translate, rotate, rotateAngle, scale);
 		    break;
         case planet:
-            generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
-            //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
+            generatedObject = new Planet(rand(), translate, baseColor, rotateAngle, rotate, scale);
             break;
 	    case sun:
 			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
@@ -79,7 +79,7 @@ AbstractShape * ThemeFactory::generateShape()
 		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, baseColor, secondaryColor);
 		    break;
 	    case fusee:
-		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
+		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);
 		    break;
 	    case heatShield:
 		    generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);

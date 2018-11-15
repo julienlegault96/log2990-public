@@ -12,10 +12,9 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			Shapelist::Cylindre,
 			bodyColor_,
 			glm::vec3(0, 0, -0.2),
-			rotationAxis_,
-			(GLfloat)0,
-			(GLfloat) 0.6,
-			glm::vec3(1, 1, 1.3)
+			DEFAULT_ROTATION_AXIS,
+			DEFAULT_ROTATION,
+			glm::vec3(0.6, 0.6, 0.78)
 		)
 	);
 	shapes_.push_back(
@@ -25,8 +24,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(-1, 0, 0),
 			glm::vec3(0, 1, 0),
 			(GLfloat)90,
-			(GLfloat) 0.6,
-			glm::vec3(0.1, 0.1, 5.3)
+			glm::vec3(0.06, 0.06, 3.18)
 		)
 	);
 
@@ -37,8 +35,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(-0.5, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+			glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
 	shapes_.push_back(
@@ -48,8 +45,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(0.5, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+			glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
 	shapes_.push_back(
@@ -59,8 +55,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(-0.75, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+            glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
 	shapes_.push_back(
@@ -70,8 +65,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(0.75, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+            glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
 	shapes_.push_back(
@@ -81,8 +75,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(-1, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+            glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
 	shapes_.push_back(
@@ -92,13 +85,7 @@ SpaceStation::SpaceStation(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 			glm::vec3(1, 0, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)50,
-			(GLfloat) 0.8,
-			glm::vec3(0.3, 2, 0.1)
+            glm::vec3(0.24, 1.6, 0.08)
 		)
 	);
-}
-
-
-SpaceStation::~SpaceStation()
-{
 }

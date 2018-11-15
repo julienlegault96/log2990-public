@@ -11,11 +11,10 @@ FlyingSaucer::FlyingSaucer(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 		new Shape(
 			Shapelist::Sphere,
 			hullColor_,
-			glm::vec3(0,0,0),
-			rotationAxis_,
-			(GLfloat) 0,
-			(GLfloat) 0.8,
-			glm::vec3(1, 1, 0.5)
+			DEFAULT_COORDS,
+			DEFAULT_ROTATION_AXIS,
+			DEFAULT_ROTATION,
+			glm::vec3(0.8, 0.8, 0.4)
 		)
 	);
 
@@ -23,15 +22,10 @@ FlyingSaucer::FlyingSaucer(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rot
 		new Shape(
 			Shapelist::Sphere,
 			glassColor_,
-			glm::vec3(0,0, ((GLfloat) 0.8)*0.6- ((GLfloat) 0.3)),
-			rotationAxis_ + glm::vec3(0.0, 0.0, 7),
-			(GLfloat)0,
+			glm::vec3(0, 0, 0.18),
+			DEFAULT_ROTATION_AXIS,
+			DEFAULT_ROTATION,
 			(GLfloat) 0.3
 		)
 	);
-}
-
-
-FlyingSaucer::~FlyingSaucer()
-{
 }

@@ -3,15 +3,14 @@
 #include "Shape.h"
 #include "CompositeShape.h"
 
-enum ShapeThemelist {Earth, Mars, Moon, Sun, Neptune, Saturn };
+
 class  Planet : public CompositeShape
 {
 public:
-	Planet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
+	Planet(short randomseed, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);
 private:
-	glm::vec4 baseColor_;
-	void initPlanet(ShapeThemelist type, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);		
-	~Planet();	
+    enum ShapeThemelist { basicPlanet, ringPlanet, enumSize };
+	void initPlanet(short type, glm::vec4 color);
 	// void changeTexture(GLuint texture);
 	// GLuint texture_;
 };

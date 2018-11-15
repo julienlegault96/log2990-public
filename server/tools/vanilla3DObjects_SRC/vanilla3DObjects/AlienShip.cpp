@@ -8,9 +8,8 @@ AlienShip::AlienShip(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 		new Shape(
 			Shapelist::Tetrahedre,
 			glm::vec4(0.0, 0.0, 1.0, 1.0),
-			glm::vec3(0, 0, 0),
-			rotationAxis_,
-			(GLfloat)0,
+			DEFAULT_COORDS,DEFAULT_ROTATION_AXIS,
+			DEFAULT_ROTATION,
 			(GLfloat) 0.5
 		)
 	);
@@ -22,8 +21,7 @@ AlienShip::AlienShip(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 			glm::vec3(0., .2, -0.3),
 			glm::vec3(0.5, -0.3, 0.),
 			(GLfloat)-45,
-			(GLfloat) 0.8,
-			glm::vec3(0.5, 0.5, 0.05)
+			glm::vec3(0.4, 0.4, 0.04)
 		)
 	);
 
@@ -34,8 +32,7 @@ AlienShip::AlienShip(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation,
 			glm::vec3(0., -.2, -0.3),
 			glm::vec3(0.5, 0.3, 0.),
 			(GLfloat)45,
-			(GLfloat) 0.8,
-			glm::vec3(0.5, 0.5, 0.05)
+			glm::vec3(0.4, 0.4, 0.04)
 		)
 	);
 

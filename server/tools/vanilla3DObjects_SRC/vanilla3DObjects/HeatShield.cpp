@@ -8,9 +8,9 @@ Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotatio
 		new Shape(
 			Shapelist::ConeTronque,
 			GRIS_CLAIR_POUR_TEXTURES,
-			glm::vec3(0.0),
-            glm::vec3(1.0),
-            (GLfloat) 0,
+			DEFAULT_COORDS,
+            DEFAULT_ROTATION_AXIS,
+            DEFAULT_ROTATION,
 			(GLfloat) 0.8
 		)
 	);
@@ -20,11 +20,10 @@ Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotatio
             Shapelist::Sphere,
             //teinte rouge
             GRIS_CLAIR_POUR_TEXTURES + glm::vec4(0.3, -0.1, -0.2, 0.0),
-            glm::vec3(0.0),
-            glm::vec3(1.0),
-            (GLfloat) 0,
-            (GLfloat) 0.8,
-            glm::vec3(1, 1, 0.3)
+            DEFAULT_COORDS,
+            DEFAULT_ROTATION_AXIS,
+            DEFAULT_ROTATION,
+            glm::vec3(0.8, 0.8, 0.24)
         )
     );
 

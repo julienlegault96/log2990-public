@@ -9,8 +9,8 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
             Shapelist::Cube,
             GRIS_CLAIR_POUR_TEXTURES,
             glm::vec3(0.2, 0.0, 0.0),
-            glm::vec3(1),
-            (GLfloat) 1,
+            DEFAULT_ROTATION_AXIS,
+            DEFAULT_ROTATION,
             (GLfloat) 0.7
         )
     );
@@ -33,8 +33,7 @@ Asteroid::Asteroid(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
             glm::vec3(0.0, 0.0, -0.4),
             glm::vec3(0.0, 0.0, 7),
             rotation_,
-            (GLfloat) 1.2,
-            glm::vec3()
+            (GLfloat) 1.2
         )
     );
 

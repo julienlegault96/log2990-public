@@ -7,7 +7,6 @@ class Fusee :
 {
 public:
 	Fusee(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale);
-	~Fusee();
 };
 
 

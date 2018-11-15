@@ -10,11 +10,10 @@ EntreprisingSpaceship::EntreprisingSpaceship(glm::vec3 coords, glm::vec3 rotatio
 		new Shape(
 			Shapelist::Sphere,
 			color_,
-			glm::vec3(0, 0, 0),
-			rotationAxis_,
-			(GLfloat)0,
-			(GLfloat) 0.8,
-			glm::vec3(1, 1, 0.5)
+			DEFAULT_COORDS,
+			DEFAULT_ROTATION_AXIS,
+			DEFAULT_ROTATION,
+			glm::vec3(0.8, 0.8, 0.4)
 		)
 	);
 
@@ -25,8 +24,7 @@ EntreprisingSpaceship::EntreprisingSpaceship(glm::vec3 coords, glm::vec3 rotatio
 			glm::vec3(0, 0, -0.2),
 			glm::vec3(1,0,0),
 			(GLfloat)90,
-			(GLfloat) 0.3,
-			glm::vec3(1, 1, 6)
+			glm::vec3(0.3, 0.3, 1.8)
 		)
 	);
 	shapes_.push_back(
@@ -36,8 +34,7 @@ EntreprisingSpaceship::EntreprisingSpaceship(glm::vec3 coords, glm::vec3 rotatio
 			glm::vec3(0.15, -0.7, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)90,
-			(GLfloat) 0.3,
-			glm::vec3(1, 1, 3)
+			glm::vec3(0.3, 0.3, 0.9)
 		)
 	);
 	shapes_.push_back(
@@ -47,13 +44,7 @@ EntreprisingSpaceship::EntreprisingSpaceship(glm::vec3 coords, glm::vec3 rotatio
 			glm::vec3(-0.15, -0.7, 0),
 			glm::vec3(1, 0, 0),
 			(GLfloat)90,
-			(GLfloat) 0.3,
-			glm::vec3(1, 1, 3)
+			glm::vec3(0.3, 0.3, 0.9)
 		)
 	);
-}
-
-
-EntreprisingSpaceship::~EntreprisingSpaceship()
-{
 }
