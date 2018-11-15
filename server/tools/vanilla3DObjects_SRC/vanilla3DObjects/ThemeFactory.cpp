@@ -118,7 +118,7 @@ bool ThemeFactory::checkForCollision(const glm::vec3 & coords, std::vector<Abstr
             distance =
                 pow(shape->getCoordinates().x - coords.x, 2) +
                 pow(shape->getCoordinates().y - coords.y, 2) +
-                pow(shape->getCoordinates().y - coords.y, 2);
+                pow(shape->getCoordinates().z - coords.z, 2);
 
             if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
         }

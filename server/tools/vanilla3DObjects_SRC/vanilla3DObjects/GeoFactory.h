@@ -10,7 +10,7 @@ public:
 	void generateShape(std::vector<AbstractShape*> * objects);
     bool checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const;
 private:
-    short const MIN_DISTANCE = 12;
+    short const MIN_DISTANCE = 6;
 };
 
 #endif

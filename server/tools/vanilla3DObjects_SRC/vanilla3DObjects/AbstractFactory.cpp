@@ -1,5 +1,6 @@
 
 #include "AbstractFactory.h"
+#include <iostream>
 
 AbstractFactory::AbstractFactory(const int & numberOfObject){
 	dimboite_ = DEFAULT_BOX_DIMENTIONS;
@@ -19,7 +20,7 @@ void AbstractFactory::generateCoordinates(glm::vec3 & coords, std::vector<Abstra
     do {
         coords.x = generateFloat(-dimboite_ / 2, dimboite_ / 2);
         coords.y = generateFloat(-dimboite_ / 2, dimboite_ / 2);
-        coords.z = generateFloat(0, dimboite_ - 1);
+        coords.z = generateFloat(0, dimboite_);
     } while (checkForCollision(coords, objects));
 }
 

@@ -10,7 +10,7 @@ public:
     bool checkForCollision(const glm::vec3 & coords, std::vector<AbstractShape*> * objects) const;
 private: 
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip, sun, fusee, heatShield, spaceship, satellite, entreprisingSpaceship, spaceStation, teslaCar, mars, enumSize};
-	short const MIN_DISTANCE = 12;
+	short const MIN_DISTANCE = 6;
 	bool sunPresent_ = false;
 
     short generateCoherentContentChoice() const;
