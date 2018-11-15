@@ -44,17 +44,20 @@ void Drawer::draw(const Shape * shape) const {
 }
 
 void Drawer::draw(const CompositeShape * compositeShape) const {
-	matrModel_->PushMatrix(); {
-		matrModel_->Translate(compositeShape->getCoordinates());
-		matrModel_->Scale(compositeShape->getScale());
-		matrModel_->Rotate(compositeShape->getRotation(), compositeShape->getRotationAxis());
-		glUniformMatrix4fv(objectLoc_->locmatrModel, 1, GL_FALSE, *matrModel_);
-		glUniformMatrix3fv(objectLoc_->locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu_->getMatr() * matrModel_->getMatr()))));
-		for (AbstractShape* shape : compositeShape->getShapes()) 
-		{
-			shape->accept(this);
-		}
-	}matrModel_->PopMatrix();
+    if (compositeShape->isVisible())
+    {
+        matrModel_->PushMatrix(); {
+            matrModel_->Translate(compositeShape->getCoordinates());
+            matrModel_->Scale(compositeShape->getScale());
+            matrModel_->Rotate(compositeShape->getRotation(), compositeShape->getRotationAxis());
+            glUniformMatrix4fv(objectLoc_->locmatrModel, 1, GL_FALSE, *matrModel_);
+            glUniformMatrix3fv(objectLoc_->locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu_->getMatr() * matrModel_->getMatr()))));
+            for (AbstractShape* shape : compositeShape->getShapes())
+            {
+                shape->accept(this);
+            }
+        }matrModel_->PopMatrix();
+    }
 }
 
 void Drawer::extractObjetLoc(const GLuint &prog) {

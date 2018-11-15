@@ -115,12 +115,14 @@ bool ThemeFactory::checkForCollision(const glm::vec3 & coords)
 {
 	double distance = 0;
 	for (AbstractShape* shape : shippingContainer_) {
-		distance =
-			pow(shape->getCoordinates().x - coords.x, 2) +
-			pow(shape->getCoordinates().y - coords.y, 2) +
-			pow(shape->getCoordinates().y - coords.y, 2);
+        if (shape->isVisible()) {
+            distance =
+                pow(shape->getCoordinates().x - coords.x, 2) +
+                pow(shape->getCoordinates().y - coords.y, 2) +
+                pow(shape->getCoordinates().y - coords.y, 2);
 
-        if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
+            if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
+        }
 	}
 	return false;
 }
