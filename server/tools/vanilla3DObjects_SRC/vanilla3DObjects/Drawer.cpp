@@ -2,44 +2,48 @@
 
 
 
-Drawer::Drawer()
-{
+Drawer::Drawer() {
 	objectLoc_ = new ObjectLoc();
 }
 
 Drawer::Drawer(const GLuint & prog, MatricePipeline * matrModel, MatricePipeline * matrVisu, MatricePipeline * matrProj)
-	:matrModel_(matrModel), matrVisu_(matrVisu), matrProj_(matrProj)
-{
+	:matrModel_(matrModel), matrVisu_(matrVisu), matrProj_(matrProj) {
 	objectLoc_ = new ObjectLoc();
 	extractObjetLoc(prog);
 }
 
 
-Drawer::~Drawer()
-{
+Drawer::~Drawer() {
 	delete objectLoc_;
 	objectLoc_ = nullptr;
 }
 
-void Drawer::draw(const Shape * shape) const
-{
+void Drawer::draw(const Shape * shape) const {
 	if (shape->isVisible())
 	{
 		glVertexAttrib4f(objectLoc_->locColor, shape->getColor().r, shape->getColor().b, shape->getColor().g, shape->getColor().a);
 		matrModel_->PushMatrix(); {
-			matrModel_->Translate(shape->getCoordinates());
-			matrModel_->Rotate(shape->getRotation(), shape->getRotationAxis());
-			matrModel_->Scale(shape->getScale());
+            if (shape->getCoordinates() != glm::vec3(0.0)) {
+                matrModel_->Translate(shape->getCoordinates());
+            }
+
+            if (shape->getRotation() != GLfloat(0.0)) {
+                matrModel_->Rotate(shape->getRotation(), shape->getRotationAxis());
+            }
+
+            if (shape->getScale() != glm::vec3(1.0)) {
+                matrModel_->Scale(shape->getScale());
+            }
 
 			glUniformMatrix4fv(objectLoc_->locmatrModel, 1, GL_FALSE, *matrModel_);
 			glUniformMatrix3fv(objectLoc_->locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu_->getMatr() * matrModel_->getMatr()))));
-			shape->show();
+			
+            shape->show();
 		}matrModel_->PopMatrix();
 	}
 }
 
-void Drawer::draw(const CompositeShape * compositeShape) const
-{
+void Drawer::draw(const CompositeShape * compositeShape) const {
 	matrModel_->PushMatrix(); {
 		matrModel_->Translate(compositeShape->getCoordinates());
 		matrModel_->Scale(compositeShape->getScale());
@@ -53,23 +57,19 @@ void Drawer::draw(const CompositeShape * compositeShape) const
 	}matrModel_->PopMatrix();
 }
 
-void Drawer::extractObjetLoc(const GLuint &prog)
-{
+void Drawer::extractObjetLoc(const GLuint &prog) {
 	objectLoc_->extractLoc(prog);
 }
 
-void Drawer::setMatrModel(MatricePipeline * matrModel)
-{
+void Drawer::setMatrModel(MatricePipeline * matrModel) {
 	matrModel_ = matrModel;
 }
 
-void Drawer::setmatrVisu(MatricePipeline * matrVisu)
-{
+void Drawer::setmatrVisu(MatricePipeline * matrVisu) {
 	matrVisu_ = matrVisu;
 }
 
-void Drawer::setmatrProj(MatricePipeline * matrProj)
-{
+void Drawer::setmatrProj(MatricePipeline * matrProj) {
 	matrProj_ = matrProj_;
 }
 
