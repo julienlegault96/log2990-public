@@ -3,8 +3,7 @@
 
 #include "Shape.h"
 #include "CompositeShape.h"
-#include "inf2705-theiere.h"
-class  Spaceship : public CompositeShape
+class Spaceship :public CompositeShape
 {
 public:
 	Spaceship(glm::vec3 coords/* GLuint texture*/, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale);

@@ -8,6 +8,11 @@
 #include "Fusee.h"
 #include "HeatShield.h"
 #include "Spaceship.h"
+#include "Satelite.h"
+#include "EntreprisingSpaceship.h"
+#include "SpaceStation.h"
+#include "TeslaCar.h"
+#include "Mars.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject, const double & dimboite): AbstractFactory(numberOfObject, dimboite){ }
 
@@ -46,8 +51,8 @@ short ThemeFactory::generateCoherentContentChoice() const {
 AbstractShape * ThemeFactory::generateShape()
 {
     CompositeShape* generatedObject = nullptr;
-	glm::vec4 color(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
-
+	glm::vec4 baseColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
+	glm::vec4 secondaryColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
 	glm::vec3 translate(0, 0, 0);
 	generateCoordinates(translate);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
@@ -56,22 +61,8 @@ AbstractShape * ThemeFactory::generateShape()
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-<<<<<<< HEAD
-    switch (possibleShapes::fusee/*possibleShapes(rand() % possibleShapes::enumSize)*/) {
-    case asteroid:
-        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
-        break;
-	case alienShip:
-		generatedObject = new AlienShip(translate, rotate, generateFloat(0, 360), scale);
-		break;
-    case planet:
-        generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
-        //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
-        break;
-	case sun:
-		if (isSun_ == false) {
-=======
     switch (possibleShapes::sun/*generateCoherentContentChoice()*/) {
+    switch (possibleShapes::spaceStation/*generateCoherentContentChoice()*/) {
         case asteroid:
             generatedObject = new Asteroid(translate, rotate, generateFloat(0, 360), scale);
             break;
@@ -83,30 +74,40 @@ AbstractShape * ThemeFactory::generateShape()
             //generatedObject = new Planet(translate, rotate, generateFloat(0, 360), scale);
             break;
 	    case sun:
->>>>>>> 5c2ca7830df2816fd7f756020ae088edfa1de95d
 			generatedObject = new Sunny(translate, rotate, generateFloat(0, 360), scale);
 			sunPresent_ = true;
             state->LightSource.position = glm::vec4(translate, 1.0);
 			break;
-		}
-		else
+	    case flyingSaucer:		    
+		    generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, baseColor, secondaryColor);
+		    break;
+	    case fusee:
+		    generatedObject = new Fusee(translate, rotate, generateFloat(0, 360), scale);		// Arguments have to be changed. Just for test.
+		    break;
+	    case heatShield:
+		    generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+	    case spaceship:
+		    generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
+		    break;
+		case satellite:
+			generatedObject = new Satellite(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
 			break;
-	case flyingSaucer:
-		glm::vec4 hullColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 1);
-		glm::vec4 glassColor(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1), 0.2);
-		generatedObject = new FlyingSaucer(translate, rotate, generateFloat(0, 360), scale, hullColor, glassColor);
+		case entreprisingSpaceship:
+			generatedObject = new EntreprisingSpaceship(translate, rotate, generateFloat(0, 360), scale, baseColor);
+			break;
+		case spaceStation:
+			generatedObject = new SpaceStation(translate, rotate, generateFloat(0, 360), scale, secondaryColor, baseColor);
+			break;
+		case teslaCar:
+		generatedObject = new TeslaCar(translate, rotate, 0, scale);
 		break;
-	case fusee:
-		generatedObject = new Fusee(translate, rotate, 0, scale);		
+		
+	case mars:
+		generatedObject = new typename Mars::Mars(translate, rotate, 0, scale);
 		break;
-	case heatShield:
-		generatedObject = new Heatshield(translate, rotate, generateFloat(0, 360), scale);
-		break;
-	case spaceship:
-		generatedObject = new Spaceship(translate, rotate, generateFloat(0, 360), scale);
-		break;
-    default:
-        throw std::exception("shape was not listed in the possible shapes");
+        default:
+            throw std::exception("shape was not listed in the possible shapes");
     };
     
     return generatedObject;

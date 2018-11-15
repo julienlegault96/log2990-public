@@ -21,14 +21,14 @@ void Shape::init(Shapelist type) {
     switch (type)
     {
 	case(Tore):
-		forme_ = new FormeTore(0.5, 8, 8, true);
+		forme_ = new FormeTore(0.1, 5.0, 4, 64);	
 		break;
     case(Sphere):
         forme_ = new FormeSphere(0.5, 8, 8, true);
         break;
 
     case(Cone):
-        forme_ = new FormeCylindre(0.5, 0.0, 0.8, 10, 1, true);
+        forme_ = new FormeCylindre(0.4, 0.0, 0.6, 10, 1, true);
         break;
 
     case(Cube):
@@ -42,7 +42,12 @@ void Shape::init(Shapelist type) {
     case(Tetrahedre):
         forme_ = new FormeTetraedre(1.0, true);
         break;
+	case(Disque):
+		forme_ = new FormeDisque(1.4, 1.5, 0.5, true);			// GLdouble inner, GLdouble outer, GLint slices, GLint loops, bool plein = true
+		break;
     }
+	 
+
 }
 
 void Shape::setColor(glm::vec4 baseColor)
