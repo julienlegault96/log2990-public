@@ -28,9 +28,10 @@ void Drawer::draw(const Shape * shape) const
 		glVertexAttrib4f(objectLoc_->locColor, shape->getColor().r, shape->getColor().b, shape->getColor().g, shape->getColor().a);
 		matrModel_->PushMatrix(); {
 			matrModel_->Translate(shape->getCoordinates());
-			matrModel_->Scale(shape->getDeformation());
-			matrModel_->Scale(shape->getScale());
 			matrModel_->Rotate(shape->getRotation(), shape->getRotationAxis());
+			matrModel_->Scale(shape->getScale());
+			
+			matrModel_->Scale(shape->getDeformation());
 			glUniformMatrix4fv(objectLoc_->locmatrModel, 1, GL_FALSE, *matrModel_);
 			glUniformMatrix3fv(objectLoc_->locmatrNormale, 1, GL_TRUE, glm::value_ptr(glm::inverse(glm::mat3(matrVisu_->getMatr() * matrModel_->getMatr()))));
 			shape->show();
