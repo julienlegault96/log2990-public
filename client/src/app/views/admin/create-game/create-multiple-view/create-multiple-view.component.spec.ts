@@ -37,4 +37,25 @@ describe("CreateMultipleViewComponent", () => {
         expect(component).toBeTruthy();
     });
 
+    it("should not have valid generator option", () => {
+        component.add = false;
+        component.color = false;
+        component.remove = false;
+
+        const result: boolean = component["hasValidGeneratorOptions"]();
+        
+        expect(result).toBe(false);
+    });
+
+    it("should  have valid generator option", () => {
+        component.add = true;
+        component.color = false;
+        component.remove = false;
+
+        const result: boolean = component["hasValidGeneratorOptions"]();
+
+        expect(result).toBe(true);
+    });
+
+
 });
