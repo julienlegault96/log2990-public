@@ -65,6 +65,8 @@ export class ImageDiffComponent implements OnInit {
                             this.errorFound.emit();
                             this.audioPlayer.play();
                             this.updateModifiedImage(errorCoordinates);
+                        } else {
+                            new AudioPlayer("../../../../assets/error.mp3").play();
                         }
                     });
             }
