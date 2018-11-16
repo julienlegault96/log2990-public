@@ -21,7 +21,6 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
         super(createGameService);
     }
 
-
     public submit(): void {
         if (!this.createGameService.validator.isStandardStringLength(this.name)
             || !this.hasValidGeneratorOptions()) {
