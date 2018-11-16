@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { GameService } from "../game/game.service";
 import { Game, generateGameTemplate } from "../../../../../common/game/game";
 import { GameType } from "../../../../../common/game/game-type";
-import { Validator } from "../../validator";
+import { Validator } from "../validator/validator";
 import { GenMultiParameters } from "../../../../../common/communication/gen-multi-parameters";
 import { GameCreationRequest } from "../../../../../common/communication/game-creation-request";
 import { MULTIPLE_VIEW_BASE_TIME, SINGLE_VIEW_BASE_TIME } from "../../../../../common/game/leaderboard";

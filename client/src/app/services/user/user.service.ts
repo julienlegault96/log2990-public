@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "../abstract-server/abstract-server.service";
-import { Validator } from "../../validator";
+import { Validator } from "../validator/validator";
 
 import { User } from "../../../../../common/user/user";
 
