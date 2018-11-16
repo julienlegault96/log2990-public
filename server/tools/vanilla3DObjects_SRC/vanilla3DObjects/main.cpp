@@ -79,17 +79,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    bool boucler = true;
-    while ( boucler )
-    {
-        // affichage
-        fenetre.afficherScene();
-        fenetre.swap();
-
-        // récupérer les événements et appeler la fonction de rappel
-        boucler = fenetre.gererEvenement();
-    }
-
 	// détruire les ressources OpenGL allouées
     fenetre.conclure();
 
