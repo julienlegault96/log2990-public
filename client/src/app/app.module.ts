@@ -32,8 +32,8 @@ import { CreateGameService } from "./services/create-game/create-game.service";
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff/img-diff.service";
 
-import { CreateSingleViewComponent } from "./game/create-game/create-single-game/create-single-view.component";
-import { CreateMultipleViewComponent } from "./game/create-game/create-multiple-view/create-multiple-view.component";
+import { CreateSingleViewComponent } from "./admin/create-game/create-single-game/create-single-view.component";
+import { CreateMultipleViewComponent } from "./admin/create-game/create-multiple-view/create-multiple-view.component";
 import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
 
 @NgModule({

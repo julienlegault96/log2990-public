@@ -27,9 +27,9 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff/img-diff.service";
-import { CreateMultipleViewComponent } from "./game/create-game/create-multiple-view/create-multiple-view.component";
+import { CreateMultipleViewComponent } from "./admin/create-game/create-multiple-view/create-multiple-view.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { CreateSingleViewComponent } from "./game/create-game/create-single-game/create-single-view.component";
+import { CreateSingleViewComponent } from "./admin/create-game/create-single-game/create-single-view.component";
 
 describe("AppComponent", () => {
     // tslint:disable-next-line:max-func-body-length
