@@ -7,7 +7,6 @@ Robot::Robot(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat
 	glm::vec4 colorHead = glm::vec4(1.0, 0., 0.0, 1.);
     glm::vec4 colorFire = glm::vec4(0.5, 0.5, 0.2, 0.3);
 	glm::vec4 colorReactor = glm::vec4(0.2, 0.5, 0.2, 1);
-	glm::vec3 deformationLeg = glm::vec3(.4, .4, 1.2);
 	glm::vec3 deformationBody = glm::vec3(.50, .70, .35);
 	glm::vec3 deformationArm = glm::vec3(.15, 0.4, 0.15);
 	glm::vec3 deformationH = glm::vec3(0.6, 0.6, 0.6);
