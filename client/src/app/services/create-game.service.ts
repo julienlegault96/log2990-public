@@ -41,9 +41,8 @@ export class CreateGameService extends GameService {
                     alert("Création du jeu réussie");
                     location.reload();
                 },
-                (error: { message: string, httpError: HttpErrorResponse }) => {
-                    const message: string = (error.httpError.status === CODES.BAD_REQUEST) ? "Les images sont invalides" : error.message;
-                    alert(message);
+                () => {
+                    alert("Les images sont invalides");
                 }
             );
         });
@@ -58,8 +57,8 @@ export class CreateGameService extends GameService {
                 alert("Création du jeu réussie");
                 location.reload();
             },
-            (error: { message: string }) => {
-                alert(error.message);
+            () => {
+                alert("Génération des images sans succès");
             }
         );
     }

@@ -29,8 +29,10 @@ export class ImageDiffComponent implements OnInit {
     private hasBeenClicked: boolean;
     private readonly clickDebounce: number = 500;
 
+    private readonly successSoundPath: string = "../../../../assets/success.mp3";
+
     public constructor(private imgDiffService: ImgDiffService) {
-        this.audioPlayer = new AudioPlayer("../../../../assets/success.mp3");
+        this.audioPlayer = new AudioPlayer(this.successSoundPath);
         this.foundErrors = [];
         this.hasBeenClicked = false;
     }

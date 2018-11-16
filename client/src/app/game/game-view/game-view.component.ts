@@ -26,8 +26,8 @@ export class GameViewComponent implements OnInit {
     public playerId: string;
     public game: Game;
 
-    private readonly maxSingleViewErrorCount: number = 7;
-    private readonly maxDoubleViewErrorCount: number = 14;
+    private readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 7;
+    private readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 14;
 
     public constructor(
         private activatedRoute: ActivatedRoute,
@@ -48,9 +48,9 @@ export class GameViewComponent implements OnInit {
 
     public verifyErrorCount(): void {
         if ((this.game.type === GameType.SingleView
-            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxSingleViewErrorCount)
+            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.MAX_SINGLE_VIEW_ERROR_COUNT)
             || (this.game.type === GameType.DoubleView
-                && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.maxDoubleViewErrorCount)) {
+                && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.MAX_DOUBLE_VIEW_ERROR_COUNT)) {
             const timeout: number = 100;
             setTimeout(() => this.endGame(), timeout);
         }

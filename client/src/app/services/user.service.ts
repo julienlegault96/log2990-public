@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpClient } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 import { AbstractServerService, Endpoints } from "./abstract-server.service";
 import { Validator } from "../validator";
@@ -77,21 +77,6 @@ export class UserService extends AbstractServerService {
         } else {
             throw new Error(this.buildErrorString(username));
         }
-    }
-
-    protected handleError(error: HttpErrorResponse): Observable<never> {
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error("An error occurred:", error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-        }
-
-        return throwError("Something bad happened; please try again later.");
     }
 
     private login(user: User): void {
