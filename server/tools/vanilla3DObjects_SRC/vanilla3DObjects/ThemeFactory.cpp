@@ -12,7 +12,7 @@
 #include "EntreprisingSpaceship.h"
 #include "SpaceStation.h"
 #include "TeslaCar.h"
-#include "Mars.h"
+#include "Ringworld.h"
 #include "Navette.h"
 #include "Robot.h"
 
@@ -37,7 +37,10 @@ short ThemeFactory::generateCoherentContentChoice() const {
         choice = rand() % possibleShapes::enumSize;
         switch (choice) {
             case sun:
-                ok = !sunPresent_;
+                ok = !sunPresent_ && !modMode_;
+                break;
+            case ringworld:
+                ok = !rwPresent_ && !modMode_;
                 break;
             default:
                 ok = true;
@@ -61,7 +64,7 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
-    //TODO remettre random
+
     switch (generateCoherentContentChoice()) {
 		case robot:
 			generatedObject = new Robot(translate, rotate, rotateAngle, scale);
@@ -107,8 +110,9 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 		case teslaCar:
 		    generatedObject = new TeslaCar(translate, rotate, rotateAngle, scale);
 		    break;
-	    case mars:
-		    generatedObject = new Mars(translate, rotate, rotateAngle, scale);
+	    case ringworld:
+		    generatedObject = new Ringworld(glm::vec3(0,0,5.5), rotate, rotateAngle, (scale+2)*3);
+            rwPresent_ = true;
 		    break;
         default:
             throw std::exception("shape was not listed in the possible shapes");

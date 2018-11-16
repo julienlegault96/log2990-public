@@ -22,6 +22,7 @@ void Planet::initPlanet(short type, glm::vec4 color)
                 DEFAULT_SCALE
             )
         );
+
 		shapes_.push_back(
             new Shape(
                 Shapelist::Tore,
@@ -29,9 +30,31 @@ void Planet::initPlanet(short type, glm::vec4 color)
                 DEFAULT_COORDS,
                 DEFAULT_ROTATION_AXIS,
                 DEFAULT_ROTATION,
-                DEFAULT_SCALE
+                glm::vec3(0.14)
             )
         ); 
+
+        shapes_.push_back(
+            new Shape(
+                Shapelist::Tore,
+                color,
+                DEFAULT_COORDS,
+                DEFAULT_ROTATION_AXIS,
+                DEFAULT_ROTATION,
+                glm::vec3(0.126, 0.126, 0.1)
+            )
+        );
+
+        shapes_.push_back(
+            new Shape(
+                Shapelist::Tore,
+                color - glm::vec4(0.166, 0.166, 0.1, 0.0),
+                DEFAULT_COORDS,
+                DEFAULT_ROTATION_AXIS,
+                DEFAULT_ROTATION,
+                glm::vec3(0.166, 0.166, 0.1)
+            )
+        );
         break;
 
     default:

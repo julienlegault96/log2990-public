@@ -11,11 +11,12 @@ public:
 private:
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip,
                           sun, fusee, heatShield, spaceship, satellite,
-                          entreprisingSpaceship, spaceStation, teslaCar, mars, robot, navette, 
+                          entreprisingSpaceship, spaceStation, teslaCar, ringworld, robot, navette,
                           enumSize
                         };
     short const MIN_DISTANCE = 6;
 	bool sunPresent_ = false;
+    bool rwPresent_ = false;
 
     short generateCoherentContentChoice() const;
 };
