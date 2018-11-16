@@ -10,7 +10,7 @@ library.add(fas);
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
-import { HomePageComponent } from "./home-page/home-page.component";
+import { HomePageComponent } from "./views/home-page/home-page.component";
 
 import { GameService } from "./services/game/game.service";
 import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
@@ -23,7 +23,7 @@ import { DiffCounterComponent } from "./game/game-view/diff-counter/diff-counter
 import { MessageBarComponent } from "./game/game-view/message-bar/message-bar.component";
 import { MessageComponent } from "./game/game-view/message/message.component";
 
-import { UserComponent } from "./home-page/user/user.component";
+import { UserComponent } from "./views/home-page/user/user.component";
 
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";

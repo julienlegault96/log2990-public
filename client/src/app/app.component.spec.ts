@@ -8,8 +8,8 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { AppComponent } from "./app.component";
 import { SoloGameComponent } from "./game/game-view/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/game-view/chrono/chrono.component";
-import { UserComponent } from "./home-page/user/user.component";
-import { HomePageComponent } from "./home-page/home-page.component";
+import { UserComponent } from "./views/home-page/user/user.component";
+import { HomePageComponent } from "./views/home-page/home-page.component";
 import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game/game-list-menu/game-card/game-card.component";
 
