@@ -36,6 +36,7 @@ import { ImgDiffService } from "./services/img-diff/img-diff.service";
 import { CreateSingleViewComponent } from "./views/admin/create-game/create-single-game/create-single-view.component";
 import { CreateMultipleViewComponent } from "./views/admin/create-game/create-multiple-view/create-multiple-view.component";
 import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
+import { SocketService } from "./services/socket/socket.service";
 
 @NgModule({
     declarations: [
@@ -72,6 +73,7 @@ import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
         CreateGameService,
         ImgDiffService,
         LeaderboardService,
+        SocketService,
     ],
     bootstrap: [
         AppComponent,

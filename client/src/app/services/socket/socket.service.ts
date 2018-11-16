@@ -1,0 +1,16 @@
+import * as SocketIO from "socket.io-client";
+import { SocketRequests } from "./socket-requests";
+
+export class SocketService {
+
+    private socket: SocketIOClient.Socket;
+
+    public constructor() {
+        this.socket = SocketIO("http://localhost:3000");
+    }
+
+    public emit<T>(requestType: SocketRequests, data: T): void {
+        this.socket.emit(`${requestType}`, data);
+    }
+
+}

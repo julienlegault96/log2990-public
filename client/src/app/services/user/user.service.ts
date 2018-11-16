@@ -6,6 +6,8 @@ import { AbstractServerService, Endpoints } from "../abstract-server/abstract-se
 import { Validator } from "../validator/validator";
 
 import { User } from "../../../../../common/user/user";
+import { SocketService } from "../socket/socket.service";
+import { SocketRequests } from "../socket/socket-requests";
 
 @Injectable({
     providedIn: "root"
@@ -28,7 +30,7 @@ export class UserService extends AbstractServerService {
     private readonly DUPLICATE_USER_MESSAGE: string =
         "Un utilisateur est déjà connecté avec un tel nom.\n";
 
-    public constructor(protected http: HttpClient) {
+    public constructor(protected http: HttpClient, private socketService: SocketService) {
         super(http);
         this.asyncUserList = [];
         this.refreshUserList();
@@ -80,6 +82,7 @@ export class UserService extends AbstractServerService {
     }
 
     private login(user: User): void {
+        this.socketService.emit<User>(SocketRequests.UserConnection, user);
         this.addUser(user).subscribe((nullUser: User) => {
             this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
