@@ -242,7 +242,6 @@ void Fenetre::screenshot(const char * filename) {
     imageBytes = nullptr;
 
     ImageHeader header(DEFAULT_24BIT_BMP_HEADER);
-    header.biClrUsed = (uint32_t)image.colorsUsed.size();
     ofstream bmpOutputFile;
     bmpOutputFile.open(filename, std::ios::out | std::ios::binary | std::ios::trunc);
     bmpOutputFile << DEFAULT_24BIT_BMP_HEADER;
