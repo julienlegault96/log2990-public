@@ -9,9 +9,17 @@ const static uint8_t EXPECTED_ARGC_VALUES[2] = { 4, 5 };
 
 void help() {
 	std::cout << std::endl << "Le programme s'utilise ainsi:" << std::endl
-		<< "img-diff-generator [./path/to/compared/file#1] [./path/to/compared/file#2] [./path/to/output/file] [options]" << std::endl
+		<< "bmpdiff <file#1> <file#2> <sortie> <options>" << std::endl
 		<< "OPTIONS" << std::endl
 		<< "-partiel : ne pas agrandir les pixels différents avec un rayon de 36px" << std::endl << std::endl;
+}
+
+std::string getAbsolutePath( const char * argv0) 
+{
+	const short PROGRAM_NAME_LENGTH = 11;
+	std::string absolutePath(argv0);
+
+	return absolutePath.substr(0, absolutePath.length() - PROGRAM_NAME_LENGTH);
 }
 
 int main(int argc, char *argv[])
@@ -23,6 +31,8 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	const std::string absolutePath = getAbsolutePath(argv[0]);
+
 	try
 	{
 		Comparator comparator;
@@ -30,8 +40,12 @@ int main(int argc, char *argv[])
 			comparator.InterpretOptionStrings(argv[4]);
 		}
 
-		comparator.compare(argv[1], argv[2]);
-		comparator.saveDiffTo(argv[3]);
+		comparator.compare(
+			(absolutePath + argv[1]).data(),
+			(absolutePath + argv[2]).data()
+		);
+
+		comparator.saveDiffTo((absolutePath + argv[3]).data());
 	}
 	catch (const std::exception & e)	{
 		std::cerr << typeid(e).name() << ": " << std::endl

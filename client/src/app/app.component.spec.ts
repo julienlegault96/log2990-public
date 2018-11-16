@@ -8,11 +8,10 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { AppComponent } from "./app.component";
 import { SoloGameComponent } from "./game/game-view/solo-game/solo-game.component";
 import { ChronoComponent } from "./game/game-view/chrono/chrono.component";
-import { UserComponent } from "./User/user-component/user.component";
+import { UserComponent } from "./home-page/user/user.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game/game-list-menu/game-card/game-card.component";
-import { CreateGameComponent } from "./game/create-game/create-game.component";
 
 import { AbstractServerService } from "./services/abstract-server.service";
 import { GameService } from "./services/game.service";
@@ -28,7 +27,9 @@ import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.
 
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff.service";
-import { CreateMultipleViewComponent } from "./game/create-multiple-view/create-multiple-view.component";
+import { CreateMultipleViewComponent } from "./game/create-game/create-multiple-view/create-multiple-view.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { CreateSingleViewComponent } from "./game/create-game/create-single-game/create-single-view.component";
 
 describe("AppComponent", () => {
     // tslint:disable-next-line:max-func-body-length
@@ -44,7 +45,6 @@ describe("AppComponent", () => {
                 MessageBarComponent,
                 MessageComponent,
                 UserComponent,
-                CreateGameComponent,
                 LeaderboardComponent,
                 HomePageComponent,
                 DiffCounterComponent,
@@ -52,11 +52,13 @@ describe("AppComponent", () => {
                 AdminViewCardComponent,
                 ImageDiffComponent,
                 CreateMultipleViewComponent,
+                CreateSingleViewComponent,
             ],
             imports: [
                 HttpClientModule,
                 RouterTestingModule,
                 FormsModule,
+                FontAwesomeModule,
             ],
             providers: [
                 AbstractServerService,

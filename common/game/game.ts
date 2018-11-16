@@ -1,53 +1,18 @@
 import { GameType } from './game-type';
-import { Leaderboard } from './leaderboard';
+import { Leaderboard, generateSoloLeaderboard, generateDuoLeaderboard } from './leaderboard';
 
 export class Game {
-    _id: number;
+    _id: string;
     type: GameType;
     title: string;
-    imageUrl: string[];
-    leaderboards: Leaderboard[];
+    imageUrl: string[] = [];
+    leaderboards: Leaderboard[] = [];
 }
 
-export const newGameTemplate: Game = {
-    "_id": 1,
-    "type": GameType.SingleView,
-    "title": "Nouveau jeu",
-    "imageUrl": ["", ""],
-    "leaderboards": [
-        {
-            "title": "Solo",
-            "scores": [
-                {
-                    "username": "Sophie",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Gabriel",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Louis",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-            ]
-        },
-        {
-            "title": "1 vs 1",
-            "scores": [
-                {
-                    "username": "Julien",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Dine",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-                {
-                    "username": "Kevin",
-                    "time": Math.floor(Math.random() * 30) + 50
-                },
-            ]
-        }
-    ]
+export function generateGameTemplate(leaderboardBaseTime: number): Game {
+    const gameTemplate = new Game();
+    gameTemplate.leaderboards.push(generateSoloLeaderboard(leaderboardBaseTime));
+    gameTemplate.leaderboards.push(generateDuoLeaderboard(leaderboardBaseTime));
+
+    return gameTemplate;
 };

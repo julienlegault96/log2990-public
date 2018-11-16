@@ -7,7 +7,7 @@ Comparator::Comparator() : _differenceImage(DEFAULT_24BIT_BMP_HEADER.biWidth, DE
 Image Comparator::getImage(const char* input) const
 {
 	ImageParser imageParser;
-	long inputLength = string(input).length();
+	size_t inputLength = strlen(input);
 	return inputLength > BASE_64_LENGTH_THRESHOLD ?
 		imageParser.getImageFromBase64(input) : imageParser.getImageFromUrl(input);
 }
@@ -62,35 +62,6 @@ void Comparator::saveDiffTo(const char*  filename) const
 
 	file << DEFAULT_24BIT_BMP_HEADER;
 	file << _differenceImage;
-	file.close();
-
-	file.open(filename, ios::ate | ios::in | ios::binary);
-	if (!file.is_open())
-	{
-		throw std::runtime_error("Could not open \"" + string(filename) + "\" for base64 encoding input");
-	}
-	int len = file.tellp();
-
-	//extract bytes for encoding
-	char * bmpData = new char[len];
-	file.read(bmpData, len);
-	string b64Data = base64().encode((const unsigned char *)bmpData, len);
-
-	delete[] bmpData;
-	bmpData = nullptr;
-	file.close();
-	
-	
-	string b64filename(filename);
-	b64filename = b64filename.substr(0, b64filename.length() - 4) + ".B64";
-	// open for b64
-	file.open(b64filename, ios::out | ios::binary);
-	if (!file.is_open())
-	{
-		throw std::runtime_error("Could not open \"" + b64filename + "\" for output");
-	}
-
-	file.write(b64Data.data(), b64Data.length());
 	file.close();
 }
 

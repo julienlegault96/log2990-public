@@ -26,9 +26,15 @@ export class ImageDiffComponent implements OnInit {
     private audioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
 
+    private hasBeenClicked: boolean;
+    private readonly clickDebounce: number = 500;
+
+    private readonly successSoundPath: string = "../../../../assets/success.mp3";
+
     public constructor(private imgDiffService: ImgDiffService) {
-        this.audioPlayer = new AudioPlayer("../../../../assets/success.mp3");
+        this.audioPlayer = new AudioPlayer(this.successSoundPath);
         this.foundErrors = [];
+        this.hasBeenClicked = false;
     }
 
     public ngOnInit(): void {
@@ -37,6 +43,13 @@ export class ImageDiffComponent implements OnInit {
     }
 
     public isClicked(event: MouseEvent): void {
+        if (this.hasBeenClicked) {
+            return;
+        }
+
+        setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
+        this.hasBeenClicked = true;
+
         // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
         const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
 

@@ -5,10 +5,17 @@ export const SINGLE_VIEW_GAME_COUNT: Number = 1;
 export const DOUBLE_VIEW_GAME_COUNT: Number = 2;
 export const GAMES: Game[] = [
     {
-        _id: 1,
+        _id: "1",
         type: GameType.DoubleView,
         title: "DoubleViewGame 1",
-        imageUrl: ["double-view-game-1.bmp"],
+        imageUrl: [
+            "originalImage1.bmp",
+            "modifedImage1.bmp",
+            "diffImage1.bmp",
+            "originalImage2.bmp",
+            "modifedImage2.bmp",
+            "diffImage2.bmp"
+        ],
         leaderboards: [
             {
                 title: "Solo",
@@ -47,10 +54,17 @@ export const GAMES: Game[] = [
         ]
     },
     {
-        _id: 2,
+        _id: "2",
         type: GameType.DoubleView,
         title: "DoubleViewGame 2",
-        imageUrl: ["double-view-game-2.bmp"],
+        imageUrl: [
+            "originalImage1.bmp",
+            "modifedImage1.bmp",
+            "diffImage1.bmp",
+            "originalImage2.bmp",
+            "modifedImage2.bmp",
+            "diffImage2.bmp"
+        ],
         leaderboards: [
             {
                 title: "Solo",
@@ -89,10 +103,14 @@ export const GAMES: Game[] = [
         ]
     },
     {
-        _id: 3,
+        _id: "3",
         type: GameType.SingleView,
         title: "SingleViewGame 1",
-        imageUrl: ["single-view-game-1.bmp"],
+        imageUrl: [
+            "originalImage1.bmp",
+            "modifedImage1.bmp",
+            "diffImage1.bmp",
+        ],
         leaderboards: [
             {
                 title: "Solo",

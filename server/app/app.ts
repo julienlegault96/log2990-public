@@ -22,7 +22,6 @@ export class Application {
         this.routes();
     }
 
-
     public routes(): void {
         const router: express.Router = express.Router();
 

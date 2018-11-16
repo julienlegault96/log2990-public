@@ -34,7 +34,7 @@ const Image ImageParser::getImageFromUrl(const char * filename) const
 
 const Image ImageParser::getImageFromBase64(const char * data64) const
 {
-	size_t len = string(data64).length();
+	size_t len = strlen(data64);
 	string res = base64().decode(data64, len);
 	const unsigned char * data = reinterpret_cast<const unsigned char*>(res.c_str());
 

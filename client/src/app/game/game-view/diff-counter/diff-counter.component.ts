@@ -9,6 +9,7 @@ export class DiffCounterComponent implements OnInit {
 
     @Input() public playerOneId: string;
     @Input() public playerTwoId: string;
+    @Input() public nbViews: number;
 
     public progressBarWidth: number[];
     private counters: number[];
@@ -61,7 +62,7 @@ export class DiffCounterComponent implements OnInit {
     public incrementPlayerCountSolo(): void {
         if (this.progressBarWidth[0] < this.BASE) {
             this.counters[0]++;
-            this.progressBarWidth[0] = this.counters[0] * this.BASE / this.MAXFOUNDSOLO;
+            this.progressBarWidth[0] = this.counters[0] * this.BASE / (this.MAXFOUNDSOLO * this.nbViews);
             this.progressBarWidth[0] = parseFloat(this.progressBarWidth[0].toFixed(0));
         } else {
             this.progressBarWidth[0] = this.BASE;

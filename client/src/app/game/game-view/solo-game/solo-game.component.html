@@ -1,12 +1,21 @@
-<div *ngIf="game">
+<div *ngIf="game" class="pt-5">
+    <div class="custom-fixed-top px-5 py-3 custom-shadow-sm">
+        <app-diff-counter [playerOneId]="playerId" [nbViews]="game.type + 1"></app-diff-counter>
+    </div>
 
-    <h3>{{game.title}}</h3>
+    <!-- <h3 class="mt-5">
+        {{ game.title }}
+    </h3>
 
-    <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
-        [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorWasFound()"></app-image-diff>
+    <hr /> -->
 
-    <app-image-diff *ngIf="game.type==1" [gameId]="game._id" [imageView]="secondView" [originalImageSrc]="game.imageUrl[3]"
-        [modifiedImageSrc]="game.imageUrl[4]" (errorFound)="errorWasFound"></app-image-diff>
 
-    <app-diff-counter [playerOneId]="playerId"></app-diff-counter>
+    <div class="mt-5">
+        <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
+            [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorWasFound()"></app-image-diff>
+
+        <app-image-diff *ngIf="game.type==1" [gameId]="game._id" [imageView]="secondView" [originalImageSrc]="game.imageUrl[3]"
+            [modifiedImageSrc]="game.imageUrl[4]" (errorFound)="errorWasFound()"></app-image-diff>
+    </div>
+
 </div>

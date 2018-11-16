@@ -3,7 +3,7 @@ import { InsertOneWriteOpResult, DeleteWriteOpResultObject, UpdateWriteOpResult 
 import { Request, Response, NextFunction } from "express";
 
 import Types from "../../types";
-import { Mongo, Collections } from "../../services/mongo";
+import { Mongo, Collections } from "../../services/mongo/mongo";
 
 import { CODES } from "../../../../common/communication/response-codes";
 
@@ -39,7 +39,7 @@ export class AbstractRoute<T> {
         }
     }
 
-    public async updateById(req: Request, res: Response, next: NextFunction, id: number): Promise<void> {
+    public async updateById(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
         try {
             const elem: T = req.body;
             const response: UpdateWriteOpResult = await this.update(id, elem);
@@ -54,10 +54,9 @@ export class AbstractRoute<T> {
         }
     }
 
-    public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async deleteById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const elem: T = req.body;
-            const response: DeleteWriteOpResultObject = await this.remove(elem);
+            const response: DeleteWriteOpResultObject = await this.remove(req.params.id);
 
             if (response.result.ok) {
                 res.status(CODES.OK).send();
@@ -73,19 +72,19 @@ export class AbstractRoute<T> {
         return this.mongo.findDocuments<T>(this.collection);
     }
 
-    public async getOne(id: number): Promise<T> {
-        return this.mongo.findDocumentById<T>(this.collection, Number(id));
+    public async getOne(id: string): Promise<T> {
+        return this.mongo.findDocumentById<T>(this.collection, id);
     }
 
     public async insert(elem: T): Promise<InsertOneWriteOpResult> {
         return this.mongo.insertDocument<T>(this.collection, elem);
     }
 
-    public async remove(elem: T): Promise<DeleteWriteOpResultObject> {
-        return this.mongo.removeDocument<T>(this.collection, elem);
+    public async remove(id: string): Promise<DeleteWriteOpResultObject> {
+        return this.mongo.removeDocumentById<T>(this.collection, id);
     }
 
-    private async update(id: number, elem: T): Promise<UpdateWriteOpResult> {
+    public async update(id: string, elem: T): Promise<UpdateWriteOpResult> {
         return this.mongo.updateDocumentById<T>(Collections.Games, id, elem);
     }
 

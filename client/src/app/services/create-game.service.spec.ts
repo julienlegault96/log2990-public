@@ -22,24 +22,24 @@ describe("CreateGameService", () => {
     it("should reject invalid images", inject([CreateGameService], (service: CreateGameService) => {
         const file: File = new File(new Array<Blob>(), "image.jpg");
         const files: Array<File> = new Array<File>(file, file);
-        expect(service.isValidInputList("Nouveau Jeu", files)).toBe(false);
+        expect(service.isValidSingleViewInputList("Nouveau Jeu", files)).toBe(false);
     }));
 
     it("should reject invalid name", inject([CreateGameService], (service: CreateGameService) => {
         const file: File = new File(new Array<Blob>(), "image.bmp");
         const files: Array<File> = new Array<File>(file, file);
-        expect(service.isValidInputList("123456789012345678901", files)).toBe(false);
+        expect(service.isValidSingleViewInputList("123456789012345678901", files)).toBe(false);
     }));
 
     it("should reject invalid inputs", inject([CreateGameService], (service: CreateGameService) => {
         const file: File = new File(new Array<Blob>(), "image.jpg");
         const files: Array<File> = new Array<File>(file, file);
-        expect(service.isValidInputList("123456789012345678901", files)).toBe(false);
+        expect(service.isValidSingleViewInputList("123456789012345678901", files)).toBe(false);
     }));
 
     it("should accept valid inputs", inject([CreateGameService], (service: CreateGameService) => {
         const file: File = new File(new Array<Blob>(), "image.bmp");
         const files: Array<File> = new Array<File>(file, file);
-        expect(service.isValidInputList("Nouveau Jeu", files)).toBe(true);
+        expect(service.isValidSingleViewInputList("Nouveau Jeu", files)).toBe(true);
     }));
 });

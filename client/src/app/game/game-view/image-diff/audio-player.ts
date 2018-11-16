@@ -9,7 +9,8 @@ export class AudioPlayer {
     }
 
     public play(): void {
-        this.audio.play();
+        const clone: HTMLAudioElement = this.audio.cloneNode() as HTMLAudioElement;
+        clone.play();
     }
 
 }
