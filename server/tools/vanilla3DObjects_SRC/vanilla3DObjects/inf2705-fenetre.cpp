@@ -259,24 +259,20 @@ void Fenetre::genererMultivue(const char * sortie)
 
     afficherScene();
     screenshot((FILENAME + A_POV + ORIGINAL).data());
-    swap();
 
     camera.randomTurn();
     afficherScene();
     screenshot((FILENAME + B_POV + ORIGINAL).data());
-    swap();
 
     //modifier scène
     scene->modify();
 
     afficherScene();
     screenshot((FILENAME + B_POV + MODIFIED).data());
-    swap();
 
     camera.unturn();
     afficherScene();
     screenshot((FILENAME + A_POV + MODIFIED).data());
-    swap();
 }
 
 
