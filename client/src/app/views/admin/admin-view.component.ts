@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { GameService } from "../../services/game/game.service";
-import { AbstractGameListComponent } from "src/app/game/game-list-menu/abstract-game-list/abstract-game-list.component";
+import { AbstractGameListComponent } from "src/app/views/abstract-game-list/abstract-game-list.component";
 
 @Component({
     selector: "app-admin-view",

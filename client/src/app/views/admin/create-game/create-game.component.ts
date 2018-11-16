@@ -1,4 +1,4 @@
-import { CreateGameService } from "../../services/create-game/create-game.service";
+import { CreateGameService } from "../../../services/create-game/create-game.service";
 
 export abstract class CreateGameComponent {
 

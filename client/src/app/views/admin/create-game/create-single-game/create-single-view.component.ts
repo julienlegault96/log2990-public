@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { CreateGameService } from "../../../services/create-game/create-game.service";
+import { CreateGameService } from "../../../../services/create-game/create-game.service";
 import { CreateGameComponent } from "../create-game.component";
 
 @Component({

@@ -3,8 +3,8 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 
 import { CreateSingleViewComponent } from "./create-single-view.component";
-import { GameService } from "../../../services/game/game.service";
-import { CreateGameService } from "../../../services/create-game/create-game.service";
+import { GameService } from "../../../../services/game/game.service";
+import { CreateGameService } from "../../../../services/create-game/create-game.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 describe("CreateSingleViewComponent", () => {
