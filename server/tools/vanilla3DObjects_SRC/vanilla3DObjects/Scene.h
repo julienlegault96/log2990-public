@@ -35,7 +35,8 @@ private:
     AbstractFactory *factory_;
     std::vector<AbstractShape*> objects_ = {};
 
-	void changeColor(int index);
+	void setColor(int index);
+
 	void deleteShape(int index);
 	void addShape();
 };

@@ -59,7 +59,7 @@ void Scene::modify()
 
         switch (mod) {
         case ColorChange:
-            changeColor(index);
+            setColor(index);
             break;
 
         case AddObject:
@@ -73,12 +73,12 @@ void Scene::modify()
     }
 }
 
-void Scene::changeColor(int index) {
-   /* glm::vec4 newColor;
+void Scene::setColor(int index) {
+	glm::vec4 newColor;
     do {
         newColor = glm::vec4(factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), factory_->generateFloat(0, 1), 1);
     } while (objects_.at(index)->getColor() == newColor);
-    objects_.at(index)->setColor(newColor);*/
+    objects_.at(index)->setColor(newColor);
 }
 
 void Scene::deleteShape(int index) {

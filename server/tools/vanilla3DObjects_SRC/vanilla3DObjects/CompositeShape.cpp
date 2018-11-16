@@ -15,3 +15,14 @@ CompositeShape::~CompositeShape(){
 void CompositeShape::accept(const Drawer  *visitor) const {
    visitor->draw(this);
 }
+
+void CompositeShape::setColor(glm::vec4 color) {
+	for (AbstractShape* shape : this->getShapes())
+	{
+		shape->setColor(color);
+	}
+}
+
+glm::vec4 CompositeShape::getColor() const {
+	return glm::vec4(0.4, 0.4, 0.4, 1.0);
+}

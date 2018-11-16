@@ -2,6 +2,7 @@
 #define ABSTRACT_SHAPE_H
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 
 // circular
@@ -23,6 +24,8 @@ public:
 	void setRotation(GLfloat rotation);
 	void setScale(GLfloat scale);
 	void setModified();
+	virtual void setColor(glm::vec4 color) = 0;
+	virtual glm::vec4 getColor() const = 0;
 
     void hide();
     virtual void accept(const Drawer *drawer) const = 0;
