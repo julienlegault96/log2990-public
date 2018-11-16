@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { GameService } from "src/app/services/game/game.service";
-import { AbstractGameCardComponent } from "src/app/game/abstract-game-card/abstract-game-card.component";
+import { AbstractGameCardComponent } from "src/app/views/abstract-game-card/abstract-game-card.component";
 
 @Component({
     selector: "app-game",
