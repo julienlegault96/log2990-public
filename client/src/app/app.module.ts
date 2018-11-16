@@ -71,6 +71,8 @@ import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
         ImgDiffService,
         LeaderboardService,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [
+        AppComponent,
+    ]
 })
 export class AppModule { }

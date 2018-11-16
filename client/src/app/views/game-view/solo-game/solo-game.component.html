@@ -3,13 +3,6 @@
         <app-diff-counter [playerOneId]="playerId" [nbViews]="game.type + 1"></app-diff-counter>
     </div>
 
-    <!-- <h3 class="mt-5">
-        {{ game.title }}
-    </h3>
-
-    <hr /> -->
-
-
     <div class="mt-5">
         <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
             [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorWasFound()"></app-image-diff>
@@ -17,5 +10,4 @@
         <app-image-diff *ngIf="game.type==1" [gameId]="game._id" [imageView]="secondView" [originalImageSrc]="game.imageUrl[3]"
             [modifiedImageSrc]="game.imageUrl[4]" (errorFound)="errorWasFound()"></app-image-diff>
     </div>
-
 </div>

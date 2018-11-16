@@ -6,7 +6,30 @@
             <app-message-bar [messages]></app-message-bar>
         </div>
         <div class="col-10 px-5 py-3">
-            <app-solo-game [playerId]="playerId" [game]="game" (errorFound)="messageBar.addMessage($event); verifyErrorCount()"></app-solo-game>
+            <app-solo-game [playerId]="playerId" [game]="game" [chrono]="chrono" (errorFound)="messageBar.addMessage($event)"></app-solo-game>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="win-end-game-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 class="modal-title">
+                    <fa-icon [icon]="['fas', 'thumbs-up']" class="text-success"></fa-icon>
+                    Bravo!
+                </h4>
+
+                <hr />
+
+                <p>Vous avez gagné la partie! Allez célébrer avec votre famille et vos amis!</p>
+
+                <div class="float-right">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" [routerLink]="['/gameList']">Continuer</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="open-win-end-game-modal" [hidden]="true" data-toggle="modal" data-backdrop="static" data-target="#win-end-game-modal"></button>
