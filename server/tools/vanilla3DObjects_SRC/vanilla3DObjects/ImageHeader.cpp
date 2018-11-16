@@ -49,7 +49,7 @@ ostream & operator<<(ostream & stream, const ImageHeader & header)
 	
 	// 40 bytes - imageheader - memblock positions [14 to 53] 
 	split4BytesInLittleEndian(memblock, header.biSize, 14, 17);
-	split4BytesInLittleEndian(memblock, header.biWidth,	18, 21);
+	split4BytesInLittleEndian(memblock, header.biWidth, 18, 21);
 	split4BytesInLittleEndian(memblock, header.biHeight, 22, 25);
 	split2BytesInLittleEndian(memblock, header.biPlanes, 26, 27);
 	split2BytesInLittleEndian(memblock, header.biBitCount, 28, 29);
@@ -58,7 +58,7 @@ ostream & operator<<(ostream & stream, const ImageHeader & header)
 	split4BytesInLittleEndian(memblock, header.biXPelsPerMeter, 38, 41);
 	split4BytesInLittleEndian(memblock, header.biYPelsPerMeter, 42, 45);
 	split4BytesInLittleEndian(memblock, header.biClrUsed, 46, 49);
-	split4BytesInLittleEndian(memblock, header.biClrImportant,	50, 53);
+	split4BytesInLittleEndian(memblock, header.biClrImportant, 50, 53);
 
 	stream.write(memblock, header.bfOffBits);
 

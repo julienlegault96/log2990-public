@@ -22,6 +22,6 @@ public:
 	friend ostream& operator<<(ostream & os, const Image & image);
 
 private:
-	vector<vector<Pixel>> _pixels;
+	vector<vector<Pixel>> pixels_;
 
 };
