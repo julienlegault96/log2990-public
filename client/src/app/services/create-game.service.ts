@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 import { GameService } from "./game.service";
-import { CODES } from "../../../../common/communication/response-codes";
 import { Game, generateGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
