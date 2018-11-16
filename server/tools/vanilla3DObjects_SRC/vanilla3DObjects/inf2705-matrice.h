@@ -26,7 +26,6 @@
 # define GLM_ENABLE_EXPERIMENTAL 1
 #endif
 
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -48,6 +47,9 @@ public:
    { matr_.top() = glm::scale( matr_.top(), glm::vec3(sx,sy,sz) ); }
    void Scale(GLfloat scale) {
 	 matr_.top() = glm::scale(matr_.top(), glm::vec3(scale, scale, scale));
+   }
+   void Scale(glm::vec3 scale) {
+	   matr_.top() = glm::scale(matr_.top(), scale);
    }
    void Translate( GLfloat tx, GLfloat ty, GLfloat tz )
    { matr_.top() = glm::translate( matr_.top(), glm::vec3(tx,ty,tz) ); }

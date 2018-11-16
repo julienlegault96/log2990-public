@@ -95,6 +95,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>R:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\lib\onecore\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,23 +127,77 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractFactory.h" />
+    <ClInclude Include="AbstractShape.h" />
+    <ClInclude Include="AlienShip.h" />
+    <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Default3DProgramState.h" />
+    <ClInclude Include="Drawer.h" />
+    <ClInclude Include="EntreprisingSpaceship.h" />
+    <ClInclude Include="FlyingSaucer.h" />
+    <ClInclude Include="Fusee.h" />
+    <ClInclude Include="GeoFactory.h" />
+    <ClInclude Include="navette.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="HeatShield.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageHeader.h" />
     <ClInclude Include="inf2705-fenetre.h" />
     <ClInclude Include="inf2705-forme.h" />
     <ClInclude Include="inf2705-matrice.h" />
     <ClInclude Include="inf2705-nuanceur.h" />
+    <ClInclude Include="inf2705-texture.h" />
+    <ClInclude Include="inf2705-theiere.h" />
+    <ClInclude Include="CompositeShape.h" />
+    <ClInclude Include="Ringworld.h" />
+    <ClInclude Include="ObjectLoc.h" />
     <ClInclude Include="Pixel.h" />
+    <ClInclude Include="Planet.h" />
+    <ClInclude Include="Satelite.h" />
     <ClInclude Include="Shape.h" />
-    <ClInclude Include="ShapesContainer.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Spaceship.h" />
+    <ClInclude Include="SpaceStation.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Sun.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TeslaCar.h" />
+    <ClInclude Include="ThemeFactory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractFactory.cpp" />
+    <ClCompile Include="AbstractShape.cpp" />
+    <ClCompile Include="AlienShip.cpp" />
+    <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Drawer.cpp" />
+    <ClCompile Include="EntreprisingSpaceship.cpp" />
+    <ClCompile Include="FlyingSaucer.cpp" />
+    <ClCompile Include="Fusee.cpp" />
+    <ClCompile Include="GeoFactory.cpp" />
+    <ClCompile Include="HeatShield.cpp" />
+    <ClCompile Include="inf2705-fenetre.cpp" />
+    <ClCompile Include="Default3DProgramState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageHeader.cpp" />
+    <ClCompile Include="CompositeShape.cpp" />
+    <ClCompile Include="Navette.cpp" />
+    <ClCompile Include="ObjectLoc.cpp" />
     <ClCompile Include="Pixel.cpp" />
-    <ClCompile Include="vanilla3DObjects.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="Ringworld.cpp" />
+    <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="Satelite.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Spaceship.cpp" />
+    <ClCompile Include="SpaceStation.cpp" />
+    <ClCompile Include="Sun.cpp" />
+    <ClCompile Include="TeslaCar.cpp" />
+    <ClCompile Include="ThemeFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuanceurs.glsl" />
