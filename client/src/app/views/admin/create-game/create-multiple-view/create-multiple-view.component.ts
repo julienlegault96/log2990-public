@@ -21,15 +21,15 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
         super(createGameService);
     }
 
-    
+
     public submit(): void {
-        if (!this.createGameService.validator.isStandardStringLength(this.name) 
-        || !this.hasValidGeneratorOptions()) {
-            alert("Erreur(s) dans le formulaire"); 
-            
+        if (!this.createGameService.validator.isStandardStringLength(this.name)
+            || !this.hasValidGeneratorOptions()) {
+            alert("Erreur(s) dans le formulaire");
+
             return;
         }
-        
+
         const options: GenMultiParameters = {
             type: this.gameType,
             quantity: this.objectNumber,
@@ -39,17 +39,17 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
                 color: this.color
             }
         };
-        
+
         this.createGameService.submitMultiple(this.name, options);
     }
-    
+
     public onRangeChange(event: Event): void {
         const target: HTMLInputElement | null = event.target as HTMLInputElement;
         if (target) {
             this.objectNumber = Number(target.value);
         }
     }
-    
+
     private hasValidGeneratorOptions(): boolean {
         return (this.add || this.remove || this.color);
     }

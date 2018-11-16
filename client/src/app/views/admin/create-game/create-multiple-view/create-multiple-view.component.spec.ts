@@ -43,7 +43,7 @@ describe("CreateMultipleViewComponent", () => {
         component.remove = false;
 
         const result: boolean = component["hasValidGeneratorOptions"]();
-        
+
         expect(result).toBe(false);
     });
 
