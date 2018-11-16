@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 import { GameService } from "./game.service";
-import { CODES } from "../../../../common/communication/response-codes";
 import { Game, generateGameTemplate } from "../../../../common/game/game";
 import { GameType } from "../../../../common/game/game-type";
 import { Validator } from "../validator";
@@ -41,9 +40,8 @@ export class CreateGameService extends GameService {
                     alert("Création du jeu réussie");
                     location.reload();
                 },
-                (error: { message: string, httpError: HttpErrorResponse }) => {
-                    const message: string = (error.httpError.status === CODES.BAD_REQUEST) ? "Les images sont invalides" : error.message;
-                    alert(message);
+                () => {
+                    alert("Les images sont invalides");
                 }
             );
         });
@@ -58,8 +56,8 @@ export class CreateGameService extends GameService {
                 alert("Création du jeu réussie");
                 location.reload();
             },
-            (error: { message: string }) => {
-                alert(error.message);
+            () => {
+                alert("Génération des images sans succès");
             }
         );
     }

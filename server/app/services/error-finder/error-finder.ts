@@ -38,7 +38,7 @@ export class ErrorFinder {
             for (const coordinates of this.getAdjacentPixels(connectedPixels[connectedPixels.length - 1])) {
                 if (this.isDifference(coordinates)) {
                     const position: number = this.getPosition(coordinates);
-                    if (usedPixels[position] !== true) {
+                    if (!usedPixels[position]) {
                         usedPixels[position] = true;
                         stack.push(coordinates);
                     }

@@ -9,3 +9,23 @@ body > .container {
 body > .container-fluid {
     height: 100%;
 }
+
+.custom-shadow {
+    box-shadow: 
+        0px 0px 3px 0px rgba(0, 0, 0, 0.20),
+        0px 16px 20px -11px rgba(0, 0, 0, 0.15);
+}
+
+.custom-shadow-sm {
+    box-shadow: 
+        0px 8px 10px -5px rgba(0, 0, 0, 0.12);
+}
+
+.btn-pill {
+    border-radius: 10em;
+    padding: 0.70em 1em;
+}
+
+.btn-round {
+    border-radius: 10em;    
+}

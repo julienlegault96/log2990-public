@@ -3,6 +3,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 
 import { UserComponent } from "./user.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("UserComponent", () => {
     let component: UserComponent;
@@ -11,7 +13,12 @@ describe("UserComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [UserComponent],
-            imports: [FormsModule, HttpClientModule]
+            imports: [
+                FormsModule,
+                HttpClientModule,
+                FontAwesomeModule,
+                RouterTestingModule.withRoutes([]),
+            ]
         })
             .compileComponents();
     }));

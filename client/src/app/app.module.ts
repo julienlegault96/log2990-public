@@ -23,7 +23,7 @@ import { DiffCounterComponent } from "./game/game-view/diff-counter/diff-counter
 import { MessageBarComponent } from "./game/game-view/message-bar/message-bar.component";
 import { MessageComponent } from "./game/game-view/message/message.component";
 
-import { UserComponent } from "./user/user-component/user.component";
+import { UserComponent } from "./home-page/user/user.component";
 
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";

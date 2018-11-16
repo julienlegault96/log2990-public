@@ -2,8 +2,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 
-import { UserComponent } from "../User/user-component/user.component";
+import { UserComponent } from "./user/user.component";
 import { HomePageComponent } from "./home-page.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("HomePageComponent", () => {
     let component: HomePageComponent;
@@ -12,7 +14,12 @@ describe("HomePageComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [HomePageComponent, UserComponent],
-            imports: [FormsModule, HttpClientModule]
+            imports: [
+                FormsModule,
+                HttpClientModule,
+                FontAwesomeModule,
+                RouterTestingModule.withRoutes([]),
+            ]
         })
             .compileComponents();
     }));

@@ -1,0 +1,56 @@
+<div class="col-sm-6 mx-auto">
+    <div class=" card custom-shadow border-0 mb-4">
+        <div class="card-body">
+            <h4>
+                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                Connexion
+            </h4>
+
+            <hr />
+
+            <div class="form-group">
+                <label>
+                    Nom d'utilisateur
+                </label>
+                <input [(ngModel)]="username" [class.is-invalid]="errorMessages[0] !== ''" type="text" class="form-control" placeholder="Entrez un nom d'utilisateur">
+                <div class="invalid-feedback">
+                    {{ errorMessages[0] }}
+                </div>
+            </div>
+
+            <div class="float-right">
+                <button class="btn btn-success btn-pill" type="button" (click)="submit()">
+                    &nbsp;
+                    Suivant&nbsp;
+                    <fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
+                    &nbsp;
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class=" card custom-shadow border-0">
+        <div class="card-body">
+            <span class="h4">
+                <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                Utilisateurs connectés:
+                <div class="float-right">
+                    <button class="btn btn-info btn-round" type="button" (click)="userService.refreshUserList()">
+                        &nbsp;
+                        <fa-icon [icon]="['fas', 'redo-alt']" size="sm"></fa-icon>
+                        &nbsp;
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </span>
+
+            <hr />
+
+            <div>
+                <span *ngFor="let user of userService.asyncUserList" class="badge badge-pill badge-primary mr-2">
+                    {{user._id}}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

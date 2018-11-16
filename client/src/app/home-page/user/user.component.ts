@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 
 import { UserService } from "../../services/user.service";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-user-component",
@@ -12,17 +13,20 @@ import { UserService } from "../../services/user.service";
  */
 export class UserComponent {
 
+    public errorMessages: Array<string>;
     private username: string;
 
-    public constructor(private userService: UserService) {
+    public constructor(private userService: UserService, private router: Router) {
+        this.errorMessages = [""];
         this.username = "";
     }
 
     public submit(): void {
         try {
             this.userService.submitUsername(this.username);
+            this.router.navigate(["/", "gameList"]);
         } catch (error) {
-            alert(error);
+            this.errorMessages = error.message.split("\n");
         }
     }
 

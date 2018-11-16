@@ -73,11 +73,15 @@ export class CreateSingleViewComponent extends CreateGameComponent {
     }
 
     private updateRawImageMessage(filename?: string): void {
-        this.rawImageMessage = (filename ? filename : "Choisir un fichier");
+        this.rawImageMessage = this.getFilenameMessage(filename);
     }
 
     private updateModifiedImageMessage(filename?: string): void {
-        this.modifiedImageMessage = (filename ? filename : "Choisir un fichier");
+        this.modifiedImageMessage = this.getFilenameMessage(filename);
+    }
+
+    private getFilenameMessage(filename: string | undefined): string {
+        return (filename ? filename : "Choisir un fichier");
     }
 
 }
