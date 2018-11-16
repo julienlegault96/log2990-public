@@ -13,6 +13,7 @@
 #include "SpaceStation.h"
 #include "TeslaCar.h"
 #include "Mars.h"
+#include "Navette.h"
 #include "Robot.h"
 
 ThemeFactory::ThemeFactory(const int & numberOfObject): AbstractFactory(numberOfObject){ }
@@ -61,7 +62,7 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
     //TODO remettre random
-    switch (possibleShapes::robot) {
+    switch (generateCoherentContentChoice()) {
 		case robot:
 			generatedObject = new Robot(translate, rotate, rotateAngle, scale);
 			break;
@@ -85,6 +86,9 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 	    case fusee:
 		    generatedObject = new Fusee(translate, rotate, rotateAngle, scale);
 		    break;
+		case navette:
+			generatedObject = new Navette(translate, rotate, rotateAngle, scale);
+			break;
 	    case heatShield:
 		    generatedObject = new Heatshield(translate, rotate, rotateAngle, scale);
 		    break;

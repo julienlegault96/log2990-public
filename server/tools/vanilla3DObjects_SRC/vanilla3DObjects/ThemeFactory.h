@@ -11,7 +11,7 @@ public:
 private:
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip,
                           sun, fusee, heatShield, spaceship, satellite,
-                          entreprisingSpaceship, spaceStation, teslaCar, mars, robot, 
+                          entreprisingSpaceship, spaceStation, teslaCar, mars, robot, navette, 
                           enumSize
                         };
     short const MIN_DISTANCE = 6;

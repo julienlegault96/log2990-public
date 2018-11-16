@@ -138,6 +138,7 @@
     <ClInclude Include="FlyingSaucer.h" />
     <ClInclude Include="Fusee.h" />
     <ClInclude Include="GeoFactory.h" />
+    <ClInclude Include="navette.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="HeatShield.h" />
     <ClInclude Include="Image.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="CompositeShape.cpp" />
     <ClCompile Include="inf2705-forme.cpp" />
     <ClCompile Include="Mars.cpp" />
+    <ClCompile Include="Navette.cpp" />
     <ClCompile Include="ObjectLoc.cpp" />
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="main.cpp" />
