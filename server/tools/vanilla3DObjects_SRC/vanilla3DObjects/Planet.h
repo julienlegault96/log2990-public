@@ -11,8 +11,6 @@ public:
 private:
     enum ShapeThemelist { basicPlanet, ringPlanet, enumSize };
 	void initPlanet(short type, glm::vec4 color);
-	// void changeTexture(GLuint texture);
-	// GLuint texture_;
 };
 
 #endif

@@ -53,7 +53,6 @@ void Fenetre::initialiser(std::string absolutePath, bool geo, int objectsAmount,
 
     // charger les ressources
     chargerNuanceurs(absolutePath);
-    chargerTextures();
 
     // créer quelques autres formes
     glUseProgram(progBase);
@@ -201,27 +200,6 @@ void Fenetre::chargerNuanceurs(std::string path)
             glUniformBlockBinding(progBase, indLightModel, bindingIndex);
         }
     }
-}
-
-void Fenetre::chargerTextures()
-{
-    /*
-    unsigned char *pixels;
-    GLsizei largeur, hauteur;
-    if ((pixels = ChargerImage("../images/echiquier.bmp", largeur, hauteur)) != NULL)
-    {
-        glGenTextures(1, &etat->state.textureId);
-        glBindTexture(GL_TEXTURE_2D, etat->state.textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        delete[] pixels;
-    }
-
-    glActiveTexture(GL_TEXTURE1); // l'unité de texture 1
-    glBindTexture(GL_TEXTURE_2D, etat->state.textureId);
-    */
 }
 
 void Fenetre::redimensionner(GLsizei w, GLsizei h)

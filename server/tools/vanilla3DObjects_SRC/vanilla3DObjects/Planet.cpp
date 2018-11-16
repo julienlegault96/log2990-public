@@ -72,10 +72,3 @@ void Planet::initPlanet(short type, glm::vec4 color)
 
 	}
 }
-/*
-void Planet::changeTexture(GLuint texture)
-{
-	texture_ = texture;
-	modified_ = true;
-}
-*/

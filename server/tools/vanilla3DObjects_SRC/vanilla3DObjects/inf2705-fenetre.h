@@ -364,7 +364,6 @@ public:
 
    // fonction pour allouer les ressources
    void initialiser(std::string absolutePath, bool geo, int objectsAmount, const char * sceneOptions);
-   void chargerTextures();
    void chargerNuanceurs(std::string path);
    // fonction pour détruire les ressources OpenGL allouées
    void conclure( );
