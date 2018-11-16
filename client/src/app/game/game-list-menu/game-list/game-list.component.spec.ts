@@ -5,7 +5,7 @@ import { TestHelper } from "../../../../test.helper";
 import { GameListComponent } from "./game-list.component";
 import { GameCardComponent } from "../game-card/game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
-import { GameService } from "../../../services/game.service";
+import { GameService } from "../../../services/game/game.service";
 
 import { GameType } from "../../../../../../common/game/game-type";
 import { GAMES, SINGLE_VIEW_GAME_COUNT, DOUBLE_VIEW_GAME_COUNT } from "../../../../../../common/game/mock-games";

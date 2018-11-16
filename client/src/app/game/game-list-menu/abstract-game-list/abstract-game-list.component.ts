@@ -1,6 +1,6 @@
 import { OnInit } from "@angular/core";
 
-import { GameService } from "../../../services/game.service";
+import { GameService } from "../../../services/game/game.service";
 
 import { Game } from "../../../../../../common/game/game";
 import { GameType } from "../../../../../../common/game/game-type";

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { GameService } from "../../services/game.service";
+import { GameService } from "../../services/game/game.service";
 import { AbstractGameCardComponent } from "src/app/game/abstract-game-card/abstract-game-card.component";
 
 @Component({

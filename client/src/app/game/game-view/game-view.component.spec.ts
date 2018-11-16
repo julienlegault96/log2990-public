@@ -7,11 +7,11 @@ import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MessageComponent } from "./message/message.component";
 import { DiffCounterComponent } from "./diff-counter/diff-counter.component";
 import { ImageDiffComponent } from "./image-diff/image-diff.component";
-import { ImgDiffService } from "src/app/services/img-diff.service";
+import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
-import { GameService } from "src/app/services/game.service";
-import { UserService } from "src/app/services/user.service";
+import { GameService } from "src/app/services/game/game.service";
+import { UserService } from "src/app/services/user/user.service";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 
 describe("GameViewComponent", () => {

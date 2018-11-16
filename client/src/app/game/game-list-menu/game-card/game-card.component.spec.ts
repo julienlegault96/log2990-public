@@ -3,7 +3,7 @@ import { TestHelper } from "../../../../test.helper";
 
 import { GameCardComponent } from "./game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
-import { GameService } from "../../../services/game.service";
+import { GameService } from "../../../services/game/game.service";
 
 import { GAMES } from "../../../../../../common/game/mock-games";
 import { RouterTestingModule } from "@angular/router/testing";

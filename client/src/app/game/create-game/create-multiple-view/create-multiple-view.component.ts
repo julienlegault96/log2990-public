@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 
 import { GenMultiParameters } from "../../../../../../common/communication/gen-multi-parameters";
 import { CreateGameComponent } from "../create-game.component";
-import { CreateGameService } from "src/app/services/create-game.service";
+import { CreateGameService } from "src/app/services/create-game/create-game.service";
 
 @Component({
     selector: "app-create-multiple-view",

@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 
-import { AbstractServerService, Endpoints } from "./abstract-server.service";
-import { Game } from "../../../../common/game/game";
+import { AbstractServerService, Endpoints } from "../abstract-server/abstract-server.service";
+import { Game } from "../../../../../common/game/game";
 import {
     generateSoloLeaderboard,
     generateDuoLeaderboard,
     Leaderboard,
     SINGLE_VIEW_BASE_TIME,
     MULTIPLE_VIEW_BASE_TIME
-} from "../../../../common/game/leaderboard";
-import { GameType } from "../../../../common/game/game-type";
-import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
+} from "../../../../../common/game/leaderboard";
+import { GameType } from "../../../../../common/game/game-type";
+import { GameCreationRequest } from "../../../../../common/communication/game-creation-request";
 
 @Injectable()
 

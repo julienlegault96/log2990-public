@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef } from "@angular/core";
-import { ImgDiffService } from "src/app/services/img-diff.service";
+import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
 import { AudioPlayer } from "./audio-player";

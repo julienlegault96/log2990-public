@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-import { AbstractServerService, Endpoints } from "./abstract-server.service";
-import { Validator } from "../validator";
+import { AbstractServerService, Endpoints } from "../abstract-server/abstract-server.service";
+import { Validator } from "../../validator";
 
-import { User } from "../../../../common/user/user";
+import { User } from "../../../../../common/user/user";
 
 @Injectable({
     providedIn: "root"

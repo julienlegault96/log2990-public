@@ -12,7 +12,7 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { HomePageComponent } from "./home-page/home-page.component";
 
-import { GameService } from "./services/game.service";
+import { GameService } from "./services/game/game.service";
 import { GameListComponent } from "./game/game-list-menu/game-list/game-list.component";
 import { GameCardComponent } from "./game/game-list-menu/game-card/game-card.component";
 import { LeaderboardComponent } from "./game/game-list-menu/leaderboard/leaderboard.component";
@@ -27,10 +27,10 @@ import { UserComponent } from "./home-page/user/user.component";
 
 import { AdminViewComponent } from "./admin/admin-view/admin-view.component";
 import { AdminViewCardComponent } from "./admin/admin-view-card/admin-view-card.component";
-import { CreateGameService } from "./services/create-game.service";
+import { CreateGameService } from "./services/create-game/create-game.service";
 
 import { ImageDiffComponent } from "./game/game-view/image-diff/image-diff.component";
-import { ImgDiffService } from "./services/img-diff.service";
+import { ImgDiffService } from "./services/img-diff/img-diff.service";
 
 import { CreateSingleViewComponent } from "./game/create-game/create-single-game/create-single-view.component";
 import { CreateMultipleViewComponent } from "./game/create-game/create-multiple-view/create-multiple-view.component";

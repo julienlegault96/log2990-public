@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { GameService } from "./game.service";
-import { Game, generateGameTemplate } from "../../../../common/game/game";
-import { GameType } from "../../../../common/game/game-type";
-import { Validator } from "../validator";
-import { GenMultiParameters } from "../../../../common/communication/gen-multi-parameters";
-import { GameCreationRequest } from "../../../../common/communication/game-creation-request";
-import { MULTIPLE_VIEW_BASE_TIME, SINGLE_VIEW_BASE_TIME } from "../../../../common/game/leaderboard";
+import { GameService } from "../game/game.service";
+import { Game, generateGameTemplate } from "../../../../../common/game/game";
+import { GameType } from "../../../../../common/game/game-type";
+import { Validator } from "../../validator";
+import { GenMultiParameters } from "../../../../../common/communication/gen-multi-parameters";
+import { GameCreationRequest } from "../../../../../common/communication/game-creation-request";
+import { MULTIPLE_VIEW_BASE_TIME, SINGLE_VIEW_BASE_TIME } from "../../../../../common/game/leaderboard";
 
 @Injectable()
 

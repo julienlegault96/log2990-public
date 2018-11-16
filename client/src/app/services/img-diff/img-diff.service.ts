@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
-import { Coordinates } from "../../../../common/game/coordinates";
-import { ImageView } from "../../../../common/game/image-view";
+import { AbstractServerService, Endpoints, Query } from "../abstract-server/abstract-server.service";
+import { Coordinates } from "../../../../../common/game/coordinates";
+import { ImageView } from "../../../../../common/game/image-view";
 
 @Injectable()
 
