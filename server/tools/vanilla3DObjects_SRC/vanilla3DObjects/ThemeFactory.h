@@ -14,7 +14,7 @@ private:
                           entreprisingSpaceship, spaceStation, teslaCar, ringworld, robot, navette,
                           enumSize
                         };
-    short const MIN_DISTANCE = 6;
+    short const MIN_DISTANCE = 9;
 	bool sunPresent_ = false;
     bool rwPresent_ = false;
 

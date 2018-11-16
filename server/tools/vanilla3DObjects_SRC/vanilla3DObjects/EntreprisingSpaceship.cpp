@@ -3,7 +3,7 @@
 
 
 EntreprisingSpaceship::EntreprisingSpaceship(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec4 color) 
-	: CompositeShape(coords, rotationAxis, rotation, scale)
+	: CompositeShape(coords, rotationAxis, rotation, scale*0.5)
 {
 	color_ = color;
 	shapes_.push_back(

@@ -104,12 +104,12 @@ export class ImageGenerator {
         images[ImagesIndex.SecondViewModified] = await
             this.fileService.readFileInBase64(this.getToolsPath(this.secondViewModifiedPath));
 
-        await this.fileService.deleteFiles(
-            this.getToolsPath(this.firstViewOriginalPath),
-            this.getToolsPath(this.firstViewModifiedPath),
-            this.getToolsPath(this.secondViewOriginalPath),
-            this.getToolsPath(this.secondViewModifiedPath),
-        );
+        //await this.fileService.deleteFiles(
+        //    this.getToolsPath(this.firstViewOriginalPath),
+        //    this.getToolsPath(this.firstViewModifiedPath),
+        //    this.getToolsPath(this.secondViewOriginalPath),
+        //    this.getToolsPath(this.secondViewModifiedPath),
+        //);
 
         return images;
     }

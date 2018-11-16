@@ -1,7 +1,8 @@
 #include "Ringworld.h"
 #include "Shape.h"
 
-Ringworld::Ringworld(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale): CompositeShape(coords, rotationAxis, rotation, scale) {
+Ringworld::Ringworld(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
+	: CompositeShape(coords, rotationAxis, rotation, scale*0.5) {
 	shapes_.push_back(
 		new Shape(
 			Shapelist::Tore,

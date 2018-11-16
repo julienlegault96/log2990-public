@@ -3,7 +3,7 @@
 
 
 FlyingSaucer::FlyingSaucer(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec4 hullColor, glm::vec4 glassColor)
-	: CompositeShape(coords, rotationAxis, rotation, scale)
+	: CompositeShape(coords, rotationAxis, rotation, scale*0.8)
 {
 	hullColor_ = hullColor;
 	glassColor_ = glassColor;

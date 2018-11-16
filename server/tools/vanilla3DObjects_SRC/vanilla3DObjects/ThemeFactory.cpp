@@ -38,7 +38,6 @@ short ThemeFactory::generateCoherentContentChoice() const {
         switch (choice) {
             case sun:
                 ok = !sunPresent_ && !modMode_;
-                break;
             case ringworld:
                 ok = !rwPresent_ && !modMode_;
                 break;
@@ -111,7 +110,7 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 		    generatedObject = new TeslaCar(translate, rotate, rotateAngle, scale);
 		    break;
 	    case ringworld:
-		    generatedObject = new Ringworld(glm::vec3(0,0,5.5), rotate, rotateAngle, (scale+2)*3);
+		    generatedObject = new Ringworld(glm::vec3(0,0,5.5), rotate, rotateAngle, (scale));
             rwPresent_ = true;
 		    break;
         default:

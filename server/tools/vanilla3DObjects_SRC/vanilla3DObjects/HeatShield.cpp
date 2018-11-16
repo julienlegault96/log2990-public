@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 Heatshield::Heatshield(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
-	:CompositeShape(coords, rotationAxis, rotation, scale)
+	:CompositeShape(coords, rotationAxis, rotation, scale*0.8)
 {
 	shapes_.push_back(
 		new Shape(
