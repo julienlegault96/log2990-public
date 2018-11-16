@@ -6,10 +6,6 @@ import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
-import { GameType } from "../../../../../common/game/game-type";
-import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
-import { LeaderboardRequest } from "../../../../../common/communication/leaderboard-request";
-import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 @Component({
     selector: "app-game-view",
@@ -23,18 +19,14 @@ export class GameViewComponent implements OnInit {
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
-    public playerId: string;
+    public playerIds: string[] = new Array<string>();
     public game: Game;
-
-    private readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 7;
-    private readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 14;
 
     public constructor(
         private activatedRoute: ActivatedRoute,
         private userService: UserService,
-        private gameService: GameService,
-        private leaderboardService: LeaderboardService) {
-        this.playerId = this.userService.loggedUser._id;
+        private gameService: GameService) {
+        this.playerIds[0] = this.userService.loggedUser._id;
     }
 
     public ngOnInit(): void {
@@ -44,30 +36,6 @@ export class GameViewComponent implements OnInit {
                 this.chrono.start();
             });
         });
-    }
-
-    public verifyErrorCount(): void {
-        if ((this.game.type === GameType.SingleView
-            && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.MAX_SINGLE_VIEW_ERROR_COUNT)
-            || (this.game.type === GameType.DoubleView
-                && this.soloGame.diffCounter.getPlayerCount(this.playerId) === this.MAX_DOUBLE_VIEW_ERROR_COUNT)) {
-            const timeout: number = 100;
-            setTimeout(() => this.endGame(), timeout);
-        }
-    }
-
-    private endGame(): void {
-        this.chrono.stop();
-
-        const leaderboardRequest: LeaderboardRequest = {
-            id: this.game._id,
-            partyMode: GamePartyMode.Solo,
-            time: this.chrono.elapsedTime,
-            playerName: this.playerId
-        };
-        this.leaderboardService.sendGameScore(leaderboardRequest);
-
-        alert("Bravo!");
     }
 
 }
