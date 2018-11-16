@@ -16,10 +16,12 @@ void help() {
 
 std::string getAbsolutePath( const char * argv0) 
 {
-	const short PROGRAM_NAME_LENGTH = 11;
-	std::string absolutePath(argv0);
+    const char * PROGRAM_NAME = "bmpdiff";
 
-	return absolutePath.substr(0, absolutePath.length() - PROGRAM_NAME_LENGTH);
+    std::string absoluteRef(argv0);
+    absoluteRef = absoluteRef.substr(0, absoluteRef.find(PROGRAM_NAME));
+
+    return absoluteRef;
 }
 
 int main(int argc, char *argv[])
