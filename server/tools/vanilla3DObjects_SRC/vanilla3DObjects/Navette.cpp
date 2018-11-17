@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 Navette::Navette(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale) 
-	:CompositeShape(coords, rotationAxis, rotation, scale*0.8) {
+	:CompositeShape(coords, rotationAxis, rotation, scale) {
 
 	glm::vec4 colorBody = glm::vec4(0.9, 0.9, 0.9, 1);
 	glm::vec4 colorHead = glm::vec4(0.2, 0.2, 0.2, 1);	

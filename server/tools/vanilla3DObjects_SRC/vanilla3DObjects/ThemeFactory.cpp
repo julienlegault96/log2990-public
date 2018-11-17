@@ -12,7 +12,7 @@
 #include "EntreprisingSpaceship.h"
 #include "SpaceStation.h"
 #include "TeslaCar.h"
-#include "Ringworld.h"
+#include "Warpgate.h"
 #include "Navette.h"
 #include "Robot.h"
 
@@ -38,7 +38,7 @@ short ThemeFactory::generateCoherentContentChoice() const {
         switch (choice) {
             case sun:
                 ok = !sunPresent_ && !modMode_;
-            case ringworld:
+            case warpgate:
                 ok = !rwPresent_ && !modMode_;
                 break;
             default:
@@ -59,7 +59,7 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 	generateCoordinates(translate, objects);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
     GLfloat rotateAngle(generateFloat(0, 360));
-
+	
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
 
     Default3DProgramState* state = Default3DProgramState::obtenirInstance();
@@ -109,8 +109,8 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 		case teslaCar:
 		    generatedObject = new TeslaCar(translate, rotate, rotateAngle, scale);
 		    break;
-	    case ringworld:
-		    generatedObject = new Ringworld(glm::vec3(0,0,5.5), rotate, rotateAngle, (scale));
+	    case warpgate:
+		    generatedObject = new Warpgate(translate, rotate, rotateAngle, (scale));
             rwPresent_ = true;
 		    break;
         default:
@@ -131,7 +131,13 @@ bool ThemeFactory::checkForCollision(const glm::vec3 & coords, std::vector<Abstr
                 pow(shape->getCoordinates().y - coords.y, 2) +
                 pow(shape->getCoordinates().z - coords.z, 2);
 
-            if (distance < MIN_DISTANCE * scalingFactor_) { return true; }
+            if (distance < MIN_DISTANCE * scalingFactor_) { 
+				return true;
+			}else if (abs(shape->getCoordinates().y - coords.y) < 0.1*MIN_DISTANCE* scalingFactor_) {
+				if (abs(shape->getCoordinates().z - coords.z) < 0.1*MIN_DISTANCE*scalingFactor_)
+					return true;
+			
+			}
         }
 	}
 	return false;

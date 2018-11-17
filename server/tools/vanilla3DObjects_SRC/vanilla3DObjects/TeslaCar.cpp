@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 TeslaCar::TeslaCar(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale) 
-	:CompositeShape(coords, rotationAxis, rotation, scale*0.5) {
+	:CompositeShape(coords, rotationAxis, rotation, scale) {
 
 glm::vec4 colorSph = glm::vec4(0.6, 0.5, 0.4, 1);
 glm::vec4 colorH = glm::vec4(0.2, 0.2, 0.2, 0.7);

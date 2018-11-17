@@ -23,8 +23,7 @@ void Camera::randomTurn()
 {
     previousPhi_ = phi_;
     previousTheta_ = theta_;
-    phi_ = glm::mix(0, 360, rand() / ((double)RAND_MAX));
-    theta_ = glm::mix(0.1, 180 - 0.1, rand() / ((double)RAND_MAX));
+	phi_ = 30;
     validateAngles();
 }
 

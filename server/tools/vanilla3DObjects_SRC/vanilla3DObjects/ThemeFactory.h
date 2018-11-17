@@ -11,10 +11,10 @@ public:
 private:
     enum possibleShapes { asteroid, planet, flyingSaucer, alienShip,
                           sun, fusee, heatShield, spaceship, satellite,
-                          entreprisingSpaceship, spaceStation, teslaCar, ringworld, robot, navette,
+                          entreprisingSpaceship, spaceStation, teslaCar, warpgate, robot, navette,
                           enumSize
                         };
-    short const MIN_DISTANCE = 9;
+    short const MIN_DISTANCE = 16;
 	bool sunPresent_ = false;
     bool rwPresent_ = false;
 

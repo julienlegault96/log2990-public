@@ -19,7 +19,7 @@ float AbstractFactory::generateFloat(const float& min, const float& max) const {
 void AbstractFactory::generateCoordinates(glm::vec3 & coords, std::vector<AbstractShape*> * objects) {
     do {
         coords.x = generateFloat(-dimboite_ / 2, dimboite_ / 2);
-        coords.y = generateFloat(-dimboite_ / 2, dimboite_ / 2);
+        coords.y = generateFloat(-dimboite_ , dimboite_ );
         coords.z = generateFloat(0, dimboite_);
     } while (checkForCollision(coords, objects));
 }

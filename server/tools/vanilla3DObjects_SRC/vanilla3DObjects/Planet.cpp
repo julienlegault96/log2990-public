@@ -1,7 +1,7 @@
 #include "Planet.h"
 
 Planet::Planet(short randomseed, glm::vec3 coords, glm::vec4 color, GLfloat rotation, glm::vec3 rotationAxis, GLfloat scale)
-    : CompositeShape(coords, rotationAxis, rotation, scale*0.5)
+    : CompositeShape(coords, rotationAxis, rotation, scale)
 {
 	initPlanet(randomseed % ShapeThemelist::enumSize, color);
 }

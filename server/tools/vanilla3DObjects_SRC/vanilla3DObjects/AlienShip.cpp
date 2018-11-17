@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 AlienShip::AlienShip(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale)
-	:CompositeShape(coords, rotationAxis, rotation, scale*0.8)
+	:CompositeShape(coords, rotationAxis, rotation, scale)
 {
 	shapes_.push_back(
 		new Shape(
