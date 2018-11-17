@@ -1,5 +1,5 @@
 import * as SocketIO from "socket.io-client";
-import { SocketRequests } from "./socket-requests";
+import { SocketEvents } from "../../../../../common/communication/socket-requests";
 
 export class SocketService {
 
@@ -9,8 +9,8 @@ export class SocketService {
         this.socket = SocketIO("http://localhost:3000");
     }
 
-    public emit<T>(requestType: SocketRequests, data: T): void {
-        this.socket.emit(`${requestType}`, data);
+    public emit<T>(requestType: SocketEvents, data: T): void {
+        this.socket.emit(requestType, data);
     }
 
 }
