@@ -24,7 +24,7 @@ export class ImageDiffComponent implements OnInit {
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
-    private audioIdentificationError: AudioPlayer;
+    private errorAudioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
 
     private hasBeenClicked: boolean;
@@ -35,7 +35,7 @@ export class ImageDiffComponent implements OnInit {
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.audioPlayer = new AudioPlayer(this.successSoundPath);
-        this.audioIdentificationError = new AudioPlayer(this.failSoundPath);
+        this.errorAudioPlayer = new AudioPlayer(this.failSoundPath);
         this.foundErrors = [];
         this.hasBeenClicked = false;
     }
@@ -69,8 +69,8 @@ export class ImageDiffComponent implements OnInit {
                             this.audioPlayer.play();
                             this.updateModifiedImage(errorCoordinates);
                         } else {
-                            this.audioIdentificationError.play();
-                            alert("Erreur d'identification !");     // A enlever. Juste pour tester.
+                            this.errorAudioPlayer.play();
+                            alert("Erreur !");     // A enlever. Juste pour tester.
                         }
                     });
             }
