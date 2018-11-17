@@ -31,7 +31,7 @@ export class ImageDiffComponent implements OnInit {
     private readonly clickDebounce: number = 500;
 
     private readonly successSoundPath: string = "../../../../assets/success.mp3";
-    private readonly failSoundPath: string = "../../../../assets/success.mp3";          // En attendant d'avoir un son pour fail.
+    private readonly failSoundPath: string = "../../../../assets/error.mp3";
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.audioPlayer = new AudioPlayer(this.successSoundPath);
@@ -68,7 +68,7 @@ export class ImageDiffComponent implements OnInit {
                             this.errorFound.emit();
                             this.audioPlayer.play();
                             this.updateModifiedImage(errorCoordinates);
-                        } else {        
+                        } else {
                             this.audioIdentificationError.play();
                             alert("Erreur d'identification !");     // A enlever. Juste pour tester.
                         }
