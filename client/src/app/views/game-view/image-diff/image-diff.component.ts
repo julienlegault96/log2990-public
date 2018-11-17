@@ -25,18 +25,30 @@ export class ImageDiffComponent implements OnInit {
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
+<<<<<<< HEAD
     private errorAudioPlayer: AudioPlayer;
+=======
+    private audioIdentificationError: AudioPlayer;
+>>>>>>> Ajout de sonnerie pour erreur d'identification, ND
     private foundErrors: Array<Coordinates>;
 
     private hasBeenClicked: boolean;
     private readonly clickDebounce: number = 500;
 
     private readonly successSoundPath: string = "../../../../assets/success.mp3";
+<<<<<<< HEAD
     private readonly failSoundPath: string = "../../../../assets/error.mp3";
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.audioPlayer = new AudioPlayer(this.successSoundPath);
         this.errorAudioPlayer = new AudioPlayer(this.failSoundPath);
+=======
+    private readonly failSoundPath: string = "../../../../assets/success.mp3";          // En attendant d'avoir un son pour fail.
+
+    public constructor(private imgDiffService: ImgDiffService) {
+        this.audioPlayer = new AudioPlayer(this.successSoundPath);
+        this.audioIdentificationError = new AudioPlayer(this.failSoundPath);
+>>>>>>> Ajout de sonnerie pour erreur d'identification, ND
         this.foundErrors = [];
         this.hasBeenClicked = false;
     }
@@ -66,8 +78,14 @@ export class ImageDiffComponent implements OnInit {
                             this.errorFound.emit();
                             this.audioPlayer.play();
                             this.updateModifiedImage(errorCoordinates);
+<<<<<<< HEAD
                         } else {
                             this.noErrorWasClicked(event);
+=======
+                        } else {        
+                            this.audioIdentificationError.play();
+                            alert("Erreur d'identification !");     // A enlever. Juste pour tester.
+>>>>>>> Ajout de sonnerie pour erreur d'identification, ND
                         }
                     });
             } else {
