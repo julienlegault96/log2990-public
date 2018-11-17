@@ -200,8 +200,8 @@ export class ImageDiffComponent implements OnInit {
             return;
         }
         const originalImageBuffer: Uint8ClampedArray = this.getImageBuffer("original");
-        const originalImage: ImageData = this.getImage("original");
         const errorImageBuffer: Uint8ClampedArray = this.getImageBuffer("error");
+        const errorImage: ImageData = this.getImage("error");
 
         const redOffset: number = 0;
         const greenOffset: number = 1;
@@ -219,6 +219,6 @@ export class ImageDiffComponent implements OnInit {
             originalImageBuffer[index + alphaOffset] =
                 errorImageBuffer[index + alphaOffset];
         }
-        this.modifiedCtx.putImageData(originalImage, 0, 0);
+        this.originalCtx.putImageData(errorImage, 0, 0);
     }
 }
