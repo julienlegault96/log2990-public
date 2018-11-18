@@ -115,12 +115,6 @@ void Fenetre::afficherScene()
     // Mode plein ou en fil
     glPolygonMode(GL_FRONT_AND_BACK, etat->state.modePolygone);
     if (etat->state.culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
-    // erreur dans le constructeur
-    glm::vec3 coords = glm::vec3(-1., 0., 4.);
-    GLfloat rotation = 0.;
-    glm::vec3 axis = glm::vec3(0., 0., 0.);
-    GLfloat scale = 1.;
-
 	scene->accept(drawer);
 }
 

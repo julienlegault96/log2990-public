@@ -59,10 +59,9 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 	generateCoordinates(translate, objects);
 	glm::vec3 rotate(generateFloat(0, 1), generateFloat(0, 1), generateFloat(0, 1));
     GLfloat rotateAngle(generateFloat(0, 360));
-	
 	GLfloat scale = generateFloat(MIN_SIZE_MODIFIER * scalingFactor_, MAX_SIZE_MODIFIER * scalingFactor_);
-
-    Default3DProgramState* state = Default3DProgramState::obtenirInstance();
+    
+	Default3DProgramState* state = Default3DProgramState::obtenirInstance();
 
     switch (generateCoherentContentChoice()) {
 		case robot:
@@ -110,7 +109,7 @@ void ThemeFactory::generateShape(std::vector<AbstractShape*> * objects)
 		    generatedObject = new TeslaCar(translate, rotate, rotateAngle, scale);
 		    break;
 	    case warpgate:
-		    generatedObject = new Warpgate(translate, rotate, rotateAngle, (scale));
+		    generatedObject = new Warpgate(translate, rotate, rotateAngle, scale);
             rwPresent_ = true;
 		    break;
         default:
