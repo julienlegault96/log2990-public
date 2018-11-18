@@ -14,7 +14,8 @@ private:
                           entreprisingSpaceship, spaceStation, teslaCar, warpgate, robot, navette,
                           enumSize
                         };
-    short const MIN_DISTANCE = 16;
+    short const MIN_TOTAL_DISTANCE = 16;
+	short const MIN_AXIS_DISTANCE = 1.6;
 	bool sunPresent_ = false;
     bool rwPresent_ = false;
 
