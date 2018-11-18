@@ -23,7 +23,7 @@ void Camera::randomTurn()
 {
     previousPhi_ = phi_;
     previousTheta_ = theta_;
-	phi_ = 30;
+    phi_ = 30;
     validateAngles();
 }
 

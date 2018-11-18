@@ -5,7 +5,7 @@ Warpgate::Warpgate(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, G
 	: CompositeShape(coords, rotationAxis, rotation, scale*0.8) {
 	shapes_.push_back(
 		new Shape(
-			Shapelist::Tore,
+            Shapelist::Tore,
             GRIS_CLAIR_POUR_TEXTURES,
 			DEFAULT_COORDS,
             DEFAULT_ROTATION_AXIS,
