@@ -7,6 +7,7 @@ import { SocketEvents } from "../../common/communication/socket-requests";
 import { UserSocket } from "./sockets/user/user.socket";
 
 import { User } from "../../common/user/user";
+import { MessageSocket } from "./sockets/message/message.socket";
 
 @injectable()
 export class Socket {
@@ -15,6 +16,7 @@ export class Socket {
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
+        @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) { }
 
     public init(server: http.Server): void {
@@ -26,6 +28,10 @@ export class Socket {
         const connections: { [key: string]: User } = {};
 
         this.io.on(SocketEvents.Connection, (socketio: SocketIO.Socket) => {
+
+            socketio.on(SocketEvents.Message, (message: any) => {
+                this.messageSocket.manage(message);
+            });
 
             socketio.on(SocketEvents.UserConnection, (user: User) => {
                 connections[socketio.id] = user;
