@@ -39,16 +39,6 @@ export class UserService extends AbstractServerService {
         this.loggedIn = false;
         this.validator = new Validator();
 
-        window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
-    }
-
-    public onUnloadEvent(event: BeforeUnloadEvent): void {
-        event.preventDefault();
-        if (this.loggedIn) {
-            this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
-        }
-        // Chrome requires returnValue to be set.
-        event.returnValue = "";
     }
 
     public validateUsername(username: string): boolean {

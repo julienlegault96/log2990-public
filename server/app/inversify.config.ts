@@ -10,6 +10,8 @@ import { UsersRoute } from "./routes/user/users.route";
 import { Imgur } from "./services/imgur/imgur";
 import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
+import { UserSocket } from "./sockets/user/user.socket";
+import { Socket } from "./socket";
 
 const container: Container = new Container();
 
@@ -22,5 +24,7 @@ container.bind(Types.GamesRoute).to(GamesRoute);
 container.bind(Types.Imgur).to(Imgur);
 container.bind(Types.ImgDiffRoute).to(ImgDiffRoute);
 container.bind(Types.LeaderboardRoute).to(LeaderboardRoute);
+container.bind(Types.Socket).to(Socket);
+container.bind(Types.UserSocket).to(UserSocket);
 
 export { container };

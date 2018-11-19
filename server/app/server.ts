@@ -11,16 +11,17 @@ export class Server {
     private readonly appPort: string | number | boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
-    private socket: Socket;
 
-    public constructor(@inject(Types.Application) private application: Application) {
-    }
+    public constructor(
+        @inject(Types.Application) private application: Application,
+        @inject(Types.Socket) private socket: Socket,
+    ) { }
 
     public init(): void {
         this.application.app.set("port", this.appPort);
 
         this.server = http.createServer(this.application.app);
-        this.socket = new Socket(this.server);
+        this.socket.init(this.server);
 
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));

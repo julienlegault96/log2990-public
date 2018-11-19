@@ -8,4 +8,6 @@ export default {
     Imgur: Symbol("Imgur"),
     ImgDiffRoute: Symbol("ImgDiff"),
     LeaderboardRoute: Symbol("LeaderboardRoute"),
+    Socket: Symbol("Socket"),
+    UserSocket: Symbol("UserSocket"),
 };
