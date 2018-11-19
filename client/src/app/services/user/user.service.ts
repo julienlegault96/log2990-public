@@ -7,7 +7,9 @@ import { Validator } from "../validator/validator";
 
 import { User } from "../../../../../common/user/user";
 import { SocketService } from "../socket/socket.service";
-import { SocketEvents } from "../../../../../common/communication/socket-requests";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 @Injectable({
     providedIn: "root"
@@ -73,6 +75,7 @@ export class UserService extends AbstractServerService {
 
     private login(user: User): void {
         this.socketService.emit<User>(SocketEvents.UserConnection, user);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, { userId: user._id, type: SocketMessageType.Connection });
         this.addUser(user).subscribe((nullUser: User) => {
             this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {

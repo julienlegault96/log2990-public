@@ -1,9 +1,10 @@
 import { injectable } from "inversify";
+import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
 
 @injectable()
 export class MessageSocket {
 
-    public manage<T>(message: T): void {
+    public manage(message: SocketMessage): void {
         //
     }
 
