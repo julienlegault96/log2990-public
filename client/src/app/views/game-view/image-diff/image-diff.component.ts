@@ -74,7 +74,6 @@ export class ImageDiffComponent implements OnInit {
                         } else {
                             this.errorAudioPlayer.play();
                             this.putError(errorCoordinates);
-                            alert("Erreur !");     // A enlever. Juste pour tester.
                         }
                     });
             }
