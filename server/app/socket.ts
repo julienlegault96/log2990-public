@@ -10,6 +10,7 @@ import { SocketMessage } from "../../common/communication/sockets/socket-message
 
 import { User } from "../../common/user/user";
 import { MessageSocket } from "./sockets/message/message.socket";
+import { SocketMessageType } from "../../common/communication/sockets/socket-message-type";
 
 @injectable()
 export class Socket {
@@ -27,28 +28,32 @@ export class Socket {
     }
 
     private defineEvents(): void {
-        const connections: { [key: string]: User } = {};
+        const connections: { [key: string]: User} = {};
 
-        this.io.on(SocketEvents.Connection, (socketio: SocketIO.Socket) => {
+        this.io.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
+            // On connection, index
+            socket.on(SocketEvents.UserConnection, (user: User) => {
+                connections[socket.id] = user;
+                this.io.sockets.emit(connections[socket.id]._id + " connected.");
+            });
 
-            socketio.on(SocketEvents.Message, (message: SocketMessage) => {
-                console.log(message);
-                this.messageSocket.manage(message);
-                this.io.sockets.emit(SocketEvents.Message, message); // Emits to everyone connected
+            socket.on(SocketEvents.Message, (message: SocketMessage) => {
+                this.messageSocket.manage(message, this.io);
                 // socketio.emit(SocketEvents.Message, message); // Emits to the current user
             });
 
-            socketio.on(SocketEvents.UserConnection, (user: User) => {
-                connections[socketio.id] = user;
-            });
-
             // On disconnection, if user was connected, clean its username from DB
-            socketio.on(SocketEvents.Disconnect, () => {
-                if (connections[socketio.id]) {
-                    this.userSocket.deleteUser(connections[socketio.id]._id);
+            socket.on(SocketEvents.Disconnect, () => {
+                if (connections[socket.id]) {
+                    const notification: SocketMessage = {
+                        userId: connections[socket.id]._id,
+                        type: SocketMessageType.Disconnection
+                    };
+
+                    this.userSocket.deleteUser(connections[socket.id]._id);
+                    this.io.sockets.emit(SocketEvents.Message, notification);
                 }
             });
-
         });
     }
 }
