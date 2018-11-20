@@ -2,12 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
+import { DEFAULT_SERVER_HOST_URL } from "../../../../../common/communication/default-urls";
 
 @Injectable()
 
 export abstract class AbstractServerService {
-
-    private readonly SERVER_HOST_URL: string = "http://localhost:3000";
 
     public constructor(protected http: HttpClient) {
     }
@@ -73,7 +72,7 @@ export abstract class AbstractServerService {
     }
 
     private appendEndpoint(serverEndpoint: Endpoints): string {
-        return `${this.SERVER_HOST_URL}/${serverEndpoint}`;
+        return `${DEFAULT_SERVER_HOST_URL}/${serverEndpoint}`;
     }
 
     private formatPathParam(pathParam?: string | null): string {

@@ -7,9 +7,11 @@ import { UserService } from "./user.service";
 import { USERS } from "../../../../../common/user/mock-users";
 import { User } from "../../../../../common/user/user";
 import { Endpoints } from "../abstract-server/abstract-server.service";
+import { SocketService } from "../socket/socket.service";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
+let socketService: SocketService;
 let getMethodSpy: jasmine.Spy;
 
 describe("UserService", () => {
@@ -23,9 +25,11 @@ describe("UserService", () => {
             );
 
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
-        userService = new UserService(httpClientSpy);
+        
+        socketService = new SocketService();
+        userService = new UserService(httpClientSpy, socketService);
         TestBed.configureTestingModule({
-            providers: [UserService],
+            providers: [UserService, SocketService],
             imports: [HttpClientModule]
         });
     });

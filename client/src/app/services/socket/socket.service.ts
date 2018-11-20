@@ -1,12 +1,13 @@
 import * as SocketIO from "socket.io-client";
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { DEFAULT_SERVER_HOST_URL } from "../../../../../common/communication/default-urls";
 
 export class SocketService {
 
     private socket: SocketIOClient.Socket;
 
     public constructor() {
-        this.socket = SocketIO("http://localhost:3000");
+        this.socket = SocketIO(DEFAULT_SERVER_HOST_URL);
         this.listen();
     }
 

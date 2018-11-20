@@ -5,6 +5,7 @@ import { FormsModule } from "@angular/forms";
 import { UserComponent } from "./user.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { RouterTestingModule } from "@angular/router/testing";
+import { SocketService } from "src/app/services/socket/socket.service";
 
 describe("UserComponent", () => {
     let component: UserComponent;
@@ -13,6 +14,9 @@ describe("UserComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [UserComponent],
+            providers: [
+                SocketService,
+            ],
             imports: [
                 FormsModule,
                 HttpClientModule,

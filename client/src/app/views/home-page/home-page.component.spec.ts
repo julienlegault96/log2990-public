@@ -6,6 +6,7 @@ import { UserComponent } from "./user/user.component";
 import { HomePageComponent } from "./home-page.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { RouterTestingModule } from "@angular/router/testing";
+import { SocketService } from "src/app/services/socket/socket.service";
 
 describe("HomePageComponent", () => {
     let component: HomePageComponent;
@@ -14,6 +15,9 @@ describe("HomePageComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [HomePageComponent, UserComponent],
+            providers: [
+                SocketService,
+            ],
             imports: [
                 FormsModule,
                 HttpClientModule,
