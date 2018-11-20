@@ -25,7 +25,7 @@ describe("UserService", () => {
             );
 
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
-        
+
         socketService = new SocketService();
         userService = new UserService(httpClientSpy, socketService);
         TestBed.configureTestingModule({
