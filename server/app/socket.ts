@@ -34,12 +34,10 @@ export class Socket {
             // On connection, index
             socket.on(SocketEvents.UserConnection, (user: User) => {
                 connections[socket.id] = user;
-                this.io.sockets.emit(connections[socket.id]._id + " connected.");
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
                 this.messageSocket.manage(message, this.io);
-                // socketio.emit(SocketEvents.Message, message); // Emits to the current user
             });
 
             // On disconnection, if user was connected, clean its username from DB
