@@ -13,7 +13,7 @@ export class ImageDiffComponent implements OnInit {
 
     @Input() public originalImageSrc: string;
     @Input() public modifiedImageSrc: string;
-    @Input() public errorImageSrc: string;
+   // @Input() public errorImageSrc: string;
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
 
@@ -22,11 +22,11 @@ export class ImageDiffComponent implements OnInit {
 
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
-    @ViewChild("error") private errorElement: ElementRef;
+    // @ViewChild("error") private errorElement: ElementRef;
 
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
-    private errorCtx: CanvasRenderingContext2D;
+    // private errorCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
     private errorAudioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
@@ -47,7 +47,7 @@ export class ImageDiffComponent implements OnInit {
     public ngOnInit(): void {
         this.initializeOriginalImage();
         this.initializeModifiedImage();
-        this.initializeErrorImage();
+       // this.initializeErrorImage();
     }
 
     public isClicked(event: MouseEvent): void {
@@ -107,7 +107,7 @@ export class ImageDiffComponent implements OnInit {
             modifiedImage.style.display = "none";
         };
     }
-
+/*
     private initializeErrorImage(): void {
         const errorImage: HTMLImageElement = new Image();
         errorImage.crossOrigin = "Anonymous";
@@ -119,7 +119,7 @@ export class ImageDiffComponent implements OnInit {
         };
 
     }
-
+*/
     private isAlreadyFound(currentCoordinates: Coordinates): boolean {
         for (const coordinates of this.foundErrors) {
             if (currentCoordinates.x === coordinates.x && currentCoordinates.y === coordinates.y) {
@@ -193,8 +193,6 @@ export class ImageDiffComponent implements OnInit {
             return this.originalElement.nativeElement as HTMLCanvasElement;
         } else if (id === "modified") {
             return this.modifiedElement.nativeElement as HTMLCanvasElement;
-        } else if (id === "error") {
-            return this.errorElement.nativeElement as HTMLCanvasElement;
         } else {
             throw new Error(`Invalid element id: ${id}`);
         }
