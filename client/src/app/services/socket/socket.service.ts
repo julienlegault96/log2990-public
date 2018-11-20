@@ -19,4 +19,8 @@ export class SocketService {
         this.socket.on(SocketEvents.Message, console.log);
     }
 
+    public registerFunction(requestType: SocketEvents, f: Function): void {
+        this.socket.on(requestType, f);
+    }
+
 }
