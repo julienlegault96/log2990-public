@@ -150,7 +150,7 @@
     <ClInclude Include="inf2705-texture.h" />
     <ClInclude Include="inf2705-theiere.h" />
     <ClInclude Include="CompositeShape.h" />
-    <ClInclude Include="Ringworld.h" />
+    <ClInclude Include="Warpgate.h" />
     <ClInclude Include="ObjectLoc.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Planet.h" />
@@ -188,7 +188,7 @@
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Planet.cpp" />
-    <ClCompile Include="Ringworld.cpp" />
+    <ClCompile Include="Warpgate.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Satelite.cpp" />
     <ClCompile Include="Scene.cpp" />

@@ -126,7 +126,7 @@
     <ClInclude Include="navette.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Ringworld.h">
+    <ClInclude Include="Warpgate.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,10 +218,10 @@
     <ClCompile Include="Navette.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Ringworld.cpp">
+    <ClCompile Include="inf2705-fenetre.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="inf2705-fenetre.cpp">
+    <ClCompile Include="Warpgate.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

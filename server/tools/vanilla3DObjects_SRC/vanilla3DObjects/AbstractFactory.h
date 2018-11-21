@@ -26,7 +26,7 @@ protected:
     const int DEFAULT_BOX_DIMENTIONS = 10;
     const float MIN_SIZE_MODIFIER = 0.5;
 	const float MAX_SIZE_MODIFIER = 1.5;
-	const short ALLOCATED_SHAPE_VOLUME = 50;
+	const short ALLOCATED_SHAPE_VOLUME = 36;
 
     bool modMode_ = false;
     int dimboite_;

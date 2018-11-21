@@ -1,7 +1,8 @@
 #include "Robot.h"
 #include "Shape.h"
 
-Robot::Robot(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale) :CompositeShape(coords, rotationAxis, rotation, scale) {
+Robot::Robot(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale) 
+	:CompositeShape(coords, rotationAxis, rotation, scale) {
 
 	glm::vec4 colorBody = glm::vec4(0.4, 0.4, 0.4, 1);
 	glm::vec4 colorHead = glm::vec4(1.0, 0., 0.0, 1.);
