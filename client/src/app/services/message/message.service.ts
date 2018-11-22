@@ -21,16 +21,16 @@ export class MessageService {
         let action: string;
         switch (message.type) {
             case SocketMessageType.Connection:
-                action = " connected.";
+                action = "s'est connecté.";
                 break;
             case SocketMessageType.Disconnection:
-                action = " disconnected.";
+                action = "s'est déconnecté.";
                 break;
             default:
-                action = " fucked up.";
+                action = "a fait quelque chose d'inattendu!";
                 break;
         }
-        this.addMessage(message.userId + action);
+        this.addMessage(`${message.userId} ${action}`);
     }
 
 }
