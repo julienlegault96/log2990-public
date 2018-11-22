@@ -49,9 +49,14 @@ export class Socket {
                 const maxPlayer: number = 2;
                 // find the first available room
                 // tslint:disable-next-line:no-empty
-                while (this.io.sockets.adapter.rooms[`${message.message}_${++i}`].length >= maxPlayer) { }
+                while (this.io.sockets.adapter.rooms[`${message.message}_${i}`]
+                    && this.io.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
+                    i++;
+                }
 
                 socket.join(`${message.message}_${i}`);
+                const socketMessage: SocketMessage = { userId: connections[socket.id]._id, type: SocketMessageType.JoinedRoom };
+                this.emitToRoom<SocketMessage>(`${message.message}_${i}`, SocketEvents.Message, socketMessage);
             });
 
             socket.on(SocketEvents.UserConnection, (user: User) => {

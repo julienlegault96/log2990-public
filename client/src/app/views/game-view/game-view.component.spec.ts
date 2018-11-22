@@ -14,6 +14,7 @@ import { GameService } from "src/app/services/game/game.service";
 import { UserService } from "src/app/services/user/user.service";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 import { SocketService } from "src/app/services/socket/socket.service";
+import { MessageService } from "src/app/services/message/message.service";
 
 describe("GameViewComponent", () => {
     let component: GameViewComponent;
@@ -36,6 +37,7 @@ describe("GameViewComponent", () => {
                 UserService,
                 SocketService,
                 LeaderboardService,
+                MessageService,
             ],
             imports: [
                 HttpClientModule,

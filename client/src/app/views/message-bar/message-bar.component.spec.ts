@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MessageBarComponent } from "./message-bar.component";
 import { MessageComponent } from "./message/message.component";
 import { SocketService } from "src/app/services/socket/socket.service";
+import { MessageService } from "src/app/services/message/message.service";
 
 describe("MessageBarComponent", () => {
     let component: MessageBarComponent;
@@ -11,11 +12,14 @@ describe("MessageBarComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             providers: [
-                SocketService
+                SocketService,
+                MessageService,
             ],
             declarations: [
                 MessageBarComponent,
-                MessageComponent
+                MessageComponent,
+            ],
+            imports: [
             ]
         })
             .compileComponents();

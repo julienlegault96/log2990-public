@@ -35,6 +35,9 @@ export class MessageService {
             case SocketMessageType.ErrorFound:
                 action = "a trouvé une erreur!";
                 break;
+            case SocketMessageType.JoinedRoom:
+                action = "a joint la partie!";
+                break;
             default:
                 action = "a fait quelque chose d'inattendu!";
                 break;

@@ -31,6 +31,8 @@ import { ImgDiffService } from "./services/img-diff/img-diff.service";
 import { CreateMultipleViewComponent } from "./views/admin/create-game/create-multiple-view/create-multiple-view.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CreateSingleViewComponent } from "./views/admin/create-game/create-single-game/create-single-view.component";
+import { MessageService } from "./services/message/message.service";
+import { SocketService } from "./services/socket/socket.service";
 
 describe("AppComponent", () => {
     // tslint:disable-next-line:max-func-body-length
@@ -67,6 +69,8 @@ describe("AppComponent", () => {
                 GameService,
                 CreateGameService,
                 ImgDiffService,
+                MessageService,
+                SocketService,
             ]
         }).compileComponents();
     }));

@@ -4,4 +4,5 @@ export enum SocketMessageType {
     Highscore,
     Connection,
     Disconnection,
+    JoinedRoom,
 }
