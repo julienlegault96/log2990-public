@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { MessageBarComponent } from "./message-bar.component";
-import { MessageComponent } from "../message/message.component";
+import { MessageComponent } from "./message/message.component";
 import { SocketService } from "src/app/services/socket/socket.service";
 
 describe("MessageBarComponent", () => {

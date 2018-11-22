@@ -20,8 +20,8 @@ import { CreateGameService } from "./services/create-game/create-game.service";
 import { LeaderboardComponent } from "./views/game-list/leaderboard/leaderboard.component";
 import { DiffCounterComponent } from "./views/game-view/diff-counter/diff-counter.component";
 import { GameViewComponent } from "./views/game-view/game-view.component";
-import { MessageBarComponent } from "./views/game-view/message-bar/message-bar.component";
-import { MessageComponent } from "./views/game-view/message/message.component";
+import { MessageBarComponent } from "./views/message-bar/message-bar.component";
+import { MessageComponent } from "./views/message-bar/message/message.component";
 
 import { AdminViewComponent } from "./views/admin/admin-view.component";
 import { AdminViewCardComponent } from "./views/admin/admin-view-card/admin-view-card.component";
