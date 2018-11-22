@@ -13,7 +13,6 @@ export class ImageDiffComponent implements OnInit {
 
     @Input() public originalImageSrc: string;
     @Input() public modifiedImageSrc: string;
-   // @Input() public errorImageSrc: string;
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
 
@@ -21,11 +20,9 @@ export class ImageDiffComponent implements OnInit {
 
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
-    // @ViewChild("error") private errorElement: ElementRef;
 
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
-    // private errorCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
     private errorAudioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
@@ -46,7 +43,6 @@ export class ImageDiffComponent implements OnInit {
     public ngOnInit(): void {
         this.initializeOriginalImage();
         this.initializeModifiedImage();
-       // this.initializeErrorImage();
     }
 
     public isClicked(event: MouseEvent): void {
@@ -73,7 +69,7 @@ export class ImageDiffComponent implements OnInit {
                             this.updateModifiedImage(errorCoordinates);
                         } else {
                             this.errorAudioPlayer.play();
-                            // this.putError(errorCoordinates);
+                            this.putError("modified", x, y);        // Have to be performed.
                         }
                     });
             }
@@ -101,19 +97,7 @@ export class ImageDiffComponent implements OnInit {
             modifiedImage.style.display = "none";
         };
     }
-/*
-    private initializeErrorImage(): void {
-        const errorImage: HTMLImageElement = new Image();
-        errorImage.crossOrigin = "Anonymous";
-        errorImage.src = this.errorImageSrc;
-        this.errorCtx = this.getContext("error");
-        errorImage.onload = () => {
-            this.errorCtx.drawImage(errorImage, 0, 0);
-            errorImage.style.display = "none";
-        };
 
-    }
-*/
     private isAlreadyFound(currentCoordinates: Coordinates): boolean {
         for (const coordinates of this.foundErrors) {
             if (currentCoordinates.x === coordinates.x && currentCoordinates.y === coordinates.y) {
@@ -190,34 +174,15 @@ export class ImageDiffComponent implements OnInit {
             throw new Error(`Invalid element id: ${id}`);
         }
     }
-/*
-    private putError(errorCoordinates: Array<Coordinates>): void {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
-        if (errorCoordinates.length === 0) {
-            return;
-        }
-        const originalImageBuffer: Uint8ClampedArray = this.getImageBuffer("original");
-        const errorImageBuffer: Uint8ClampedArray = this.getImageBuffer("error");
-        const errorImage: ImageData = this.getImage("error");
 
-        const redOffset: number = 0;
-        const greenOffset: number = 1;
-        const blueOffset: number = 2;
-        const alphaOffset: number = 3;
-        for (const coordinates of errorCoordinates) {
-            const index: number = this.getPosition(coordinates, this.getCanvas("original"));
-
-            originalImageBuffer[index + redOffset] =
-                errorImageBuffer[index + redOffset];
-            originalImageBuffer[index + greenOffset] =
-                errorImageBuffer[index + greenOffset];
-            originalImageBuffer[index + blueOffset] =
-                errorImageBuffer[index + blueOffset];
-            originalImageBuffer[index + alphaOffset] =
-                errorImageBuffer[index + alphaOffset];
-        }
-        this.originalCtx.putImageData(errorImage, 0, 0);
+    private putError( id: string, x: number, y: number): void {
+        const canvas: HTMLCanvasElement = this.getCanvas(id);
+        const  context: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
+        const SECOND: number = 1000;
+        context.font = "15px Arial";
+        context.fillStyle = "rgba(255, 0, 0, 1)";
+        context.fillText("Erreur !", x, y);
+        setTimeout(() => {} , SECOND);
+        // context.clearRect(0, 0, x, y);       // Do not work again.
     }
-
-*/
 }
