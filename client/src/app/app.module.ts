@@ -37,6 +37,7 @@ import { CreateSingleViewComponent } from "./views/admin/create-game/create-sing
 import { CreateMultipleViewComponent } from "./views/admin/create-game/create-multiple-view/create-multiple-view.component";
 import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
 import { SocketService } from "./services/socket/socket.service";
+import { MessageService } from "./services/message/message.service";
 
 @NgModule({
     declarations: [
@@ -74,6 +75,7 @@ import { SocketService } from "./services/socket/socket.service";
         ImgDiffService,
         LeaderboardService,
         SocketService,
+        MessageService,
     ],
     bootstrap: [
         AppComponent,
