@@ -16,7 +16,7 @@ export class SocketService {
     }
 
     public listen(): void {
-        this.socket.on(SocketEvents.Message, console.log);
+        // this.socket.on(SocketEvents.Message, console.log);
     }
 
     public registerFunction(requestType: SocketEvents, f: Function): void {

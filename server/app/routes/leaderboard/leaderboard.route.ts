@@ -10,12 +10,18 @@ import { Score, Leaderboard } from "../../../../common/game/leaderboard";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
+import { Socket } from "../../socket";
+import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 
 @injectable()
-
 export class LeaderboardRoute extends AbstractRoute<Game> {
 
-    public constructor(@inject(Types.Mongo) mongo: Mongo) {
+    public constructor(
+        @inject(Types.Socket) private socket: Socket,
+        @inject(Types.Mongo) mongo: Mongo,
+    ) {
         super(mongo);
         this.collection = Collections.Games;
     }
@@ -47,11 +53,29 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
 
     private async updateScores(leaderboardRequest: LeaderboardRequest): Promise<UpdateWriteOpResult> {
         const game: Game = await this.getOne(leaderboardRequest.id);
-        const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
+        const updatedScores: Array<Score> = await this.getUpdatedScores(JSON.parse(JSON.stringify(game)), leaderboardRequest);
+
+        if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
+            const socketMessage: SocketMessage = {
+                userId: leaderboardRequest.playerName,
+                type: SocketMessageType.Highscore,
+            };
+            this.socket.emitToUser<SocketMessage>({ _id: leaderboardRequest.playerName }, SocketEvents.Message, socketMessage);
+        }
+
         game.leaderboards[leaderboardRequest.partyMode].scores = updatedScores;
 
         return this.update(game._id, game);
     }
+
+    // On veut comparer les 3 scores enregistres dans le leaderboard
+    // tslint:disable:no-magic-numbers
+    private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
+        return scores[0].time !== updatedScores[0].time
+            || scores[1].time !== updatedScores[1].time
+            || scores[2].time !== updatedScores[2].time;
+    }
+    // tslint:enable:no-magic-numbers
 
     private async getUpdatedScores(game: Game, elem: LeaderboardRequest): Promise<Array<Score>> {
         const scores: Array<Score> = game.leaderboards[elem.partyMode].scores;

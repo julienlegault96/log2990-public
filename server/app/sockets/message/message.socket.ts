@@ -6,6 +6,7 @@ import { SocketEvents } from "../../../../common/communication/sockets/socket-re
 
 @injectable()
 export class MessageSocket {
+
     public manage(message: SocketMessage, server: SocketIO.Server): void {
         switch (message.type) {
             case SocketMessageType.ErrorFound:

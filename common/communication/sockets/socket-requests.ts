@@ -3,4 +3,5 @@ export enum SocketEvents {
     Disconnect = "disconnect", // native event
     UserConnection = "UserConnection",
     Message = "Message",
+    JoinedGame = "JoinedGame",
 }
