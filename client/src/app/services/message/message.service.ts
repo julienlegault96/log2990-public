@@ -26,6 +26,15 @@ export class MessageService {
             case SocketMessageType.Disconnection:
                 action = "s'est déconnecté.";
                 break;
+            case SocketMessageType.Highscore:
+                action = "a battu un temps record!";
+                break;
+            case SocketMessageType.NoErrorFound:
+                action = "a mal identifié une erreur...";
+                break;
+            case SocketMessageType.ErrorFound:
+                action = "a trouvé une erreur!";
+                break;
             default:
                 action = "a fait quelque chose d'inattendu!";
                 break;
