@@ -7,6 +7,7 @@ import { SocketMessage } from "../../../../../../common/communication/sockets/so
 import { SocketEvents } from "../../../../../../common/communication/sockets/socket-requests";
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { UserService } from "src/app/services/user/user.service";
+import { MessageService } from "src/app/services/message/message.service";
 
 @Component({
     selector: "app-game",
@@ -19,6 +20,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         public socketService: SocketService,
         private userService: UserService,
         gameService: GameService,
+        private messageService: MessageService,
     ) {
         super(gameService);
     }
@@ -28,6 +30,8 @@ export class GameCardComponent extends AbstractGameCardComponent {
             userId: this.userService.loggedUser._id,
             type: SocketMessageType.JoinedRoom
         };
+
+        this.messageService.manage(message);
 
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
