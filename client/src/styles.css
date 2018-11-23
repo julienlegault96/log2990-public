@@ -29,14 +29,18 @@ body > .container-fluid {
 .btn-round {
     border-radius: 10em;    
 }
+<<<<<<< HEAD
 
 .errorMessage {
     position: absolute;
     color: white;
     background: red;
     border: solid black 2px;
+=======
+.text-shadow {
+    text-shadow: 0 0 0 3px black;
+>>>>>>> Affichage du mot erreur ok, ND
 }
-
 .text-shadow {
     text-shadow: 0 0 0 3px black;
 
