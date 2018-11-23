@@ -29,3 +29,6 @@ body > .container-fluid {
 .btn-round {
     border-radius: 10em;    
 }
+.text-shadow {
+    text-shadow: 0 0 0 3px black;
+}
