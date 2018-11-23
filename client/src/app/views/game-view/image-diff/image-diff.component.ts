@@ -182,7 +182,10 @@ export class ImageDiffComponent implements OnInit {
         context.font = "15px Arial";
         context.fillStyle = "rgba(255, 0, 0, 1)";
         context.fillText("Erreur !", x, y);
-        setTimeout(() => {} , SECOND);
-        // context.clearRect(0, 0, x, y);       // Do not work again.
+        setTimeout(() => {
+        context.fillStyle = "rgba(255, 255, 255, 1)";
+        context.fillText("", x, y);
+        // context.clearRect(0, 0, x, y);
+    } ,            SECOND);
     }
 }
