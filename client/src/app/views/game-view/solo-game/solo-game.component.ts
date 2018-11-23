@@ -24,6 +24,7 @@ export class SoloGameComponent {
     @Input() public chrono: ChronoComponent;
 
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public firstView: ImageView = ImageView.FirstView;
     public secondView: ImageView = ImageView.SecondView;
@@ -38,6 +39,10 @@ export class SoloGameComponent {
         this.diffCounter.incrementPlayerCountSolo();
         this.errorFound.emit();
         this.verifyErrorCount();
+    }
+
+    public noErrorWasFound(): void {
+        this.noErrorFound.emit();
     }
 
     public verifyErrorCount(): void {

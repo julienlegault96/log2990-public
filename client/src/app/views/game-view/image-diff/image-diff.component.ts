@@ -17,6 +17,7 @@ export class ImageDiffComponent implements OnInit {
     @Input() public imageView: ImageView;
 
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
@@ -66,15 +67,19 @@ export class ImageDiffComponent implements OnInit {
                             this.audioPlayer.play();
                             this.updateModifiedImage(errorCoordinates);
                         } else {
-                            this.errorAudioPlayer.play();
-                            this.putError(event.clientX, event.clientY);
+                            this.noErrorWasClicked(event);
                         }
                     });
             } else {
-                            this.errorAudioPlayer.play();
-                            this.putError(event.clientX, event.clientY);
-                        }
+                this.noErrorWasClicked(event);
+            }
         }
+    }
+
+    private noErrorWasClicked(event: MouseEvent): void {
+        this.errorAudioPlayer.play();
+        this.putError(event.clientX, event.clientY);
+        this.noErrorFound.emit();
     }
 
     private initializeOriginalImage(): void {
@@ -157,7 +162,8 @@ export class ImageDiffComponent implements OnInit {
     }
 
     private getContext(id: string): CanvasRenderingContext2D {
-        const context: CanvasRenderingContext2D = this.getCanvas(id).getContext("2d") as CanvasRenderingContext2D;
+        const context: CanvasRenderingContext2D = this.getCanvas(id)
+            .getContext("2d") as CanvasRenderingContext2D;
 
         if (context) {
             return context;
@@ -175,36 +181,17 @@ export class ImageDiffComponent implements OnInit {
             throw new Error(`Invalid element id: ${id}`);
         }
     }
-/*
-    private putError( id: string, x: number, y: number): void {
-        const canvas: HTMLCanvasElement = this.getCanvas(id);
-        const  context: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
-        const SECOND: number = 1000;
-        context.font = "15px Arial";
-        context.fillStyle = "rgba(255, 0, 0, 1)";
-        context.fillText("Erreur !", x, y);
-       // context.fillRect(x, y, 60, 60);
-        setTimeout(() => {
-        // context.fillRect(x, y, 60, 60);
-    } ,            SECOND);
-    }
-
-    */
 
     public putError(x: number, y: number): void {
         const fadeDelay: number = 1000;
         const fadeDuration: number = 1000;
-        const div: JQuery<HTMLElement> = $('<div class="image-wrapper">')
-                .css({
-                    "left": x + "px",
-                    "top": y + "px",
-                    "position": "absolute",
-                    "color": "red",
-                    "text-shadow": "2px 2px 2px #000"
-
-                })
-                .append($('<img src="" alt="Erreur !" />'))
-                .appendTo(document.body);
+        const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
+            .css({
+                "left": x + "px",
+                "top": y + "px",
+            })
+            .append($("<span>Erreur</span>"))
+            .appendTo(document.body);
 
             setTimeout(() => {
                 div.addClass("fade-out");
