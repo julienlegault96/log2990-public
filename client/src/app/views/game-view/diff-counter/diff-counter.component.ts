@@ -23,11 +23,8 @@ export class DiffCounterComponent implements OnInit {
     private readonly UNDECLARED_ID_ERROR: string = "Aucun compteur n'est initialisé pour l'indentifiant ";
 
     public ngOnInit(): void {
-        if (this.playerTwoId) {
-            this.updatePlayerCount(this.MAX_PLAYERS);
-        }
-
-        this.updatePlayerCount(this.MIN_PLAYERS);
+        const playerCount: number = this.playerTwoId ? this.MAX_PLAYERS : this.MIN_PLAYERS;
+        this.updatePlayerCount(playerCount);
     }
 
     public setPlayerOne(playerId: string): void {

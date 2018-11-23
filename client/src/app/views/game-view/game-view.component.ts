@@ -26,7 +26,7 @@ export class GameViewComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private userService: UserService,
         private gameService: GameService) {
-        this.playerIds[0] = this.userService.loggedUser._id;
+        this.playerIds.push(this.userService.loggedUser._id);
     }
 
     public ngOnInit(): void {
@@ -34,6 +34,9 @@ export class GameViewComponent implements OnInit {
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
                 this.chrono.start();
+
+                // push player id 2 here
+                // this.playerIds.push("bob");
             });
         });
     }

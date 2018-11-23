@@ -10,16 +10,17 @@ import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.ser
 import { ChronoComponent } from "../chrono/chrono.component";
 
 @Component({
-    selector: "app-solo-game",
-    templateUrl: "./solo-game.component.html",
-    styleUrls: ["./solo-game.component.css"]
+    selector: "app-multiplayer-game",
+    templateUrl: "./multiplayer-game.component.html",
+    styleUrls: ["./multiplayer-game.component.css"]
 })
 
-export class SoloGameComponent {
+export class MultiplayerGameComponent {
 
     @ViewChild(DiffCounterComponent) public diffCounter: DiffCounterComponent;
 
-    @Input() public playerId: string;
+    @Input() public playerOneId: string;
+    @Input() public playerTwoId: string;
     @Input() public game: Game;
     @Input() public chrono: ChronoComponent;
 
@@ -28,37 +29,49 @@ export class SoloGameComponent {
     public firstView: ImageView = ImageView.FirstView;
     public secondView: ImageView = ImageView.SecondView;
 
-    protected readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 7;
-    protected readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 14;
+    protected readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 4;
+    protected readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 7;
 
     public constructor(private leaderboardService: LeaderboardService) {
     }
 
     public errorWasFound(): void {
-        this.diffCounter.incrementPlayerCountSolo();
-        this.errorFound.emit(this.playerId + " a trouvé une différence!");
+        this.diffCounter.incrementPlayerCount(this.playerOneId);
+        this.errorFound.emit(this.playerOneId + " a trouvé une différence!");
+        this.verifyErrorCount();
+    }
+
+    public errorWasFoundByOpponent(): void {
+        this.diffCounter.incrementPlayerCount(this.playerTwoId);
+        this.errorFound.emit(this.playerTwoId + " a trouvé une différence!");
         this.verifyErrorCount();
     }
 
     public verifyErrorCount(): void {
         const winTimeout: number = 100;
-        if (this.isPlayerWinner(this.playerId)) {
-            setTimeout(() => this.endGame(), winTimeout);
+        if (this.isPlayerWinner(this.playerOneId)) {
+            setTimeout(() => this.endGame(this.playerOneId), winTimeout);
+        } else if (this.isPlayerWinner(this.playerTwoId)) {
+            setTimeout(() => this.endGame(this.playerTwoId), winTimeout);
         }
     }
 
-    private endGame(): void {
+    private endGame(winnerId: string): void {
         this.chrono.stop();
 
-        const leaderboardRequest: LeaderboardRequest = {
-            id: this.game._id,
-            partyMode: GamePartyMode.Solo,
-            time: this.chrono.elapsedTime,
-            playerName: this.playerId
-        };
-        this.leaderboardService.sendGameScore(leaderboardRequest);
+        if (winnerId === this.playerOneId) {
+            const leaderboardRequest: LeaderboardRequest = {
+                id: this.game._id,
+                partyMode: GamePartyMode.Multiplayer,
+                time: this.chrono.elapsedTime,
+                playerName: winnerId
+            };
+            this.leaderboardService.sendGameScore(leaderboardRequest);
 
-        $("#open-win-end-game-modal").click();
+            $("#open-win-end-game-modal").click();
+        } else {
+            $("#open-lose-end-game-modal").click();
+        }
     }
 
     private isPlayerWinner(playerId: string): boolean {
