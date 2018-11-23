@@ -1,6 +1,6 @@
 // tslint:disable:no-any les attributs sont des types any
 // tslint:disable:no-floating-promises pour le before each
-import { TestBed, async, ComponentFixture } from "@angular/core/testing";
+import { TestBed, ComponentFixture, fakeAsync, async } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
@@ -35,8 +35,11 @@ import { MessageService } from "./services/message/message.service";
 import { SocketService } from "./services/socket/socket.service";
 
 describe("AppComponent", () => {
+    let socketServiceSpy: jasmine.Spy;
+
     // tslint:disable-next-line:max-func-body-length
-    beforeEach(async(() => {
+    beforeEach(fakeAsync(() => {
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["registerFunction"]);
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
@@ -70,7 +73,7 @@ describe("AppComponent", () => {
                 CreateGameService,
                 ImgDiffService,
                 MessageService,
-                SocketService,
+                { provide: SocketService, useValue: socketServiceSpy },
             ]
         }).compileComponents();
     }));
