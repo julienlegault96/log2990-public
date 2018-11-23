@@ -2,16 +2,20 @@ import { TestBed, inject } from "@angular/core/testing";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { TestHelper } from "../../../test.helper";
 
+import { Endpoints } from "../abstract-server/abstract-server.service";
+import { SocketService } from "../socket/socket.service";
 import { UserService } from "./user.service";
 
 import { USERS } from "../../../../../common/user/mock-users";
 import { User } from "../../../../../common/user/user";
-import { Endpoints } from "../abstract-server/abstract-server.service";
-import { SocketService } from "../socket/socket.service";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 let httpClientSpy: jasmine.SpyObj<HttpClient>;
 let userService: UserService;
 let socketServiceSpy: jasmine.SpyObj<SocketService>;
+const socketListenersList: Function[] = [];
 
 describe("UserService", () => {
     beforeEach(() => {
@@ -21,8 +25,12 @@ describe("UserService", () => {
         httpClientSpy.post.and.callFake((endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(null));
         httpClientSpy.delete.and.callFake( () => TestHelper.asyncData("delete done") );
 
-        socketServiceSpy = jasmine.createSpyObj("SocketService", ["emit"]);
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["emit", "registerFunction"]);
+        socketServiceSpy.registerFunction.and.callFake((requestType: SocketEvents, f: Function) => {
+            socketListenersList.push(f);
+        });
 
+        // create tested object
         userService = new UserService(httpClientSpy, socketServiceSpy);
 
         TestBed.configureTestingModule({
@@ -41,7 +49,7 @@ describe("UserService", () => {
 
     it("should reject existing usernames", () => {
         // setup fixtures
-        userService.asyncUserList = USERS;
+        userService.userList = USERS;
 
         // test
         expect(userService.validateUsername(USERS[0]._id)).toBeFalsy();
@@ -75,5 +83,21 @@ describe("UserService", () => {
 
         // check if only one call was made
         expect(httpClientSpy.delete).toHaveBeenCalledTimes(1);
+    });
+
+    it("should sync the connected users", () => {
+        const MOCK_CONNECT: SocketMessage = {userId: USERS[0]._id, type: SocketMessageType.Connection};
+        const MOCK_DISCONNECT: SocketMessage = {userId: USERS[0]._id, type: SocketMessageType.Disconnection};
+
+        // setup fixtures
+        userService.userList = [];
+
+        // system under test
+        socketListenersList.forEach((f: Function) => { f(MOCK_CONNECT); });
+        expect(userService.userList.length).toEqual(1);
+        expect(userService.userList[0]._id).toEqual(USERS[0]._id);
+
+        socketListenersList.forEach((f: Function) => { f(MOCK_DISCONNECT); });
+        expect(userService.userList.length).toEqual(0);
     });
 });

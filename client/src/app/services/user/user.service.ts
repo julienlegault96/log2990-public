@@ -21,7 +21,7 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 export class UserService extends AbstractServerService {
 
     public validator: Validator;
-    public asyncUserList: User[];
+    public userList: User[];
     public loggedUser: User;
     public loggedIn: boolean;
 
@@ -34,13 +34,14 @@ export class UserService extends AbstractServerService {
 
     public constructor(protected http: HttpClient, private socketService: SocketService) {
         super(http);
-        this.asyncUserList = [];
+        this.userList = [];
         this.refreshUserList();
 
         this.loggedUser = new User("Anon");
         this.loggedIn = false;
         this.validator = new Validator();
 
+        socketService.registerFunction(SocketEvents.Message, this.syncUserList.bind(this));
     }
 
     public validateUsername(username: string): boolean {
@@ -50,7 +51,7 @@ export class UserService extends AbstractServerService {
     }
 
     public refreshUserList(): void {
-        this.getUsers().subscribe((newUsers: User[]) => { this.asyncUserList = newUsers; });
+        this.getUsers().subscribe((newUsers: User[]) => { this.userList = newUsers; });
     }
 
     public getUsers(): Observable<User[]> {
@@ -79,12 +80,19 @@ export class UserService extends AbstractServerService {
         this.addUser(user).subscribe((nullUser: User) => {
             this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
-                    this.asyncUserList.push(user);
                     this.loggedUser = user;
                     this.loggedIn = true;
                 }
             });
         });
+    }
+
+    private syncUserList(msg: SocketMessage): void {
+        if (msg.type === SocketMessageType.Disconnection) {
+            this.userList = this.userList.filter((value: User) => value._id !== msg.userId);
+        } else if (msg.type === SocketMessageType.Connection) {
+            this.userList.push(new User(msg.userId));
+        }
     }
 
     private buildErrorString(username: string): string {
@@ -104,7 +112,7 @@ export class UserService extends AbstractServerService {
     }
 
     private isUniqueUsername(username: string): boolean {
-        for (const user of this.asyncUserList) {
+        for (const user of this.userList) {
             if (user._id === username) {
                 return false;
             }
