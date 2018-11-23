@@ -15,40 +15,38 @@ import { SocketMessageType } from "../../common/communication/sockets/socket-mes
 export class Socket {
 
     public usersSocketId: { [key: string]: string };
-    private io: SocketIO.Server;
+    public usersRoom: { [key: string]: string };
+    public ioServer: SocketIO.Server;
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
         @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) {
         this.usersSocketId = {};
+        this.usersRoom = {};
     }
 
     public init(server: http.Server): void {
-        this.io = SocketIO(server);
+        this.ioServer = SocketIO(server);
         this.defineEvents();
     }
 
     public emitToUser<T>(user: User, event: SocketEvents, message: T): void {
-        this.io.to(this.usersSocketId[user._id]).emit(event, message);
-    }
-
-    public emitToRoom<T>(room: string, event: SocketEvents, message: T): void {
-        this.io.to(room).emit(event, message);
+        this.ioServer.to(this.usersSocketId[user._id]).emit(event, message);
     }
 
     private defineEvents(): void {
         const connections: { [key: string]: User } = {};
 
-        // tslint:disable-next-line:max-func-body-length
-        this.io.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
+        this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
+
             socket.on(SocketEvents.UserConnection, (user: User) => {
-                connections[socket.id] = user;
                 this.usersSocketId[user._id] = socket.id;
+                connections[socket.id] = user;
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
-                this.messageSocket.manage(this.io, socket, connections, message);
+                this.messageSocket.manage(this, socket, message);
             });
 
             // On disconnection, if user was connected, clean its username from DB
@@ -60,9 +58,10 @@ export class Socket {
                     };
 
                     this.userSocket.deleteUser(connections[socket.id]._id);
-                    this.io.sockets.emit(SocketEvents.Message, notification);
+                    this.ioServer.sockets.emit(SocketEvents.Message, notification);
                 }
             });
+
         });
     }
 }
