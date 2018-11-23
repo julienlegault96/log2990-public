@@ -6,14 +6,19 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class MessageService {
+
     public messages: Array<string>;
+    private initMessage: string = "Aucun message";
 
     public constructor(public socketService: SocketService) {
-        this.messages = [];
+        this.messages = [this.initMessage];
         socketService.registerFunction(SocketEvents.Message, this.manage.bind(this));
     }
 
     public addMessage(message: string): void {
+        if (this.messages[0] === this.initMessage) {
+            this.messages = [];
+        }
         this.messages.push(message);
     }
 
