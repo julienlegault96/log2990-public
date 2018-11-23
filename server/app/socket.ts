@@ -42,30 +42,13 @@ export class Socket {
 
         // tslint:disable-next-line:max-func-body-length
         this.io.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
-            // On connection, index
-            socket.on(SocketEvents.Message, (message: SocketMessage) => {
-                // creating a unique game room id
-                let i: number = 0;
-                const maxPlayer: number = 2;
-                // find the first available room
-                // tslint:disable-next-line:no-empty
-                while (this.io.sockets.adapter.rooms[`${message.message}_${i}`]
-                    && this.io.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
-                    i++;
-                }
-
-                socket.join(`${message.message}_${i}`);
-                const socketMessage: SocketMessage = { userId: connections[socket.id]._id, type: SocketMessageType.JoinedRoom };
-                this.emitToRoom<SocketMessage>(`${message.message}_${i}`, SocketEvents.Message, socketMessage);
-            });
-
             socket.on(SocketEvents.UserConnection, (user: User) => {
                 connections[socket.id] = user;
                 this.usersSocketId[user._id] = socket.id;
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
-                this.messageSocket.manage(message, this.io);
+                this.messageSocket.manage(this.io, socket, connections, message);
             });
 
             // On disconnection, if user was connected, clean its username from DB

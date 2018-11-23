@@ -6,10 +6,6 @@ import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
 import { MessageService } from "src/app/services/message/message.service";
-import { SocketService } from "src/app/services/socket/socket.service";
-import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
-import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
-import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 @Component({
     selector: "app-game-view",
@@ -27,7 +23,6 @@ export class GameViewComponent implements OnInit {
     public game: Game;
 
     public constructor(
-        public socketService: SocketService,
         public messageService: MessageService,
         private activatedRoute: ActivatedRoute,
         private userService: UserService,
@@ -45,8 +40,6 @@ export class GameViewComponent implements OnInit {
                 // this.playerIds.push("bob");
             });
         });
-        // TODO A déplacer pour que l'appel soit fait lorsque la vue est affichee
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, { userId: this.playerId, type: SocketMessageType.JoinedRoom });
     }
 
 }
