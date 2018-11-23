@@ -7,6 +7,8 @@ import { GameService } from "../../../services/game/game.service";
 
 import { GAMES } from "../../../../../../common/game/mock-games";
 import { RouterTestingModule } from "@angular/router/testing";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { HttpClientModule } from "@angular/common/http";
 
 describe("GameCardComponent", () => {
     let component: GameCardComponent;
@@ -22,10 +24,12 @@ describe("GameCardComponent", () => {
                 LeaderboardComponent,
             ],
             providers: [
-                { provide: GameService, useValue: gameService }
+                { provide: GameService, useValue: gameService },
+                SocketService,
             ],
             imports: [
                 RouterTestingModule,
+                HttpClientModule,
             ]
         })
             .compileComponents();

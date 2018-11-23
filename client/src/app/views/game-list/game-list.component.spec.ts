@@ -10,6 +10,7 @@ import { GameService } from "../../services/game/game.service";
 import { GameType } from "../../../../../common/game/game-type";
 import { GAMES, SINGLE_VIEW_GAME_COUNT, DOUBLE_VIEW_GAME_COUNT } from "../../../../../common/game/mock-games";
 import { RouterTestingModule } from "@angular/router/testing";
+import { SocketService } from "src/app/services/socket/socket.service";
 
 describe("GameListComponent", () => {
     let component: GameListComponent;
@@ -29,7 +30,8 @@ describe("GameListComponent", () => {
                 LeaderboardComponent,
             ],
             providers: [
-                { provide: GameService, useValue: gameService }
+                { provide: GameService, useValue: gameService },
+                SocketService,
             ],
             imports: [
                 HttpClientModule,

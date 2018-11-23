@@ -24,7 +24,10 @@ const routes: Routes = [
 @Injectable()
 export class AppRoutingModule {
 
-    public constructor(userService: UserService, router: Router) {
+    public constructor(
+        userService: UserService,
+        router: Router,
+    ) {
         if (!userService.loggedIn) {
             router.navigate([""]);
         }
