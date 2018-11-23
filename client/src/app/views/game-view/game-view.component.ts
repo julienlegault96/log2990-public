@@ -1,7 +1,6 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ChronoComponent } from "./chrono/chrono.component";
-import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
@@ -20,7 +19,6 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 export class GameViewComponent implements OnInit {
 
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
-    @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
     public playerIds: string[] = new Array<string>();
     public game: Game;
@@ -52,6 +50,8 @@ export class GameViewComponent implements OnInit {
             userId: this.userService.loggedUser._id,
             type: SocketMessageType.ErrorFound
         };
+
+        this.messageService.manage(message);
 
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }

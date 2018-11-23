@@ -3,6 +3,7 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class MessageService {
@@ -10,9 +11,12 @@ export class MessageService {
     public messages: Array<string>;
     private initMessage: string = "Aucun message";
 
-    public constructor(public socketService: SocketService) {
+    public constructor(
+        public socketService: SocketService,
+        private userService: UserService,
+    ) {
         this.messages = [this.initMessage];
-        socketService.registerFunction(SocketEvents.Message, this.manage.bind(this));
+        socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
     }
 
     public addMessage(message: string): void {
@@ -22,7 +26,14 @@ export class MessageService {
         this.messages.push(message);
     }
 
-    private manage(message: SocketMessage): void {
+    public manageFromServer(message: SocketMessage): void {
+        if (message.userId === this.userService.loggedUser._id) {
+            return;
+        }
+        this.manage(message);
+    }
+
+    public manage(message: SocketMessage): void {
         let action: string;
         switch (message.type) {
             case SocketMessageType.Connection:
