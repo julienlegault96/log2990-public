@@ -16,6 +16,7 @@ import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.ser
 import { SocketService } from "src/app/services/socket/socket.service";
 import { MessageService } from "src/app/services/message/message.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
 
 describe("GameViewComponent", () => {
     let component: GameViewComponent;
@@ -31,6 +32,7 @@ describe("GameViewComponent", () => {
                 SoloGameComponent,
                 DiffCounterComponent,
                 ImageDiffComponent,
+                MultiplayerGameComponent
             ],
             providers: [
                 ImgDiffService,

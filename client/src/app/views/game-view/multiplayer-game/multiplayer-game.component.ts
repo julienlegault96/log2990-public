@@ -37,13 +37,13 @@ export class MultiplayerGameComponent {
 
     public errorWasFound(): void {
         this.diffCounter.incrementPlayerCount(this.playerOneId);
-        this.errorFound.emit(this.playerOneId + " a trouvé une différence!");
+        this.errorFound.emit();
         this.verifyErrorCount();
     }
 
     public errorWasFoundByOpponent(): void {
         this.diffCounter.incrementPlayerCount(this.playerTwoId);
-        this.errorFound.emit(this.playerTwoId + " a trouvé une différence!");
+        this.errorFound.emit();
         this.verifyErrorCount();
     }
 
