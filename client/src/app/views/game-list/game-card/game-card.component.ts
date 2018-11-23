@@ -23,7 +23,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         super(gameService);
     }
 
-    public test(): void {
+    public joinGame(): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
             type: SocketMessageType.JoinedRoom

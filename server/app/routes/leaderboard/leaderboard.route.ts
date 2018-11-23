@@ -53,7 +53,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
 
     private async updateScores(leaderboardRequest: LeaderboardRequest): Promise<UpdateWriteOpResult> {
         const game: Game = await this.getOne(leaderboardRequest.id);
-        const updatedScores: Array<Score> = await this.getUpdatedScores(JSON.parse(JSON.stringify(game)), leaderboardRequest);
+        const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
             const socketMessage: SocketMessage = {
@@ -68,14 +68,15 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         return this.update(game._id, game);
     }
 
-    // On veut comparer les 3 scores enregistres dans le leaderboard
-    // tslint:disable:no-magic-numbers
     private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
-        return scores[0].time !== updatedScores[0].time
-            || scores[1].time !== updatedScores[1].time
-            || scores[2].time !== updatedScores[2].time;
+        const firstScoreIndex: number = 0;
+        const secondScoreIndex: number = 1;
+        const thirdScoreIndex: number = 2;
+
+        return scores[firstScoreIndex].time !== updatedScores[firstScoreIndex].time
+            || scores[secondScoreIndex].time !== updatedScores[secondScoreIndex].time
+            || scores[thirdScoreIndex].time !== updatedScores[thirdScoreIndex].time;
     }
-    // tslint:enable:no-magic-numbers
 
     private async getUpdatedScores(game: Game, elem: LeaderboardRequest): Promise<Array<Score>> {
         const scores: Array<Score> = game.leaderboards[elem.partyMode].scores;

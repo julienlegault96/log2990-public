@@ -15,7 +15,6 @@ import { MessageService } from "src/app/services/message/message.service";
 
 export class GameViewComponent implements OnInit {
 
-    // @ViewChild(MessageBarComponent) public messageBar: MessageBarComponent;
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
