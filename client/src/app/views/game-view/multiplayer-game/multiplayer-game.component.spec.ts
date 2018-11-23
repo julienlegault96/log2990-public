@@ -7,6 +7,7 @@ import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { ImageDiffComponent } from "../image-diff/image-diff.component";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
+import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 
 describe("MultiplayerGameComponent", () => {
     let component: MultiplayerGameComponent;
@@ -22,6 +23,7 @@ describe("MultiplayerGameComponent", () => {
             ],
             providers: [
                 ImgDiffService,
+                LeaderboardService,
             ],
             imports: [
                 HttpClientModule,

@@ -1,10 +1,11 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { NgModule, Injectable } from "@angular/core";
+import { RouterModule, Routes, Router } from "@angular/router";
 
 import { GameListComponent } from "./views/game-list/game-list.component";
 import { AdminViewComponent } from "./views/admin/admin-view.component";
 import { HomePageComponent } from "./views/home-page/home-page.component";
 import { GameViewComponent } from "./views/game-view/game-view.component";
+import { UserService } from "./services/user/user.service";
 
 const routes: Routes = [
     { path: "", component: HomePageComponent },
@@ -20,4 +21,16 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
 })
 
-export class AppRoutingModule { }
+@Injectable()
+export class AppRoutingModule {
+
+    public constructor(
+        userService: UserService,
+        router: Router,
+    ) {
+        if (!userService.loggedIn) {
+            router.navigate([""]);
+        }
+    }
+
+}

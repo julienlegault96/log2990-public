@@ -2,10 +2,11 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 
 import { AbstractServerService, Endpoints, Query } from "./abstract-server.service";
+import { DEFAULT_SERVER_HOST_URL } from "../../../../../common/communication/default-urls";
 
 class NotSoAbstractServerService extends AbstractServerService {
     public getServerHost(): string {
-        return "http://localhost:3000";
+        return DEFAULT_SERVER_HOST_URL;
     }
 
     public getUrlFromParent(serverEndpoint: Endpoints, pathParam?: string, ...queryParams: Query[]): string {

@@ -10,12 +10,18 @@ import { Score, Leaderboard } from "../../../../common/game/leaderboard";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
+import { Socket } from "../../socket";
+import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 
 @injectable()
-
 export class LeaderboardRoute extends AbstractRoute<Game> {
 
-    public constructor(@inject(Types.Mongo) mongo: Mongo) {
+    public constructor(
+        @inject(Types.Socket) private socket: Socket,
+        @inject(Types.Mongo) mongo: Mongo,
+    ) {
         super(mongo);
         this.collection = Collections.Games;
     }
@@ -48,9 +54,28 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
     private async updateScores(leaderboardRequest: LeaderboardRequest): Promise<UpdateWriteOpResult> {
         const game: Game = await this.getOne(leaderboardRequest.id);
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
+
+        if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
+            const socketMessage: SocketMessage = {
+                userId: leaderboardRequest.playerName,
+                type: SocketMessageType.Highscore,
+            };
+            this.socket.emitToUser<SocketMessage>({ _id: leaderboardRequest.playerName }, SocketEvents.Message, socketMessage);
+        }
+
         game.leaderboards[leaderboardRequest.partyMode].scores = updatedScores;
 
         return this.update(game._id, game);
+    }
+
+    private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
+        const firstScoreIndex: number = 0;
+        const secondScoreIndex: number = 1;
+        const thirdScoreIndex: number = 2;
+
+        return scores[firstScoreIndex].time !== updatedScores[firstScoreIndex].time
+            || scores[secondScoreIndex].time !== updatedScores[secondScoreIndex].time
+            || scores[thirdScoreIndex].time !== updatedScores[thirdScoreIndex].time;
     }
 
     private async getUpdatedScores(game: Game, elem: LeaderboardRequest): Promise<Array<Score>> {

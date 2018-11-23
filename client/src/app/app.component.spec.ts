@@ -1,6 +1,6 @@
 // tslint:disable:no-any les attributs sont des types any
 // tslint:disable:no-floating-promises pour le before each
-import { TestBed, async, ComponentFixture } from "@angular/core/testing";
+import { TestBed, ComponentFixture, fakeAsync, async } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
@@ -20,8 +20,8 @@ import { CreateGameService } from "./services/create-game/create-game.service";
 import { LeaderboardComponent } from "./views/game-list/leaderboard/leaderboard.component";
 import { DiffCounterComponent } from "./views/game-view/diff-counter/diff-counter.component";
 import { GameViewComponent } from "./views/game-view/game-view.component";
-import { MessageBarComponent } from "./views/game-view/message-bar/message-bar.component";
-import { MessageComponent } from "./views/game-view/message/message.component";
+import { MessageBarComponent } from "./views/message-bar/message-bar.component";
+import { MessageComponent } from "./views/message-bar/message/message.component";
 
 import { AdminViewComponent } from "./views/admin/admin-view.component";
 import { AdminViewCardComponent } from "./views/admin/admin-view-card/admin-view-card.component";
@@ -31,10 +31,15 @@ import { ImgDiffService } from "./services/img-diff/img-diff.service";
 import { CreateMultipleViewComponent } from "./views/admin/create-game/create-multiple-view/create-multiple-view.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CreateSingleViewComponent } from "./views/admin/create-game/create-single-game/create-single-view.component";
+import { MessageService } from "./services/message/message.service";
+import { SocketService } from "./services/socket/socket.service";
 
 describe("AppComponent", () => {
+    let socketServiceSpy: jasmine.Spy;
+
     // tslint:disable-next-line:max-func-body-length
-    beforeEach(async(() => {
+    beforeEach(fakeAsync(() => {
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["registerFunction"]);
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
@@ -67,6 +72,8 @@ describe("AppComponent", () => {
                 GameService,
                 CreateGameService,
                 ImgDiffService,
+                MessageService,
+                { provide: SocketService, useValue: socketServiceSpy },
             ]
         }).compileComponents();
     }));

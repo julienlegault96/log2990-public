@@ -21,8 +21,8 @@ import { MultiplayerGameComponent } from "./views/game-view/multiplayer-game/mul
 import { GameViewComponent } from "./views/game-view/game-view.component";
 import { ChronoComponent } from "./views/game-view/chrono/chrono.component";
 import { DiffCounterComponent } from "./views/game-view/diff-counter/diff-counter.component";
-import { MessageBarComponent } from "./views/game-view/message-bar/message-bar.component";
-import { MessageComponent } from "./views/game-view/message/message.component";
+import { MessageBarComponent } from "./views/message-bar/message-bar.component";
+import { MessageComponent } from "./views/message-bar/message/message.component";
 
 import { UserComponent } from "./views/home-page/user/user.component";
 
@@ -36,6 +36,8 @@ import { ImgDiffService } from "./services/img-diff/img-diff.service";
 import { CreateSingleViewComponent } from "./views/admin/create-game/create-single-game/create-single-view.component";
 import { CreateMultipleViewComponent } from "./views/admin/create-game/create-multiple-view/create-multiple-view.component";
 import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
+import { SocketService } from "./services/socket/socket.service";
+import { MessageService } from "./services/message/message.service";
 
 @NgModule({
     declarations: [
@@ -72,6 +74,8 @@ import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
         CreateGameService,
         ImgDiffService,
         LeaderboardService,
+        SocketService,
+        MessageService,
     ],
     bootstrap: [
         AppComponent,

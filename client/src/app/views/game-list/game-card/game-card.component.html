@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="col">
-                        <button class="btn btn-primary btn-block btn-pill">
+                        <button class="btn btn-primary btn-block btn-pill" (click)="joinGame()">
                             <span *ngIf="isJoinable; else elseBlock">
                                 Joindre la partie
                             </span>

@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from "@angular/core/testing";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 import { TestHelper } from "../../../test.helper";
 import { GameListComponent } from "./game-list.component";
@@ -10,17 +10,25 @@ import { GameService } from "../../services/game/game.service";
 import { GameType } from "../../../../../common/game/game-type";
 import { GAMES, SINGLE_VIEW_GAME_COUNT, DOUBLE_VIEW_GAME_COUNT } from "../../../../../common/game/mock-games";
 import { RouterTestingModule } from "@angular/router/testing";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { UserService } from "src/app/services/user/user.service";
 
 describe("GameListComponent", () => {
     let component: GameListComponent;
     let fixture: ComponentFixture<GameListComponent>;
-    // tslint:disable-next-line:no-any Used to mock the http call
-    let httpClientSpy: any;
+    let httpClientSpy: jasmine.SpyObj<HttpClient>;
     let gameService: GameService;
+    let socketServiceSpy: jasmine.SpyObj<SocketService>;
+
+    let userServiceSpy: UserService;
 
     beforeEach(() => {
-        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
+        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get", "pipe", "detectChanges"]);
+        httpClientSpy.get.and.callFake(() => TestHelper.asyncData(null));
         gameService = new GameService(httpClientSpy);
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["registerFunction"]);
+
+        userServiceSpy = new UserService(httpClientSpy, socketServiceSpy);
 
         TestBed.configureTestingModule({
             declarations: [
@@ -29,7 +37,9 @@ describe("GameListComponent", () => {
                 LeaderboardComponent,
             ],
             providers: [
-                { provide: GameService, useValue: gameService }
+                { provide: GameService, useValue: gameService },
+                { provide: SocketService, useValue: socketServiceSpy },
+                { provide: UserService, useValue: userServiceSpy },
             ],
             imports: [
                 HttpClientModule,

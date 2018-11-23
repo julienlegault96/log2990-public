@@ -6,6 +6,10 @@ import { AbstractServerService, Endpoints } from "../abstract-server/abstract-se
 import { Validator } from "../validator/validator";
 
 import { User } from "../../../../../common/user/user";
+import { SocketService } from "../socket/socket.service";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 @Injectable({
     providedIn: "root"
@@ -28,7 +32,7 @@ export class UserService extends AbstractServerService {
     private readonly DUPLICATE_USER_MESSAGE: string =
         "Un utilisateur est déjà connecté avec un tel nom.\n";
 
-    public constructor(protected http: HttpClient) {
+    public constructor(protected http: HttpClient, private socketService: SocketService) {
         super(http);
         this.asyncUserList = [];
         this.refreshUserList();
@@ -37,16 +41,6 @@ export class UserService extends AbstractServerService {
         this.loggedIn = false;
         this.validator = new Validator();
 
-        window.addEventListener("beforeunload", async (e) => this.onUnloadEvent(e));
-    }
-
-    public onUnloadEvent(event: BeforeUnloadEvent): void {
-        event.preventDefault();
-        if (this.loggedIn) {
-            this.removeUser(this.loggedUser).subscribe(/*fire & forget*/);
-        }
-        // Chrome requires returnValue to be set.
-        event.returnValue = "";
     }
 
     public validateUsername(username: string): boolean {
@@ -80,6 +74,8 @@ export class UserService extends AbstractServerService {
     }
 
     private login(user: User): void {
+        this.socketService.emit<User>(SocketEvents.UserConnection, user);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, { userId: user._id, type: SocketMessageType.Connection });
         this.addUser(user).subscribe((nullUser: User) => {
             this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {

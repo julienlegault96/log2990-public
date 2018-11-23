@@ -7,25 +7,29 @@ import { UserService } from "./user.service";
 import { USERS } from "../../../../../common/user/mock-users";
 import { User } from "../../../../../common/user/user";
 import { Endpoints } from "../abstract-server/abstract-server.service";
+import { SocketService } from "../socket/socket.service";
 
-let httpClientSpy: HttpClient;
+let httpClientSpy: jasmine.SpyObj<HttpClient>;
 let userService: UserService;
-let getMethodSpy: jasmine.Spy;
+let socketServiceSpy: jasmine.SpyObj<SocketService>;
 
 describe("UserService", () => {
     beforeEach(() => {
-        httpClientSpy = HttpClient.prototype;
         // setup fake server responses
-        getMethodSpy = spyOn(httpClientSpy, "get").and.callFake( () => TestHelper.asyncData(USERS) );
+        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get", "post", "delete"]);
+        httpClientSpy.get.and.callFake(() => TestHelper.asyncData(USERS));
+        httpClientSpy.post.and.callFake((endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(null));
+        httpClientSpy.delete.and.callFake( () => TestHelper.asyncData("delete done") );
 
-        spyOn(httpClientSpy, "post").and.callFake(
-            (endpoint: Endpoints, postedUser: User) => TestHelper.asyncData(null)
-            );
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["emit"]);
 
-        spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
-        userService = new UserService(httpClientSpy);
+        userService = new UserService(httpClientSpy, socketServiceSpy);
+
         TestBed.configureTestingModule({
-            providers: [UserService],
+            providers: [
+                {provide: UserService, useValue: userService},
+                {provide: SocketService, useValue: socketServiceSpy}
+                ],
             imports: [HttpClientModule]
         });
     });
@@ -45,14 +49,14 @@ describe("UserService", () => {
 
     it("should fetch the existing usernames", () => {
         // ignore calls done in constructor
-        getMethodSpy.calls.reset();
+        httpClientSpy.get.calls.reset();
 
         userService.getUsers().subscribe( (users: User[] ) => {
             expect(users).toEqual(jasmine.any(Array));
             expect(users).toEqual(USERS, "users check");
         });
 
-        expect(getMethodSpy).toHaveBeenCalledTimes(1);
+        expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     });
 
     it("should submit usernames", () => {
@@ -61,6 +65,9 @@ describe("UserService", () => {
         // should have called login
         expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
         expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+
+        const expectedEmitCalls: number = 2;
+        expect(socketServiceSpy.emit).toHaveBeenCalledTimes(expectedEmitCalls);
     });
 
     it("should delete the submited username", () => {

@@ -1,11 +1,14 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { MessageBarComponent } from "./message-bar/message-bar.component";
 import { ChronoComponent } from "./chrono/chrono.component";
-import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
+import { MessageService } from "src/app/services/message/message.service";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 @Component({
     selector: "app-game-view",
@@ -15,17 +18,18 @@ import { GameService } from "src/app/services/game/game.service";
 
 export class GameViewComponent implements OnInit {
 
-    @ViewChild(MessageBarComponent) public messageBar: MessageBarComponent;
     @ViewChild(ChronoComponent) public chrono: ChronoComponent;
-    @ViewChild(SoloGameComponent) public soloGame: SoloGameComponent;
 
     public playerIds: string[] = new Array<string>();
     public game: Game;
 
     public constructor(
+        public messageService: MessageService,
         private activatedRoute: ActivatedRoute,
         private userService: UserService,
-        private gameService: GameService) {
+        private gameService: GameService,
+        private socketService: SocketService,
+    ) {
         this.playerIds.push(this.userService.loggedUser._id);
     }
 
@@ -39,6 +43,17 @@ export class GameViewComponent implements OnInit {
                 // this.playerIds.push("bob");
             });
         });
+    }
+
+    public userFoundError(): void {
+        const message: SocketMessage = {
+            userId: this.userService.loggedUser._id,
+            type: SocketMessageType.ErrorFound
+        };
+
+        this.messageService.manage(message);
+
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
 
 }
