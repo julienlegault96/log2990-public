@@ -6,6 +6,10 @@ import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
 import { MessageService } from "src/app/services/message/message.service";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 
 @Component({
     selector: "app-game-view",
@@ -25,7 +29,9 @@ export class GameViewComponent implements OnInit {
         public messageService: MessageService,
         private activatedRoute: ActivatedRoute,
         private userService: UserService,
-        private gameService: GameService) {
+        private gameService: GameService,
+        private socketService: SocketService,
+    ) {
         this.playerIds.push(this.userService.loggedUser._id);
     }
 
@@ -39,6 +45,15 @@ export class GameViewComponent implements OnInit {
                 // this.playerIds.push("bob");
             });
         });
+    }
+
+    public userFoundError(): void {
+        const message: SocketMessage = {
+            userId: this.userService.loggedUser._id,
+            type: SocketMessageType.ErrorFound
+        };
+
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
 
 }

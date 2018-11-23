@@ -36,7 +36,7 @@ export class SoloGameComponent {
 
     public errorWasFound(): void {
         this.diffCounter.incrementPlayerCountSolo();
-        this.errorFound.emit(this.playerId + " a trouvé une différence!");
+        this.errorFound.emit();
         this.verifyErrorCount();
     }
 
