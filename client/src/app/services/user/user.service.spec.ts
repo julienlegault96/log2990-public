@@ -11,8 +11,9 @@ import { SocketService } from "../socket/socket.service";
 
 let httpClientSpy: HttpClient;
 let userService: UserService;
-let socketService: SocketService;
+let socketServiceSpy: SocketService;
 let getMethodSpy: jasmine.Spy;
+let emitMethodSpy: jasmine.Spy;
 
 describe("UserService", () => {
     beforeEach(() => {
@@ -26,8 +27,10 @@ describe("UserService", () => {
 
         spyOn(httpClientSpy, "delete").and.callFake( () => TestHelper.asyncData("delete done") );
 
-        socketService = new SocketService();
-        userService = new UserService(httpClientSpy, socketService);
+        socketServiceSpy = new SocketService();
+        // setup fake server responses
+        emitMethodSpy = spyOn(socketServiceSpy, "emit").and.callFake( () => {/* don't emit*/} );
+        userService = new UserService(httpClientSpy, socketServiceSpy);
         TestBed.configureTestingModule({
             providers: [UserService, SocketService],
             imports: [HttpClientModule]
@@ -64,7 +67,10 @@ describe("UserService", () => {
 
         // should have called login
         expect(httpClientSpy.post).toHaveBeenCalledTimes(1);
-        expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+        expect(getMethodSpy).toHaveBeenCalledTimes(1);
+
+        const expectedEmitCalls: number = 2;
+        expect(emitMethodSpy).toHaveBeenCalledTimes(expectedEmitCalls);
     });
 
     it("should delete the submited username", () => {
