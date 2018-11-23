@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { GameService } from "src/app/services/game/game.service";
 import { AbstractGameCardComponent } from "src/app/views/abstract-game-card/abstract-game-card.component";
@@ -8,7 +9,6 @@ import { SocketEvents } from "../../../../../../common/communication/sockets/soc
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { UserService } from "src/app/services/user/user.service";
 import { MessageService } from "src/app/services/message/message.service";
-
 @Component({
     selector: "app-game",
     templateUrl: "./game-card.component.html",
@@ -21,6 +21,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         private userService: UserService,
         gameService: GameService,
         private messageService: MessageService,
+        private router: Router
     ) {
         super(gameService);
     }
@@ -34,6 +35,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         this.messageService.manage(message);
 
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", "waiting"]);
     }
 
 }
