@@ -49,10 +49,8 @@ export class ImageDiffComponent implements OnInit {
         if (this.hasBeenClicked) {
             return;
         }
-
         setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
         this.hasBeenClicked = true;
-
         // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
         const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
         if (target) {
@@ -69,10 +67,13 @@ export class ImageDiffComponent implements OnInit {
                             this.updateModifiedImage(errorCoordinates);
                         } else {
                             this.errorAudioPlayer.play();
-                            this.putError("modified", x, y);        // Have to be performed.
+                            this.putError(event.clientX, event.clientY);
                         }
                     });
-            }
+            } else {
+                            this.errorAudioPlayer.play();
+                            this.putError(event.clientX, event.clientY);
+                        }
         }
     }
 
@@ -174,7 +175,7 @@ export class ImageDiffComponent implements OnInit {
             throw new Error(`Invalid element id: ${id}`);
         }
     }
-
+/*
     private putError( id: string, x: number, y: number): void {
         const canvas: HTMLCanvasElement = this.getCanvas(id);
         const  context: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -182,10 +183,33 @@ export class ImageDiffComponent implements OnInit {
         context.font = "15px Arial";
         context.fillStyle = "rgba(255, 0, 0, 1)";
         context.fillText("Erreur !", x, y);
+       // context.fillRect(x, y, 60, 60);
         setTimeout(() => {
-        context.fillStyle = "rgba(255, 255, 255, 1)";
-        context.fillText("", x, y);
-        // context.clearRect(0, 0, x, y);
+        // context.fillRect(x, y, 60, 60);
     } ,            SECOND);
+    }
+
+    */
+
+    public putError(x: number, y: number): void {
+        const fadeDelay: number = 1000;
+        const fadeDuration: number = 1000;
+        const div: JQuery<HTMLElement> = $('<div class="image-wrapper">')
+                .css({
+                    "left": x + "px",
+                    "top": y + "px",
+                    "position": "absolute",
+                    "color": "red",
+                    "text-shadow": "2px 2px 2px #000"
+
+                })
+                .append($('<img src="" alt="Erreur !" />'))
+                .appendTo(document.body);
+
+            setTimeout(() => {
+                div.addClass("fade-out");
+                setTimeout(() => { div.remove(); }, fadeDuration);
+            // tslint:disable-next-line:align
+            }, fadeDelay);
     }
 }
