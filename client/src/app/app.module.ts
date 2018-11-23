@@ -17,6 +17,7 @@ import { GameListComponent } from "./views/game-list/game-list.component";
 import { GameCardComponent } from "./views/game-list/game-card/game-card.component";
 import { LeaderboardComponent } from "./views/game-list/leaderboard/leaderboard.component";
 import { SoloGameComponent } from "./views/game-view/solo-game/solo-game.component";
+import { MultiplayerGameComponent } from "./views/game-view/multiplayer-game/multiplayer-game.component";
 import { GameViewComponent } from "./views/game-view/game-view.component";
 import { ChronoComponent } from "./views/game-view/chrono/chrono.component";
 import { DiffCounterComponent } from "./views/game-view/diff-counter/diff-counter.component";
@@ -44,6 +45,7 @@ import { LeaderboardService } from "./services/leaderboard/leaderboard.service";
         GameCardComponent,
         LeaderboardComponent,
         SoloGameComponent,
+        MultiplayerGameComponent,
         GameViewComponent,
         ChronoComponent,
         UserComponent,

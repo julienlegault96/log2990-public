@@ -7,6 +7,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 
 import { AppComponent } from "./app.component";
 import { SoloGameComponent } from "./views/game-view/solo-game/solo-game.component";
+import { MultiplayerGameComponent } from "./views/game-view/multiplayer-game/multiplayer-game.component";
 import { ChronoComponent } from "./views/game-view/chrono/chrono.component";
 import { UserComponent } from "./views/home-page/user/user.component";
 import { HomePageComponent } from "./views/home-page/home-page.component";
@@ -38,6 +39,7 @@ describe("AppComponent", () => {
             declarations: [
                 AppComponent,
                 SoloGameComponent,
+                MultiplayerGameComponent,
                 ChronoComponent,
                 GameListComponent,
                 GameCardComponent,

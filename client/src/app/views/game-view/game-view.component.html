@@ -6,7 +6,12 @@
             <app-message-bar [messages]></app-message-bar>
         </div>
         <div class="col-10 px-5 py-3">
-            <app-solo-game [playerId]="playerId" [game]="game" [chrono]="chrono" (errorFound)="messageBar.addMessage($event)"></app-solo-game>
+            <app-solo-game *ngIf="playerIds.length ===1" [playerId]="playerIds[0]" [game]="game" [chrono]="chrono"
+                (errorFound)="messageBar.addMessage($event)">
+            </app-solo-game>
+            <app-multiplayer-game *ngIf="playerIds.length == 2" [playerOneId]="playerIds[0]" [playerTwoId]="playerIds[1]"
+                [game]="game" [chrono]="chrono" (errorFound)="messageBar.addMessage($event)">
+            </app-multiplayer-game>
         </div>
     </div>
 </div>
@@ -25,7 +30,9 @@
                 <p>Vous avez gagné la partie! Allez célébrer avec votre famille et vos amis!</p>
 
                 <div class="float-right">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" [routerLink]="['/gameList']">Continuer</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" [routerLink]="['/gameList']">
+                        Continuer
+                    </button>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -33,3 +40,33 @@
     </div>
 </div>
 <button id="open-win-end-game-modal" [hidden]="true" data-toggle="modal" data-backdrop="static" data-target="#win-end-game-modal"></button>
+
+<div class="modal fade" id="lose-end-game-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 class="modal-title">
+                    <fa-icon [icon]="['fas', 'sad-tear']"></fa-icon>
+                    Toute une catastrophe!
+                </h4>
+
+                <hr />
+
+                <p>Vous êtes le grand perdant! Allez-vous accepter la defaite et la honte ou prendrez-vous votre revanche?!</p>
+
+                <div class="float-right">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" [routerLink]="['/gameList']">
+                        Continuer
+                    </button>
+                </div>
+                <div class="float-right pr-2">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">
+                        Rejouer
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="open-lose-end-game-modal" [hidden]="true" data-toggle="modal" data-backdrop="static" data-target="#lose-end-game-modal"></button>
