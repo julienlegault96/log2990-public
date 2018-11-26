@@ -34,31 +34,29 @@ export class MessageService {
     }
 
     public manage(message: SocketMessage): void {
-        let action: string;
         switch (message.type) {
             case SocketMessageType.Connection:
-                action = "s'est connecté.";
+                this.addMessage(`${message.userId} vient de se connecter.`);
                 break;
             case SocketMessageType.Disconnection:
-                action = "s'est déconnecté.";
+                this.addMessage(`${message.userId} vient de se déconnecter.`);
                 break;
             case SocketMessageType.Highscore:
-                action = "a battu un temps record!";
+                this.addMessage(`${message.userId} a battu un temps record!`);
                 break;
             case SocketMessageType.NoErrorFound:
-                action = "a mal identifié une erreur...";
+                this.addMessage(`Erreur par ${message.userId}`);
                 break;
             case SocketMessageType.ErrorFound:
-                action = "a trouvé une erreur!";
+                this.addMessage(`Différence trouvée par ${message.userId}`);
                 break;
             case SocketMessageType.JoinedRoom:
-                action = "a joint la partie!";
+                this.addMessage(`${message.userId} a joint la partie!`);
                 break;
             default:
-                action = "a fait quelque chose d'inattendu!";
+                this.addMessage(`${message.userId} a fait quelque chose d'inattendu!`);
                 break;
         }
-        this.addMessage(`${message.userId} ${action}`);
     }
 
 }
