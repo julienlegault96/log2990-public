@@ -55,10 +55,17 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const game: Game = await this.getOne(leaderboardRequest.id);
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
+        console.log(updatedScores, game.leaderboards[leaderboardRequest.partyMode].scores);
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
+            console.log("yeah!!!");
             const socketMessage: SocketMessage = {
                 userId: leaderboardRequest.playerName,
                 type: SocketMessageType.Highscore,
+                message: {
+                    position: 0,
+                    gameMode: leaderboardRequest.partyMode,
+                    gameName: game.title,
+                }
             };
             this.socket.emitToUser<SocketMessage>({ _id: leaderboardRequest.playerName }, SocketEvents.Message, socketMessage);
         }
@@ -69,13 +76,9 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
     }
 
     private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
-        const firstScoreIndex: number = 0;
-        const secondScoreIndex: number = 1;
-        const thirdScoreIndex: number = 2;
+        const displayedScores: number = 3;
 
-        return scores[firstScoreIndex].time !== updatedScores[firstScoreIndex].time
-            || scores[secondScoreIndex].time !== updatedScores[secondScoreIndex].time
-            || scores[thirdScoreIndex].time !== updatedScores[thirdScoreIndex].time;
+        return scores.length !== displayedScores;
     }
 
     private async getUpdatedScores(game: Game, elem: LeaderboardRequest): Promise<Array<Score>> {
