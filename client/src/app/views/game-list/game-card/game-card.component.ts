@@ -9,6 +9,7 @@ import { SocketEvents } from "../../../../../../common/communication/sockets/soc
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { UserService } from "src/app/services/user/user.service";
 import { MessageService } from "src/app/services/message/message.service";
+
 @Component({
     selector: "app-game",
     templateUrl: "./game-card.component.html",
