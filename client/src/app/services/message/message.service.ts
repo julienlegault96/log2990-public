@@ -4,6 +4,7 @@ import { SocketEvents } from "../../../../../common/communication/sockets/socket
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
 import { UserService } from "../user/user.service";
+import { SocketHighscore } from "../../../../../common/communication/sockets/socket-highscore";
 
 @Injectable()
 export class MessageService {
@@ -42,7 +43,11 @@ export class MessageService {
                 this.addMessage(`${message.userId} vient de se déconnecter.`);
                 break;
             case SocketMessageType.Highscore:
-                this.addMessage(`${message.userId} a battu un temps record!`);
+                if (message.message instanceof SocketHighscore) {
+                    this.addMessage(`${message.userId} obtient la ${message.message.position
+                        } place dans les meilleurs temps du jeu ${message.message.gameName
+                        } en ${message.message.gameMode === 0 ? "solo" : "duel"}`);
+                }
                 break;
             case SocketMessageType.NoErrorFound:
                 this.addMessage(`Erreur par ${message.userId}`);
