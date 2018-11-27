@@ -41,7 +41,7 @@ export class MessageSocket {
 
         socket.usersRoom[message.userId] = `${message.message}_${i}`;
         ioSocket.join(socket.usersRoom[message.userId]);
-        this.emitToUsersRoom(
+        this.emitToUsersRoom<SocketMessage>(
             socket,
             message.userId,
             SocketEvents.Message,
