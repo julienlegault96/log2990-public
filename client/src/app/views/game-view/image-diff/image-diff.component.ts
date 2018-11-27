@@ -3,6 +3,7 @@ import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
 import { AudioPlayer } from "./audio-player";
+// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
     selector: "app-image-diff",
@@ -161,6 +162,13 @@ export class ImageDiffComponent implements OnInit {
         return this.getContext(id).getImageData(0, 0, canvas.width, canvas.height);
     }
 
+    private setCanvasId(id: string): void {
+        this.getCanvas("original").id = id;
+        this.getCanvas("modified").id = id;
+        // this.getCanvas("original").addEventListener("mouseout", this.isClicked($), false);
+        // this.getCanvas("modified").addEventListener("mouseout", this.isClicked($), false);
+    }
+
     private getContext(id: string): CanvasRenderingContext2D {
         const context: CanvasRenderingContext2D = this.getCanvas(id)
             .getContext("2d") as CanvasRenderingContext2D;
@@ -194,8 +202,8 @@ export class ImageDiffComponent implements OnInit {
             .appendTo(document.body);
 
             setTimeout(() => {
-                div.addClass("fade-out");
-                setTimeout(() => { div.remove(); }, fadeDuration);
+                div.addClass("fade-out"); this.setCanvasId("notAllowed");
+                setTimeout(() => { div.remove(); this.setCanvasId("canvas"); }, fadeDuration);
             // tslint:disable-next-line:align
             }, fadeDelay);
     }

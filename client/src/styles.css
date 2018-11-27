@@ -37,6 +37,10 @@ body > .container-fluid {
     border: solid black 2px;
 }
 
+#notAllowed {
+    cursor: not-allowed;
+    /*pointer-events:none */
+}
 .text-shadow {
     text-shadow: 0 0 0 3px black;
 }.text-shadow {
