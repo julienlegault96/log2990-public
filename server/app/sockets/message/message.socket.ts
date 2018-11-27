@@ -33,7 +33,6 @@ export class MessageSocket {
         const maxPlayer: number = 2;
 
         // find the first available room
-        // tslint:disable-next-line:no-empty
         while (socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`]
             && socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
             i++;
@@ -47,7 +46,8 @@ export class MessageSocket {
             SocketEvents.Message,
             {
                 userId: message.userId,
-                type: SocketMessageType.JoinedRoom
+                type: SocketMessageType.JoinedRoom,
+                timestamp: Date.now()
             });
     }
 

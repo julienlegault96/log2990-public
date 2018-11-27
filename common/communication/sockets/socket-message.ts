@@ -4,5 +4,12 @@ import { SocketHighscore } from "./socket-highscore";
 export interface SocketMessage {
     userId: string;
     type: SocketMessageType;
-    message?: string | number | SocketHighscore;
+    timestamp: number;
+    message?: MessageOptions;
 }
+
+export interface MessageOptions{ 
+    textMessage?: string,
+    numbMessage?: number,
+    HighScore?: SocketHighscore
+};

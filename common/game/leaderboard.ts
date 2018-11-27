@@ -16,21 +16,21 @@ export class Leaderboard {
 }
 
 export function generateSoloLeaderboard(baseTime: number): Leaderboard {
-    let leaderboard = generateLeaderboardTemplate(baseTime);
+    const leaderboard = generateLeaderboardTemplate(baseTime);
     leaderboard.title = "Solo";
 
     return leaderboard;
 }
 
 export function generateDuoLeaderboard(baseTime: number): Leaderboard {
-    let leaderboard = generateLeaderboardTemplate(baseTime);
+    const leaderboard = generateLeaderboardTemplate(baseTime);
     leaderboard.title = "Duel";
 
     return leaderboard;
 }
 
 export function generateLeaderboardTemplate(baseTime: number) {
-    let leaderboard = new Leaderboard();
+    const leaderboard = new Leaderboard();
 
     for (let i = 0; i < SCOREBOARD_SIZE; i++) {
         leaderboard.scores.push(

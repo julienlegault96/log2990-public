@@ -55,19 +55,23 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const game: Game = await this.getOne(leaderboardRequest.id);
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
-        console.log(updatedScores, game.leaderboards[leaderboardRequest.partyMode].scores);
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
-            console.log("yeah!!!");
-            const socketMessage: SocketMessage = {
-                userId: leaderboardRequest.playerName,
-                type: SocketMessageType.Highscore,
-                message: {
-                    position: 0,
-                    gameMode: leaderboardRequest.partyMode,
-                    gameName: game.title,
+            this.socket.emitToUser<SocketMessage>(
+                { _id: leaderboardRequest.playerName },
+                SocketEvents.Message,
+                {
+                    userId: leaderboardRequest.playerName,
+                    type: SocketMessageType.Highscore,
+                    timestamp: Date.now(),
+                    message: {
+                        HighScore: {
+                            position: 0,
+                            gameMode: leaderboardRequest.partyMode,
+                            gameName: game.title,
+                        }
+                    }
                 }
-            };
-            this.socket.emitToUser<SocketMessage>({ _id: leaderboardRequest.playerName }, SocketEvents.Message, socketMessage);
+            );
         }
 
         game.leaderboards[leaderboardRequest.partyMode].scores = updatedScores;

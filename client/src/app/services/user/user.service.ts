@@ -76,7 +76,16 @@ export class UserService extends AbstractServerService {
 
     private login(user: User): void {
         this.socketService.emit<User>(SocketEvents.UserConnection, user);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, { userId: user._id, type: SocketMessageType.Connection });
+
+        this.socketService.emit<SocketMessage>(
+            SocketEvents.Message,
+            {
+                userId: user._id,
+                type: SocketMessageType.Connection,
+                timestamp:  Date.now()
+            }
+        );
+
         this.addUser(user).subscribe((nullUser: User) => {
             this.getUsers().subscribe((newUsers: User[]) => {
                 if (newUsers.filter((value: User) => value._id === user._id).length === 1) {

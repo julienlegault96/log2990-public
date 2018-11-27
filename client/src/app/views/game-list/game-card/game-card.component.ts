@@ -30,7 +30,8 @@ export class GameCardComponent extends AbstractGameCardComponent {
     public joinGame(): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
-            type: SocketMessageType.JoinedRoom
+            type: SocketMessageType.JoinedRoom,
+            timestamp: Date.now()
         };
 
         this.messageService.manage(message);

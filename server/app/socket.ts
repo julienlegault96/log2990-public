@@ -54,7 +54,8 @@ export class Socket {
                 if (connections[socket.id]) {
                     const notification: SocketMessage = {
                         userId: connections[socket.id]._id,
-                        type: SocketMessageType.Disconnection
+                        type: SocketMessageType.Disconnection,
+                        timestamp: Date.now()
                     };
 
                     this.userSocket.deleteUser(connections[socket.id]._id);
