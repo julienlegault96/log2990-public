@@ -22,7 +22,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         private userService: UserService,
         gameService: GameService,
         private messageService: MessageService,
-        private router: Router
+        private router: Router,
     ) {
         super(gameService);
     }

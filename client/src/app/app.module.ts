@@ -62,7 +62,7 @@ import { MessageService } from "./services/message/message.service";
         MessageComponent,
         DiffCounterComponent,
         ImageDiffComponent,
-        WaitingViewComponent
+        WaitingViewComponent,
     ],
     imports: [
         AppRoutingModule,

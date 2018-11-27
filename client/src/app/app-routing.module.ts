@@ -13,7 +13,7 @@ const routes: Routes = [
     { path: "gameList", component: GameListComponent },
     { path: "game/:id", component: GameViewComponent },
     { path: "admin", component: AdminViewComponent },
-    { path: "waiting" , component : WaitingViewComponent }
+    { path: "waiting" , component : WaitingViewComponent },
 ];
 
 @NgModule({

@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 export class WaitingViewComponent {
 
     public constructor(
-        private router: Router
+        private router: Router,
     ) {}
 
     public cancelGameCreation(): void {
