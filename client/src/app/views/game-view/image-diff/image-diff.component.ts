@@ -3,7 +3,6 @@ import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
 import { AudioPlayer } from "./audio-player";
-// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
     selector: "app-image-diff",
@@ -52,7 +51,7 @@ export class ImageDiffComponent implements OnInit {
         if (this.hasBeenClicked) {
             return;
         }
-        if ( !this.isNotAllowed) {
+        if (!this.isNotAllowed) {
         setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
         this.hasBeenClicked = true;
         // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
@@ -78,6 +77,29 @@ export class ImageDiffComponent implements OnInit {
             }
         }
         }
+    }
+
+    public putError(x: number, y: number): void {
+        this.isNotAllowed = true;
+        const fadeDelay: number = 1000;
+        const fadeDuration: number = 1000;
+        const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
+            .css({
+                "left": x + "px",
+                "top": y + "px",
+            })
+            .append($("<span>Erreur</span>"))
+            .appendTo(document.body);
+            setTimeout(() => {
+                div.addClass("fade-out");
+                this.setCanvasId("notAllowed");
+                setTimeout(() => {
+                    div.remove();
+                    this.setCanvasId("canvas");
+                    this.isNotAllowed = false; },
+                           fadeDuration);
+            // tslint:disable-next-line:align
+            }, fadeDelay);
     }
 
     private noErrorWasClicked(event: MouseEvent): void {
@@ -189,28 +211,5 @@ export class ImageDiffComponent implements OnInit {
         } else {
             throw new Error(`Invalid element id: ${id}`);
         }
-    }
-
-    public putError(x: number, y: number): void {
-        this.isNotAllowed = true;
-        const fadeDelay: number = 1000;
-        const fadeDuration: number = 1000;
-        const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
-            .css({
-                "left": x + "px",
-                "top": y + "px",
-            })
-            .append($("<span>Erreur</span>"))
-            .appendTo(document.body);
-            setTimeout(() => {
-                div.addClass("fade-out");
-                this.setCanvasId("notAllowed");
-                setTimeout(() => {
-                    div.remove();
-                    this.setCanvasId("canvas");
-                    this.isNotAllowed = false; },
-                           fadeDuration);
-            // tslint:disable-next-line:align
-            }, fadeDelay);
     }
 }
