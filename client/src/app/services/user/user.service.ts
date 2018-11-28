@@ -87,12 +87,10 @@ export class UserService extends AbstractServerService {
         );
 
         this.addUser(user).subscribe((nullUser: User) => {
-            this.getUsers().subscribe((newUsers: User[]) => {
-                if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
-                    this.loggedUser = user;
-                    this.loggedIn = true;
-                }
-            });
+            if (this.userList.filter((value: User) => value._id === user._id).length === 1) {
+                this.loggedUser = user;
+                this.loggedIn = true;
+            }
         });
     }
 

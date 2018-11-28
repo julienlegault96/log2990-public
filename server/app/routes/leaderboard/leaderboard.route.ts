@@ -12,14 +12,13 @@ import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
 import { Socket } from "../../socket";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
-import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 
 @injectable()
 export class LeaderboardRoute extends AbstractRoute<Game> {
 
     public constructor(
-        @inject(Types.Socket) private socket: Socket,
+        @inject(Types.SocketIo) private io: Socket,
         @inject(Types.Mongo) mongo: Mongo,
     ) {
         super(mongo);
@@ -56,8 +55,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
-            this.socket.emitToUser<SocketMessage>(
-                { _id: leaderboardRequest.playerName },
+            this.io.ioServer.sockets.emit(
                 SocketEvents.Message,
                 {
                     userId: leaderboardRequest.playerName,
