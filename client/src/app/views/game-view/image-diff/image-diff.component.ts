@@ -28,6 +28,7 @@ export class ImageDiffComponent implements OnInit {
     private audioPlayer: AudioPlayer;
     private errorAudioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
+    private isNotAllowed: boolean = false;
 
     private hasBeenClicked: boolean;
     private readonly clickDebounce: number = 500;
@@ -51,6 +52,7 @@ export class ImageDiffComponent implements OnInit {
         if (this.hasBeenClicked) {
             return;
         }
+        if ( !this.isNotAllowed) {
         setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
         this.hasBeenClicked = true;
         // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
@@ -74,6 +76,7 @@ export class ImageDiffComponent implements OnInit {
             } else {
                 this.noErrorWasClicked(event);
             }
+        }
         }
     }
 
@@ -165,8 +168,6 @@ export class ImageDiffComponent implements OnInit {
     private setCanvasId(id: string): void {
         this.getCanvas("original").id = id;
         this.getCanvas("modified").id = id;
-        // this.getCanvas("original").addEventListener("mouseout", this.isClicked($), false);
-        // this.getCanvas("modified").addEventListener("mouseout", this.isClicked($), false);
     }
 
     private getContext(id: string): CanvasRenderingContext2D {
@@ -191,6 +192,7 @@ export class ImageDiffComponent implements OnInit {
     }
 
     public putError(x: number, y: number): void {
+        this.isNotAllowed = true;
         const fadeDelay: number = 1000;
         const fadeDuration: number = 1000;
         const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
@@ -200,10 +202,14 @@ export class ImageDiffComponent implements OnInit {
             })
             .append($("<span>Erreur</span>"))
             .appendTo(document.body);
-
             setTimeout(() => {
-                div.addClass("fade-out"); this.setCanvasId("notAllowed");
-                setTimeout(() => { div.remove(); this.setCanvasId("canvas"); }, fadeDuration);
+                div.addClass("fade-out");
+                this.setCanvasId("notAllowed");
+                setTimeout(() => {
+                    div.remove();
+                    this.setCanvasId("canvas");
+                    this.isNotAllowed = false; },
+                           fadeDuration);
             // tslint:disable-next-line:align
             }, fadeDelay);
     }
