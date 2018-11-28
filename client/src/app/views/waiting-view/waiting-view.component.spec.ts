@@ -4,7 +4,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 import { WaitingViewComponent } from "./waiting-view.component";
 
-describe("HomePageComponent", () => {
+describe("WaitingViewComponent", () => {
     let component: WaitingViewComponent;
     let fixture: ComponentFixture<WaitingViewComponent>;
 
