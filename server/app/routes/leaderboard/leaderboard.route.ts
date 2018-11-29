@@ -55,7 +55,6 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
-            console.log(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores);
             this.io.ioServer.sockets.emit(
                 SocketEvents.Message,
                 {
