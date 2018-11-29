@@ -82,7 +82,7 @@ export class UserService extends AbstractServerService {
             {
                 userId: user._id,
                 type: SocketMessageType.Connection,
-                timestamp:  Date.now()
+                timestamp: Date.now()
             }
         );
 

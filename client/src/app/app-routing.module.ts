@@ -1,5 +1,5 @@
 import { NgModule, Injectable } from "@angular/core";
-import { RouterModule, Routes, Router, NavigationStart, Event } from "@angular/router";
+import { RouterModule, Routes, Router } from "@angular/router";
 
 import { GameListComponent } from "./views/game-list/game-list.component";
 import { AdminViewComponent } from "./views/admin/admin-view.component";
@@ -13,7 +13,7 @@ const APP_ROUTES: Routes = [
     { path: "admin", component: AdminViewComponent },
     { path: "gameList", component: GameListComponent },
     { path: "game/:id", component: GameViewComponent },
-    { path: "waiting" , component : WaitingViewComponent },
+    { path: "waiting", component: WaitingViewComponent },
 ];
 
 @NgModule({
@@ -30,15 +30,11 @@ export class AppRoutingModule {
         userService: UserService,
         router: Router,
     ) {
-        router.events.subscribe((value: Event) => {
-            if (value instanceof NavigationStart) {
-                if (!userService.loggedIn
-                    && value.url !== "/" + APP_ROUTES[0].path
-                    && value.url !== "/" + APP_ROUTES[1].path ) {
-                    router.navigate([APP_ROUTES[0].path]);
-                }
-            }
-        });
+        if (!userService.loggedIn
+            && router.url !== "/" + APP_ROUTES[0].path
+            && router.url !== "/" + APP_ROUTES[1].path) {
+            router.navigate([APP_ROUTES[0].path]);
+        }
     }
 
 }
