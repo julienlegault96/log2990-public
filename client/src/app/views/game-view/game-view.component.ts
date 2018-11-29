@@ -56,13 +56,8 @@ export class GameViewComponent implements OnInit {
     private emitMessage(messageType: SocketMessageType): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
-            type: SocketMessageType.ErrorFound
+            type: messageType
         };
-
-        if (messageType === SocketMessageType.NoErrorFound) {
-            message.type = SocketMessageType.NoErrorFound;
-        }
-
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
