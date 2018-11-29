@@ -1,5 +1,5 @@
 import { NgModule, Injectable } from "@angular/core";
-import { RouterModule, Routes, Router } from "@angular/router";
+import { RouterModule, Routes, Router, NavigationStart, Event } from "@angular/router";
 
 import { GameListComponent } from "./views/game-list/game-list.component";
 import { AdminViewComponent } from "./views/admin/admin-view.component";
@@ -30,11 +30,16 @@ export class AppRoutingModule {
         userService: UserService,
         router: Router,
     ) {
-        if (!userService.loggedIn
-            && router.url !== "/" + APP_ROUTES[0].path
-            && router.url !== "/" + APP_ROUTES[1].path) {
-            router.navigate([APP_ROUTES[0].path]);
-        }
+        router.events.subscribe((event: Event) => {
+            if (event instanceof NavigationStart) {
+                if (event.url !== "/" + APP_ROUTES[0].path
+                    && event.url !== "/" + APP_ROUTES[1].path) {
+                    if (!userService.loggedIn) {
+                        router.navigate([APP_ROUTES[0].path]);
+                    }
+                }
+            }
+        });
     }
 
 }
