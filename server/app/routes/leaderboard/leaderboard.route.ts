@@ -55,6 +55,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
 
         if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
+            console.log(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores);
             this.io.ioServer.sockets.emit(
                 SocketEvents.Message,
                 {
@@ -63,7 +64,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
                     timestamp: Date.now(),
                     message: {
                         HighScore: {
-                            position: 0,
+                            position: this.getHighscorePosition(updatedScores, leaderboardRequest),
                             gameMode: leaderboardRequest.partyMode,
                             gameName: game.title,
                         }
@@ -75,6 +76,21 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         game.leaderboards[leaderboardRequest.partyMode].scores = updatedScores;
 
         return this.update(game._id, game);
+    }
+
+    private getHighscorePosition(updatedScores: Array<Score>, leaderboardRequest: LeaderboardRequest): number {
+        const thirdPlaceIndex: number = 2;
+        if (updatedScores[thirdPlaceIndex].username === leaderboardRequest.playerName
+            && updatedScores[thirdPlaceIndex].time === leaderboardRequest.time) {
+            return thirdPlaceIndex + 1;
+        }
+        const secondPlaceIndex: number = 1;
+        if (updatedScores[secondPlaceIndex].username === leaderboardRequest.playerName
+            && updatedScores[secondPlaceIndex].time === leaderboardRequest.time) {
+            return secondPlaceIndex + 1;
+        }
+
+        return 1;
     }
 
     private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
