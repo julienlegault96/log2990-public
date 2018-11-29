@@ -27,7 +27,8 @@ export class MessageService {
     }
 
     public manageFromServer(message: SocketMessage): void {
-        if (message.userId === this.userService.loggedUser._id) {
+        if (message.type !== SocketMessageType.Highscore
+            && message.userId === this.userService.loggedUser._id) {
             return;
         }
         this.manage(message);
