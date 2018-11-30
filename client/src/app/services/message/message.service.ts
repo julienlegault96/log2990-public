@@ -47,27 +47,16 @@ export class MessageService {
                 messageText += message.userId + " vient de se déconnecter.";
                 break;
             case SocketMessageType.Highscore:
-                if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
-                    messageText += message.userId + " obtient la ";
-                    messageText += message.extraMessageInfo.HighScore.position;
-                    messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
-                    messageText += (message.extraMessageInfo.HighScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
-                }
+                messageText += this.formatHighscoreMessage(message);
                 break;
             case SocketMessageType.NoErrorFound:
                 messageText += "Erreur";
-                if (message.extraMessageInfo && message.extraMessageInfo.Game
-                    && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
-                    messageText += " par " + message.userId;
-                }
+                messageText += this.formatMultiplayerUserId(message);
                 messageText += ".";
                 break;
             case SocketMessageType.ErrorFound:
                 messageText += "Différence trouvée";
-                if (message.extraMessageInfo && message.extraMessageInfo.Game
-                    && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
-                    messageText += " par " + message.userId;
-                }
+                messageText += this.formatMultiplayerUserId(message);
                 messageText += ".";
                 break;
             case SocketMessageType.JoinedRoom:
@@ -78,6 +67,32 @@ export class MessageService {
                 break;
         }
         this.addMessage(messageText, message.timestamp);
+    }
+
+    private formatHighscoreMessage(message: SocketMessage): string {
+        const firstPos: number = 1;
+        const scndPos: number = 2;
+        let messageText: string = "";
+        if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
+            const position: string = message.extraMessageInfo.HighScore.position === firstPos ? "première" :
+                                     message.extraMessageInfo.HighScore.position === scndPos ? "deuxième" : "troisième";
+
+            messageText = message.userId + " obtient la " + position;
+            messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
+            messageText += (message.extraMessageInfo.HighScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
+        }
+
+        return messageText;
+    }
+
+    private formatMultiplayerUserId(message: SocketMessage): string {
+        let messageText: string = "";
+        if (message.extraMessageInfo && message.extraMessageInfo.Game
+            && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
+            messageText += " par " + message.userId;
+        }
+
+        return messageText;
     }
 
 }

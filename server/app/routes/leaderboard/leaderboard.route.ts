@@ -78,6 +78,9 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         return this.update(game._id, game);
     }
 
+    /**
+     * returns 1, 2 or 3 depending on the Highscore's position
+     */
     private getHighscorePosition(updatedScores: Array<Score>, leaderboardRequest: LeaderboardRequest): number {
         const thirdPlaceIndex: number = 2;
         if (updatedScores[thirdPlaceIndex].username === leaderboardRequest.playerName
