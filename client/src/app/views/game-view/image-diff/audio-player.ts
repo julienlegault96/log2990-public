@@ -12,5 +12,4 @@ export class AudioPlayer {
         const clone: HTMLAudioElement = this.audio.cloneNode() as HTMLAudioElement;
         clone.play();
     }
-
 }

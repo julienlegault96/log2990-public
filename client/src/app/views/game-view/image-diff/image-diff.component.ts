@@ -17,6 +17,7 @@ export class ImageDiffComponent implements OnInit {
     @Input() public imageView: ImageView;
 
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     @ViewChild("original") private originalElement: ElementRef;
     @ViewChild("modified") private modifiedElement: ElementRef;
@@ -24,15 +25,19 @@ export class ImageDiffComponent implements OnInit {
     private originalCtx: CanvasRenderingContext2D;
     private modifiedCtx: CanvasRenderingContext2D;
     private audioPlayer: AudioPlayer;
+    private errorAudioPlayer: AudioPlayer;
     private foundErrors: Array<Coordinates>;
+    private isNotAllowed: boolean = false;
 
     private hasBeenClicked: boolean;
     private readonly clickDebounce: number = 500;
 
     private readonly successSoundPath: string = "../../../../assets/success.mp3";
+    private readonly failSoundPath: string = "../../../../assets/error.mp3";
 
     public constructor(private imgDiffService: ImgDiffService) {
         this.audioPlayer = new AudioPlayer(this.successSoundPath);
+        this.errorAudioPlayer = new AudioPlayer(this.failSoundPath);
         this.foundErrors = [];
         this.hasBeenClicked = false;
     }
@@ -46,29 +51,59 @@ export class ImageDiffComponent implements OnInit {
         if (this.hasBeenClicked) {
             return;
         }
-
-        setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
-        this.hasBeenClicked = true;
-
-        // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
-        const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
-
-        if (target) {
-            const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
-            const x: number = event.clientX - rect.left;
-            const y: number = event.clientY - rect.top;
-            if (!this.isAlreadyFound({ x: Math.round(x), y: Math.round(y) })) {
-                this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
-                    .subscribe((errorCoordinates: Array<Coordinates>) => {
-                        if (errorCoordinates.length > 0) {
-                            this.foundErrors = this.foundErrors.concat(errorCoordinates);
-                            this.errorFound.emit();
-                            this.audioPlayer.play();
-                            this.updateModifiedImage(errorCoordinates);
-                        }
-                    });
+        if (!this.isNotAllowed) {
+            setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
+            this.hasBeenClicked = true;
+            // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
+            const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
+            if (target) {
+                const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
+                const x: number = event.clientX - rect.left;
+                const y: number = event.clientY - rect.top;
+                if (!this.isAlreadyFound({ x: Math.round(x), y: Math.round(y) })) {
+                    this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
+                        .subscribe((errorCoordinates: Array<Coordinates>) => {
+                            if (errorCoordinates.length > 0) {
+                                this.foundErrors = this.foundErrors.concat(errorCoordinates);
+                                this.errorFound.emit();
+                                this.audioPlayer.play();
+                                this.updateModifiedImage(errorCoordinates);
+                            } else {
+                                this.noErrorWasClicked(event);
+                            }
+                        });
+                } else {
+                    this.noErrorWasClicked(event);
+                }
             }
         }
+    }
+
+    public putError(x: number, y: number): void {
+        this.isNotAllowed = true;
+        const removeTimeout: number = 1000;
+        const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
+            .css({
+                "left": x + "px",
+                "top": y + "px",
+            })
+            .append($("<span>Erreur</span>"))
+            .appendTo(document.body);
+        this.setCanvasClass("notAllowed");
+        setTimeout(
+            () => {
+                div.remove();
+                this.removeCanvasClass("notAllowed");
+                this.isNotAllowed = false;
+            },
+            removeTimeout
+        );
+    }
+
+    private noErrorWasClicked(event: MouseEvent): void {
+        this.errorAudioPlayer.play();
+        this.putError(event.pageX, event.pageY);
+        this.noErrorFound.emit();
     }
 
     private initializeOriginalImage(): void {
@@ -150,8 +185,19 @@ export class ImageDiffComponent implements OnInit {
         return this.getContext(id).getImageData(0, 0, canvas.width, canvas.height);
     }
 
+    private setCanvasClass(className: string): void {
+        this.getCanvas("original").classList.add(className);
+        this.getCanvas("modified").classList.add(className);
+    }
+
+    private removeCanvasClass(className: string): void {
+        this.getCanvas("original").classList.remove(className);
+        this.getCanvas("modified").classList.remove(className);
+    }
+
     private getContext(id: string): CanvasRenderingContext2D {
-        const context: CanvasRenderingContext2D = this.getCanvas(id).getContext("2d") as CanvasRenderingContext2D;
+        const context: CanvasRenderingContext2D = this.getCanvas(id)
+            .getContext("2d") as CanvasRenderingContext2D;
 
         if (context) {
             return context;
@@ -169,5 +215,4 @@ export class ImageDiffComponent implements OnInit {
             throw new Error(`Invalid element id: ${id}`);
         }
     }
-
 }

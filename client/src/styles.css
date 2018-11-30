@@ -29,3 +29,18 @@ body > .container-fluid {
 .btn-round {
     border-radius: 10em;    
 }
+
+.errorMessage {
+    position: absolute;
+    color: white;
+    background: red;
+    border: solid black 2px;
+}
+
+.notAllowed {
+    cursor: not-allowed;
+}
+
+.text-shadow {
+    text-shadow: 0 0 0 3px black;
+}
