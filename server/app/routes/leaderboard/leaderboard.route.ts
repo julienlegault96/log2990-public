@@ -7,7 +7,7 @@ import { AbstractRoute } from "../abstract-route/abstract-route";
 
 import { Game } from "../../../../common/game/game";
 import { Score, Leaderboard } from "../../../../common/game/leaderboard";
-import { UpdateWriteOpResult, SocketOptions } from "mongodb";
+import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
 import { Socket } from "../../socket";

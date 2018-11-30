@@ -34,12 +34,12 @@ export class MessageSocket {
         const maxPlayer: number = 2;
 
         // find the first available room
-        while (socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`]
-            && socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
+        while (socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`]
+            && socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`].length >= maxPlayer) {
             i++;
         }
 
-        socket.usersRoom[message.userId] = `${message.message}_${i}`;
+        socket.usersRoom[message.userId] = `${message.extraMessageInfo}_${i}`;
         ioSocket.join(socket.usersRoom[message.userId]);
         this.emitToUsersRoom<SocketMessage>(
             socket,
