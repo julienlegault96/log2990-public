@@ -28,6 +28,7 @@ export class MessageSocket {
         }
     }
 
+    // TODO update when sophie is done
     private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
         let i: number = 0;
         const maxPlayer: number = 2;

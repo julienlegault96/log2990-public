@@ -1,15 +1,15 @@
 import { SocketMessageType } from "./socket-message-type";
 import { SocketHighscore } from "./socket-highscore";
+import { SocketGame } from "./socket-game";
 
 export interface SocketMessage {
     userId: string;
     type: SocketMessageType;
     timestamp: number;
-    message?: MessageOptions;
+    extraMessageInfo?: MessageOptions;
 }
 
 export interface MessageOptions{ 
-    textMessage?: string,
-    numbMessage?: number,
     HighScore?: SocketHighscore
+    Game?: SocketGame
 };

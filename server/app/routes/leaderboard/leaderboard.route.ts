@@ -7,12 +7,14 @@ import { AbstractRoute } from "../abstract-route/abstract-route";
 
 import { Game } from "../../../../common/game/game";
 import { Score, Leaderboard } from "../../../../common/game/leaderboard";
-import { UpdateWriteOpResult } from "mongodb";
+import { UpdateWriteOpResult, SocketOptions } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
 import { Socket } from "../../socket";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
+import { SocketMessage, MessageOptions } from "../../../../common/communication/sockets/socket-message";
+import { SocketHighscore } from "../../../../common/communication/sockets/socket-highscore";
 
 @injectable()
 export class LeaderboardRoute extends AbstractRoute<Game> {
@@ -53,23 +55,22 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
     private async updateScores(leaderboardRequest: LeaderboardRequest): Promise<UpdateWriteOpResult> {
         const game: Game = await this.getOne(leaderboardRequest.id);
         const updatedScores: Array<Score> = await this.getUpdatedScores(game, leaderboardRequest);
+        // construct emited message with explicit types to avoid having the emit's "any" type introducing errors
+        const messageHighscore: SocketHighscore = {
+            position: this.getHighscorePosition(updatedScores, leaderboardRequest),
+            gameMode: leaderboardRequest.partyMode,
+            gameName: game.title
+        };
+        const messageInfo: MessageOptions = { HighScore: messageHighscore };
+        const message: SocketMessage = {
+            userId: leaderboardRequest.playerName,
+            type: SocketMessageType.Highscore,
+            timestamp: Date.now(),
+            extraMessageInfo: messageInfo
+        };
 
-        if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores, updatedScores)) {
-            this.io.ioServer.sockets.emit(
-                SocketEvents.Message,
-                {
-                    userId: leaderboardRequest.playerName,
-                    type: SocketMessageType.Highscore,
-                    timestamp: Date.now(),
-                    message: {
-                        HighScore: {
-                            position: this.getHighscorePosition(updatedScores, leaderboardRequest),
-                            gameMode: leaderboardRequest.partyMode,
-                            gameName: game.title,
-                        }
-                    }
-                }
-            );
+        if (this.hasHighscore(game.leaderboards[leaderboardRequest.partyMode].scores)) {
+            this.io.ioServer.sockets.emit( SocketEvents.Message, message );
         }
 
         game.leaderboards[leaderboardRequest.partyMode].scores = updatedScores;
@@ -92,7 +93,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         return 1;
     }
 
-    private hasHighscore(scores: Array<Score>, updatedScores: Array<Score>): boolean {
+    private hasHighscore(scores: Array<Score>): boolean {
         const displayedScores: number = 3;
 
         return scores.length !== displayedScores;

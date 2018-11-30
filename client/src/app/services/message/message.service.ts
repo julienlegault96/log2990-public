@@ -4,6 +4,7 @@ import { SocketEvents } from "../../../../../common/communication/sockets/socket
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
 import { UserService } from "../user/user.service";
+import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 @Injectable()
 export class MessageService {
@@ -19,11 +20,12 @@ export class MessageService {
         socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
     }
 
-    public addMessage(timestamp: number, message: string): void {
+    public addMessage(message: string, timestamp?: number ): void {
         if (this.messages[0] === this.initMessage) {
             this.messages = [];
         }
-        this.messages.push(new Date(timestamp).toLocaleTimeString() + " " + message);
+
+        this.messages.push((timestamp ? new Date(timestamp).toLocaleTimeString() + " - " : "") + message);
     }
 
     public manageFromServer(message: SocketMessage): void {
@@ -36,33 +38,46 @@ export class MessageService {
 
     // tslint:disable-next-line:max-func-body-length
     public manage(message: SocketMessage): void {
+        let messageText: string = "";
         switch (message.type) {
             case SocketMessageType.Connection:
-                this.addMessage(message.timestamp, `${message.userId} vient de se connecter.`);
+                messageText += message.userId + " vient de se connecter.";
                 break;
             case SocketMessageType.Disconnection:
-                this.addMessage(message.timestamp, `${message.userId} vient de se déconnecter.`);
+                messageText += message.userId + " vient de se déconnecter.";
                 break;
             case SocketMessageType.Highscore:
-                if (message.message && message.message.HighScore) {
-                    this.addMessage(message.timestamp, `${message.userId} obtient la ${message.message.HighScore.position}
-                     place dans les meilleurs temps du jeu ${message.message.HighScore.gameName}
-                     en ${message.message.HighScore.gameMode === 0 ? "solo" : "duel"}`);
+                if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
+                    messageText += message.userId + " obtient la ";
+                    messageText += message.extraMessageInfo.HighScore.position;
+                    messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
+                    messageText += (message.extraMessageInfo.HighScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
                 }
                 break;
             case SocketMessageType.NoErrorFound:
-                this.addMessage(message.timestamp, `Erreur par ${message.userId}`);
+                messageText += "Erreur";
+                if (message.extraMessageInfo && message.extraMessageInfo.Game
+                    && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
+                    messageText += " par " + message.userId;
+                }
+                messageText += ".";
                 break;
             case SocketMessageType.ErrorFound:
-                this.addMessage(message.timestamp, `Différence trouvée par ${message.userId}`);
+                messageText += "Différence trouvée";
+                if (message.extraMessageInfo && message.extraMessageInfo.Game
+                    && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
+                    messageText += " par " + message.userId;
+                }
+                messageText += ".";
                 break;
             case SocketMessageType.JoinedRoom:
-                this.addMessage(message.timestamp, `${message.userId} a joint la partie!`);
+                messageText += message.userId + " a joint la partie.";
                 break;
             default:
-                this.addMessage(message.timestamp, `${message.userId} a fait quelque chose d'inattendu!`);
+                messageText += message.userId + " a fait quelque chose d'inattendu.";
                 break;
         }
+        this.addMessage(messageText, message.timestamp);
     }
 
 }

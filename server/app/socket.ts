@@ -59,13 +59,14 @@ export class Socket {
     private disconnectConnectedUser(user: User | undefined): void {
         if (user) {
             this.userSocket.deleteUser(user._id);
+            const message: SocketMessage = {
+                userId: user._id,
+                type: SocketMessageType.Disconnection,
+                timestamp: Date.now()
+            };
             this.ioServer.sockets.emit(
                 SocketEvents.Message,
-                {
-                    userId: user._id,
-                    type: SocketMessageType.Disconnection,
-                    timestamp: Date.now()
-                }
+                message
             );
         }
     }
