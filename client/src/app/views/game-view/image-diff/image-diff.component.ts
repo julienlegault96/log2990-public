@@ -104,7 +104,7 @@ export class ImageDiffComponent implements OnInit {
 
     private noErrorWasClicked(event: MouseEvent): void {
         this.errorAudioPlayer.play();
-        this.putError(event.clientX, event.clientY);
+        this.putError(event.pageX, event.pageY);
         this.noErrorFound.emit();
     }
 
