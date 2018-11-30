@@ -10,11 +10,13 @@ import { GAMES } from "../../../../../common/game/mock-games";
 
 describe("GameService", () => {
     // setting  up fixtures
-    let httpClientSpy: HttpClient;
+    let httpClientSpy: jasmine.SpyObj<HttpClient>;
     let gameService: GameService;
 
     beforeEach(() => {
-        httpClientSpy = HttpClient.prototype;
+        httpClientSpy = jasmine.createSpyObj("HttpClient", ["get", "put"]);
+        httpClientSpy.get.and.callFake(() => TestHelper.asyncData(GAMES));
+        httpClientSpy.put.and.callFake((endpoint: Endpoints, resetGame: Game) => TestHelper.asyncData(resetGame));
         gameService = new GameService(httpClientSpy);
 
         TestBed.configureTestingModule({
@@ -28,9 +30,6 @@ describe("GameService", () => {
     }));
 
     it("should return expected data on get", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "get").and.callFake(() => TestHelper.asyncData(GAMES));
-
         // check the content of the mocked call
         gameService.getGames().subscribe(
             (games: Game[]) => {
@@ -44,11 +43,6 @@ describe("GameService", () => {
     });
 
     it("should reset the leaderboard", () => {
-        // setup fake server response
-        spyOn(httpClientSpy, "put").and.callFake(
-            (endpoint: Endpoints, resetGame: Game) => TestHelper.asyncData(resetGame)
-        );
-
         // check the content of the mocked call
         gameService.resetLeaderboard(GAMES[0]).subscribe();
 
