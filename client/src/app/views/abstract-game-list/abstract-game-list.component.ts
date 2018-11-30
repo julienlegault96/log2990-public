@@ -9,10 +9,12 @@ export abstract class AbstractGameListComponent implements OnInit {
 
     public singleViewGames: Game[];
     public doubleViewGames: Game[];
+    public gamesLoaded: boolean;
 
     public constructor(protected gameService: GameService) {
         this.singleViewGames = new Array();
         this.doubleViewGames = new Array();
+        this.gamesLoaded = false;
     }
 
     public ngOnInit(): void {
@@ -23,6 +25,7 @@ export abstract class AbstractGameListComponent implements OnInit {
         this.gameService.getGames()
             .subscribe((games: Game[]) => {
                 this.filterGames(games);
+                this.gamesLoaded = true;
             });
     }
 
