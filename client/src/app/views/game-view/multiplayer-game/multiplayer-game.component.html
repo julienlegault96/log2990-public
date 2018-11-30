@@ -1,7 +1,7 @@
 <div *ngIf="game" class="pt-5">
     <div class="custom-fixed-top px-5 py-3 custom-shadow-sm">
         <div class="row">
-            <div class="col-2">
+            <div class="col-2 pt-4">
                 <app-chrono (timerMilestone)="messageService.addMessage($event)"></app-chrono>
             </div>
             <div class="col">
