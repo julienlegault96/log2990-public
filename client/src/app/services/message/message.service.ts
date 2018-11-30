@@ -25,7 +25,7 @@ export class MessageService {
             this.messages = [];
         }
 
-        this.messages.push((timestamp ? new Date(timestamp).toLocaleTimeString() + " - " : "") + message);
+        this.messages.push((timestamp ? new Date(timestamp).toLocaleTimeString() + " – " : "") + message);
     }
 
     public manageFromServer(message: SocketMessage): void {
