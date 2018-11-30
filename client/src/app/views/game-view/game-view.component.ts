@@ -38,8 +38,6 @@ export class GameViewComponent implements AfterViewInit {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
-                this.playerIds.push("bob");
-                console.log(this.gameComponent);
                 setTimeout(() => this.gameComponent.first.chrono.start());
             });
         });
