@@ -115,10 +115,17 @@ export class ImageGenerator {
     }
 
     private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
-        const modificationsParameter: string =
-            `${parameters.modifications.add ? "a" : ""}
-            ${parameters.modifications.delete ? "s" : ""}
-            ${parameters.modifications.color ? "c" : ""}`;
+        let modificationsParameter: string = "";
+
+        if (parameters.modifications.add) {
+            modificationsParameter += "a";
+        }
+        if (parameters.modifications.delete) {
+            modificationsParameter += "s";
+        }
+        if (parameters.modifications.color) {
+            modificationsParameter += "c";
+        }
 
         await this.fileService.execFile(this.genMultiExecPath, [
             parameters.type,
