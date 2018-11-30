@@ -1,4 +1,4 @@
-<div *ngIf="game">
+<div *ngIf="game" class="pt-5">
     <div class="custom-fixed-top px-5 py-3 custom-shadow-sm">
         <div class="row">
             <div class="col-2">
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div>
+    <div class="mt-60">
         <app-image-diff [gameId]="game._id" [imageView]="firstView" [originalImageSrc]="game.imageUrl[0]"
             [modifiedImageSrc]="game.imageUrl[1]" (errorFound)="errorWasFound()"></app-image-diff>
 
