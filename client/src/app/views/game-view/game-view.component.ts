@@ -32,7 +32,6 @@ export class GameViewComponent implements AfterViewInit {
         private socketService: SocketService,
     ) {
         this.playerIds.push(this.userService.loggedUser._id);
-        this.playerIds.push("tesbsf");
     }
 
     public ngAfterViewInit(): void {
