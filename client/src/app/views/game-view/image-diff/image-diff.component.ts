@@ -52,37 +52,36 @@ export class ImageDiffComponent implements OnInit {
             return;
         }
         if (!this.isNotAllowed) {
-        setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
-        this.hasBeenClicked = true;
-        // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
-        const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
-        if (target) {
-            const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
-            const x: number = event.clientX - rect.left;
-            const y: number = event.clientY - rect.top;
-            if (!this.isAlreadyFound({ x: Math.round(x), y: Math.round(y) })) {
-                this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
-                    .subscribe((errorCoordinates: Array<Coordinates>) => {
-                        if (errorCoordinates.length > 0) {
-                            this.foundErrors = this.foundErrors.concat(errorCoordinates);
-                            this.errorFound.emit();
-                            this.audioPlayer.play();
-                            this.updateModifiedImage(errorCoordinates);
-                        } else {
-                            this.noErrorWasClicked(event);
-                        }
-                    });
-            } else {
-                this.noErrorWasClicked(event);
+            setTimeout(() => { this.hasBeenClicked = false; }, this.clickDebounce);
+            this.hasBeenClicked = true;
+            // https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
+            const target: HTMLCanvasElement = event.target as HTMLCanvasElement;
+            if (target) {
+                const rect: DOMRect = target.getBoundingClientRect() as DOMRect;
+                const x: number = event.clientX - rect.left;
+                const y: number = event.clientY - rect.top;
+                if (!this.isAlreadyFound({ x: Math.round(x), y: Math.round(y) })) {
+                    this.imgDiffService.getDiff(this.gameId, this.imageView, x, y)
+                        .subscribe((errorCoordinates: Array<Coordinates>) => {
+                            if (errorCoordinates.length > 0) {
+                                this.foundErrors = this.foundErrors.concat(errorCoordinates);
+                                this.errorFound.emit();
+                                this.audioPlayer.play();
+                                this.updateModifiedImage(errorCoordinates);
+                            } else {
+                                this.noErrorWasClicked(event);
+                            }
+                        });
+                } else {
+                    this.noErrorWasClicked(event);
+                }
             }
-        }
         }
     }
 
     public putError(x: number, y: number): void {
         this.isNotAllowed = true;
-        const fadeDelay: number = 1000;
-        const fadeDuration: number = 1000;
+        const removeTimeout: number = 1000;
         const div: JQuery<HTMLElement> = $(`<div class="errorMessage p-1 rounded custom-shadow">`)
             .css({
                 "left": x + "px",
@@ -90,16 +89,15 @@ export class ImageDiffComponent implements OnInit {
             })
             .append($("<span>Erreur</span>"))
             .appendTo(document.body);
-            setTimeout(() => {
-                div.addClass("fade-out");
-                this.setCanvasClass("notAllowed");
-                setTimeout(() => {
-                    div.remove();
-                    this.removeCanvasClass("notAllowed");
-                    this.isNotAllowed = false; },
-                           fadeDuration);
-            // tslint:disable-next-line:align
-            }, fadeDelay);
+        this.setCanvasClass("notAllowed");
+        setTimeout(
+            () => {
+                div.remove();
+                this.removeCanvasClass("notAllowed");
+                this.isNotAllowed = false;
+            },
+            removeTimeout
+        );
     }
 
     private noErrorWasClicked(event: MouseEvent): void {
