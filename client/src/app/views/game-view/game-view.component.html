@@ -1,11 +1,10 @@
 <div class="h-100">
-    <app-chrono (timerMilestone)="messageService.addMessage($event)"></app-chrono>
-    <div class="px-5 py-3">
-        <app-solo-game *ngIf="playerIds.length ===1" [playerId]="playerIds[0]" [game]="game" [chrono]="chrono"
+    <div class="px-5 pt-5">
+        <app-solo-game *ngIf="playerIds.length === 1" #gameComponent [playerId]="playerIds[0]" [game]="game"
             (errorFound)="userFoundError()">
         </app-solo-game>
-        <app-multiplayer-game *ngIf="playerIds.length == 2" [playerOneId]="playerIds[0]" [playerTwoId]="playerIds[1]"
-            [game]="game" [chrono]="chrono" (errorFound)="userFoundError()">
+        <app-multiplayer-game *ngIf="playerIds.length === 2" #gameComponent [playerOneId]="playerIds[0]" [playerTwoId]="playerIds[1]"
+            [game]="game" (errorFound)="userFoundError()">
         </app-multiplayer-game>
     </div>
 </div>

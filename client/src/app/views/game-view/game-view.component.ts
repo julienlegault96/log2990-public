@@ -1,6 +1,5 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, AfterViewInit, ViewChildren, QueryList } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ChronoComponent } from "./chrono/chrono.component";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
 import { GameService } from "src/app/services/game/game.service";
@@ -9,6 +8,8 @@ import { SocketService } from "src/app/services/socket/socket.service";
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 import { SocketMessage } from "../../../../../common/communication/sockets/socket-message";
 import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
+import { SoloGameComponent } from "./solo-game/solo-game.component";
+import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
 
 @Component({
     selector: "app-game-view",
@@ -16,11 +17,11 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
     styleUrls: ["./game-view.component.css"]
 })
 
-export class GameViewComponent implements OnInit {
+export class GameViewComponent implements AfterViewInit {
 
-    @ViewChild(ChronoComponent) public chrono: ChronoComponent;
+    @ViewChildren("gameComponent") public gameComponent: QueryList<SoloGameComponent | MultiplayerGameComponent>;
 
-    public playerIds: string[] = new Array<string>();
+    public playerIds: string[] = [];
     public game: Game;
 
     public constructor(
@@ -33,14 +34,13 @@ export class GameViewComponent implements OnInit {
         this.playerIds.push(this.userService.loggedUser._id);
     }
 
-    public ngOnInit(): void {
+    public ngAfterViewInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
-                this.chrono.start();
-
-                // push player id 2 here
-                // this.playerIds.push("bob");
+                this.playerIds.push("bob");
+                console.log(this.gameComponent);
+                setTimeout(() => this.gameComponent.first.chrono.start());
             });
         });
     }
