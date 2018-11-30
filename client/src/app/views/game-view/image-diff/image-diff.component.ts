@@ -92,10 +92,10 @@ export class ImageDiffComponent implements OnInit {
             .appendTo(document.body);
             setTimeout(() => {
                 div.addClass("fade-out");
-                this.setCanvasId("notAllowed");
+                this.setCanvasClass("notAllowed");
                 setTimeout(() => {
                     div.remove();
-                    this.setCanvasId("canvas");
+                    this.removeCanvasClass("notAllowed");
                     this.isNotAllowed = false; },
                            fadeDuration);
             // tslint:disable-next-line:align
@@ -187,9 +187,14 @@ export class ImageDiffComponent implements OnInit {
         return this.getContext(id).getImageData(0, 0, canvas.width, canvas.height);
     }
 
-    private setCanvasId(id: string): void {
-        this.getCanvas("original").id = id;
-        this.getCanvas("modified").id = id;
+    private setCanvasClass(className: string): void {
+        this.getCanvas("original").classList.add(className);
+        this.getCanvas("modified").classList.add(className);
+    }
+
+    private removeCanvasClass(className: string): void {
+        this.getCanvas("original").classList.remove(className);
+        this.getCanvas("modified").classList.remove(className);
     }
 
     private getContext(id: string): CanvasRenderingContext2D {

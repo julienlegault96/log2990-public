@@ -37,7 +37,7 @@ body > .container-fluid {
     border: solid black 2px;
 }
 
-#notAllowed {
+.notAllowed {
     cursor: not-allowed;
 }
 
