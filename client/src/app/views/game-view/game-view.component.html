@@ -4,7 +4,7 @@
             (errorFound)="userFoundError()" (noErrorFound)="userFoundBadError()">
         </app-solo-game>
         <app-multiplayer-game *ngIf="playerIds.length === 2" #gameComponent [playerOneId]="playerIds[0]" [playerTwoId]="playerIds[1]"
-            [game]="game" (errorFound)="userFoundError()" (noErrorFound)="userFoundBadError()">
+            [game]="game" (errorFound)="userFoundError($event)" (noErrorFound)="userFoundBadError()">
         </app-multiplayer-game>
     </div>
 </div>

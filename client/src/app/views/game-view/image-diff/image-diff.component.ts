@@ -3,6 +3,10 @@ import { ImgDiffService } from "src/app/services/img-diff/img-diff.service";
 import { Coordinates } from "../../../../../../common/game/coordinates";
 import { ImageView } from "../../../../../../common/game/image-view";
 import { AudioPlayer } from "./audio-player";
+import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
+import { UserService } from "src/app/services/user/user.service";
+import { MessageService } from "src/app/services/message/message.service";
 
 @Component({
     selector: "app-image-diff",
@@ -16,7 +20,7 @@ export class ImageDiffComponent implements OnInit {
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
 
-    @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public errorFound: EventEmitter<{ imageView: ImageView, x: number, y: number }> = new EventEmitter<{ imageView: ImageView, x: number, y: number }>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     @ViewChild("original") private originalElement: ElementRef;
@@ -35,16 +39,41 @@ export class ImageDiffComponent implements OnInit {
     private readonly successSoundPath: string = "../../../../assets/success.mp3";
     private readonly failSoundPath: string = "../../../../assets/error.mp3";
 
-    public constructor(private imgDiffService: ImgDiffService) {
+    public constructor(
+        private imgDiffService: ImgDiffService,
+        private userService: UserService,
+        private messageService: MessageService,
+    ) {
         this.audioPlayer = new AudioPlayer(this.successSoundPath);
         this.errorAudioPlayer = new AudioPlayer(this.failSoundPath);
         this.foundErrors = [];
         this.hasBeenClicked = false;
+        this.messageService.addExternalManageCallback(this.retriveErrorMessages.bind(this));
     }
 
     public ngOnInit(): void {
         this.initializeOriginalImage();
         this.initializeModifiedImage();
+    }
+
+    public retriveErrorMessages(message: SocketMessage): void {
+        if (message.type === SocketMessageType.ErrorFound
+            && message.userId !== this.userService.loggedUser._id) {
+            if (message.extraMessageInfo && message.extraMessageInfo.ErrorLocation
+                && message.extraMessageInfo.ErrorLocation.imageView === this.imageView) {
+                this.errorWasFoundByOpponent(message.extraMessageInfo.ErrorLocation);
+            }
+        }
+    }
+
+    private errorWasFoundByOpponent(errorLocation: { imageView: ImageView, x: number, y: number }): void {
+        this.imgDiffService.getDiff(this.gameId, errorLocation.imageView, errorLocation.x, errorLocation.y)
+            .subscribe((errorCoordinates: Array<Coordinates>) => {
+                if (errorCoordinates.length > 0) {
+                    this.foundErrors = this.foundErrors.concat(errorCoordinates);
+                    this.updateModifiedImage(errorCoordinates);
+                }
+            });
     }
 
     public isClicked(event: MouseEvent): void {
@@ -65,7 +94,7 @@ export class ImageDiffComponent implements OnInit {
                         .subscribe((errorCoordinates: Array<Coordinates>) => {
                             if (errorCoordinates.length > 0) {
                                 this.foundErrors = this.foundErrors.concat(errorCoordinates);
-                                this.errorFound.emit();
+                                this.errorFound.emit({ imageView: this.imageView, x: x, y: y });
                                 this.audioPlayer.play();
                                 this.updateModifiedImage(errorCoordinates);
                             } else {

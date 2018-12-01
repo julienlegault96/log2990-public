@@ -27,7 +27,7 @@ export class MultiplayerGameComponent {
     @Input() public playerTwoId: string;
     @Input() public game: Game;
 
-    @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public errorFound: EventEmitter<{ imageView: ImageView, x: number, y: number }> = new EventEmitter<{ imageView: ImageView, x: number, y: number }>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public firstView: ImageView = ImageView.FirstView;
@@ -50,9 +50,9 @@ export class MultiplayerGameComponent {
         }
     }
 
-    public errorWasFound(): void {
+    public errorWasFound(errorLocation: { imageView: ImageView, x: number, y: number }): void {
         this.diffCounter.incrementPlayerCount(this.playerOneId);
-        this.errorFound.emit();
+        this.errorFound.emit(errorLocation);
         this.verifyErrorCount();
     }
 

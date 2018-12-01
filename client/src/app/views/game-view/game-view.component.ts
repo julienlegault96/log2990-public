@@ -10,6 +10,7 @@ import { SocketMessage } from "../../../../../common/communication/sockets/socke
 import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
+import { ImageView } from "../../../../../common/game/image-view";
 
 @Component({
     selector: "app-game-view",
@@ -38,7 +39,7 @@ export class GameViewComponent implements AfterViewInit {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.matchId = paramsId.matchId;
             if (this.matchId !== "solo") {
-                this.playerIds.push("bob");
+                this.playerIds.push("autreJoueur");
             }
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
@@ -47,19 +48,20 @@ export class GameViewComponent implements AfterViewInit {
         });
     }
 
-    public userFoundError(): void {
-        this.emitMessage(SocketMessageType.ErrorFound);
+    public userFoundError(errorLocation: { imageView: ImageView, x: number, y: number }): void {
+        this.emitMessage(SocketMessageType.ErrorFound, errorLocation);
     }
 
     public userFoundBadError(): void {
         this.emitMessage(SocketMessageType.NoErrorFound);
     }
 
-    private emitMessage(messageType: SocketMessageType): void {
+    private emitMessage(messageType: SocketMessageType, errorLocation?: { imageView: ImageView, x: number, y: number }): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
-            type: SocketMessageType.ErrorFound,
-            timestamp: Date.now()
+            type: messageType,
+            timestamp: Date.now(),
+            extraMessageInfo: (messageType === SocketMessageType.ErrorFound ? {ErrorLocation: errorLocation} : undefined),
         };
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
