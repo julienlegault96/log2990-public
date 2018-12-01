@@ -13,18 +13,17 @@ import { SocketMessageType } from "../../common/communication/sockets/socket-mes
 import { UserConnection } from "./sockets/userConnection.socket";
 
 @injectable()
-export class Socket {
-    
-    public usersRoom: { [key: string]: string };
+export class Socket {    
+    public gameRooms: { [key: string]: Array<SocketIO.Room> }; //key=gameId, key=roomName -> number of user connected
     public ioServer: SocketIO.Server;
-    public socketUser: { [key: string]: UserConnection };
+    public socketUser: { [key: string]: UserConnection }; //key=socketId
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
         @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) {
-        this.usersRoom = {};
         this.socketUser = {};
+        this.gameRooms = {};
     }
 
     public init(server: http.Server): void {
@@ -39,6 +38,8 @@ export class Socket {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
                 this.disconnectConnectedUser(this.socketUser[socket.id]);
+                console.log("connection");
+                console.log(socket.id);
                 this.socketUser[socket.id] = new UserConnection(user._id);
             });
 

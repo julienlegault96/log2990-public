@@ -34,7 +34,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
             timestamp: Date.now(),
             extraMessageInfo: {
                 Game: {
-                    _id: this.game._id,
+                    gameId: this.game._id,
                     Name: this.game.title,
                     Mode: mode
                 }

@@ -12,6 +12,7 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SocketHighscore } from "../../../../../common/communication/sockets/socket-highscore";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
+import { Router } from "@angular/router";
 
 const TIME: number = Date.now(); // HH:MM:SS
 const NOM_JOUEUR: string = USERS[0]._id;
@@ -41,7 +42,7 @@ const EXPECTED_HIGHSCORE: SocketHighscore = {
     gameName: NOM_JEU
 };
 const EXPECTED_GAME: SocketGame = {
-    _id: "1",
+    gameId: "1",
     Mode: GamePartyMode.Multiplayer,
     Name: NOM_JEU
 };
@@ -86,7 +87,8 @@ describe("MessageService", () => {
                 MessageService,
                 UserService,
                 SocketService,
-                HttpClient
+                HttpClient,
+                Router
             ],
             imports: [HttpClientModule]
         });

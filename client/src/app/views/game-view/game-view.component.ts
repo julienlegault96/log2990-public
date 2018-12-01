@@ -22,7 +22,7 @@ export class GameViewComponent implements OnInit {
 
     public playerIds: string[] = new Array<string>();
     public game: Game;
-
+    public matchId: string;
     public constructor(
         public messageService: MessageService,
         private activatedRoute: ActivatedRoute,
@@ -35,12 +35,17 @@ export class GameViewComponent implements OnInit {
 
     public ngOnInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
+            this.matchId = paramsId.matchId;
+            console.log(paramsId.matchId);
+            if (this.matchId !== "-1") {
+                this.playerIds.push("bob");
+            }
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
                 this.chrono.start();
 
                 // push player id 2 here
-                // this.playerIds.push("bob");
+                
             });
         });
     }

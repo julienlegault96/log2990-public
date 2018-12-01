@@ -12,7 +12,7 @@ const APP_ROUTES: Routes = [
     { path: "", component: HomePageComponent },
     { path: "admin", component: AdminViewComponent },
     { path: "gameList", component: GameListComponent },
-    { path: "game/:id/:roomName", component: GameViewComponent },
+    { path: "game/:id/:matchId", component: GameViewComponent },
     { path: "waiting", component: WaitingViewComponent },
 ];
 

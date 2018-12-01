@@ -4,6 +4,7 @@ import { SocketMessage } from "../../../../common/communication/sockets/socket-m
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
 import { Socket } from "../../socket";
+import { SocketGame } from "../../../../common/communication/sockets/socket-game";
 
 @injectable()
 export class MessageSocket {
@@ -23,6 +24,7 @@ export class MessageSocket {
             case SocketMessageType.JoinedRoom:
                 this.manageJoinedRoom(socket, message, ioSocket);
                 break;
+
             default:
                 break;
         }
@@ -30,30 +32,41 @@ export class MessageSocket {
 
     // TODO update when sophie is done
     private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
-        let i: number = 0;
-        const maxPlayer: number = 2;
+        if (message.extraMessageInfo && message.extraMessageInfo.Game) {
+            const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
+            if (!socket.gameRooms[socketGame.gameId]) {
+                socket.gameRooms[socketGame.gameId] = [];
+            }
+            let size: number = socket.gameRooms[socketGame.gameId].length;
+            if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length > 1) {
+                ioSocket.join(socketGame.gameId + size);
+                socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[socketGame.gameId + size];
+                socket.socketUser[ioSocket.id].gameRoomName = socketGame.gameId + size;
+                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
 
-        // find the first available room
-        while (socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`]
-            && socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`].length >= maxPlayer) {
-            i++;
-        }
-
-        socket.usersRoom[message.userId] = `${message.extraMessageInfo}_${i}`;
-        ioSocket.join(socket.usersRoom[message.userId]);
-        this.emitToUsersRoom<SocketMessage>(
-            socket,
-            message.userId,
-            SocketEvents.Message,
-            {
-                userId: message.userId,
-                type: SocketMessageType.JoinedRoom,
-                timestamp: Date.now()
-            });
-    }
-
-    private emitToUsersRoom<T>(io: Socket, userId: string, event: SocketEvents, message: T): void {
-        io.ioServer.to(io.usersRoom[userId]).emit(event, message);
+            } else {
+                const roomName: string = socketGame.gameId + (size - 1);
+                ioSocket.join(roomName);
+                socket.socketUser[ioSocket.id].gameRoomName = roomName;
+                const startMessage: SocketMessage = {
+                    userId: message.userId,
+                    type: SocketMessageType.StartedGame,
+                    timestamp: Date.now(),
+                    extraMessageInfo: {
+                        Game: {
+                            gameId: socketGame.gameId,
+                            Name: socketGame.Name,
+                            Mode: socketGame.Mode,
+                            RoomName: roomName
+                        }
+                    }
+                }
+                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
+            }                
+        }    
+        
+        
     }
 
 }

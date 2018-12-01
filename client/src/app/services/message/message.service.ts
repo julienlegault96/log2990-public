@@ -3,8 +3,10 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { UserService } from "../user/user.service";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
+import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
 
 @Injectable()
 export class MessageService {
@@ -15,6 +17,7 @@ export class MessageService {
     public constructor(
         public socketService: SocketService,
         private userService: UserService,
+        private router: Router,
     ) {
         this.messages = [this.initMessage];
         socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
@@ -60,6 +63,12 @@ export class MessageService {
                 messageText += ".";
                 break;
             case SocketMessageType.StartedGame:
+                console.log("start");
+                if (message.extraMessageInfo && message.extraMessageInfo.Game) {
+                    
+                    const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
+                    this.router.navigate(["/", "game", socketGame.gameId, socketGame.RoomName]);
+                }
             case SocketMessageType.JoinedRoom:
                 messageText += message.userId + " a joint la partie.";
                 break;
