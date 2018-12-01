@@ -118,13 +118,16 @@ export class ImageGenerator {
         let modificationsParameter: string = "";
 
         if (parameters.modifications.add) {
-            modificationsParameter += "a";
+            const addOption: string = "a";
+            modificationsParameter += addOption;
         }
         if (parameters.modifications.delete) {
-            modificationsParameter += "s";
+            const deleteOption: string = "s";
+            modificationsParameter += deleteOption;
         }
         if (parameters.modifications.color) {
-            modificationsParameter += "c";
+            const colorOption: string = "c";
+            modificationsParameter += colorOption;
         }
 
         await this.fileService.execFile(this.genMultiExecPath, [
