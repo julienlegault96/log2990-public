@@ -31,7 +31,6 @@ export class UserComponent {
     }
 
     public keyPressHandle(event: KeyboardEvent): void {
-        console.log(event);
         event.preventDefault();
         const enterCode: number = 13;
         if (event.keyCode === enterCode) {
