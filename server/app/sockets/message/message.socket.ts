@@ -26,10 +26,16 @@ export class MessageSocket {
             case SocketMessageType.JoinedRoom:
                 this.manageJoinedRoom(socket, message, ioSocket);
                 break;
-
+            case SocketMessageType.EndedGame:
+                this.quitRoom(socket, message, ioSocket);
+                break;
             default:
                 break;
         }
+    }
+    private quitRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
+        const room: string = socket.socketUser[ioSocket.id].gameRoomName;
+        ioSocket.leave(room);
     }
 
     // TODO update when sophie is done

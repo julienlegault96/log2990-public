@@ -12,6 +12,8 @@ import { MessageService } from "src/app/services/message/message.service";
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
 import { ErrorLocation } from "../../../../../../common/communication/sockets/socket-error-location";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../../common/communication/sockets/socket-requests";
 
 @Component({
     selector: "app-multiplayer-game",
@@ -40,6 +42,7 @@ export class MultiplayerGameComponent {
     public constructor(
         private leaderboardService: LeaderboardService,
         private messageService: MessageService,
+        private socketService: SocketService,
     ) {
         this.messageService.addExternalManageCallback(this.retriveErrorMessages.bind(this));
     }
@@ -77,6 +80,12 @@ export class MultiplayerGameComponent {
 
     private endGame(winnerId: string): void {
         this.chrono.stop();
+        const message: SocketMessage = {
+            userId: this.playerOneId,
+            type: SocketMessageType.EndedGame,
+            timestamp: Date.now(),
+        };
+        this.socketService.emit(SocketEvents.Message, message);
 
         if (winnerId === this.playerOneId) {
             const leaderboardRequest: LeaderboardRequest = {
