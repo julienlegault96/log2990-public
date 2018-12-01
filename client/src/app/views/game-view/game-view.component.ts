@@ -11,6 +11,8 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
 import { ErrorLocation } from "../../../../../common/communication/sockets/socket-error-location";
+import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
+import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 @Component({
     selector: "app-game-view",
@@ -57,12 +59,22 @@ export class GameViewComponent implements AfterViewInit {
     }
 
     private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
+        const socketGame: SocketGame = {
+            gameId: this.game._id,
+            Name: this.game.title,
+            Mode: (this.playerIds.length === 1) ? GamePartyMode.Solo : GamePartyMode.Multiplayer
+        };
+
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
             type: messageType,
             timestamp: Date.now(),
-            extraMessageInfo: (messageType === SocketMessageType.ErrorFound ? {ErrorLocation: errorLocation} : undefined),
+            extraMessageInfo: {
+                Game: socketGame,
+                ...(messageType === SocketMessageType.ErrorFound ? { ErrorLocation: errorLocation } : undefined),
+            },
         };
+
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
