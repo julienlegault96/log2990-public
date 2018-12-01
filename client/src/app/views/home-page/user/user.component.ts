@@ -30,4 +30,12 @@ export class UserComponent {
         }
     }
 
+    public keyPressHandle(event: KeyboardEvent): void {
+        event.preventDefault();
+        const enterCode: number = 13;
+        if (event.keyCode === enterCode) {
+            this.submit();
+        }
+    }
+
 }

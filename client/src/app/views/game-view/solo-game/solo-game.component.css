@@ -11,3 +11,7 @@
 .spacer {
     margin: 75px 0;
 }
+
+.mt-60 {
+    margin-top: 60px !important;
+}

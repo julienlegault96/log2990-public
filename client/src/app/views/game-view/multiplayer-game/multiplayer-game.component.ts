@@ -17,12 +17,12 @@ import { ChronoComponent } from "../chrono/chrono.component";
 
 export class MultiplayerGameComponent {
 
+    @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(DiffCounterComponent) public diffCounter: DiffCounterComponent;
 
     @Input() public playerOneId: string;
     @Input() public playerTwoId: string;
     @Input() public game: Game;
-    @Input() public chrono: ChronoComponent;
 
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();

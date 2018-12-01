@@ -9,7 +9,7 @@ export class DiffCounterComponent implements OnInit {
 
     @Input() public playerOneId: string;
     @Input() public playerTwoId: string;
-    @Input() public nbViews: number;
+    @Input() public errorsRequired: number;
 
     public progressBarWidth: number[];
     private counters: number[];
@@ -17,8 +17,6 @@ export class DiffCounterComponent implements OnInit {
 
     private readonly MIN_PLAYERS: number = 1;
     private readonly MAX_PLAYERS: number = 2;
-    private readonly MAXFOUNDSOLO: number = 7;
-    private readonly MAXFOUNDDOUBLE: number = 7;
     private readonly BASE: number = 100;
     private readonly UNDECLARED_ID_ERROR: string = "Aucun compteur n'est initialisé pour l'indentifiant ";
 
@@ -49,7 +47,7 @@ export class DiffCounterComponent implements OnInit {
     public incrementPlayerCount(playerId: string): void {
         if (this.progressBarWidth[this.getIndex(playerId)] < this.BASE) {
             this.counters[this.getIndex(playerId)]++;
-            this.progressBarWidth[this.getIndex(playerId)] = this.counters[this.getIndex(playerId)] * this.BASE / this.MAXFOUNDDOUBLE;
+            this.progressBarWidth[this.getIndex(playerId)] = this.counters[this.getIndex(playerId)] * this.BASE / this.errorsRequired;
             this.progressBarWidth[this.getIndex(playerId)] = parseFloat(this.progressBarWidth[this.getIndex(playerId)].toFixed(0));
         } else {
             this.progressBarWidth[this.getIndex(playerId)] = this.BASE;
@@ -59,7 +57,7 @@ export class DiffCounterComponent implements OnInit {
     public incrementPlayerCountSolo(): void {
         if (this.progressBarWidth[0] < this.BASE) {
             this.counters[0]++;
-            this.progressBarWidth[0] = this.counters[0] * this.BASE / (this.MAXFOUNDSOLO * this.nbViews);
+            this.progressBarWidth[0] = this.counters[0] * this.BASE / this.errorsRequired;
             this.progressBarWidth[0] = parseFloat(this.progressBarWidth[0].toFixed(0));
         } else {
             this.progressBarWidth[0] = this.BASE;

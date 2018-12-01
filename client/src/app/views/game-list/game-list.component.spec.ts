@@ -14,6 +14,7 @@ import { GameService } from "../../services/game/game.service";
 import { SocketService } from "src/app/services/socket/socket.service";
 import { UserService } from "src/app/services/user/user.service";
 import { MessageService } from "src/app/services/message/message.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 describe("GameListComponent", () => {
     let component: GameListComponent;
@@ -47,6 +48,7 @@ describe("GameListComponent", () => {
             imports: [
                 HttpClientModule,
                 RouterTestingModule,
+                FontAwesomeModule,
             ]
         });
 

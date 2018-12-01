@@ -8,6 +8,7 @@ import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
 import { LeaderboardRequest } from "../../../../../../common/communication/leaderboard-request";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 import { ChronoComponent } from "../chrono/chrono.component";
+import { MessageService } from "src/app/services/message/message.service";
 
 @Component({
     selector: "app-solo-game",
@@ -17,11 +18,11 @@ import { ChronoComponent } from "../chrono/chrono.component";
 
 export class SoloGameComponent {
 
+    @ViewChild(ChronoComponent) public chrono: ChronoComponent;
     @ViewChild(DiffCounterComponent) public diffCounter: DiffCounterComponent;
 
     @Input() public playerId: string;
     @Input() public game: Game;
-    @Input() public chrono: ChronoComponent;
 
     @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
@@ -32,7 +33,10 @@ export class SoloGameComponent {
     protected readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 7;
     protected readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 14;
 
-    public constructor(private leaderboardService: LeaderboardService) {
+    public constructor(
+        public messageService: MessageService,
+        private leaderboardService: LeaderboardService,
+        ) {
     }
 
     public errorWasFound(): void {

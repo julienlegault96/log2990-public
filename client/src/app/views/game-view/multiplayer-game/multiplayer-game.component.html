@@ -1,6 +1,14 @@
 <div *ngIf="game" class="pt-5">
     <div class="custom-fixed-top px-5 py-3 custom-shadow-sm">
-        <app-diff-counter [playerOneId]="playerOneId" [playerTwoId]="playerTwoId" [nbViews]="game.type + 1"></app-diff-counter>
+        <div class="row">
+            <div class="col-2 pt-4">
+                <app-chrono (timerMilestone)="messageService.addMessage($event)"></app-chrono>
+            </div>
+            <div class="col">
+                <app-diff-counter [playerOneId]="playerOneId" [playerTwoId]="playerTwoId" [errorsRequired]="game.type === 0 ? MAX_SINGLE_VIEW_ERROR_COUNT : MAX_DOUBLE_VIEW_ERROR_COUNT">
+                </app-diff-counter>
+            </div>
+        </div>
     </div>
 
     <div class="mt-100">
