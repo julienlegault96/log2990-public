@@ -7,6 +7,7 @@ import { SocketMessage } from "../../../../../../common/communication/sockets/so
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { UserService } from "src/app/services/user/user.service";
 import { MessageService } from "src/app/services/message/message.service";
+import { ErrorLocation } from "../../../../../../common/communication/sockets/socket-error-location";
 
 @Component({
     selector: "app-image-diff",
@@ -20,7 +21,7 @@ export class ImageDiffComponent implements OnInit {
     @Input() public gameId: number;
     @Input() public imageView: ImageView;
 
-    @Output() public errorFound: EventEmitter<{ imageView: ImageView, x: number, y: number }> = new EventEmitter<{ imageView: ImageView, x: number, y: number }>();
+    @Output() public errorFound: EventEmitter<ErrorLocation> = new EventEmitter<ErrorLocation>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     @ViewChild("original") private originalElement: ElementRef;
@@ -66,7 +67,7 @@ export class ImageDiffComponent implements OnInit {
         }
     }
 
-    private errorWasFoundByOpponent(errorLocation: { imageView: ImageView, x: number, y: number }): void {
+    private errorWasFoundByOpponent(errorLocation: ErrorLocation): void {
         this.imgDiffService.getDiff(this.gameId, errorLocation.imageView, errorLocation.x, errorLocation.y)
             .subscribe((errorCoordinates: Array<Coordinates>) => {
                 if (errorCoordinates.length > 0) {

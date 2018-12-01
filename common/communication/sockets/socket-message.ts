@@ -1,7 +1,7 @@
 import { SocketMessageType } from "./socket-message-type";
 import { SocketHighscore } from "./socket-highscore";
 import { SocketGame } from "./socket-game";
-import { ImageView } from "../../game/image-view";
+import { ErrorLocation } from "./socket-error-location";
 
 export interface SocketMessage {
     userId: string;
@@ -13,5 +13,5 @@ export interface SocketMessage {
 export interface MessageOptions {
     HighScore?: SocketHighscore,
     Game?: SocketGame,
-    ErrorLocation?: { imageView: ImageView, x: number, y: number },
+    ErrorLocation?: ErrorLocation,
 };

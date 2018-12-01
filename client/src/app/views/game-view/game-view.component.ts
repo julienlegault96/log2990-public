@@ -11,6 +11,7 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
 import { ImageView } from "../../../../../common/game/image-view";
+import { ErrorLocation } from "../../../../../common/communication/sockets/socket-error-location";
 
 @Component({
     selector: "app-game-view",
@@ -48,7 +49,7 @@ export class GameViewComponent implements AfterViewInit {
         });
     }
 
-    public userFoundError(errorLocation: { imageView: ImageView, x: number, y: number }): void {
+    public userFoundError(errorLocation: ErrorLocation): void {
         this.emitMessage(SocketMessageType.ErrorFound, errorLocation);
     }
 
@@ -56,7 +57,7 @@ export class GameViewComponent implements AfterViewInit {
         this.emitMessage(SocketMessageType.NoErrorFound);
     }
 
-    private emitMessage(messageType: SocketMessageType, errorLocation?: { imageView: ImageView, x: number, y: number }): void {
+    private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
             type: messageType,

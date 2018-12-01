@@ -11,6 +11,7 @@ import { ChronoComponent } from "../chrono/chrono.component";
 import { MessageService } from "src/app/services/message/message.service";
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
+import { ErrorLocation } from "../../../../../../common/communication/sockets/socket-error-location";
 
 @Component({
     selector: "app-multiplayer-game",
@@ -27,7 +28,7 @@ export class MultiplayerGameComponent {
     @Input() public playerTwoId: string;
     @Input() public game: Game;
 
-    @Output() public errorFound: EventEmitter<{ imageView: ImageView, x: number, y: number }> = new EventEmitter<{ imageView: ImageView, x: number, y: number }>();
+    @Output() public errorFound: EventEmitter<ErrorLocation> = new EventEmitter<ErrorLocation>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public firstView: ImageView = ImageView.FirstView;
@@ -50,7 +51,7 @@ export class MultiplayerGameComponent {
         }
     }
 
-    public errorWasFound(errorLocation: { imageView: ImageView, x: number, y: number }): void {
+    public errorWasFound(errorLocation: ErrorLocation): void {
         this.diffCounter.incrementPlayerCount(this.playerOneId);
         this.errorFound.emit(errorLocation);
         this.verifyErrorCount();
