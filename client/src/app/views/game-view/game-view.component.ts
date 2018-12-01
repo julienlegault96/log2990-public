@@ -46,14 +46,20 @@ export class GameViewComponent implements OnInit {
     }
 
     public userFoundError(): void {
-        const message: SocketMessage = {
-            userId: this.userService.loggedUser._id,
-            type: SocketMessageType.ErrorFound
-        };
-
-        this.messageService.manage(message);
-
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.emitMessage(SocketMessageType.ErrorFound);
     }
 
+    public userFoundBadError(): void {
+        this.emitMessage(SocketMessageType.NoErrorFound);
+    }
+
+    private emitMessage(messageType: SocketMessageType): void {
+        const message: SocketMessage = {
+            userId: this.userService.loggedUser._id,
+            type: SocketMessageType.ErrorFound,
+            timestamp: Date.now()
+        };
+        this.messageService.manage(message);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+    }
 }

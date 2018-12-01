@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { GameService } from "src/app/services/game/game.service";
 import { AbstractGameCardComponent } from "src/app/views/abstract-game-card/abstract-game-card.component";
@@ -21,6 +22,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         private userService: UserService,
         gameService: GameService,
         private messageService: MessageService,
+        private router: Router,
     ) {
         super(gameService);
     }
@@ -28,12 +30,14 @@ export class GameCardComponent extends AbstractGameCardComponent {
     public joinGame(): void {
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
-            type: SocketMessageType.JoinedRoom
+            type: SocketMessageType.JoinedRoom,
+            timestamp: Date.now()
         };
 
         this.messageService.manage(message);
 
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", "waiting"]);
     }
 
 }

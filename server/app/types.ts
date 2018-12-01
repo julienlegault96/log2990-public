@@ -8,7 +8,7 @@ export default {
     ImgDiffRoute: Symbol("ImgDiff"),
     LeaderboardRoute: Symbol("LeaderboardRoute"),
 
-    Socket: Symbol("Socket"),
+    SocketIo: Symbol("SocketIo"),
     UserSocket: Symbol("UserSocket"),
     MessageSocket: Symbol("MessageSocket"),
 

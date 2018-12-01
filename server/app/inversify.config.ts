@@ -25,7 +25,7 @@ container.bind(Types.GamesRoute).to(GamesRoute);
 container.bind(Types.ImgDiffRoute).to(ImgDiffRoute);
 container.bind(Types.LeaderboardRoute).to(LeaderboardRoute);
 
-container.bind(Types.Socket).to(Socket).inSingletonScope();
+container.bind(Types.SocketIo).to(Socket).inSingletonScope();
 container.bind(Types.UserSocket).to(UserSocket);
 container.bind(Types.MessageSocket).to(MessageSocket);
 

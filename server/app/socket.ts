@@ -41,6 +41,7 @@ export class Socket {
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
+                this.disconnectConnectedUser(connections[socket.id]);
                 this.usersSocketId[user._id] = socket.id;
                 connections[socket.id] = user;
             });
@@ -49,19 +50,24 @@ export class Socket {
                 this.messageSocket.manage(this, socket, message);
             });
 
-            // On disconnection, if user was connected, clean its username from DB
             socket.on(SocketEvents.Disconnect, () => {
-                if (connections[socket.id]) {
-                    const notification: SocketMessage = {
-                        userId: connections[socket.id]._id,
-                        type: SocketMessageType.Disconnection
-                    };
-
-                    this.userSocket.deleteUser(connections[socket.id]._id);
-                    this.ioServer.sockets.emit(SocketEvents.Message, notification);
-                }
+                this.disconnectConnectedUser(connections[socket.id]);
             });
-
         });
+    }
+
+    private disconnectConnectedUser(user: User | undefined): void {
+        if (user) {
+            this.userSocket.deleteUser(user._id);
+            const message: SocketMessage = {
+                userId: user._id,
+                type: SocketMessageType.Disconnection,
+                timestamp: Date.now()
+            };
+            this.ioServer.sockets.emit(
+                SocketEvents.Message,
+                message
+            );
+        }
     }
 }

@@ -4,6 +4,7 @@ import { SocketEvents } from "../../../../../common/communication/sockets/socket
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
 import { UserService } from "../user/user.service";
+import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 @Injectable()
 export class MessageService {
@@ -19,46 +20,79 @@ export class MessageService {
         socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
     }
 
-    public addMessage(message: string): void {
+    public addMessage(message: string, timestamp?: number ): void {
         if (this.messages[0] === this.initMessage) {
             this.messages = [];
         }
-        this.messages.push(message);
+
+        this.messages.push((timestamp ? new Date(timestamp).toLocaleTimeString() + " – " : "") + message);
     }
 
     public manageFromServer(message: SocketMessage): void {
-        if (message.userId === this.userService.loggedUser._id) {
+        if (message.type !== SocketMessageType.Highscore
+            && message.userId === this.userService.loggedUser._id) {
             return;
         }
         this.manage(message);
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public manage(message: SocketMessage): void {
-        let action: string;
+        let messageText: string = "";
         switch (message.type) {
             case SocketMessageType.Connection:
-                action = "s'est connecté.";
+                messageText += message.userId + " vient de se connecter.";
                 break;
             case SocketMessageType.Disconnection:
-                action = "s'est déconnecté.";
+                messageText += message.userId + " vient de se déconnecter.";
                 break;
             case SocketMessageType.Highscore:
-                action = "a battu un temps record!";
+                messageText += this.formatHighscoreMessage(message);
                 break;
             case SocketMessageType.NoErrorFound:
-                action = "a mal identifié une erreur...";
+                messageText += "Erreur";
+                messageText += this.formatMultiplayerUserId(message);
+                messageText += ".";
                 break;
             case SocketMessageType.ErrorFound:
-                action = "a trouvé une erreur!";
+                messageText += "Différence trouvée";
+                messageText += this.formatMultiplayerUserId(message);
+                messageText += ".";
                 break;
             case SocketMessageType.JoinedRoom:
-                action = "a joint la partie!";
+                messageText += message.userId + " a joint la partie.";
                 break;
             default:
-                action = "a fait quelque chose d'inattendu!";
+                messageText += message.userId + " a fait quelque chose d'inattendu.";
                 break;
         }
-        this.addMessage(`${message.userId} ${action}`);
+        this.addMessage(messageText, message.timestamp);
+    }
+
+    private formatHighscoreMessage(message: SocketMessage): string {
+        const firstPos: number = 1;
+        const scndPos: number = 2;
+        let messageText: string = "";
+        if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
+            const position: string = message.extraMessageInfo.HighScore.position === firstPos ? "première" :
+                                     message.extraMessageInfo.HighScore.position === scndPos ? "deuxième" : "troisième";
+
+            messageText = message.userId + " obtient la " + position;
+            messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
+            messageText += (message.extraMessageInfo.HighScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
+        }
+
+        return messageText;
+    }
+
+    private formatMultiplayerUserId(message: SocketMessage): string {
+        let messageText: string = "";
+        if (message.extraMessageInfo && message.extraMessageInfo.Game
+            && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
+            messageText += " par " + message.userId;
+        }
+
+        return messageText;
     }
 
 }

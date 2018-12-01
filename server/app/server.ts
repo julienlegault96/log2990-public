@@ -14,7 +14,7 @@ export class Server {
 
     public constructor(
         @inject(Types.Application) private application: Application,
-        @inject(Types.Socket) private socket: Socket,
+        @inject(Types.SocketIo) private socket: Socket,
     ) { }
 
     public init(): void {

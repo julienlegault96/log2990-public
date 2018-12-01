@@ -28,26 +28,27 @@ export class MessageSocket {
         }
     }
 
+    // TODO update when sophie is done
     private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
         let i: number = 0;
         const maxPlayer: number = 2;
 
         // find the first available room
-        // tslint:disable-next-line:no-empty
-        while (socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`]
-            && socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
+        while (socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`]
+            && socket.ioServer.sockets.adapter.rooms[`${message.extraMessageInfo}_${i}`].length >= maxPlayer) {
             i++;
         }
 
-        socket.usersRoom[message.userId] = `${message.message}_${i}`;
+        socket.usersRoom[message.userId] = `${message.extraMessageInfo}_${i}`;
         ioSocket.join(socket.usersRoom[message.userId]);
-        this.emitToUsersRoom(
+        this.emitToUsersRoom<SocketMessage>(
             socket,
             message.userId,
             SocketEvents.Message,
             {
                 userId: message.userId,
-                type: SocketMessageType.JoinedRoom
+                type: SocketMessageType.JoinedRoom,
+                timestamp: Date.now()
             });
     }
 

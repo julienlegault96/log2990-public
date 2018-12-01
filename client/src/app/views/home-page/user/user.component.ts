@@ -23,8 +23,10 @@ export class UserComponent {
 
     public submit(): void {
         try {
-            this.userService.submitUsername(this.username);
-            this.router.navigate(["/", "gameList"]);
+            this.userService.submitUsername(this.username)
+                .then(() => {
+                    this.router.navigate(["/", "gameList"]);
+                });
         } catch (error) {
             this.errorMessages = error.message.split("\n");
         }

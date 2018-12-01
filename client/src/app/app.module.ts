@@ -30,6 +30,7 @@ import { AdminViewComponent } from "./views/admin/admin-view.component";
 import { AdminViewCardComponent } from "./views/admin/admin-view-card/admin-view-card.component";
 import { CreateGameService } from "./services/create-game/create-game.service";
 
+import { WaitingViewComponent } from "./views/waiting-view/waiting-view.component";
 import { ImageDiffComponent } from "./views/game-view/image-diff/image-diff.component";
 import { ImgDiffService } from "./services/img-diff/img-diff.service";
 
@@ -61,6 +62,7 @@ import { MessageService } from "./services/message/message.service";
         MessageComponent,
         DiffCounterComponent,
         ImageDiffComponent,
+        WaitingViewComponent,
     ],
     imports: [
         AppRoutingModule,

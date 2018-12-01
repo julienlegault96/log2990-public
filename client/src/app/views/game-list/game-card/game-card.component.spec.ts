@@ -1,20 +1,21 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { TestHelper } from "../../../../test.helper";
+
+import { GAMES } from "../../../../../../common/game/mock-games";
+
+import { GameService } from "../../../services/game/game.service";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { MessageService } from "src/app/services/message/message.service";
 
 import { GameCardComponent } from "./game-card.component";
 import { LeaderboardComponent } from "../leaderboard/leaderboard.component";
-import { GameService } from "../../../services/game/game.service";
-
-import { GAMES } from "../../../../../../common/game/mock-games";
-import { RouterTestingModule } from "@angular/router/testing";
-import { SocketService } from "src/app/services/socket/socket.service";
-import { HttpClientModule } from "@angular/common/http";
 
 describe("GameCardComponent", () => {
     let component: GameCardComponent;
     let fixture: ComponentFixture<GameCardComponent>;
-    // tslint:disable-next-line:no-any Used to mock the http call
-    let httpClientSpy: any;
+    let httpClientSpy: jasmine.SpyObj<HttpClient>;
     let gameService: GameService;
 
     beforeEach(async(() => {
@@ -26,6 +27,7 @@ describe("GameCardComponent", () => {
             providers: [
                 { provide: GameService, useValue: gameService },
                 SocketService,
+                MessageService
             ],
             imports: [
                 RouterTestingModule,
@@ -37,7 +39,7 @@ describe("GameCardComponent", () => {
 
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
-        httpClientSpy.get.and.returnValue(TestHelper.asyncData(GAMES));
+        httpClientSpy.get.and.callFake(() => TestHelper.asyncData(GAMES));
         gameService = new GameService(httpClientSpy);
 
         fixture = TestBed.createComponent(GameCardComponent);
