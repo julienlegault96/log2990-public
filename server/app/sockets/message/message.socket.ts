@@ -39,10 +39,13 @@ export class MessageSocket {
                 socket.gameRooms[socketGame.gameId] = [];
             }
             const size: number = socket.gameRooms[socketGame.gameId].length;
-            if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length > 1) {
-                ioSocket.join(socketGame.gameId + size);
-                socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[socketGame.gameId + size];
-                socket.socketUser[ioSocket.id].gameRoomName = socketGame.gameId + size;
+            const roomSize: number = 2;
+            if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length >= roomSize) {
+                const roomName: string = socketGame.gameId + size;
+                ioSocket.join(roomName);
+                socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[roomName];
+                socket.socketUser[ioSocket.id].gameRoomName = roomName;
+                console.log(socket.socketUser);
                 socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
 
             } else {
