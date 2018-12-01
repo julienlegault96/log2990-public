@@ -51,7 +51,9 @@ export class Socket {
             });
 
             socket.on(SocketEvents.Disconnect, () => {
-                this.disconnectConnectedUser(this.socketUser[socket.id]);
+                if (this.socketUser[socket.id]) {
+                    this.disconnectConnectedUser(this.socketUser[socket.id]);
+                }
             });
 
         });
