@@ -71,7 +71,7 @@ export class MessageService {
             case SocketMessageType.StartedGame:
                 if (message.extraMessageInfo && message.extraMessageInfo.Game) {
                     const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
-                    this.router.navigate(["/", "game", socketGame.gameId, socketGame.RoomName]);
+                    this.router.navigate(["/", "game", socketGame.gameId, "duel"]);
 
                     return;
                 }

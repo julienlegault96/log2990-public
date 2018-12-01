@@ -36,16 +36,12 @@ export class GameViewComponent implements OnInit {
     public ngOnInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.matchId = paramsId.matchId;
-            console.log(paramsId.matchId);
-            if (this.matchId !== "-1") {
+            if (this.matchId !== "solo") {
                 this.playerIds.push("bob");
             }
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
                 this.chrono.start();
-
-                // push player id 2 here
-                
             });
         });
     }

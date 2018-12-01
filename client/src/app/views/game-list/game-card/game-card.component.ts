@@ -39,7 +39,7 @@ export class GameCardComponent extends AbstractGameCardComponent {
         const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", "game", this.game._id, "-1"]);
+        this.router.navigate(["/", "game", this.game._id, "solo"]);
     }
 
     private generateSocketMessage(mode: GamePartyMode, type: SocketMessageType): SocketMessage {
