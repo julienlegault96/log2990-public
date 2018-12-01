@@ -12,8 +12,10 @@ export class MessageSocket {
     public manage(socket: Socket, ioSocket: SocketIO.Socket, message: SocketMessage): void {
         switch (message.type) {
             case SocketMessageType.ErrorFound:
-                // il faut envoyer cet evenement du client (image-diff comp)
-                socket.ioServer.sockets.emit(SocketEvents.Message, message);
+                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                break;
+            case SocketMessageType.NoErrorFound:
+                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.Connection:
                 socket.ioServer.sockets.emit(SocketEvents.Message, message);
