@@ -41,8 +41,6 @@ export class Socket {
                 if (this.socketUser[socket.id]) {
                     this.disconnectConnectedUser(this.socketUser[socket.id]);
                 }
-                console.log("connection");
-                console.log(socket.id);
                 this.socketUser[socket.id] = new UserConnection(user._id);
             });
 

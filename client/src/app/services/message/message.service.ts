@@ -32,6 +32,12 @@ export class MessageService {
     }
 
     public manageFromServer(message: SocketMessage): void {
+        if (message.type === SocketMessageType.StartedGame) {
+            this.manage(message);
+
+            return;
+        }
+
         if (message.type !== SocketMessageType.Highscore
             && message.userId === this.userService.loggedUser._id) {
             return;
@@ -63,9 +69,7 @@ export class MessageService {
                 messageText += ".";
                 break;
             case SocketMessageType.StartedGame:
-                console.log("start");
                 if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-
                     const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
                     this.router.navigate(["/", "game", socketGame.gameId, socketGame.RoomName]);
 

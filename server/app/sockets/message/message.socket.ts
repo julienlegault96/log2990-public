@@ -45,7 +45,6 @@ export class MessageSocket {
                 ioSocket.join(roomName);
                 socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[roomName];
                 socket.socketUser[ioSocket.id].gameRoomName = roomName;
-                console.log(socket.socketUser);
                 socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
 
             } else {
