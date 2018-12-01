@@ -10,20 +10,21 @@ import { SocketMessage } from "../../common/communication/sockets/socket-message
 import { User } from "../../common/user/user";
 import { MessageSocket } from "./sockets/message/message.socket";
 import { SocketMessageType } from "../../common/communication/sockets/socket-message-type";
+import { UserConnection } from "./sockets/userConnection.socket";
 
 @injectable()
 export class Socket {
-
-    public usersSocketId: { [key: string]: string };
+    
     public usersRoom: { [key: string]: string };
     public ioServer: SocketIO.Server;
+    public socketUser: { [key: string]: UserConnection };
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
         @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) {
-        this.usersSocketId = {};
         this.usersRoom = {};
+        this.socketUser = {};
     }
 
     public init(server: http.Server): void {
@@ -31,19 +32,14 @@ export class Socket {
         this.defineEvents();
     }
 
-    public emitToUser<T>(user: User, event: SocketEvents, message: T): void {
-        this.ioServer.to(this.usersSocketId[user._id]).emit(event, message);
-    }
-
     private defineEvents(): void {
-        const connections: { [key: string]: User } = {};
+        //const connections: { [key: string]: User } = {};
 
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
-                this.disconnectConnectedUser(connections[socket.id]);
-                this.usersSocketId[user._id] = socket.id;
-                connections[socket.id] = user;
+                this.disconnectConnectedUser(this.socketUser[socket.id]);
+                this.socketUser[socket.id] = new UserConnection(user._id);
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
@@ -51,16 +47,16 @@ export class Socket {
             });
 
             socket.on(SocketEvents.Disconnect, () => {
-                this.disconnectConnectedUser(connections[socket.id]);
+                this.disconnectConnectedUser(this.socketUser[socket.id]);
             });
         });
     }
 
-    private disconnectConnectedUser(user: User | undefined): void {
-        if (user) {
-            this.userSocket.deleteUser(user._id);
+    private disconnectConnectedUser(connection: UserConnection | undefined): void {
+        if (connection) {
+            this.userSocket.deleteUser(connection.userId);
             const message: SocketMessage = {
-                userId: user._id,
+                userId: connection.userId,
                 type: SocketMessageType.Disconnection,
                 timestamp: Date.now()
             };

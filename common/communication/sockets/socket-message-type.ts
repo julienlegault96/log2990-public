@@ -5,4 +5,5 @@ export enum SocketMessageType {
     Connection,
     Disconnection,
     JoinedRoom,
+    StartedGame,
 }

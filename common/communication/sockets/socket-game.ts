@@ -1,7 +1,7 @@
 import { GamePartyMode } from "../../game/game-party-mode";
 
-export class SocketGame {
-    _id?: number;
+export interface SocketGame {
+    _id?: string;
     Name: string;
     Mode: GamePartyMode;
 }

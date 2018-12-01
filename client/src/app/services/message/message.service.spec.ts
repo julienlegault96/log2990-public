@@ -41,7 +41,7 @@ const EXPECTED_HIGHSCORE: SocketHighscore = {
     gameName: NOM_JEU
 };
 const EXPECTED_GAME: SocketGame = {
-    _id: 1,
+    _id: "1",
     Mode: GamePartyMode.Multiplayer,
     Name: NOM_JEU
 };

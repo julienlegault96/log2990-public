@@ -59,6 +59,7 @@ export class MessageService {
                 messageText += this.formatMultiplayerUserId(message);
                 messageText += ".";
                 break;
+            case SocketMessageType.StartedGame:
             case SocketMessageType.JoinedRoom:
                 messageText += message.userId + " a joint la partie.";
                 break;
