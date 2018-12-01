@@ -31,13 +31,14 @@ export class MessageSocket {
     }
 
     // TODO update when sophie is done
+    // tslint:disable-next-line:max-func-body-length
     private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
         if (message.extraMessageInfo && message.extraMessageInfo.Game) {
             const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
             if (!socket.gameRooms[socketGame.gameId]) {
                 socket.gameRooms[socketGame.gameId] = [];
             }
-            let size: number = socket.gameRooms[socketGame.gameId].length;
+            const size: number = socket.gameRooms[socketGame.gameId].length;
             if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length > 1) {
                 ioSocket.join(socketGame.gameId + size);
                 socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[socketGame.gameId + size];
@@ -60,13 +61,11 @@ export class MessageSocket {
                             RoomName: roomName
                         }
                     }
-                }
+                };
                 socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
-            }                
-        }    
-        
-        
+            }
+        }
     }
 
 }

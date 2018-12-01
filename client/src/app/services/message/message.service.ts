@@ -23,7 +23,7 @@ export class MessageService {
         socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
     }
 
-    public addMessage(message: string, timestamp?: number ): void {
+    public addMessage(message: string, timestamp?: number): void {
         if (this.messages[0] === this.initMessage) {
             this.messages = [];
         }
@@ -65,10 +65,13 @@ export class MessageService {
             case SocketMessageType.StartedGame:
                 console.log("start");
                 if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-                    
+
                     const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
                     this.router.navigate(["/", "game", socketGame.gameId, socketGame.RoomName]);
+
+                    return;
                 }
+                break;
             case SocketMessageType.JoinedRoom:
                 messageText += message.userId + " a joint la partie.";
                 break;
@@ -85,7 +88,7 @@ export class MessageService {
         let messageText: string = "";
         if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
             const position: string = message.extraMessageInfo.HighScore.position === firstPos ? "première" :
-                                     message.extraMessageInfo.HighScore.position === scndPos ? "deuxième" : "troisième";
+                message.extraMessageInfo.HighScore.position === scndPos ? "deuxième" : "troisième";
 
             messageText = message.userId + " obtient la " + position;
             messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
