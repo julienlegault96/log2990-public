@@ -10,7 +10,6 @@ import { SocketMessage } from "../../../../../common/communication/sockets/socke
 import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
-import { ImageView } from "../../../../../common/game/image-view";
 import { ErrorLocation } from "../../../../../common/communication/sockets/socket-error-location";
 
 @Component({
