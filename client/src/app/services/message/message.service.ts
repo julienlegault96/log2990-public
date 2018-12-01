@@ -13,6 +13,7 @@ export class MessageService {
 
     public messages: Array<string>;
     private initMessage: string = "Aucun message";
+    private manager: Array<(message: SocketMessage) => void> = [];
 
     public constructor(
         public socketService: SocketService,
@@ -83,7 +84,14 @@ export class MessageService {
                 messageText += message.userId + " a fait quelque chose d'inattendu.";
                 break;
         }
+        this.manager.forEach((callback: (message: SocketMessage) => void) => {
+            callback(message);
+        });
         this.addMessage(messageText, message.timestamp);
+    }
+
+    public addExternalManageCallback(callback: (message: SocketMessage) => void): void {
+        this.manager.push(callback);
     }
 
     private formatHighscoreMessage(message: SocketMessage): string {

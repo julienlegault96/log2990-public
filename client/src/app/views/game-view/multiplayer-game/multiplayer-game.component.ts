@@ -8,6 +8,9 @@ import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
 import { LeaderboardRequest } from "../../../../../../common/communication/leaderboard-request";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 import { ChronoComponent } from "../chrono/chrono.component";
+import { MessageService } from "src/app/services/message/message.service";
+import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
+import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
 
 @Component({
     selector: "app-multiplayer-game",
@@ -33,7 +36,18 @@ export class MultiplayerGameComponent {
     protected readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 4;
     protected readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 7;
 
-    public constructor(private leaderboardService: LeaderboardService) {
+    public constructor(
+        private leaderboardService: LeaderboardService,
+        private messageService: MessageService,
+    ) {
+        this.messageService.addExternalManageCallback(this.retriveErrorMessages.bind(this));
+    }
+
+    public retriveErrorMessages(message: SocketMessage): void {
+        if (message.type === SocketMessageType.ErrorFound
+            && message.userId !== this.playerOneId) {
+            this.errorWasFoundByOpponent();
+        }
     }
 
     public errorWasFound(): void {
@@ -48,7 +62,6 @@ export class MultiplayerGameComponent {
 
     public errorWasFoundByOpponent(): void {
         this.diffCounter.incrementPlayerCount(this.playerTwoId);
-        this.errorFound.emit();
         this.verifyErrorCount();
     }
 
