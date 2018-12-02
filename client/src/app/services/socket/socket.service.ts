@@ -21,12 +21,12 @@ export class SocketService {
 
     public registerFunction(requestType: SocketEvents, f: Function): void {
         this.socket.on(requestType, f);
-        console.log(this.socket.listeners);
+        console.log("register", requestType, f, this.socket.listeners);
     }
 
     public unregisterFunction(requestType: SocketEvents, f: Function): void {
         this.socket.removeListener(requestType, f);
-        console.log(requestType, f, this.socket.listeners);
+        console.log("unreg", requestType, f, this.socket.listeners);
     }
 
 }
