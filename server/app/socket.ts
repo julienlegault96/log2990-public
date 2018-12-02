@@ -15,7 +15,7 @@ import { UserConnection } from "./sockets/userConnection.socket";
 @injectable()
 export class Socket {
 
-    public gameRooms: { [key: string]: Array<SocketIO.Room> }; // key=gameId, key=roomName -> number of user connected
+    public gameRooms: { [key: string]: Array<SocketIO.Room> }; // key=gameId
     public ioServer: SocketIO.Server;
     public socketUser: { [key: string]: UserConnection }; // key=socketId
 

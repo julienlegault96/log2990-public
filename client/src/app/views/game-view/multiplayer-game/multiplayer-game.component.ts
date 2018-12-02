@@ -8,7 +8,6 @@ import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
 import { LeaderboardRequest } from "../../../../../../common/communication/leaderboard-request";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 import { ChronoComponent } from "../chrono/chrono.component";
-import { MessageService } from "src/app/services/message/message.service";
 import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
 import { ErrorLocation } from "../../../../../../common/communication/sockets/socket-error-location";
@@ -41,13 +40,12 @@ export class MultiplayerGameComponent {
 
     public constructor(
         private leaderboardService: LeaderboardService,
-        private messageService: MessageService,
         private socketService: SocketService,
     ) {
-        this.messageService.addExternalManageCallback(this.retriveErrorMessages.bind(this));
+        this.socketService.registerFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
     }
 
-    public retriveErrorMessages(message: SocketMessage): void {
+    public retrieveMessages(message: SocketMessage): void {
         if (message.type === SocketMessageType.ErrorFound
             && message.userId !== this.playerOneId) {
             this.errorWasFoundByOpponent();
@@ -78,12 +76,20 @@ export class MultiplayerGameComponent {
         }
     }
 
+    // tslint:disable-next-line:max-func-body-length
     private endGame(winnerId: string): void {
         this.chrono.stop();
         const message: SocketMessage = {
             userId: this.playerOneId,
             type: SocketMessageType.EndedGame,
             timestamp: Date.now(),
+            extraMessageInfo: {
+                Game: {
+                    gameId: this.game._id,
+                    Name: this.game.title,
+                    Mode: GamePartyMode.Multiplayer,
+                }
+            }
         };
         this.socketService.emit(SocketEvents.Message, message);
 
@@ -100,9 +106,12 @@ export class MultiplayerGameComponent {
         } else {
             $("#open-lose-end-game-modal").click();
         }
+
+        this.socketService.unregisterFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
     }
 
     private isPlayerWinner(playerId: string): boolean {
+        console.log(this.diffCounter.getPlayerCount(playerId), this.diffCounter.getPlayerCount(playerId) === this.MAX_DOUBLE_VIEW_ERROR_COUNT);
         return (
             (
                 this.game.type === GameType.SingleView
