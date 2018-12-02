@@ -60,7 +60,6 @@ export class MessageSocket {
             }
             const size: number = socket.gameRooms[socketGame.gameId].length;
             const roomSize: number = 2;
-            console.log(socket.gameRooms[socketGame.gameId]);
             if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length >= roomSize) {
                 const roomName: string = `${socketGame.gameId}_${size}`;
                 ioSocket.join(roomName);

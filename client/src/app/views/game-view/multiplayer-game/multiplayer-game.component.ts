@@ -111,7 +111,6 @@ export class MultiplayerGameComponent {
     }
 
     private isPlayerWinner(playerId: string): boolean {
-        console.log(this.diffCounter.getPlayerCount(playerId), this.diffCounter.getPlayerCount(playerId) === this.MAX_DOUBLE_VIEW_ERROR_COUNT);
         return (
             (
                 this.game.type === GameType.SingleView
