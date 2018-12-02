@@ -33,8 +33,6 @@ export class Socket {
     }
 
     private defineEvents(): void {
-        // const connections: { [key: string]: User } = {};
-
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {

@@ -62,11 +62,10 @@ export class MessageSocket {
             const roomSize: number = 2;
             if (size === 0 || socket.gameRooms[socketGame.gameId][size - 1].length >= roomSize) {
                 const roomName: string = `${socketGame.gameId}_${size}`;
+                socket.ioServer.sockets.emit(SocketEvents.Message, message);
                 ioSocket.join(roomName);
                 socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[roomName];
                 socket.socketUser[ioSocket.id].gameRoomName = roomName;
-                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
-
             } else {
                 const roomName: string = `${socketGame.gameId}_${size - 1}`;
                 ioSocket.join(roomName);

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { GameService } from "src/app/services/game/game.service";
@@ -16,7 +16,8 @@ import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
     templateUrl: "./game-card.component.html",
 })
 
-export class GameCardComponent extends AbstractGameCardComponent {
+export class GameCardComponent extends AbstractGameCardComponent implements OnInit {
+    public isJoinable: boolean;
 
     public constructor(
         public socketService: SocketService,
@@ -26,6 +27,19 @@ export class GameCardComponent extends AbstractGameCardComponent {
         private router: Router,
     ) {
         super(gameService);
+        this.isJoinable = false;
+    }
+
+    public ngOnInit(): void {
+        this.socketService.registerFunction(SocketEvents.Message, this.syncMultiplayerStatus.bind(this));
+    }
+
+    private syncMultiplayerStatus(message: SocketMessage): void {
+        if (message.type === SocketMessageType.JoinedRoom) {
+            if (message.extraMessageInfo && message.extraMessageInfo.Game && this.game._id === message.extraMessageInfo.Game.gameId) {
+                this.isJoinable = !this.isJoinable;
+            }
+        }
     }
 
     public joinGame(): void {

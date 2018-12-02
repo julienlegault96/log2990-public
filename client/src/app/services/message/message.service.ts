@@ -69,6 +69,7 @@ export class MessageService {
                 messageText += ".";
                 break;
             case SocketMessageType.StartedGame:
+                // TODO move to waiting component
                 if (message.extraMessageInfo && message.extraMessageInfo.Game) {
                     const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
                     this.router.navigate(["/", "game", socketGame.gameId, "duel"]);
@@ -77,8 +78,12 @@ export class MessageService {
                 }
                 break;
             case SocketMessageType.JoinedRoom:
-                messageText += message.userId + " a joint la partie.";
+                if (message.extraMessageInfo && message.extraMessageInfo.Game) {
+                    messageText += message.userId + " a créé une partie de " + message.extraMessageInfo.Game.Name + " en duel.";
+                }
                 break;
+            case SocketMessageType.EndedGame:
+                return;
             default:
                 messageText += message.userId + " a fait quelque chose d'inattendu.";
                 break;
