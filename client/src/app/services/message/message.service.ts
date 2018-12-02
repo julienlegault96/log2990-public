@@ -70,18 +70,16 @@ export class MessageService {
                 break;
             case SocketMessageType.StartedGame:
                 // TODO move to waiting component
-                if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-                    const socketGame: SocketGame = message.extraMessageInfo.Game as SocketGame;
+                if (message.extraMessageInfo && message.extraMessageInfo.game) {
+                    const socketGame: SocketGame = message.extraMessageInfo.game as SocketGame;
                     this.router.navigate(["/", "game", socketGame.gameId, "duel"]);
 
                     return;
                 }
-                break;
+
+                return;
             case SocketMessageType.JoinedRoom:
-                if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-                    messageText += message.userId + " a créé une partie de " + message.extraMessageInfo.Game.Name + " en duel.";
-                }
-                break;
+                return;
             case SocketMessageType.EndedGame:
                 return;
             default:
@@ -96,13 +94,13 @@ export class MessageService {
         const firstPos: number = 1;
         const scndPos: number = 2;
         let messageText: string = "";
-        if (message.extraMessageInfo && message.extraMessageInfo.HighScore) {
-            const position: string = message.extraMessageInfo.HighScore.position === firstPos ? "première" :
-                message.extraMessageInfo.HighScore.position === scndPos ? "deuxième" : "troisième";
+        if (message.extraMessageInfo && message.extraMessageInfo.highScore) {
+            const position: string = message.extraMessageInfo.highScore.position === firstPos ? "première" :
+                message.extraMessageInfo.highScore.position === scndPos ? "deuxième" : "troisième";
 
             messageText = message.userId + " obtient la " + position;
-            messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.HighScore.gameName + " en ";
-            messageText += (message.extraMessageInfo.HighScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
+            messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.highScore.gameName + " en ";
+            messageText += (message.extraMessageInfo.highScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
         }
 
         return messageText;
@@ -110,8 +108,8 @@ export class MessageService {
 
     private formatMultiplayerUserId(message: SocketMessage): string {
         let messageText: string = "";
-        if (message.extraMessageInfo && message.extraMessageInfo.Game
-            && message.extraMessageInfo.Game.Mode === GamePartyMode.Multiplayer) {
+        if (message.extraMessageInfo && message.extraMessageInfo.game
+            && message.extraMessageInfo.game.mode === GamePartyMode.Multiplayer) {
             messageText += " par " + message.userId;
         }
 

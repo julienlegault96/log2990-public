@@ -66,7 +66,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
                 gameMode: leaderboardRequest.partyMode,
                 gameName: game.title
             };
-            const messageInfo: MessageOptions = { HighScore: messageHighscore };
+            const messageInfo: MessageOptions = { highScore: messageHighscore };
             const message: SocketMessage = {
                 userId: leaderboardRequest.playerName,
                 type: SocketMessageType.Highscore,

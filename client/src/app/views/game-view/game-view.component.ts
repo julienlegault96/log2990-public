@@ -61,8 +61,8 @@ export class GameViewComponent implements AfterViewInit {
     private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
         const socketGame: SocketGame = {
             gameId: this.game._id,
-            Name: this.game.title,
-            Mode: (this.playerIds.length === 1) ? GamePartyMode.Solo : GamePartyMode.Multiplayer
+            name: this.game.title,
+            mode: (this.playerIds.length === 1) ? GamePartyMode.Solo : GamePartyMode.Multiplayer
         };
 
         const message: SocketMessage = {
@@ -70,8 +70,8 @@ export class GameViewComponent implements AfterViewInit {
             type: messageType,
             timestamp: Date.now(),
             extraMessageInfo: {
-                Game: socketGame,
-                ...(messageType === SocketMessageType.ErrorFound ? { ErrorLocation: errorLocation } : undefined),
+                game: socketGame,
+                ...(messageType === SocketMessageType.ErrorFound ? { errorLocation: errorLocation } : undefined),
             },
         };
 

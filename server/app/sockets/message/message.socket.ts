@@ -12,10 +12,10 @@ export class MessageSocket {
     public manage(socket: Socket, ioSocket: SocketIO.Socket, message: SocketMessage): void {
         switch (message.type) {
             case SocketMessageType.ErrorFound:
-                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                socket.ioServer.to(socket.socketUsers[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.NoErrorFound:
-                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                socket.ioServer.to(socket.socketUsers[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.Connection:
                 socket.ioServer.sockets.emit(SocketEvents.Message, message);
@@ -34,27 +34,25 @@ export class MessageSocket {
         }
     }
     private quitRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
-        socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+        socket.ioServer.to(socket.socketUsers[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
 
-        const room: string = socket.socketUser[ioSocket.id].gameRoomName;
+        const room: string = socket.socketUsers[ioSocket.id].gameRoomName;
         ioSocket.leave(room);
 
-        // this.userList.filter((value: User) => value._id !== msg.userId);
-        if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-            const socketGame: SocketGame = message.extraMessageInfo.Game;
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {
+            const socketGame: SocketGame = message.extraMessageInfo.game;
             socket.gameRooms[socketGame.gameId] = socket.gameRooms[socketGame.gameId]
                 .filter((ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0);
         }
 
-        socket.socketUser[ioSocket.id].gameRoomName = "";
-        socket.socketUser[ioSocket.id].isPlayingMultiplayer = false;
+        socket.socketUsers[ioSocket.id].gameRoomName = "";
+        socket.socketUsers[ioSocket.id].isPlayingMultiplayer = false;
     }
 
-    // TODO update when sophie is done
     // tslint:disable-next-line:max-func-body-length
     private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
-        if (message.extraMessageInfo && message.extraMessageInfo.Game) {
-            const socketGame: SocketGame = message.extraMessageInfo.Game;
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {
+            const socketGame: SocketGame = message.extraMessageInfo.game;
             if (!socket.gameRooms[socketGame.gameId]) {
                 socket.gameRooms[socketGame.gameId] = [];
             }
@@ -65,27 +63,27 @@ export class MessageSocket {
                 socket.ioServer.sockets.emit(SocketEvents.Message, message);
                 ioSocket.join(roomName);
                 socket.gameRooms[socketGame.gameId][size] = socket.ioServer.sockets.adapter.rooms[roomName];
-                socket.socketUser[ioSocket.id].gameRoomName = roomName;
+                socket.socketUsers[ioSocket.id].gameRoomName = roomName;
             } else {
                 const roomName: string = `${socketGame.gameId}_${size - 1}`;
                 ioSocket.join(roomName);
-                socket.socketUser[ioSocket.id].gameRoomName = roomName;
-                socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                socket.socketUsers[ioSocket.id].gameRoomName = roomName;
+                socket.ioServer.to(socket.socketUsers[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 if (socket.gameRooms[socketGame.gameId][size - 1].length >= roomSize) {
                     const startMessage: SocketMessage = {
                         userId: message.userId,
                         type: SocketMessageType.StartedGame,
                         timestamp: Date.now(),
                         extraMessageInfo: {
-                            Game: {
+                            game: {
                                 gameId: socketGame.gameId,
-                                Name: socketGame.Name,
-                                Mode: socketGame.Mode,
-                                RoomName: roomName
+                                name: socketGame.name,
+                                mode: socketGame.mode,
+                                roomName: roomName
                             }
                         }
                     };
-                    socket.ioServer.to(socket.socketUser[ioSocket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
+                    socket.ioServer.to(socket.socketUsers[ioSocket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
                 }
             }
         }

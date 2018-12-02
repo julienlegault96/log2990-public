@@ -36,7 +36,7 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
 
     private syncMultiplayerStatus(message: SocketMessage): void {
         if (message.type === SocketMessageType.JoinedRoom) {
-            if (message.extraMessageInfo && message.extraMessageInfo.Game && this.game._id === message.extraMessageInfo.Game.gameId) {
+            if (message.extraMessageInfo && message.extraMessageInfo.game && this.game._id === message.extraMessageInfo.game.gameId) {
                 this.isJoinable = !this.isJoinable;
             }
         }
@@ -62,10 +62,10 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
             type: type,
             timestamp: Date.now(),
             extraMessageInfo: {
-                Game: {
+                game: {
                     gameId: this.game._id,
-                    Name: this.game.title,
-                    Mode: mode
+                    name: this.game.title,
+                    mode: mode
                 }
             }
         };

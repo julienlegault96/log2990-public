@@ -84,10 +84,10 @@ export class MultiplayerGameComponent {
             type: SocketMessageType.EndedGame,
             timestamp: Date.now(),
             extraMessageInfo: {
-                Game: {
+                game: {
                     gameId: this.game._id,
-                    Name: this.game.title,
-                    Mode: GamePartyMode.Multiplayer,
+                    name: this.game.title,
+                    mode: GamePartyMode.Multiplayer,
                 }
             }
         };

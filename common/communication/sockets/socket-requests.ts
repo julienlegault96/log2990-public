@@ -4,4 +4,5 @@ export enum SocketEvents {
     UserConnection = "UserConnection",
     Message = "Message",
     JoinedGame = "JoinedGame",
+    GameStateRequest = "GameStateRequest",
 }

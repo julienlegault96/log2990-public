@@ -43,12 +43,12 @@ const EXPECTED_HIGHSCORE: SocketHighscore = {
 };
 const EXPECTED_GAME: SocketGame = {
     gameId: "1",
-    Mode: GamePartyMode.Multiplayer,
-    Name: NOM_JEU
+    mode: GamePartyMode.Multiplayer,
+    name: NOM_JEU
 };
 const EXPECTED_MESSAGE_OPTIONS: MessageOptions = {
-    HighScore: EXPECTED_HIGHSCORE,
-    Game: EXPECTED_GAME
+    highScore: EXPECTED_HIGHSCORE,
+    game: EXPECTED_GAME
 };
 const EXPECTED_HIGHSCORE_MESSAGE: SocketMessage = {
     userId: NOM_JOUEUR,

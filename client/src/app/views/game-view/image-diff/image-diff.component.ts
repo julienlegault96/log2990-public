@@ -63,9 +63,9 @@ export class ImageDiffComponent implements OnInit {
             this.socketService.unregisterFunction(SocketEvents.Message, this.retriveMessages.bind(this));
         } else if (message.type === SocketMessageType.ErrorFound
             && message.userId !== this.userService.loggedUser._id) {
-            if (message.extraMessageInfo && message.extraMessageInfo.ErrorLocation
-                && message.extraMessageInfo.ErrorLocation.imageView === this.imageView) {
-                this.errorWasFoundByOpponent(message.extraMessageInfo.ErrorLocation);
+            if (message.extraMessageInfo && message.extraMessageInfo.errorLocation
+                && message.extraMessageInfo.errorLocation.imageView === this.imageView) {
+                this.errorWasFoundByOpponent(message.extraMessageInfo.errorLocation);
             }
         }
     }

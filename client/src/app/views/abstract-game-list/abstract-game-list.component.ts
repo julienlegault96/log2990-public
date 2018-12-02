@@ -4,6 +4,8 @@ import { GameService } from "../../services/game/game.service";
 
 import { Game } from "../../../../../common/game/game";
 import { GameType } from "../../../../../common/game/game-type";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 
 export abstract class AbstractGameListComponent implements OnInit {
 
@@ -11,7 +13,7 @@ export abstract class AbstractGameListComponent implements OnInit {
     public doubleViewGames: Game[];
     public gamesLoaded: boolean;
 
-    public constructor(protected gameService: GameService) {
+    public constructor(protected gameService: GameService, protected socketService: SocketService) {
         this.singleViewGames = new Array();
         this.doubleViewGames = new Array();
         this.gamesLoaded = false;
@@ -26,6 +28,7 @@ export abstract class AbstractGameListComponent implements OnInit {
             .subscribe((games: Game[]) => {
                 this.filterGames(games);
                 this.gamesLoaded = true;
+                this.socketService.emit(SocketEvents.GameStateRequest, undefined);
             });
     }
 

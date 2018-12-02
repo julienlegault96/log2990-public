@@ -11,7 +11,7 @@ export interface SocketMessage {
 }
 
 export interface MessageOptions {
-    HighScore?: SocketHighscore,
-    Game?: SocketGame,
-    ErrorLocation?: ErrorLocation,
+    highScore?: SocketHighscore,
+    game?: SocketGame,
+    errorLocation?: ErrorLocation,
 };

@@ -11,19 +11,20 @@ import { User } from "../../common/user/user";
 import { MessageSocket } from "./sockets/message/message.socket";
 import { SocketMessageType } from "../../common/communication/sockets/socket-message-type";
 import { UserConnection } from "./sockets/userConnection.socket";
+import { GamePartyMode } from "../../common/game/game-party-mode";
 
 @injectable()
 export class Socket {
 
     public gameRooms: { [key: string]: Array<SocketIO.Room> }; // key=gameId
     public ioServer: SocketIO.Server;
-    public socketUser: { [key: string]: UserConnection }; // key=socketId
+    public socketUsers: { [key: string]: UserConnection }; // key=socketId
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
         @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) {
-        this.socketUser = {};
+        this.socketUsers = {};
         this.gameRooms = {};
     }
 
@@ -36,19 +37,22 @@ export class Socket {
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
-                if (this.socketUser[socket.id]) {
-                    this.disconnectConnectedUser(this.socketUser[socket.id]);
+                if (this.socketUsers[socket.id]) {
+                    this.disconnectConnectedUser(this.socketUsers[socket.id]);
                 }
-                this.socketUser[socket.id] = new UserConnection(user._id);
+                this.socketUsers[socket.id] = new UserConnection(user._id);
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
                 this.messageSocket.manage(this, socket, message);
             });
 
+            socket.on(SocketEvents.GameStateRequest, () => {
+                this.sendWaitingGames(socket);
+            });
             socket.on(SocketEvents.Disconnect, () => {
-                if (this.socketUser[socket.id]) {
-                    this.disconnectConnectedUser(this.socketUser[socket.id]);
+                if (this.socketUsers[socket.id]) {
+                    this.disconnectConnectedUser(this.socketUsers[socket.id]);
                 }
             });
 
@@ -64,5 +68,28 @@ export class Socket {
             timestamp: Date.now()
         };
         this.ioServer.sockets.emit(SocketEvents.Message, message);
+    }
+
+    private sendWaitingGames(socket: SocketIO.Socket): void {
+        for (const gameId in this.gameRooms) {
+            if (this.gameRooms.hasOwnProperty(gameId)) {
+                const rooms: Array<SocketIO.Room> = this.gameRooms[gameId];
+                if (rooms && rooms[rooms.length - 1].length === 1 ) {
+                    const joinMessage: SocketMessage = {
+                        userId: "Someone",
+                        type: SocketMessageType.JoinedRoom,
+                        timestamp: Date.now(),
+                        extraMessageInfo: {
+                            game: {
+                                gameId: gameId,
+                                name: "a game",
+                                mode: GamePartyMode.Multiplayer,
+                            }
+                        }
+                    };
+                    socket.emit(SocketEvents.Message, joinMessage);
+                }
+            }
+        }
     }
 }
