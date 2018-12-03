@@ -16,16 +16,16 @@ import { GamePartyMode } from "../../common/game/game-party-mode";
 @injectable()
 export class SocketManager {
 
-    public gameRooms: { [key: string]: Array<SocketIO.Room> }; // key=gameId
+    public gameLobbies: { [gameId: string]: Array<SocketIO.Room> };
     public ioServer: SocketIO.Server;
-    public socketUsers: { [key: string]: UserConnection }; // key=socketId
+    public connections: { [socketId: string]: UserConnection };
 
     public constructor(
         @inject(Types.UserSocket) private userSocket: UserSocket,
         @inject(Types.MessageSocket) private messageSocket: MessageSocket,
     ) {
-        this.socketUsers = {};
-        this.gameRooms = {};
+        this.connections = {};
+        this.gameLobbies = {};
     }
 
     public init(server: http.Server): void {
@@ -37,10 +37,10 @@ export class SocketManager {
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
-                if (this.socketUsers[socket.id]) {
-                    this.disconnectConnectedUser(this.socketUsers[socket.id]);
+                if (this.connections[socket.id]) {
+                    this.disconnectConnectedUser(this.connections[socket.id].userId);
                 }
-                this.socketUsers[socket.id] = new UserConnection(user._id);
+                this.connections[socket.id] = new UserConnection(user._id);
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
@@ -51,30 +51,31 @@ export class SocketManager {
                 this.sendWaitingGames(socket);
             });
             socket.on(SocketEvents.Disconnect, () => {
-                if (this.socketUsers[socket.id]) {
-                    this.disconnectConnectedUser(this.socketUsers[socket.id]);
+                if (this.connections[socket.id]) {
+                    this.disconnectConnectedUser(this.connections[socket.id].userId);
                 }
             });
 
         });
     }
 
-    private disconnectConnectedUser(connection: UserConnection): void {
-        this.userSocket.deleteUser(connection.userId);
+    private disconnectConnectedUser(userId: string): void {
+        this.userSocket.deleteUser(userId);
 
         const message: SocketMessage = {
-            userId: connection.userId,
+            userId: userId,
             type: SocketMessageType.Disconnection,
             timestamp: Date.now()
         };
+
         this.ioServer.sockets.emit(SocketEvents.Message, message);
     }
 
     private sendWaitingGames(socket: SocketIO.Socket): void {
-        for (const gameId in this.gameRooms) {
-            if (this.gameRooms.hasOwnProperty(gameId)) {
-                const rooms: Array<SocketIO.Room> = this.gameRooms[gameId];
-                if (rooms && rooms[rooms.length - 1] && rooms[rooms.length - 1].length === 1 ) {
+        for (const gameId in this.gameLobbies) {
+            if (this.gameLobbies.hasOwnProperty(gameId)) {
+                const lobbies: Array<SocketIO.Room> = this.gameLobbies[gameId];
+                if (lobbies && lobbies[lobbies.length - 1] && lobbies[lobbies.length - 1].length === 1 ) {
                     const joinMessage: SocketMessage = {
                         userId: "Someone",
                         type: SocketMessageType.JoinedRoom,
@@ -97,8 +98,73 @@ export class SocketManager {
         return gameId + "_" + lobbyCount;
     }
 
+    public addUserToRoom(gameId: string, lobbyCount: number, socket: SocketIO.Socket): void {
+        const roomName: string = this.generateLobbyName(gameId, lobbyCount);
+        socket.join(roomName);
+        this.connections[socket.id].gameRoomName = roomName;
+    }
+
+    public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {
+        this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+        socket.leave(this.connections[socket.id].gameRoomName);
+
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {
+            this.unindexRoom(message.extraMessageInfo.game.gameId);
+        }
+
+        this.connections[socket.id].gameRoomName = "";
+        this.connections[socket.id].isPlayingMultiplayer = false;
+    }
+
     public indexRoom(gameId: string, lobbyCount: number): void {
-        this.gameRooms[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
+        this.gameLobbies[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
+    }
+
+    /**
+     * removes all unused lobbies in a server's game
+     *
+     * @param gameId the game whose lobbies are to be cleaned
+     */
+    public unindexRoom(gameId: string): void {
+        this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
+            (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
+            );
+    }
+
+    // tslint:disable-next-line:max-func-body-length
+    private manageJoinedRoom(manager: SocketManager, message: SocketMessage, socket: SocketIO.Socket): void {
+        manager.ioServer.sockets.emit(SocketEvents.Message, message);
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {
+            const gameId: string = message.extraMessageInfo.game.gameId;
+            if (!manager.gameLobbies[gameId]) {
+                manager.gameLobbies[gameId] = [];
+            }
+            const lobbyCount: number = manager.gameLobbies[gameId].length;
+            const roomSize: number = 2;
+            if (lobbyCount === 0 || manager.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
+                manager.addUserToRoom(gameId, lobbyCount , socket);
+                manager.indexRoom(gameId, lobbyCount);
+            } else {
+                manager.addUserToRoom(gameId, lobbyCount - 1, socket);
+                manager.ioServer.to(manager.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+                if (manager.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
+                    const startMessage: SocketMessage = {
+                        userId: message.userId,
+                        type: SocketMessageType.StartedGame,
+                        timestamp: Date.now(),
+                        extraMessageInfo: {
+                            game: {
+                                gameId: gameId,
+                                name: message.extraMessageInfo.game.name,
+                                mode: message.extraMessageInfo.game.mode,
+                                roomName: manager.generateLobbyName(gameId, lobbyCount - 1)
+                            }
+                        }
+                    };
+                    manager.ioServer.to(manager.connections[socket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
+                }
+            }
+        }
     }
 
 }
