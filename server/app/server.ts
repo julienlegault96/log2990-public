@@ -3,7 +3,7 @@ import * as http from "http";
 import Types from "./types";
 import { injectable, inject } from "inversify";
 import { AddressInfo } from "net";
-import { SocketManager } from "./socket";
+import { SocketManager } from "./socket.manager";
 
 @injectable()
 export class Server {

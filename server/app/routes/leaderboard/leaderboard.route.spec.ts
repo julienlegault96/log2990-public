@@ -5,7 +5,7 @@ import { LeaderboardRequest } from "../../../../common/communication/leaderboard
 import { GamePartyMode } from "../../../../common/game/game-party-mode";
 import { GAMES } from "../../../../common/game/mock-games";
 import { Score } from "../../../../common/game/leaderboard";
-import { SocketManager } from "../../socket";
+import { SocketManager } from "../../socket.manager";
 import { UserSocket } from "../../sockets/user/user.socket";
 import { MessageSocket } from "../../sockets/message/message.socket";
 

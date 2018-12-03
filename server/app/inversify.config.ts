@@ -3,14 +3,14 @@ import { Container } from "inversify";
 import Types from "./types";
 import { Server } from "./server";
 import { Application } from "./app";
-import { Routes } from "./routes";
+import { Routes } from "./route.manager";
 import { Mongo } from "./services/mongo/mongo";
 import { GamesRoute } from "./routes/games/games.route";
 import { UsersRoute } from "./routes/user/users.route";
 import { Imgur } from "./services/imgur/imgur";
 import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
-import { SocketManager } from "./socket";
+import { SocketManager } from "./socket.manager";
 import { UserSocket } from "./sockets/user/user.socket";
 import { MessageSocket } from "./sockets/message/message.socket";
 

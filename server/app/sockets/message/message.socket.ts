@@ -3,7 +3,7 @@ import * as SocketIO from "socket.io";
 import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
-import { SocketManager } from "../../socket";
+import { SocketManager } from "../../socket.manager";
 import { SocketGame } from "../../../../common/communication/sockets/socket-game";
 
 @injectable()

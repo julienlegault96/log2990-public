@@ -10,7 +10,7 @@ import { Score, Leaderboard } from "../../../../common/game/leaderboard";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
-import { SocketManager } from "../../socket";
+import { SocketManager } from "../../socket.manager";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 import { SocketMessage, MessageOptions } from "../../../../common/communication/sockets/socket-message";
