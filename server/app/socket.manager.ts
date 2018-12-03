@@ -3,15 +3,15 @@ import * as http from "http";
 import { inject, injectable } from "inversify";
 import Types from "./types";
 
-import { SocketEvents } from "../../common/communication/sockets/socket-requests";
-import { UserSocket } from "./sockets/user/user.socket";
-import { SocketMessage } from "../../common/communication/sockets/socket-message";
-
 import { User } from "../../common/user/user";
-import { MessageSocket } from "./sockets/message/message.socket";
-import { SocketMessageType } from "../../common/communication/sockets/socket-message-type";
-import { UserConnection } from "./sockets/userConnection.socket";
+import { SocketEvents } from "../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../common/communication/sockets/socket-message";
 import { GamePartyMode } from "../../common/game/game-party-mode";
+import { SocketMessageType } from "../../common/communication/sockets/socket-message-type";
+
+import { UserSocket } from "./sockets/user/user.socket";
+import { MessageSocket } from "./sockets/message/message.socket";
+import { UserConnection } from "./sockets/userConnection.socket";
 
 @injectable()
 export class SocketManager {
@@ -132,22 +132,22 @@ export class SocketManager {
     }
 
     // tslint:disable-next-line:max-func-body-length
-    private manageJoinedRoom(manager: SocketManager, message: SocketMessage, socket: SocketIO.Socket): void {
-        manager.ioServer.sockets.emit(SocketEvents.Message, message);
+    public manageJoinedRoom(message: SocketMessage, socket: SocketIO.Socket): void {
+        this.ioServer.sockets.emit(SocketEvents.Message, message);
         if (message.extraMessageInfo && message.extraMessageInfo.game) {
             const gameId: string = message.extraMessageInfo.game.gameId;
-            if (!manager.gameLobbies[gameId]) {
-                manager.gameLobbies[gameId] = [];
+            if (!this.gameLobbies[gameId]) {
+                this.gameLobbies[gameId] = [];
             }
-            const lobbyCount: number = manager.gameLobbies[gameId].length;
+            const lobbyCount: number = this.gameLobbies[gameId].length;
             const roomSize: number = 2;
-            if (lobbyCount === 0 || manager.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
-                manager.addUserToRoom(gameId, lobbyCount , socket);
-                manager.indexRoom(gameId, lobbyCount);
+            if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
+                this.addUserToRoom(gameId, lobbyCount , socket);
+                this.indexRoom(gameId, lobbyCount);
             } else {
-                manager.addUserToRoom(gameId, lobbyCount - 1, socket);
-                manager.ioServer.to(manager.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
-                if (manager.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
+                this.addUserToRoom(gameId, lobbyCount - 1, socket);
+                this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+                if (this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                     const startMessage: SocketMessage = {
                         userId: message.userId,
                         type: SocketMessageType.StartedGame,
@@ -156,12 +156,12 @@ export class SocketManager {
                             game: {
                                 gameId: gameId,
                                 name: message.extraMessageInfo.game.name,
-                                mode: message.extraMessageInfo.game.mode,
-                                roomName: manager.generateLobbyName(gameId, lobbyCount - 1)
+                                mode: GamePartyMode.Multiplayer,
+                                roomName: this.generateLobbyName(gameId, lobbyCount - 1)
                             }
                         }
                     };
-                    manager.ioServer.to(manager.connections[socket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
+                    this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
                 }
             }
         }

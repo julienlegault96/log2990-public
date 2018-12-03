@@ -35,7 +35,7 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
     }
 
     private syncMultiplayerStatus(message: SocketMessage): void {
-        if (message.type === SocketMessageType.JoinedRoom) {
+        if (message.type === SocketMessageType.JoinedRoom || message.type === SocketMessageType.LeftRoom) {
             if (message.extraMessageInfo && message.extraMessageInfo.game && this.game._id === message.extraMessageInfo.game.gameId) {
                 this.isJoinable = !this.isJoinable;
             }
@@ -46,7 +46,7 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
         const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", "waiting"]);
+        this.router.navigate(["/", "waiting", this.game._id]);
     }
 
     public startGame(): void {

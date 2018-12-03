@@ -4,7 +4,6 @@ import { SocketEvents } from "../../../../../common/communication/sockets/socket
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { UserService } from "../user/user.service";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
 
@@ -16,11 +15,10 @@ export class MessageService {
 
     public constructor(
         public socketService: SocketService,
-        private userService: UserService,
         private router: Router,
     ) {
         this.messages = [this.initMessage];
-        socketService.registerFunction(SocketEvents.Message, this.manageFromServer.bind(this));
+        socketService.registerFunction(SocketEvents.Message, this.manage.bind(this));
     }
 
     public addMessage(message: string, timestamp?: number): void {
@@ -29,20 +27,6 @@ export class MessageService {
         }
 
         this.messages.push((timestamp ? new Date(timestamp).toLocaleTimeString() + " – " : "") + message);
-    }
-
-    public manageFromServer(message: SocketMessage): void {
-        if (message.type === SocketMessageType.StartedGame) {
-            this.manage(message);
-
-            return;
-        }
-
-        if (message.type !== SocketMessageType.Highscore
-            && message.userId === this.userService.loggedUser._id) {
-            return;
-        }
-        this.manage(message);
     }
 
     // tslint:disable-next-line:max-func-body-length
@@ -76,10 +60,8 @@ export class MessageService {
 
                     return;
                 }
-
-                return;
             case SocketMessageType.JoinedRoom:
-                return;
+            case SocketMessageType.LeftRoom:
             case SocketMessageType.EndedGame:
                 return;
             default:
