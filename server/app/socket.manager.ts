@@ -14,7 +14,7 @@ import { UserConnection } from "./sockets/userConnection.socket";
 import { GamePartyMode } from "../../common/game/game-party-mode";
 
 @injectable()
-export class Socket {
+export class SocketManager {
 
     public gameRooms: { [key: string]: Array<SocketIO.Room> }; // key=gameId
     public ioServer: SocketIO.Server;
@@ -74,7 +74,7 @@ export class Socket {
         for (const gameId in this.gameRooms) {
             if (this.gameRooms.hasOwnProperty(gameId)) {
                 const rooms: Array<SocketIO.Room> = this.gameRooms[gameId];
-                if (rooms && rooms[rooms.length - 1].length === 1 ) {
+                if (rooms && rooms[rooms.length - 1] && rooms[rooms.length - 1].length === 1 ) {
                     const joinMessage: SocketMessage = {
                         userId: "Someone",
                         type: SocketMessageType.JoinedRoom,
@@ -82,7 +82,7 @@ export class Socket {
                         extraMessageInfo: {
                             game: {
                                 gameId: gameId,
-                                name: "a game",
+                                name: "Somegame",
                                 mode: GamePartyMode.Multiplayer,
                             }
                         }
@@ -92,4 +92,13 @@ export class Socket {
             }
         }
     }
+
+    public generateLobbyName(gameId: string, lobbyCount: number): string {
+        return gameId + "_" + lobbyCount;
+    }
+
+    public indexRoom(gameId: string, lobbyCount: number): void {
+        this.gameRooms[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
+    }
+
 }
