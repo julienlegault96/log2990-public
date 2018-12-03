@@ -5,9 +5,11 @@ import { DEFAULT_SERVER_HOST_URL } from "../../../../../common/communication/def
 export class SocketService {
 
     private socket: SocketIOClient.Socket;
+    public reconnectionPackage: Object;
 
     public constructor() {
-        this.socket = SocketIO(DEFAULT_SERVER_HOST_URL);
+        this.socket = SocketIO(DEFAULT_SERVER_HOST_URL, {query : this.reconnectionPackage});
+        this.reconnectionPackage = {};
         this.listen();
     }
 
@@ -15,6 +17,7 @@ export class SocketService {
         this.socket.emit(requestType, data);
     }
 
+    // TODO remove when ready to tag to sprint4
     public listen(): void {
         this.socket.on(SocketEvents.Message, console.log);
     }
@@ -26,5 +29,4 @@ export class SocketService {
     public unregisterFunction(requestType: SocketEvents, f: Function): void {
         this.socket.removeListener(requestType, f);
     }
-
 }

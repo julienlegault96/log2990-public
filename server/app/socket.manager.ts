@@ -13,6 +13,9 @@ import { UserSocket } from "./sockets/user/user.socket";
 import { MessageSocket } from "./sockets/message/message.socket";
 import { UserConnection } from "./sockets/userConnection.socket";
 
+type LobbyFunctor = (gameId: string, lobbies: Array<SocketIO.Room>, ) => void;
+type ConnectionFunctor = (socketId: string, connection: UserConnection) => void;
+
 @injectable()
 export class SocketManager {
 
@@ -35,12 +38,15 @@ export class SocketManager {
 
     private defineEvents(): void {
         this.ioServer.on(SocketEvents.Connection, (socket: SocketIO.Socket) => {
+            if (socket.handshake.query && socket.handshake.query._id) {
+                this.indexConnection(socket.handshake.query._id, socket);
+            }
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
                 if (this.connections[socket.id]) {
                     this.disconnectConnectedUser(this.connections[socket.id].userId);
                 }
-                this.connections[socket.id] = new UserConnection(user._id);
+                this.indexConnection(user._id, socket);
             });
 
             socket.on(SocketEvents.Message, (message: SocketMessage) => {
@@ -53,28 +59,33 @@ export class SocketManager {
             socket.on(SocketEvents.Disconnect, () => {
                 if (this.connections[socket.id]) {
                     this.disconnectConnectedUser(this.connections[socket.id].userId);
+                    this.unindexConnection(this.connections[socket.id].userId, socket);
                 }
             });
 
         });
     }
 
-    private disconnectConnectedUser(userId: string): void {
-        this.userSocket.deleteUser(userId);
-
-        const message: SocketMessage = {
-            userId: userId,
-            type: SocketMessageType.Disconnection,
-            timestamp: Date.now()
-        };
-
-        this.ioServer.sockets.emit(SocketEvents.Message, message);
-    }
-
-    private sendWaitingGames(socket: SocketIO.Socket): void {
+    private forEachLobby( functor: LobbyFunctor): void {
         for (const gameId in this.gameLobbies) {
             if (this.gameLobbies.hasOwnProperty(gameId)) {
                 const lobbies: Array<SocketIO.Room> = this.gameLobbies[gameId];
+                functor(gameId, lobbies);
+            }
+        }
+    }
+
+    private forEachConnection( functor: ConnectionFunctor): void {
+        for (const socketId in this.connections) {
+            if (this.connections.hasOwnProperty(socketId)) {
+                const userConnection: UserConnection = this.connections[socketId];
+                functor(socketId, userConnection);
+            }
+        }
+    }
+
+    private sendWaitingGames(socket: SocketIO.Socket): void {
+        this.forEachLobby( (gameId: string, lobbies: Array<SocketIO.Room> ) => {
                 if (lobbies && lobbies[lobbies.length - 1] && lobbies[lobbies.length - 1].length === 1 ) {
                     const joinMessage: SocketMessage = {
                         userId: "Someone",
@@ -91,7 +102,50 @@ export class SocketManager {
                     socket.emit(SocketEvents.Message, joinMessage);
                 }
             }
-        }
+        );
+    }
+
+
+
+    public indexConnection(userId: string, socket: SocketIO.Socket): void {
+        this.connections[socket.id] = new UserConnection(userId);
+    }
+
+    public unindexConnection(userId: string, socket: SocketIO.Socket): void {
+        const newConnections: { [socketId: string]: UserConnection } = {};
+        this.forEachConnection( (socketId: string, connection: UserConnection) => {
+            if (socketId !== socket.id && connection.userId !== userId) {
+                newConnections[socketId] = connection;
+            }
+        });
+        this.connections = newConnections;
+    }
+
+    public indexLobby(gameId: string, lobbyCount: number): void {
+        this.gameLobbies[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
+    }
+
+    /**
+     * removes all unused lobbies in a server's game
+     *
+     * @param gameId the game whose lobbies are to be cleaned
+     */
+    public unindexLobbies(gameId: string): void {
+        this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
+            (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
+            );
+    }
+
+    private disconnectConnectedUser(userId: string): void {
+        this.userSocket.deleteUser(userId);
+
+        const message: SocketMessage = {
+            userId: userId,
+            type: SocketMessageType.Disconnection,
+            timestamp: Date.now()
+        };
+
+        this.ioServer.sockets.emit(SocketEvents.Message, message);
     }
 
     public generateLobbyName(gameId: string, lobbyCount: number): string {
@@ -109,26 +163,11 @@ export class SocketManager {
         socket.leave(this.connections[socket.id].gameRoomName);
 
         if (message.extraMessageInfo && message.extraMessageInfo.game) {
-            this.unindexRoom(message.extraMessageInfo.game.gameId);
+            this.unindexLobbies(message.extraMessageInfo.game.gameId);
         }
 
         this.connections[socket.id].gameRoomName = "";
         this.connections[socket.id].isPlayingMultiplayer = false;
-    }
-
-    public indexRoom(gameId: string, lobbyCount: number): void {
-        this.gameLobbies[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
-    }
-
-    /**
-     * removes all unused lobbies in a server's game
-     *
-     * @param gameId the game whose lobbies are to be cleaned
-     */
-    public unindexRoom(gameId: string): void {
-        this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
-            (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
-            );
     }
 
     // tslint:disable-next-line:max-func-body-length
@@ -143,7 +182,7 @@ export class SocketManager {
             const roomSize: number = 2;
             if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                 this.addUserToRoom(gameId, lobbyCount , socket);
-                this.indexRoom(gameId, lobbyCount);
+                this.indexLobby(gameId, lobbyCount);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
                 this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);

@@ -76,6 +76,7 @@ export class UserService extends AbstractServerService {
 
     private login(user: User): Promise<boolean> {
         this.socketService.emit<User>(SocketEvents.UserConnection, user);
+        this.socketService.reconnectionPackage = user;
 
         this.socketService.emit<SocketMessage>(
             SocketEvents.Message,
@@ -91,7 +92,10 @@ export class UserService extends AbstractServerService {
                 if (this.userList.filter((value: User) => value._id === user._id).length === 1) {
                     this.loggedUser = user;
                     this.loggedIn = true;
-                    resolve(true);
+ 
+                    resolve();
+                } else {
+                    reject();
                 }
             });
         });
