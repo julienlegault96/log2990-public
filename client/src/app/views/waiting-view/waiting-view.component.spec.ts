@@ -21,7 +21,7 @@ describe("WaitingViewComponent", () => {
             imports: [
                 FontAwesomeModule,
                 HttpClientModule,
-                RouterTestingModule.withRoutes([]),
+                RouterTestingModule.withRoutes([])
             ]
         })
             .compileComponents();

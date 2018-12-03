@@ -1,12 +1,14 @@
 import { Component, AfterViewInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { SocketService } from "src/app/services/socket/socket.service";
+
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 import { SocketMessage, MessageOptions } from "../../../../../common/communication/sockets/socket-message";
-import { UserService } from "src/app/services/user/user.service";
 import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
+
+import { SocketService } from "src/app/services/socket/socket.service";
+import { UserService } from "src/app/services/user/user.service";
 
 @Component({
     selector: "app-waiting-view",

@@ -22,17 +22,17 @@ describe("SoloGameComponent", () => {
                 SoloGameComponent,
                 ChronoComponent,
                 DiffCounterComponent,
-                ImageDiffComponent,
+                ImageDiffComponent
             ],
             providers: [
                 ImgDiffService,
                 LeaderboardService,
                 SocketService,
-                MessageService,
+                MessageService
             ],
             imports: [
                 HttpClientModule,
-                RouterTestingModule,
+                RouterTestingModule
             ]
         })
             .compileComponents();
