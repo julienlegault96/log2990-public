@@ -1,4 +1,5 @@
 import { TestBed, inject } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 import { MessageService } from "./message.service";
@@ -12,7 +13,6 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SocketHighscore } from "../../../../../common/communication/sockets/socket-highscore";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
-import { Router } from "@angular/router";
 
 const TIME: number = Date.now(); // HH:MM:SS
 const NOM_JOUEUR: string = USERS[0]._id;
@@ -88,9 +88,11 @@ describe("MessageService", () => {
                 UserService,
                 SocketService,
                 HttpClient,
-                Router
             ],
-            imports: [HttpClientModule]
+            imports: [
+                HttpClientModule,
+                RouterTestingModule.withRoutes([])
+            ]
         });
     });
 

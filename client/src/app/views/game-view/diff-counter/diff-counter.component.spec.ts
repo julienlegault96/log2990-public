@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { SocketService } from "src/app/services/socket/socket.service";
+
 import { DiffCounterComponent } from "./diff-counter.component";
 
 describe("DiffCounterComponent", () => {
@@ -8,6 +10,9 @@ describe("DiffCounterComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            providers: [
+                SocketService
+            ],
             declarations: [DiffCounterComponent]
         })
             .compileComponents();

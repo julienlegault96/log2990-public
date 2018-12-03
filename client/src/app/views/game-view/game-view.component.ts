@@ -27,6 +27,7 @@ export class GameViewComponent implements AfterViewInit {
     public playerIds: string[] = [];
     public game: Game;
     public matchId: string;
+
     public constructor(
         public messageService: MessageService,
         private activatedRoute: ActivatedRoute,
@@ -40,14 +41,15 @@ export class GameViewComponent implements AfterViewInit {
     public ngAfterViewInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.matchId = paramsId.matchId;
-            if (this.matchId !== "solo") {
-                this.playerIds.push("autreJoueur");
-            }
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
                 setTimeout(() => this.gameComponent.first.chrono.start());
             });
         });
+
+        if (this.matchId !== "solo") {
+            this.playerIds.push("autreJoueur");
+        }
     }
 
     public userFoundError(errorLocation: ErrorLocation): void {
