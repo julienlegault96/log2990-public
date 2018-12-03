@@ -10,7 +10,7 @@ import { UsersRoute } from "./routes/user/users.route";
 import { Imgur } from "./services/imgur/imgur";
 import { ImgDiffRoute } from "./routes/img-diff/imgdiff.route";
 import { LeaderboardRoute } from "./routes/leaderboard/leaderboard.route";
-import { Socket } from "./socket";
+import { SocketManager } from "./socket";
 import { UserSocket } from "./sockets/user/user.socket";
 import { MessageSocket } from "./sockets/message/message.socket";
 
@@ -25,7 +25,7 @@ container.bind(Types.GamesRoute).to(GamesRoute);
 container.bind(Types.ImgDiffRoute).to(ImgDiffRoute);
 container.bind(Types.LeaderboardRoute).to(LeaderboardRoute);
 
-container.bind(Types.SocketIo).to(Socket).inSingletonScope();
+container.bind(Types.SocketIo).to(SocketManager).inSingletonScope();
 container.bind(Types.UserSocket).to(UserSocket);
 container.bind(Types.MessageSocket).to(MessageSocket);
 

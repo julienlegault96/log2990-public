@@ -10,7 +10,7 @@ import { Score, Leaderboard } from "../../../../common/game/leaderboard";
 import { UpdateWriteOpResult } from "mongodb";
 import { CODES } from "../../../../common/communication/response-codes";
 import { LeaderboardRequest } from "../../../../common/communication/leaderboard-request";
-import { Socket } from "../../socket";
+import { SocketManager } from "../../socket";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 import { SocketMessage, MessageOptions } from "../../../../common/communication/sockets/socket-message";
@@ -21,7 +21,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
     private readonly DISPLAYED_SCORES: number = 3;
 
     public constructor(
-        @inject(Types.SocketIo) private io: Socket,
+        @inject(Types.SocketIo) private io: SocketManager,
         @inject(Types.Mongo) mongo: Mongo,
     ) {
         super(mongo);
@@ -57,7 +57,7 @@ export class LeaderboardRoute extends AbstractRoute<Game> {
         const game: Game = await this.getOne(leaderboardRequest.id);
         // get top 3 + your score
         const updatedScores: Array<Score> = this.getUpdatedScores(game, leaderboardRequest);
-        const position: number = this.getHighscorePosition(updatedScores, leaderboardRequest)
+        const position: number = this.getHighscorePosition(updatedScores, leaderboardRequest);
         //
         if (position !== 0 ) {
             // construct emited message with explicit types to avoid having the emit's "any" type introducing errors
