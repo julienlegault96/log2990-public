@@ -9,7 +9,7 @@ import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 import { SocketService } from "src/app/services/socket/socket.service";
 import { UserService } from "src/app/services/user/user.service";
-import { Routing } from "src/app/routing";
+import { Routing, RoutingGameMatchId } from "src/app/routing";
 
 @Component({
     selector: "app-waiting-view",
@@ -24,7 +24,20 @@ export class WaitingViewComponent implements AfterViewInit {
         private socketService: SocketService,
         private userService: UserService,
         private router: Router,
-    ) {}
+    ) {
+        this.socketService.registerFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
+    }   
+
+    public retrieveMessages(message: SocketMessage): void {
+        if (message.type === SocketMessageType.StartedGame &&
+            message.extraMessageInfo && message.extraMessageInfo.game) {
+            const socketGame: SocketGame = message.extraMessageInfo.game as SocketGame;
+            if (socketGame.gameId === this.waitingGameId) {
+                console.log("StartedGame");
+                this.router.navigate(["/", Routing.Game, socketGame.gameId, RoutingGameMatchId.Duel]);
+            }
+        }
+    }
 
     public ngAfterViewInit(): void {
         this.activatedRoute.params.subscribe((params) => {
@@ -33,6 +46,7 @@ export class WaitingViewComponent implements AfterViewInit {
     }
 
     public cancelGameCreation(): void {
+        console.log("disconnect");
         const messageGame: SocketGame = {
             gameId : this.waitingGameId,
             name: "unknown",
@@ -52,5 +66,7 @@ export class WaitingViewComponent implements AfterViewInit {
         this.socketService.emit(SocketEvents.Message, exitMessage);
         this.router.navigate(["/", Routing.Waiting]);
     }
+
+
 
 }
