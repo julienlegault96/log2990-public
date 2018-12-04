@@ -25,25 +25,31 @@ export class CreateGameService extends GameService {
             && this.isValidInputImageList(images);
     }
 
-    public submitSingle(name: string, images: File[]): void {
+    public async submitSingle(name: string, images: File[]): Promise<boolean> {
         if (!this.isValidSingleViewInputList(name, images)) {
-            return;
+            return Promise.resolve(false);
         }
 
         const rawImagePromise: Promise<string> = this.getBase64(images[0]);
         const modifiedImagePromise: Promise<string> = this.getBase64(images[1]);
 
-        Promise.all([rawImagePromise, modifiedImagePromise]).then((imageUrls) => {
-            const newGame: Game = this.generateSingleViewGame(name, imageUrls);
-            this.postSingleViewGame(newGame).subscribe(
-                () => {
-                    alert("Création du jeu réussie");
-                    location.reload();
-                },
-                () => {
-                    alert("Les images sont invalides");
-                }
-            );
+        return new Promise<boolean>((resolve) => {
+            Promise.all([rawImagePromise, modifiedImagePromise])
+                .then((imageUrls) => {
+                    const newGame: Game = this.generateSingleViewGame(name, imageUrls);
+                    this.postSingleViewGame(newGame)
+                        .subscribe(
+                            () => {
+                                alert("Création du jeu réussie");
+                                location.reload();
+                                resolve(true);
+                            },
+                            () => {
+                                alert("Les images sont invalides");
+                                resolve(false);
+                            }
+                        );
+                });
         });
     }
 
