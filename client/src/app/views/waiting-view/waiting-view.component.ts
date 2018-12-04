@@ -47,7 +47,6 @@ export class WaitingViewComponent implements AfterViewInit {
     public cancelGameCreation(): void {
         const messageGame: SocketGame = {
             gameId : this.waitingGameId,
-            name: this.userService.loggedUser._id,
             mode: GamePartyMode.Multiplayer
         };
 

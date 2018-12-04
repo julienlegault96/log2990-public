@@ -86,7 +86,6 @@ export class MultiplayerGameComponent {
             extraMessageInfo: {
                 game: {
                     gameId: this.game._id,
-                    name: this.game.title,
                     mode: GamePartyMode.Multiplayer,
                 }
             }

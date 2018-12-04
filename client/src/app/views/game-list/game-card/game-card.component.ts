@@ -65,7 +65,6 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
             extraMessageInfo: {
                 game: {
                     gameId: this.game._id,
-                    name: this.game.title,
                     mode: mode
                 }
             }
