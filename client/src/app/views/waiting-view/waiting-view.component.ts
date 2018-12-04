@@ -26,7 +26,7 @@ export class WaitingViewComponent implements AfterViewInit {
         private router: Router,
     ) {
         this.socketService.registerFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
-    }   
+    }
 
     public retrieveMessages(message: SocketMessage): void {
         if (message.type === SocketMessageType.StartedGame &&
@@ -47,7 +47,7 @@ export class WaitingViewComponent implements AfterViewInit {
     public cancelGameCreation(): void {
         const messageGame: SocketGame = {
             gameId : this.waitingGameId,
-            name: "unknown",
+            name: this.userService.loggedUser._id,
             mode: GamePartyMode.Multiplayer
         };
 
@@ -62,6 +62,6 @@ export class WaitingViewComponent implements AfterViewInit {
             extraMessageInfo : messageOptions
         };
         this.socketService.emit(SocketEvents.Message, exitMessage);
-        this.router.navigate(["/", Routing.Waiting]);
+        this.router.navigate(["/", Routing.GameList]);
     }
 }
