@@ -3,10 +3,7 @@ import { SocketMessageType } from "../../../../../common/communication/sockets/s
 import { SocketEvents } from "../../../../../common/communication/sockets/socket-requests";
 import { SocketService } from "../socket/socket.service";
 import { Injectable } from "@angular/core";
-//import { Router } from "@angular/router";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
-//import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
-//import { Routing, RoutingGameMatchId } from "src/app/routing";
 
 @Injectable()
 export class MessageService {
@@ -16,7 +13,6 @@ export class MessageService {
 
     public constructor(
         public socketService: SocketService,
-        //private router: Router,
     ) {
         this.messages = [this.initMessage];
         socketService.registerFunction(SocketEvents.Message, this.manage.bind(this));
