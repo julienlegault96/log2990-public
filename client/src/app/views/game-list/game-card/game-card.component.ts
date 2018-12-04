@@ -71,5 +71,4 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
         this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
     }
-
 }
