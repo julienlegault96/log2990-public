@@ -22,7 +22,6 @@ export class CreateSingleViewComponent extends CreateGameComponent {
         super(createGameService);
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
-
         this.isCreating = false;
     }
 
