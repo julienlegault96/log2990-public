@@ -13,7 +13,12 @@
                 <div class="card custom-shadow border-0 mb-3">
                     <div class="card-body">
                         <h5 class="text-center">
-                            Aucun jeu disponible
+                            <div *ngIf="gamesLoaded else firstViewLoader">
+                                Aucun jeu disponible
+                            </div>
+                            <ng-template #firstViewLoader>
+                                <fa-icon [icon]="['fas', 'circle-notch']" [spin]="true" size="2x"></fa-icon>
+                            </ng-template>
                         </h5>
                     </div>
                 </div>
@@ -38,7 +43,12 @@
                 <div class="card custom-shadow border-0 mb-3">
                     <div class="card-body">
                         <h5 class="text-center">
-                            Aucun jeu disponible
+                            <div *ngIf="gamesLoaded else secondViewLoader">
+                                Aucun jeu disponible
+                            </div>
+                            <ng-template #secondViewLoader>
+                                <fa-icon [icon]="['fas', 'circle-notch']" [spin]="true" size="2x"></fa-icon>
+                            </ng-template>
                         </h5>
                     </div>
                 </div>
