@@ -47,9 +47,14 @@
             <hr />
 
             <div>
-                <span *ngFor="let user of userService.userList" class="badge badge-pill badge-primary mr-2">
-                    {{user._id}}
-                </span>
+                <ng-container *ngIf="userService.userList && userService.userList.length > 0; else noUserConnectedMessage">
+                    <span *ngFor="let user of userService.userList" class="badge badge-pill badge-primary mr-2">
+                        {{user._id}}
+                    </span>
+                </ng-container>
+                <ng-template #noUserConnectedMessage>
+                    Aucun utilisateur connecté
+                </ng-template>
             </div>
         </div>
     </div>

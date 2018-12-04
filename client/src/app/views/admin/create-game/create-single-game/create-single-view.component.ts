@@ -16,10 +16,13 @@ export class CreateSingleViewComponent extends CreateGameComponent {
     private rawImage: File | null;
     private modifiedImage: File | null;
 
+    public isCreating: boolean;
+
     public constructor(createGameService: CreateGameService) {
         super(createGameService);
         this.updateRawImageMessage();
         this.updateModifiedImageMessage();
+        this.isCreating = false;
     }
 
     public submit(): void {
@@ -29,8 +32,12 @@ export class CreateSingleViewComponent extends CreateGameComponent {
             return;
         }
 
+        this.isCreating = true;
         const imageList: Array<File> = this.getImageListForSubmit();
-        this.createGameService.submitSingle(this.name, imageList);
+        this.createGameService.submitSingle(this.name, imageList)
+            .then(() => {
+                this.isCreating = false;
+            });
     }
 
     public setRawImage(event: Event): void {
