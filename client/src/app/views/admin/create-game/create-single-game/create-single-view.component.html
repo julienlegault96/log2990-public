@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="float-right">
-                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal">
+                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal" [disabled]="isCreating">
                         Annuler
                     </button>
                     <ng-container *ngIf="!isCreating; else isCreatingButton">

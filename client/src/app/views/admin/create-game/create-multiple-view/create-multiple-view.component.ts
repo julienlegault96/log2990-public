@@ -17,8 +17,11 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
     public remove: boolean = false;
     public color: boolean = false;
 
+    public isCreating: boolean;
+
     public constructor(createGameService: CreateGameService) {
         super(createGameService);
+        this.isCreating = false;
     }
 
     public submit(): void {
@@ -39,7 +42,11 @@ export class CreateMultipleViewComponent extends CreateGameComponent {
             }
         };
 
-        this.createGameService.submitMultiple(this.name, options);
+        this.isCreating = true;
+        this.createGameService.submitMultiple(this.name, options)
+            .then(() => {
+                this.isCreating = false;
+            });
     }
 
     public onRangeChange(event: Event): void {

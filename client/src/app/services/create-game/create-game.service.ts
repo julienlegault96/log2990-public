@@ -53,19 +53,23 @@ export class CreateGameService extends GameService {
         });
     }
 
-    public submitMultiple(name: string, options: GenMultiParameters): void {
+    public async submitMultiple(name: string, options: GenMultiParameters): Promise<boolean> {
         const newGame: Game = this.generateMultipleViewGame(name);
         const request: GameCreationRequest = { newGame, options };
 
-        this.postMultipleViewGame(request).subscribe(
-            () => {
-                alert("Création du jeu réussie");
-                location.reload();
-            },
-            () => {
-                alert("Génération des images sans succès");
-            }
-        );
+        return new Promise<boolean>((resolve) => {
+            this.postMultipleViewGame(request).subscribe(
+                () => {
+                    alert("Création du jeu réussie");
+                    location.reload();
+                    resolve(true);
+                },
+                () => {
+                    alert("Génération des images sans succès");
+                    resolve(false);
+                }
+            );
+        });
     }
 
     private generateSingleViewGame(name: string, imageUrls: Array<string>): Game {
