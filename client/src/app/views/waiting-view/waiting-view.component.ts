@@ -31,9 +31,8 @@ export class WaitingViewComponent implements AfterViewInit {
     public retrieveMessages(message: SocketMessage): void {
         if (message.type === SocketMessageType.StartedGame &&
             message.extraMessageInfo && message.extraMessageInfo.game) {
-            const socketGame: SocketGame = message.extraMessageInfo.game as SocketGame;
+            const socketGame: SocketGame = message.extraMessageInfo.game;
             if (socketGame.gameId === this.waitingGameId) {
-                console.log("StartedGame");
                 this.router.navigate(["/", Routing.Game, socketGame.gameId, RoutingGameMatchId.Duel]);
             }
         }
@@ -46,7 +45,6 @@ export class WaitingViewComponent implements AfterViewInit {
     }
 
     public cancelGameCreation(): void {
-        console.log("disconnect");
         const messageGame: SocketGame = {
             gameId : this.waitingGameId,
             name: "unknown",
@@ -66,7 +64,4 @@ export class WaitingViewComponent implements AfterViewInit {
         this.socketService.emit(SocketEvents.Message, exitMessage);
         this.router.navigate(["/", Routing.Waiting]);
     }
-
-
-
 }
