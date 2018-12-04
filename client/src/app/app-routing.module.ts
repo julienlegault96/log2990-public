@@ -33,10 +33,10 @@ export class AppRoutingModule {
     ) {
         router.events.subscribe((event: Event) => {
             if (event instanceof NavigationStart) {
-                if (event.url !== "/" + APP_ROUTES[0].path
-                    && event.url !== "/" + APP_ROUTES[1].path) {
+                if (event.url !== "/" + Routing.Homepage
+                    && event.url !== "/" + Routing.Admin) {
                     if (!userService.loggedIn) {
-                        router.navigate([APP_ROUTES[0].path]);
+                        router.navigate([Routing.Homepage]);
                     }
                 }
             }
