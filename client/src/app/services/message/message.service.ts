@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
+import { Routing, RoutingGameMatchId } from "src/app/routing";
 
 @Injectable()
 export class MessageService {
@@ -34,10 +35,10 @@ export class MessageService {
         let messageText: string = "";
         switch (message.type) {
             case SocketMessageType.Connection:
-                messageText += message.userId + " vient de se connecter.";
+                messageText += `${message.userId} vient de se connecter.`;
                 break;
             case SocketMessageType.Disconnection:
-                messageText += message.userId + " vient de se déconnecter.";
+                messageText += `${message.userId} vient de se déconnecter.`;
                 break;
             case SocketMessageType.Highscore:
                 messageText += this.formatHighscoreMessage(message);
@@ -56,16 +57,16 @@ export class MessageService {
                 // TODO move to waiting component
                 if (message.extraMessageInfo && message.extraMessageInfo.game) {
                     const socketGame: SocketGame = message.extraMessageInfo.game as SocketGame;
-                    this.router.navigate(["/", "game", socketGame.gameId, "duel"]);
-
-                    return;
+                    this.router.navigate(["/", Routing.Game, socketGame.gameId, RoutingGameMatchId.Duel]);
                 }
+
+                return;
             case SocketMessageType.JoinedRoom:
             case SocketMessageType.LeftRoom:
             case SocketMessageType.EndedGame:
                 return;
             default:
-                messageText += message.userId + " a fait quelque chose d'inattendu.";
+                messageText += `${message.userId} a fait quelque chose d'inattendu.`;
                 break;
         }
 
@@ -80,9 +81,9 @@ export class MessageService {
             const position: string = message.extraMessageInfo.highScore.position === firstPos ? "première" :
                 message.extraMessageInfo.highScore.position === scndPos ? "deuxième" : "troisième";
 
-            messageText = message.userId + " obtient la " + position;
-            messageText += " place dans les meilleurs temps du jeu " + message.extraMessageInfo.highScore.gameName + " en ";
-            messageText += (message.extraMessageInfo.highScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un") + ".";
+            messageText = `${message.userId} obtient la ${position}`;
+            messageText += ` place dans les meilleurs temps du jeu ${message.extraMessageInfo.highScore.gameName} en `;
+            messageText += `${message.extraMessageInfo.highScore.gameMode === GamePartyMode.Solo ? "solo" : "un contre un"}.`;
         }
 
         return messageText;
@@ -92,7 +93,7 @@ export class MessageService {
         let messageText: string = "";
         if (message.extraMessageInfo && message.extraMessageInfo.game
             && message.extraMessageInfo.game.mode === GamePartyMode.Multiplayer) {
-            messageText += " par " + message.userId;
+            messageText += ` par ${message.userId}`;
         }
 
         return messageText;

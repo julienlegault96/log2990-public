@@ -10,6 +10,7 @@ import { SocketMessageType } from "../../../../../../common/communication/socket
 import { UserService } from "src/app/services/user/user.service";
 import { MessageService } from "src/app/services/message/message.service";
 import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
+import { Routing, RoutingGameMatchId } from "src/app/routing";
 
 @Component({
     selector: "app-game",
@@ -46,14 +47,14 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
         const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", "waiting", this.game._id]);
+        this.router.navigate(["/", Routing.Waiting, this.game._id]);
     }
 
     public startGame(): void {
         const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", "game", this.game._id, "solo"]);
+        this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
     }
 
     private generateSocketMessage(mode: GamePartyMode, type: SocketMessageType): SocketMessage {

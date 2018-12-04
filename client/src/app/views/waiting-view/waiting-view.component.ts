@@ -9,6 +9,7 @@ import { GamePartyMode } from "../../../../../common/game/game-party-mode";
 
 import { SocketService } from "src/app/services/socket/socket.service";
 import { UserService } from "src/app/services/user/user.service";
+import { Routing } from "src/app/routing";
 
 @Component({
     selector: "app-waiting-view",
@@ -49,7 +50,7 @@ export class WaitingViewComponent implements AfterViewInit {
             extraMessageInfo : messageOptions
         };
         this.socketService.emit(SocketEvents.Message, exitMessage);
-        this.router.navigate(["/", "gameList"]);
+        this.router.navigate(["/", Routing.Waiting]);
     }
 
 }

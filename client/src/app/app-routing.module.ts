@@ -7,13 +7,14 @@ import { HomePageComponent } from "./views/home-page/home-page.component";
 import { GameViewComponent } from "./views/game-view/game-view.component";
 import { UserService } from "./services/user/user.service";
 import { WaitingViewComponent } from "./views/waiting-view/waiting-view.component";
+import { Routing } from "./routing";
 
 const APP_ROUTES: Routes = [
-    { path: "", component: HomePageComponent },
-    { path: "admin", component: AdminViewComponent },
-    { path: "gameList", component: GameListComponent },
-    { path: "game/:id/:matchId", component: GameViewComponent },
-    { path: "waiting/:id", component: WaitingViewComponent },
+    { path: Routing.Homepage, component: HomePageComponent },
+    { path: Routing.Admin, component: AdminViewComponent },
+    { path: Routing.GameList, component: GameListComponent },
+    { path: `${Routing.Game}/:id/:matchId`, component: GameViewComponent },
+    { path: `${Routing.Waiting}/:id`, component: WaitingViewComponent },
 ];
 
 @NgModule({

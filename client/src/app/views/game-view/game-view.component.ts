@@ -13,6 +13,7 @@ import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.co
 import { ErrorLocation } from "../../../../../common/communication/sockets/socket-error-location";
 import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
 import { GamePartyMode } from "../../../../../common/game/game-party-mode";
+import { RoutingGameMatchId } from "src/app/routing";
 
 @Component({
     selector: "app-game-view",
@@ -47,7 +48,7 @@ export class GameViewComponent implements AfterContentInit {
             });
         });
 
-        if (this.matchId !== "solo") {
+        if (this.matchId === RoutingGameMatchId.Duel) {
             this.playerIds.push("autreJoueur");
         }
     }

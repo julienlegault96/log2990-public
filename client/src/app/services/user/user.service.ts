@@ -92,7 +92,7 @@ export class UserService extends AbstractServerService {
                 if (this.userList.filter((value: User) => value._id === user._id).length === 1) {
                     this.loggedUser = user;
                     this.loggedIn = true;
- 
+
                     resolve();
                 } else {
                     reject();
