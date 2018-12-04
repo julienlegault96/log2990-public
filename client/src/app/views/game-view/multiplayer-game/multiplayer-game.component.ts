@@ -8,6 +8,11 @@ import { GamePartyMode } from "../../../../../../common/game/game-party-mode";
 import { LeaderboardRequest } from "../../../../../../common/communication/leaderboard-request";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
 import { ChronoComponent } from "../chrono/chrono.component";
+import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
+import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
+import { ErrorLocation } from "../../../../../../common/communication/sockets/socket-error-location";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../../common/communication/sockets/socket-requests";
 
 @Component({
     selector: "app-multiplayer-game",
@@ -24,7 +29,7 @@ export class MultiplayerGameComponent {
     @Input() public playerTwoId: string;
     @Input() public game: Game;
 
-    @Output() public errorFound: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public errorFound: EventEmitter<ErrorLocation> = new EventEmitter<ErrorLocation>();
     @Output() public noErrorFound: EventEmitter<string> = new EventEmitter<string>();
 
     public firstView: ImageView = ImageView.FirstView;
@@ -33,12 +38,23 @@ export class MultiplayerGameComponent {
     protected readonly MAX_SINGLE_VIEW_ERROR_COUNT: number = 4;
     protected readonly MAX_DOUBLE_VIEW_ERROR_COUNT: number = 7;
 
-    public constructor(private leaderboardService: LeaderboardService) {
+    public constructor(
+        private leaderboardService: LeaderboardService,
+        private socketService: SocketService,
+    ) {
+        this.socketService.registerFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
     }
 
-    public errorWasFound(): void {
+    public retrieveMessages(message: SocketMessage): void {
+        if (message.type === SocketMessageType.ErrorFound
+            && message.userId !== this.playerOneId) {
+            this.errorWasFoundByOpponent();
+        }
+    }
+
+    public errorWasFound(errorLocation: ErrorLocation): void {
         this.diffCounter.incrementPlayerCount(this.playerOneId);
-        this.errorFound.emit();
+        this.errorFound.emit(errorLocation);
         this.verifyErrorCount();
     }
 
@@ -48,7 +64,6 @@ export class MultiplayerGameComponent {
 
     public errorWasFoundByOpponent(): void {
         this.diffCounter.incrementPlayerCount(this.playerTwoId);
-        this.errorFound.emit();
         this.verifyErrorCount();
     }
 
@@ -61,8 +76,22 @@ export class MultiplayerGameComponent {
         }
     }
 
+    // tslint:disable-next-line:max-func-body-length
     private endGame(winnerId: string): void {
         this.chrono.stop();
+        const message: SocketMessage = {
+            userId: this.playerOneId,
+            type: SocketMessageType.EndedGame,
+            timestamp: Date.now(),
+            extraMessageInfo: {
+                game: {
+                    gameId: this.game._id,
+                    name: this.game.title,
+                    mode: GamePartyMode.Multiplayer,
+                }
+            }
+        };
+        this.socketService.emit(SocketEvents.Message, message);
 
         if (winnerId === this.playerOneId) {
             const leaderboardRequest: LeaderboardRequest = {
@@ -77,6 +106,8 @@ export class MultiplayerGameComponent {
         } else {
             $("#open-lose-end-game-modal").click();
         }
+
+        this.socketService.unregisterFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
     }
 
     private isPlayerWinner(playerId: string): boolean {

@@ -29,7 +29,7 @@ describe("GameListComponent", () => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get", "pipe", "detectChanges"]);
         httpClientSpy.get.and.callFake(() => TestHelper.asyncData(null));
         gameService = new GameService(httpClientSpy);
-        socketServiceSpy = jasmine.createSpyObj("SocketService", ["registerFunction"]);
+        socketServiceSpy = jasmine.createSpyObj("SocketService", ["emit", "registerFunction"]);
 
         userServiceSpy = new UserService(httpClientSpy, socketServiceSpy);
 

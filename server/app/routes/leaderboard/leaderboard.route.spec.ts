@@ -5,7 +5,7 @@ import { LeaderboardRequest } from "../../../../common/communication/leaderboard
 import { GamePartyMode } from "../../../../common/game/game-party-mode";
 import { GAMES } from "../../../../common/game/mock-games";
 import { Score } from "../../../../common/game/leaderboard";
-import { Socket } from "../../socket";
+import { SocketManager } from "../../socket.manager";
 import { UserSocket } from "../../sockets/user/user.socket";
 import { MessageSocket } from "../../sockets/message/message.socket";
 
@@ -16,7 +16,7 @@ describe("Leaderboard route", () => {
         const mongo: Mongo = new Mongo();
         const userSocket: UserSocket = new UserSocket(mongo);
         const messageSocket: MessageSocket = new MessageSocket();
-        const socket: Socket = new Socket(userSocket, messageSocket);
+        const socket: SocketManager = new SocketManager(userSocket, messageSocket);
         leaderboardRoute = new LeaderboardRoute(socket, mongo);
     });
 

@@ -86,8 +86,16 @@ describe("UserService", () => {
     });
 
     it("should sync the connected users", () => {
-        const MOCK_CONNECT: SocketMessage = {userId: USERS[0]._id, type: SocketMessageType.Connection};
-        const MOCK_DISCONNECT: SocketMessage = {userId: USERS[0]._id, type: SocketMessageType.Disconnection};
+        const MOCK_CONNECT: SocketMessage = {
+            userId: USERS[0]._id,
+            type: SocketMessageType.Connection,
+            timestamp: Date.now()
+        };
+        const MOCK_DISCONNECT: SocketMessage = {
+            userId: USERS[0]._id,
+            type: SocketMessageType.Disconnection,
+            timestamp: Date.now()
+            };
 
         // setup fixtures
         userService.userList = [];

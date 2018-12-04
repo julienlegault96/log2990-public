@@ -33,6 +33,7 @@ export class GameService extends AbstractServerService {
         return this.postRequest<GameCreationRequest>(Endpoints.Games, { newGame });
     }
 
+    // TODO extract to LeaderboardService
     public resetLeaderboard(toReset: Game): Observable<Leaderboard[]> {
         const baseTime: number = toReset.type === GameType.SingleView ? SINGLE_VIEW_BASE_TIME : MULTIPLE_VIEW_BASE_TIME;
         const leaderboards: Leaderboard[] = [

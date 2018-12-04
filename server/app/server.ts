@@ -3,7 +3,7 @@ import * as http from "http";
 import Types from "./types";
 import { injectable, inject } from "inversify";
 import { AddressInfo } from "net";
-import { Socket } from "./socket";
+import { SocketManager } from "./socket.manager";
 
 @injectable()
 export class Server {
@@ -14,7 +14,7 @@ export class Server {
 
     public constructor(
         @inject(Types.Application) private application: Application,
-        @inject(Types.Socket) private socket: Socket,
+        @inject(Types.SocketIo) private socket: SocketManager,
     ) { }
 
     public init(): void {

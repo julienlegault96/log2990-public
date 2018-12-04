@@ -66,22 +66,36 @@ export class UserService extends AbstractServerService {
         return this.deleteRequest<User>(Endpoints.Users, userToDelete._id);
     }
 
-    public submitUsername(username: string): void {
+    public submitUsername(username: string): Promise<boolean> {
         if (this.validateUsername(username)) {
-            this.login(new User(username));
+            return this.login(new User(username));
         } else {
             throw new Error(this.buildErrorString(username));
         }
     }
 
-    private login(user: User): void {
+    private login(user: User): Promise<boolean> {
         this.socketService.emit<User>(SocketEvents.UserConnection, user);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, { userId: user._id, type: SocketMessageType.Connection });
-        this.addUser(user).subscribe((nullUser: User) => {
-            this.getUsers().subscribe((newUsers: User[]) => {
-                if (newUsers.filter((value: User) => value._id === user._id).length === 1) {
+        this.socketService.reconnectionPackage = user;
+
+        this.socketService.emit<SocketMessage>(
+            SocketEvents.Message,
+            {
+                userId: user._id,
+                type: SocketMessageType.Connection,
+                timestamp: Date.now()
+            }
+        );
+
+        return new Promise((resolve, reject) => {
+            this.addUser(user).subscribe((nullUser: User) => {
+                if (this.userList.filter((value: User) => value._id === user._id).length === 1) {
                     this.loggedUser = user;
                     this.loggedIn = true;
+
+                    resolve();
+                } else {
+                    reject();
                 }
             });
         });

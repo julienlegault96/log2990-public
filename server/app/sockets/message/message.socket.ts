@@ -3,56 +3,37 @@ import * as SocketIO from "socket.io";
 import { SocketMessage } from "../../../../common/communication/sockets/socket-message";
 import { SocketMessageType } from "../../../../common/communication/sockets/socket-message-type";
 import { SocketEvents } from "../../../../common/communication/sockets/socket-requests";
-import { Socket } from "../../socket";
+import { SocketManager } from "../../socket.manager";
 
 @injectable()
 export class MessageSocket {
 
-    public manage(socket: Socket, ioSocket: SocketIO.Socket, message: SocketMessage): void {
+    public manage(manager: SocketManager, ioSocket: SocketIO.Socket, message: SocketMessage): void {
         switch (message.type) {
             case SocketMessageType.ErrorFound:
-                // il faut envoyer cet evenement du client (image-diff comp)
-                socket.ioServer.sockets.emit(SocketEvents.Message, message);
+                manager.ioServer.to(manager.connections[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                break;
+            case SocketMessageType.NoErrorFound:
+                manager.ioServer.to(manager.connections[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.Connection:
-                socket.ioServer.sockets.emit(SocketEvents.Message, message);
+                manager.ioServer.sockets.emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.Disconnection:
-                socket.ioServer.sockets.emit(SocketEvents.Message, message);
+                manager.ioServer.sockets.emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.JoinedRoom:
-                this.manageJoinedRoom(socket, message, ioSocket);
+                manager.manageJoinedRoom(message, ioSocket);
+                break;
+            case SocketMessageType.LeftRoom:
+                manager.ioServer.sockets.emit(SocketEvents.Message, message);
+                manager.removeUserFromRoom(message, ioSocket);
+                break;
+            case SocketMessageType.EndedGame:
+                manager.removeUserFromRoom(message, ioSocket);
                 break;
             default:
                 break;
         }
     }
-
-    private manageJoinedRoom(socket: Socket, message: SocketMessage, ioSocket: SocketIO.Socket): void {
-        let i: number = 0;
-        const maxPlayer: number = 2;
-
-        // find the first available room
-        // tslint:disable-next-line:no-empty
-        while (socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`]
-            && socket.ioServer.sockets.adapter.rooms[`${message.message}_${i}`].length >= maxPlayer) {
-            i++;
-        }
-
-        socket.usersRoom[message.userId] = `${message.message}_${i}`;
-        ioSocket.join(socket.usersRoom[message.userId]);
-        this.emitToUsersRoom(
-            socket,
-            message.userId,
-            SocketEvents.Message,
-            {
-                userId: message.userId,
-                type: SocketMessageType.JoinedRoom
-            });
-    }
-
-    private emitToUsersRoom<T>(io: Socket, userId: string, event: SocketEvents, message: T): void {
-        io.ioServer.to(io.usersRoom[userId]).emit(event, message);
-    }
-
 }

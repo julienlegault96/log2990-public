@@ -1,11 +1,13 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
 
 import { MessageBarComponent } from "./message-bar.component";
 import { MessageComponent } from "./message/message.component";
+
 import { SocketService } from "src/app/services/socket/socket.service";
 import { MessageService } from "src/app/services/message/message.service";
 import { LeaderboardService } from "src/app/services/leaderboard/leaderboard.service";
-import { HttpClientModule } from "@angular/common/http";
 
 describe("MessageBarComponent", () => {
     let component: MessageBarComponent;
@@ -16,14 +18,15 @@ describe("MessageBarComponent", () => {
             providers: [
                 SocketService,
                 MessageService,
-                LeaderboardService,
+                LeaderboardService
             ],
             declarations: [
                 MessageBarComponent,
-                MessageComponent,
+                MessageComponent
             ],
             imports: [
                 HttpClientModule,
+                RouterTestingModule.withRoutes([])
             ]
         })
             .compileComponents();

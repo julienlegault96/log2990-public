@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 
 import {
     getformattedTime,
@@ -6,6 +6,7 @@ import {
     MINUTES_IN_HOUR,
     MILLISECONDS_IN_SECOND
 } from "../../../../../../common/helpers/time";
+import { MessageService } from "src/app/services/message/message.service";
 
 @Component({
     selector: "app-chrono",
@@ -13,8 +14,6 @@ import {
 })
 
 export class ChronoComponent {
-
-    @Output() public timerMilestone: EventEmitter<string> = new EventEmitter<string>();
 
     public elapsedTime: number;
     public formattedTime: string;
@@ -25,7 +24,9 @@ export class ChronoComponent {
     private readonly SECONDS_ALERT: number = 30;
     private readonly MODULO_ZERO: number = 0;
 
-    public constructor() {
+    public constructor(
+        private messageService: MessageService,
+    ) {
         this.formattedTime = "00:00";
         this.isStarted = false;
     }
@@ -54,7 +55,7 @@ export class ChronoComponent {
         this.formattedTime = getformattedTime(this.elapsedTime);
 
         if (this.elapsedTime >= this.SECONDS_ALERT && this.elapsedTime % this.SECONDS_ALERT === this.MODULO_ZERO) {
-            this.timerMilestone.emit(`${this.elapsedTime} secondes se sont écoulées`);
+            this.messageService.addMessage(`${this.elapsedTime} secondes se sont écoulées`);
         }
     }
 

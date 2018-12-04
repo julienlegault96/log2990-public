@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChildren, QueryList } from "@angular/core";
+import { Component, ViewChildren, QueryList, AfterContentInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
@@ -10,6 +10,10 @@ import { SocketMessage } from "../../../../../common/communication/sockets/socke
 import { SocketMessageType } from "../../../../../common/communication/sockets/socket-message-type";
 import { SoloGameComponent } from "./solo-game/solo-game.component";
 import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.component";
+import { ErrorLocation } from "../../../../../common/communication/sockets/socket-error-location";
+import { SocketGame } from "../../../../../common/communication/sockets/socket-game";
+import { GamePartyMode } from "../../../../../common/game/game-party-mode";
+import { RoutingGameMatchId } from "src/app/routing";
 
 @Component({
     selector: "app-game-view",
@@ -17,12 +21,13 @@ import { MultiplayerGameComponent } from "./multiplayer-game/multiplayer-game.co
     styleUrls: ["./game-view.component.css"]
 })
 
-export class GameViewComponent implements AfterViewInit {
+export class GameViewComponent implements AfterContentInit {
 
     @ViewChildren("gameComponent") public gameComponent: QueryList<SoloGameComponent | MultiplayerGameComponent>;
 
     public playerIds: string[] = [];
     public game: Game;
+    public matchId: string;
 
     public constructor(
         public messageService: MessageService,
@@ -34,28 +39,45 @@ export class GameViewComponent implements AfterViewInit {
         this.playerIds.push(this.userService.loggedUser._id);
     }
 
-    public ngAfterViewInit(): void {
+    public ngAfterContentInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
+            this.matchId = paramsId.matchId;
             this.gameService.getGame(paramsId.id).subscribe((game) => {
                 this.game = game;
                 setTimeout(() => this.gameComponent.first.chrono.start());
             });
         });
+
+        if (this.matchId === RoutingGameMatchId.Duel) {
+            this.playerIds.push("autreJoueur");
+        }
     }
 
-    public userFoundError(): void {
-        this.emitMessage(SocketMessageType.ErrorFound);
+    public userFoundError(errorLocation: ErrorLocation): void {
+        this.emitMessage(SocketMessageType.ErrorFound, errorLocation);
     }
 
     public userFoundBadError(): void {
         this.emitMessage(SocketMessageType.NoErrorFound);
     }
 
-    private emitMessage(messageType: SocketMessageType): void {
+    private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
+        const socketGame: SocketGame = {
+            gameId: this.game._id,
+            name: this.game.title,
+            mode: (this.playerIds.length === 1) ? GamePartyMode.Solo : GamePartyMode.Multiplayer
+        };
+
         const message: SocketMessage = {
             userId: this.userService.loggedUser._id,
-            type: messageType
+            type: messageType,
+            timestamp: Date.now(),
+            extraMessageInfo: {
+                game: socketGame,
+                ...(messageType === SocketMessageType.ErrorFound ? { errorLocation: errorLocation } : undefined),
+            },
         };
+
         this.messageService.manage(message);
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }

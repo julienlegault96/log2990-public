@@ -6,7 +6,7 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import Types from "./types";
 import { injectable, inject } from "inversify";
-import { Routes } from "./routes";
+import { Routes } from "./route.manager";
 import {CODES} from "../../common/communication/response-codes";
 
 @injectable()

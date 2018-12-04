@@ -4,7 +4,7 @@
             (errorFound)="userFoundError()" (noErrorFound)="userFoundBadError()">
         </app-solo-game>
         <app-multiplayer-game *ngIf="playerIds.length === 2" #gameComponent [playerOneId]="playerIds[0]" [playerTwoId]="playerIds[1]"
-            [game]="game" (errorFound)="userFoundError()" (noErrorFound)="userFoundBadError()">
+            [game]="game" (errorFound)="userFoundError($event)" (noErrorFound)="userFoundBadError()">
         </app-multiplayer-game>
     </div>
 </div>
@@ -40,7 +40,7 @@
             <div class="modal-body">
                 <h4 class="modal-title">
                     <fa-icon [icon]="['fas', 'sad-tear']"></fa-icon>
-                    Toute une catastrophe!
+                    Oh non!
                 </h4>
 
                 <hr />

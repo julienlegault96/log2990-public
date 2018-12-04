@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { SocketService } from "src/app/services/socket/socket.service";
+import { SocketEvents } from "../../../../../../common/communication/sockets/socket-requests";
+import { SocketMessage } from "../../../../../../common/communication/sockets/socket-message";
+import { SocketMessageType } from "../../../../../../common/communication/sockets/socket-message-type";
 
 @Component({
     selector: "app-diff-counter",
@@ -20,9 +24,21 @@ export class DiffCounterComponent implements OnInit {
     private readonly BASE: number = 100;
     private readonly UNDECLARED_ID_ERROR: string = "Aucun compteur n'est initialisé pour l'indentifiant ";
 
+    public constructor(
+        private socketService: SocketService,
+    ) { }
+
     public ngOnInit(): void {
         const playerCount: number = this.playerTwoId ? this.MAX_PLAYERS : this.MIN_PLAYERS;
         this.updatePlayerCount(playerCount);
+        this.socketService.registerFunction(SocketEvents.Message, this.retriveMessages.bind(this));
+    }
+
+    private retriveMessages(message: SocketMessage): void {
+        if (message.type === SocketMessageType.EndedGame) {
+            this.counters = [0, 0];
+            this.socketService.unregisterFunction(SocketEvents.Message, this.retriveMessages.bind(this));
+        }
     }
 
     public setPlayerOne(playerId: string): void {
