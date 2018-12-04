@@ -11,10 +11,10 @@ export class MessageSocket {
     public manage(manager: SocketManager, ioSocket: SocketIO.Socket, message: SocketMessage): void {
         switch (message.type) {
             case SocketMessageType.ErrorFound:
-                manager.ioServer.to(manager.connections[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                manager.ioServer.to(manager.connections[ioSocket.id].currentRoom).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.NoErrorFound:
-                manager.ioServer.to(manager.connections[ioSocket.id].gameRoomName).emit(SocketEvents.Message, message);
+                manager.ioServer.to(manager.connections[ioSocket.id].currentRoom).emit(SocketEvents.Message, message);
                 break;
             case SocketMessageType.Connection:
                 manager.ioServer.sockets.emit(SocketEvents.Message, message);

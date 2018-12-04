@@ -1,8 +1,7 @@
 export class UserConnection {
 
     public userId: string;
-    public gameRoomName: string;
-    public isPlayingMultiplayer: boolean;
+    public currentRoom: string;
 
     public constructor(userId: string) {
         this.userId = userId;
@@ -10,8 +9,7 @@ export class UserConnection {
     }
 
     public reset(): void {
-        this.gameRoomName = "";
-        this.isPlayingMultiplayer = false;
+        this.currentRoom = "/";
     }
 
 }

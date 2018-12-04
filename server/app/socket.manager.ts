@@ -177,12 +177,12 @@ export class SocketManager {
     private addUserToRoom(gameId: string, lobbyCount: number, socket: SocketIO.Socket): void {
         const roomName: string = this.generateLobbyName(gameId, lobbyCount);
         socket.join(roomName);
-        this.connections[socket.id].gameRoomName = roomName;
+        this.connections[socket.id].currentRoom = roomName;
     }
 
     public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {
-        this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
-        socket.leave(this.connections[socket.id].gameRoomName);
+        this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, message);
+        socket.leave(this.connections[socket.id].currentRoom);
 
         if (message.extraMessageInfo && message.extraMessageInfo.game) {
             this.unindexLobbies(message.extraMessageInfo.game.gameId);
@@ -207,8 +207,7 @@ export class SocketManager {
                 gameRoomName = this.generateLobbyName(gameId, lobbyCount);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
-                this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
-                gameRoomName = this.generateLobbyName(gameId, lobbyCount - 1);                
+                this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, message);
                 if (this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                     const startMessage: SocketMessage = {
                         userId: message.userId,
@@ -222,7 +221,7 @@ export class SocketManager {
                             }
                         }
                     };
-                    this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
+                    this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, startMessage);
                 }
             }           
             this.connections[socket.id].gameRoomName = gameRoomName;
