@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChildren, QueryList } from "@angular/core";
+import { Component, ViewChildren, QueryList, AfterContentInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { UserService } from "../../services/user/user.service";
 import { Game } from "../../../../../common/game/game";
@@ -20,7 +20,7 @@ import { GamePartyMode } from "../../../../../common/game/game-party-mode";
     styleUrls: ["./game-view.component.css"]
 })
 
-export class GameViewComponent implements AfterViewInit {
+export class GameViewComponent implements AfterContentInit {
 
     @ViewChildren("gameComponent") public gameComponent: QueryList<SoloGameComponent | MultiplayerGameComponent>;
 
@@ -38,7 +38,7 @@ export class GameViewComponent implements AfterViewInit {
         this.playerIds.push(this.userService.loggedUser._id);
     }
 
-    public ngAfterViewInit(): void {
+    public ngAfterContentInit(): void {
         this.activatedRoute.params.subscribe((paramsId) => {
             this.matchId = paramsId.matchId;
             this.gameService.getGame(paramsId.id).subscribe((game) => {
