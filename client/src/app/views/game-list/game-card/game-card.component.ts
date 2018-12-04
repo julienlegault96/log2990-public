@@ -35,6 +35,20 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
         this.socketService.registerFunction(SocketEvents.Message, this.syncMultiplayerStatus.bind(this));
     }
 
+    public joinGame(): void {
+        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
+        this.messageService.manage(message);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", Routing.Waiting, this.game._id]);
+    }
+
+    public startGame(): void {
+        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
+        this.messageService.manage(message);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
+    }
+
     private syncMultiplayerStatus(message: SocketMessage): void {
         if (message.type === SocketMessageType.JoinedRoom || message.type === SocketMessageType.LeftRoom) {
             if (message.extraMessageInfo && message.extraMessageInfo.game && this.game._id === message.extraMessageInfo.game.gameId) {
@@ -56,19 +70,5 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
                 }
             }
         };
-    }
-
-    public joinGame(): void {
-        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
-        this.messageService.manage(message);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", Routing.Waiting, this.game._id]);
-    }
-
-    public startGame(): void {
-        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
-        this.messageService.manage(message);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
     }
 }
