@@ -43,20 +43,6 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
         }
     }
 
-    public joinGame(): void {
-        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
-        this.messageService.manage(message);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", Routing.Waiting, this.game._id]);
-    }
-
-    public startGame(): void {
-        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
-        this.messageService.manage(message);
-        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
-        this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
-    }
-
     private generateSocketMessage(mode: GamePartyMode, type: SocketMessageType): SocketMessage {
         return {
             userId: this.userService.loggedUser._id,
@@ -70,6 +56,20 @@ export class GameCardComponent extends AbstractGameCardComponent implements OnIn
                 }
             }
         };
+    }
+
+    public joinGame(): void {
+        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
+        this.messageService.manage(message);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", Routing.Waiting, this.game._id]);
+    }
+
+    public startGame(): void {
+        const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Solo, SocketMessageType.StartedGame);
+        this.messageService.manage(message);
+        this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
+        this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
     }
 
 }
