@@ -54,12 +54,19 @@ export class GameViewComponent implements AfterContentInit {
         }
     }
 
-    public userFoundError(errorLocation: ErrorLocation): void {
-        this.emitMessage(SocketMessageType.ErrorFound, errorLocation);
-    }
-
-    public userFoundBadError(): void {
-        this.emitMessage(SocketMessageType.NoErrorFound);
+    private generateSocketMessage(mode: GamePartyMode, type: SocketMessageType): SocketMessage {
+        return {
+            userId: this.userService.loggedUser._id,
+            type: type,
+            timestamp: Date.now(),
+            extraMessageInfo: {
+                game: {
+                    gameId: this.game._id,
+                    name: this.game.title,
+                    mode: mode
+                }
+            }
+        };
     }
 
     private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
@@ -83,6 +90,14 @@ export class GameViewComponent implements AfterContentInit {
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
     }
 
+    public userFoundError(errorLocation: ErrorLocation): void {
+        this.emitMessage(SocketMessageType.ErrorFound, errorLocation);
+    }
+
+    public userFoundBadError(): void {
+        this.emitMessage(SocketMessageType.NoErrorFound);
+    }
+
     public joinGame(): void {
         const message: SocketMessage = this.generateSocketMessage(GamePartyMode.Multiplayer, SocketMessageType.JoinedRoom);
         this.messageService.manage(message);
@@ -96,20 +111,4 @@ export class GameViewComponent implements AfterContentInit {
         this.socketService.emit<SocketMessage>(SocketEvents.Message, message);
         this.router.navigate(["/", Routing.Game, this.game._id, RoutingGameMatchId.Solo]);
     }
-
-    private generateSocketMessage(mode: GamePartyMode, type: SocketMessageType): SocketMessage {
-        return {
-            userId: this.userService.loggedUser._id,
-            type: type,
-            timestamp: Date.now(),
-            extraMessageInfo: {
-                game: {
-                    gameId: this.game._id,
-                    name: this.game.title,
-                    mode: mode
-                }
-            }
-        };
-    }
-
 }
