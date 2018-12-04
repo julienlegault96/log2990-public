@@ -19,6 +19,7 @@ type ConnectionFunctor = (socketId: string, connection: UserConnection) => void;
 @injectable()
 export class SocketManager {
 
+    private readonly LOBBY_SEPARATION_CHAR = "_";
     public gameLobbies: { [gameId: string]: Array<SocketIO.Room> };
     public ioServer: SocketIO.Server;
     public connections: { [socketId: string]: UserConnection };
@@ -44,7 +45,7 @@ export class SocketManager {
 
             socket.on(SocketEvents.UserConnection, (user: User) => {
                 if (this.connections[socket.id]) {
-                    this.disconnectConnectedUser(this.connections[socket.id].userId);
+                    this.disconnectConnectedUser(this.connections[socket.id].userId, socket);
                 }
                 this.indexConnection(user._id, socket);
             });
@@ -58,7 +59,7 @@ export class SocketManager {
             });
             socket.on(SocketEvents.Disconnect, () => {
                 if (this.connections[socket.id]) {
-                    this.disconnectConnectedUser(this.connections[socket.id].userId);
+                    this.disconnectConnectedUser(this.connections[socket.id].userId, socket);
                     this.unindexConnection(this.connections[socket.id].userId, socket);
                 }
             });
@@ -94,7 +95,6 @@ export class SocketManager {
                         extraMessageInfo: {
                             game: {
                                 gameId: gameId,
-                                name: "Somegame",
                                 mode: GamePartyMode.Multiplayer,
                             }
                         }
@@ -105,13 +105,11 @@ export class SocketManager {
         );
     }
 
-
-
-    public indexConnection(userId: string, socket: SocketIO.Socket): void {
+    private indexConnection(userId: string, socket: SocketIO.Socket): void {        
         this.connections[socket.id] = new UserConnection(userId);
     }
 
-    public unindexConnection(userId: string, socket: SocketIO.Socket): void {
+    private unindexConnection(userId: string, socket: SocketIO.Socket): void {
         const newConnections: { [socketId: string]: UserConnection } = {};
         this.forEachConnection( (socketId: string, connection: UserConnection) => {
             if (socketId !== socket.id && connection.userId !== userId) {
@@ -121,7 +119,7 @@ export class SocketManager {
         this.connections = newConnections;
     }
 
-    public indexLobby(gameId: string, lobbyCount: number): void {
+    private indexLobby(gameId: string, lobbyCount: number): void {
         this.gameLobbies[gameId][lobbyCount] = this.ioServer.sockets.adapter.rooms[this.generateLobbyName(gameId, lobbyCount)];
     }
 
@@ -130,15 +128,32 @@ export class SocketManager {
      *
      * @param gameId the game whose lobbies are to be cleaned
      */
-    public unindexLobbies(gameId: string): void {
+    private unindexLobbies(gameId: string): void {
         this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
             (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
             );
     }
 
-    private disconnectConnectedUser(userId: string): void {
+    private disconnectConnectedUser(userId: string, socket: SocketIO.Socket ): void {
         this.userSocket.deleteUser(userId);
 
+        if (this.connections[socket.id].gameRoomName !== "") {
+            const leaveMessage: SocketMessage = {
+                userId: userId,
+                type: SocketMessageType.LeftRoom,
+                timestamp: Date.now(),
+                extraMessageInfo: {
+                    game: {
+                        gameId: this.extractGameName(this.connections[socket.id].gameRoomName),
+                        mode: GamePartyMode.Multiplayer,
+                        roomName: this.connections[socket.id].gameRoomName
+                    }
+                }
+            };
+            this.ioServer.sockets.emit(SocketEvents.Message, leaveMessage);
+            socket.leave(this.connections[socket.id].gameRoomName);
+            this.unindexLobbies(this.extractGameName(this.connections[socket.id].gameRoomName));
+        }        
         const message: SocketMessage = {
             userId: userId,
             type: SocketMessageType.Disconnection,
@@ -146,13 +161,20 @@ export class SocketManager {
         };
 
         this.ioServer.sockets.emit(SocketEvents.Message, message);
+        
+        this.connections[socket.id].reset();
     }
 
-    public generateLobbyName(gameId: string, lobbyCount: number): string {
-        return gameId + "_" + lobbyCount;
+    private generateLobbyName(gameId: string, lobbyCount: number): string {
+        return gameId + this.LOBBY_SEPARATION_CHAR + lobbyCount;
     }
 
-    public addUserToRoom(gameId: string, lobbyCount: number, socket: SocketIO.Socket): void {
+    private extractGameName(lobbyName: string): string {
+        const index: number = lobbyName.indexOf(this.LOBBY_SEPARATION_CHAR);
+        return lobbyName.substring(0, index);
+    }
+
+    private addUserToRoom(gameId: string, lobbyCount: number, socket: SocketIO.Socket): void {
         const roomName: string = this.generateLobbyName(gameId, lobbyCount);
         socket.join(roomName);
         this.connections[socket.id].gameRoomName = roomName;
@@ -165,9 +187,7 @@ export class SocketManager {
         if (message.extraMessageInfo && message.extraMessageInfo.game) {
             this.unindexLobbies(message.extraMessageInfo.game.gameId);
         }
-
-        this.connections[socket.id].gameRoomName = "";
-        this.connections[socket.id].isPlayingMultiplayer = false;
+        this.connections[socket.id].reset();
     }
 
     // tslint:disable-next-line:max-func-body-length
@@ -180,12 +200,15 @@ export class SocketManager {
             }
             const lobbyCount: number = this.gameLobbies[gameId].length;
             const roomSize: number = 2;
+            let gameRoomName: string = "";
             if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                 this.addUserToRoom(gameId, lobbyCount , socket);
                 this.indexLobby(gameId, lobbyCount);
+                gameRoomName = this.generateLobbyName(gameId, lobbyCount - 1);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
                 this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+                gameRoomName = this.generateLobbyName(gameId, lobbyCount - 1);                
                 if (this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                     const startMessage: SocketMessage = {
                         userId: message.userId,
@@ -194,15 +217,15 @@ export class SocketManager {
                         extraMessageInfo: {
                             game: {
                                 gameId: gameId,
-                                name: message.extraMessageInfo.game.name,
                                 mode: GamePartyMode.Multiplayer,
-                                roomName: this.generateLobbyName(gameId, lobbyCount - 1)
+                                roomName: gameRoomName
                             }
                         }
                     };
                     this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, startMessage);
                 }
-            }
+            }           
+            this.connections[socket.id].gameRoomName = gameRoomName;
         }
     }
 }

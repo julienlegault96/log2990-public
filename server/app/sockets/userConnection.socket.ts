@@ -6,6 +6,10 @@ export class UserConnection {
 
     public constructor(userId: string) {
         this.userId = userId;
+        this.reset();
+    }
+
+    public reset(): void {
         this.gameRoomName = "";
         this.isPlayingMultiplayer = false;
     }
