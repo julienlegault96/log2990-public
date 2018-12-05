@@ -25,8 +25,8 @@ export class MessageSocket {
             case SocketMessageType.JoinedRoom:
                 manager.manageJoinedRoom(message, ioSocket);
                 break;
-            case SocketMessageType.LeftRoom:                
-                manager.ioServer.sockets.emit(SocketEvents.Message, message);    
+            case SocketMessageType.LeftRoom:
+                manager.ioServer.sockets.emit(SocketEvents.Message, message);
                 manager.removeUserFromRoom(message, ioSocket);
                 break;
             case SocketMessageType.EndedGame:
