@@ -15,9 +15,9 @@ describe("Socket Manager", () => {
     const TEST_ROOM: SocketIO.Room = {sockets: sockets, length: 1};
 
     it("should index & unindex new connections", () => {
-        manager.indexConnection(USERS[0]._id, TEST_SOCKET);
+        manager["indexConnection"](USERS[0]._id, TEST_SOCKET);
         expect(manager.connections[TEST_SOCKET_ID]).not.to.equal(undefined);
-        manager.unindexConnection(USERS[0]._id, TEST_SOCKET);
+        manager["unindexConnection"](USERS[0]._id, TEST_SOCKET);
         expect(manager.connections[TEST_SOCKET_ID]).to.be.equal(undefined);
     });
 

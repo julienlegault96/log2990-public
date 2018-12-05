@@ -18,8 +18,7 @@ type ConnectionFunctor = (socketId: string, connection: UserConnection) => void;
 
 @injectable()
 export class SocketManager {
-
-    private readonly LOBBY_SEPARATION_CHAR = "_";
+    private readonly LOBBY_SEPARATION_CHAR: string = "_";
     public gameLobbies: { [gameId: string]: Array<SocketIO.Room> };
     public ioServer: SocketIO.Server;
     public connections: { [socketId: string]: UserConnection };
@@ -119,7 +118,13 @@ export class SocketManager {
         return socketId;
     }
 
-    public indexConnection(userId: string, socket: SocketIO.Socket): void {
+    private extractGameId(lobbyName: string): string {
+        const index: number = lobbyName.indexOf(this.LOBBY_SEPARATION_CHAR);
+
+        return lobbyName.substring(0, index);
+    }
+
+    private indexConnection(userId: string, socket: SocketIO.Socket): void {
         this.connections[socket.id] = new UserConnection(userId);
     }
 
@@ -151,23 +156,23 @@ export class SocketManager {
     private disconnectConnectedUser(userId: string, socket: SocketIO.Socket ): void {
         this.userSocket.deleteUser(userId);
 
-        if (this.connections[socket.id].gameRoomName !== "") {
+        if (this.connections[socket.id].currentRoom !== "/") {
             const leaveMessage: SocketMessage = {
                 userId: userId,
                 type: SocketMessageType.LeftRoom,
                 timestamp: Date.now(),
                 extraMessageInfo: {
                     game: {
-                        gameId: this.extractGameId(this.connections[socket.id].gameRoomName),
+                        gameId: this.extractGameId(this.connections[socket.id].currentRoom),
                         mode: GamePartyMode.Multiplayer,
-                        roomName: this.connections[socket.id].gameRoomName
+                        roomName: this.connections[socket.id].currentRoom
                     }
                 }
             };
             this.ioServer.sockets.emit(SocketEvents.Message, leaveMessage);
-            socket.leave(this.connections[socket.id].gameRoomName);
-            this.unindexLobbies(this.extractGameId(this.connections[socket.id].gameRoomName));
-        }        
+            socket.leave(this.connections[socket.id].currentRoom);
+            this.unindexLobbies(this.extractGameId(this.connections[socket.id].currentRoom));
+        }
         const message: SocketMessage = {
             userId: userId,
             type: SocketMessageType.Disconnection,
@@ -175,17 +180,12 @@ export class SocketManager {
         };
 
         this.ioServer.sockets.emit(SocketEvents.Message, message);
-        
+
         this.connections[socket.id].reset();
     }
 
     private generateLobbyName(gameId: string, lobbyCount: number): string {
         return `${gameId}${this.LOBBY_SEPARATION_CHAR}${lobbyCount}`;
-    }
-
-    private extractGameId(lobbyName: string): string {
-        const index: number = lobbyName.indexOf(this.LOBBY_SEPARATION_CHAR);
-        return lobbyName.substring(0, index);
     }
 
     private addUserToRoom(gameId: string, lobbyCount: number, socket: SocketIO.Socket): void {
@@ -214,11 +214,11 @@ export class SocketManager {
             }
             const lobbyCount: number = this.gameLobbies[gameId].length;
             const roomSize: number = 2;
-            let gameRoomName: string = "";
+            let currentRoom: string = "";
             if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                 this.addUserToRoom(gameId, lobbyCount , socket);
                 this.indexLobby(gameId, lobbyCount);
-                gameRoomName = this.generateLobbyName(gameId, lobbyCount);
+                currentRoom = this.generateLobbyName(gameId, lobbyCount);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
                 this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, message);
@@ -231,14 +231,14 @@ export class SocketManager {
                             game: {
                                 gameId: gameId,
                                 mode: GamePartyMode.Multiplayer,
-                                roomName: gameRoomName
+                                roomName: currentRoom
                             }
                         }
                     };
                     this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, startMessage);
                 }
-            }           
-            this.connections[socket.id].gameRoomName = gameRoomName;
+            }
+            this.connections[socket.id].currentRoom = currentRoom;
         }
     }
 }
