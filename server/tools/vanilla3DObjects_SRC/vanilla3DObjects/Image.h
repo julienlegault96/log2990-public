@@ -1,7 +1,6 @@
 #pragma once
+
 #include <vector>
-#include <map>
-#include <iostream>
 #include <iomanip>
 #include <string>
 #include "Pixel.h"
@@ -15,7 +14,7 @@ class Image
 {
 public:
 	Image(const unsigned height, const unsigned width);
-	map <string, bool> colorsUsed;
+
 	const Pixel getPixel(const unsigned & x, const unsigned & y) const;
 	const vector<vector<Pixel>> getPixels() const;
 	void setPixel(const unsigned x, const unsigned y, const Pixel & pixel);
@@ -23,6 +22,6 @@ public:
 	friend ostream& operator<<(ostream & os, const Image & image);
 
 private:
-	vector<vector<Pixel>> pixels;
+	vector<vector<Pixel>> pixels_;
 
 };

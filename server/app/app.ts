@@ -6,13 +6,13 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import Types from "./types";
 import { injectable, inject } from "inversify";
-import { Routes } from "./routes";
+import { Routes } from "./route.manager";
+import {CODES} from "../../common/communication/response-codes";
 
 @injectable()
 export class Application {
 
     public app: express.Application;
-    private readonly internalError: number = 500;
 
     public constructor(@inject(Types.Routes) private api: Routes) {
         this.app = express();
@@ -54,7 +54,7 @@ export class Application {
         if (this.app.get("env") === "development") {
             // tslint:disable-next-line:no-any
             this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-                res.status(err.status || this.internalError);
+                res.status(err.status || CODES.SERVER_ERROR);
                 res.send({
                     message: err.message,
                     error: err
@@ -66,7 +66,7 @@ export class Application {
         // no stacktraces leaked to user (in production env only)
         // tslint:disable-next-line:no-any
         this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.status(err.status || this.internalError);
+            res.status(err.status || CODES.SERVER_ERROR);
             res.send({
                 message: err.message,
                 error: {}

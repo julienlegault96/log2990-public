@@ -3,6 +3,7 @@ import * as http from "http";
 import Types from "./types";
 import { injectable, inject } from "inversify";
 import { AddressInfo } from "net";
+import { SocketManager } from "./socket.manager";
 
 @injectable()
 export class Server {
@@ -11,13 +12,16 @@ export class Server {
     private readonly baseDix: number = 10;
     private server: http.Server;
 
-    public constructor(@inject(Types.Application) private application: Application) {
-    }
+    public constructor(
+        @inject(Types.Application) private application: Application,
+        @inject(Types.SocketIo) private socket: SocketManager,
+    ) { }
 
     public init(): void {
         this.application.app.set("port", this.appPort);
 
         this.server = http.createServer(this.application.app);
+        this.socket.init(this.server);
 
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));

@@ -10,7 +10,7 @@ public:
 	const bool operator!=(const Pixel & pixel) const;
 
 	unsigned char
-		_red, 
-		_green, 
-		_blue;
+		red_, 
+		green_, 
+		blue_;
 };

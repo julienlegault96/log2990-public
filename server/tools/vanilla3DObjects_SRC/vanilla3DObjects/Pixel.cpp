@@ -1,19 +1,15 @@
 #include "Pixel.h"
 
-Pixel::Pixel() : r(255), g(255), b(255)
-{
-}
+Pixel::Pixel() : red_(255), green_(255), blue_(255) { }
 
-Pixel::Pixel(const unsigned char & r, const unsigned char & g, const unsigned & b) : r(r), g(g), b(b)
-{
-}
+Pixel::Pixel(const unsigned char & r, const unsigned char & g, const unsigned & b) : red_(r), green_(g), blue_(b) { }
 
 const bool Pixel::operator==(const Pixel & pixel) const
 {
-	return
-		this->r == pixel.r
-		&& this->g == pixel.g
-		&& this->b == pixel.b;
+	return 
+		this->red_ == pixel.red_
+		&& this->green_ == pixel.green_
+		&& this->blue_ == pixel.blue_;
 }
 
 const bool Pixel::operator!=(const Pixel & pixel) const

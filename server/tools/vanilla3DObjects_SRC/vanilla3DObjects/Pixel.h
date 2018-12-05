@@ -1,15 +1,16 @@
 #pragma once
+
 class Pixel
 {
 public:
 	Pixel();
-	Pixel(const unsigned char & r, const unsigned char & g, const unsigned & b);
+	Pixel(const unsigned char & red, const unsigned char & green, const unsigned & blue);
 
 	const bool operator==(const Pixel & pixel) const;
 	const bool operator!=(const Pixel & pixel) const;
 
 	unsigned char
-		r,
-		g,
-		b;
+		red_, 
+		green_, 
+		blue_;
 };

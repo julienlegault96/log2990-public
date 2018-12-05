@@ -115,17 +115,27 @@ export class ImageGenerator {
     }
 
     private async generateMultipleViewImages(parameters: GenMultiParameters): Promise<void> {
-        const modificationsParameter: string =
-            `${parameters.modifications.add ? "a" : ""}
-            ${parameters.modifications.delete ? "s" : ""}
-            ${parameters.modifications.color ? "c" : ""}`;
+        let modificationsParameter: string = "";
+
+        if (parameters.modifications.add) {
+            const addOption: string = "a";
+            modificationsParameter += addOption;
+        }
+        if (parameters.modifications.delete) {
+            const deleteOption: string = "s";
+            modificationsParameter += deleteOption;
+        }
+        if (parameters.modifications.color) {
+            const colorOption: string = "c";
+            modificationsParameter += colorOption;
+        }
 
         await this.fileService.execFile(this.genMultiExecPath, [
             parameters.type,
             parameters.quantity.toString(),
             modificationsParameter,
             this.outputPrefix]
-        ).catch(console.log);
+        );
     }
 
     private isValidDifferenceImages(images: string[]): boolean {

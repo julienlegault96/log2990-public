@@ -1,0 +1,17 @@
+.custom-fixed-top {
+    position:fixed;
+    top:0;
+    right:0;
+    left: 16.6666%;
+    background:white;
+    z-index:1000;
+    box-sizing: border-box;
+}
+
+.spacer {
+    margin: 75px 0;
+}
+
+.mt-60 {
+    margin-top: 60px !important;
+}

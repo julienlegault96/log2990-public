@@ -3,7 +3,7 @@
 
 
 Satellite::Satellite(glm::vec3 coords, glm::vec3 rotationAxis, GLfloat rotation, GLfloat scale, glm::vec4 pannelColor, glm::vec4 bodyColor)
-	: CompositeShape(coords, rotationAxis, rotation, scale)
+	: CompositeShape(coords, rotationAxis, rotation, scale*0.9)
 {
 	bodyColor_ = bodyColor;
 	pannelColor_ = pannelColor;

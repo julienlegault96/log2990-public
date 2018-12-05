@@ -1,0 +1,72 @@
+<div class="text-center">
+    <button type="button" class="btn btn-success btn-round" data-toggle="modal" data-target="#create-game-modal">
+        <fa-icon [icon]="['fas', 'plus']" size="sm"></fa-icon>
+        Nouveau
+    </button>
+</div>
+
+<div class="modal fade" id="create-game-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title">
+                    <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"></fa-icon>
+                    Créer un jeu à point de vue simple
+                </h5>
+
+                <hr />
+
+                <div class="form-group">
+                    <label>Nom du jeu</label>
+                    <input [(ngModel)]="name" (change)="verifyName" [class.is-invalid]="!isValidName()" type="text"
+                        class="form-control" placeholder="Entrez un nom">
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Image originale</label>
+                            <div class="custom-file">
+                                <input ngModel (change)="setRawImage($event)" type="file" class="custom-file-input" id="raw-image">
+                                <label class="custom-file-label" for="raw-image">
+                                    {{ this.rawImageMessage }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Image modifiée</label>
+                            <div class="custom-file">
+                                <input ngModel (change)="setModifiedImage($event)" type="file" class="custom-file-input"
+                                    id="modified-image">
+                                <label class="custom-file-label" for="modified-image">
+                                    {{ this.modifiedImageMessage }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="float-right">
+                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal" [disabled]="isCreating">
+                        Annuler
+                    </button>
+                    <ng-container *ngIf="!isCreating; else isCreatingButton">
+                        <button type="button" class="btn btn-success" (click)="submit()">
+                            Soumettre
+                        </button>
+                    </ng-container>
+                    <ng-template #isCreatingButton>
+                        <button type="button" class="btn btn-success">
+                            <fa-icon [icon]="['fas', 'circle-notch']" spin="true"></fa-icon>
+                            En cours
+                        </button>
+                    </ng-template>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

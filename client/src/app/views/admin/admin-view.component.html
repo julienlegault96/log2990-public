@@ -1,0 +1,64 @@
+<div class="p-3">
+    <div class="row">
+        <div class="col">
+
+            <div class="mb-3">
+                <h3 class="text-center">
+                    Jeux à point de vue simple
+                </h3>
+                <app-create-single-view></app-create-single-view>
+            </div>
+
+            <div *ngIf="singleViewGames.length === 0; else hasSingleViewGames">
+                <div class="card custom-shadow border-0 mb-3">
+                    <div class="card-body">
+                        <h5 class="text-center">
+                            <div *ngIf="gamesLoaded else firstViewLoader">
+                                Aucun jeu disponible
+                            </div>
+                            <ng-template #firstViewLoader>
+                                <fa-icon [icon]="['fas', 'circle-notch']" [spin]="true" size="2x"></fa-icon>
+                            </ng-template>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #hasSingleViewGames>
+                <div *ngFor="let game of singleViewGames">
+                    <app-admin-card [game]="game"></app-admin-card>
+                </div>
+            </ng-template>
+        </div>
+
+        <div class="col">
+            <div class="mb-3">
+                <h3 class="text-center">
+                    Jeux à point de vue double
+                </h3>
+                <app-create-multiple-view></app-create-multiple-view>
+            </div>
+
+            <div *ngIf="doubleViewGames.length === 0; else hasDoubleViewGames">
+                <div class="card custom-shadow border-0 mb-3">
+                    <div class="card-body">
+                        <h5 class="text-center">
+                            <div *ngIf="gamesLoaded else secondViewLoader">
+                                Aucun jeu disponible
+                            </div>
+                            <ng-template #secondViewLoader>
+                                <fa-icon [icon]="['fas', 'circle-notch']" [spin]="true" size="2x"></fa-icon>
+                            </ng-template>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #hasDoubleViewGames>
+                <div *ngFor="let game of doubleViewGames">
+                    <app-admin-card [game]="game"></app-admin-card>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

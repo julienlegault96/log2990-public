@@ -11,12 +11,12 @@ export class DifferenceCounter {
     }
 
     public async hasValidDifferenceCount(filepath: string): Promise<boolean> {
-        const differenceCount: number = await this.CountDifferences(filepath);
+        const differenceCount: number = await this.countDifferences(filepath);
 
         return differenceCount === this.differencesRequired;
     }
 
-    private async CountDifferences(filepath: string): Promise<number> {
+    private async countDifferences(filepath: string): Promise<number> {
         const seen: Object = {};
         let nbError: number = 0;
 

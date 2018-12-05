@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { AbstractServerService, Endpoints } from "../abstract-server.service";
+import { AbstractServerService, Endpoints } from "../abstract-server/abstract-server.service";
 
 import { LeaderboardRequest } from "../../../../../common/communication/leaderboard-request";
 

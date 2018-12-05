@@ -1,0 +1,12 @@
+<div class="pb-3">
+    <div class="pb-2" *ngFor="let progressBar of progressBarWidth; let i = index" [attr.data-index]="i">
+        <h4>
+            Joueur {{ i + 1 }}
+        </h4>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" [style.width.%]="progressBar">
+                {{counters[i]}}
+            </div>
+        </div>
+    </div>
+</div>
