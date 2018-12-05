@@ -88,24 +88,38 @@ export class SocketManager {
     private sendWaitingGames(socket: SocketIO.Socket): void {
         this.forEachLobby( (gameId: string, lobbies: Array<SocketIO.Room> ) => {
                 if (lobbies && lobbies[lobbies.length - 1] && lobbies[lobbies.length - 1].length === 1 ) {
-                    const joinMessage: SocketMessage = {
-                        userId: "Someone",
-                        type: SocketMessageType.JoinedRoom,
-                        timestamp: Date.now(),
-                        extraMessageInfo: {
-                            game: {
-                                gameId: gameId,
-                                mode: GamePartyMode.Multiplayer,
+                    const waitingSocketId: string | undefined = this.extractLastSocketId(lobbies[lobbies.length - 1]);
+                    if (waitingSocketId) {
+                        const joinMessage: SocketMessage = {
+                            userId: this.connections[waitingSocketId].userId,
+                            type: SocketMessageType.JoinedRoom,
+                            timestamp: Date.now(),
+                            extraMessageInfo: {
+                                game: {
+                                    gameId: gameId,
+                                    mode: GamePartyMode.Multiplayer,
+                                }
                             }
-                        }
-                    };
-                    socket.emit(SocketEvents.Message, joinMessage);
+                        };
+                        socket.emit(SocketEvents.Message, joinMessage);
+                    }
                 }
             }
         );
     }
 
-    private indexConnection(userId: string, socket: SocketIO.Socket): void {        
+    private extractLastSocketId( room: SocketIO.Room): string | undefined {
+        let socketId: string | undefined;
+        for (const id in room.sockets){
+            if ( room.sockets.hasOwnProperty(id)) {
+                socketId = id;
+            }
+        }
+
+        return socketId;
+    }
+
+    public indexConnection(userId: string, socket: SocketIO.Socket): void {
         this.connections[socket.id] = new UserConnection(userId);
     }
 
