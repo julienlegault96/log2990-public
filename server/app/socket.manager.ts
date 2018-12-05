@@ -128,7 +128,7 @@ export class SocketManager {
      *
      * @param gameId the game whose lobbies are to be cleaned
      */
-    private unindexLobbies(gameId: string): void {
+    private unindexLobbies(gameId: string): void {        
         this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
             (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
             );
@@ -180,11 +180,10 @@ export class SocketManager {
         this.connections[socket.id].gameRoomName = roomName;
     }
 
-    public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {
-        this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+    public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {      
         socket.leave(this.connections[socket.id].gameRoomName);
-
-        if (message.extraMessageInfo && message.extraMessageInfo.game) {
+        this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {            
             this.unindexLobbies(message.extraMessageInfo.game.gameId);
         }
         this.connections[socket.id].reset();
@@ -204,7 +203,7 @@ export class SocketManager {
             if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                 this.addUserToRoom(gameId, lobbyCount , socket);
                 this.indexLobby(gameId, lobbyCount);
-                gameRoomName = this.generateLobbyName(gameId, lobbyCount - 1);
+                gameRoomName = this.generateLobbyName(gameId, lobbyCount);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
                 this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);

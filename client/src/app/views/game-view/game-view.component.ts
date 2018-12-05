@@ -84,7 +84,6 @@ export class GameViewComponent implements AfterContentInit {
             extraMessageInfo: {
                 game: {
                     gameId: this.game._id,
-                    name: this.game.title,
                     mode: mode
                 }
             }
