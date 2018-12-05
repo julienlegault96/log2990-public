@@ -166,7 +166,7 @@ export class SocketManager {
     }
 
     private generateLobbyName(gameId: string, lobbyCount: number): string {
-        return gameId + this.LOBBY_SEPARATION_CHAR + lobbyCount;
+        return `${gameId}${this.LOBBY_SEPARATION_CHAR}${lobbyCount}`;
     }
 
     private extractGameId(lobbyName: string): string {
