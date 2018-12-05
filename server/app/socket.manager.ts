@@ -128,7 +128,7 @@ export class SocketManager {
      *
      * @param gameId the game whose lobbies are to be cleaned
      */
-    private unindexLobbies(gameId: string): void {        
+    private unindexLobbies(gameId: string): void {
         this.gameLobbies[gameId] = this.gameLobbies[gameId].filter(
             (ioSocketRoom: SocketIO.Room) => ioSocketRoom.length > 0
             );
@@ -180,10 +180,11 @@ export class SocketManager {
         this.connections[socket.id].gameRoomName = roomName;
     }
 
-    public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {      
-        socket.leave(this.connections[socket.id].gameRoomName);
+    public removeUserFromRoom(message: SocketMessage, socket: SocketIO.Socket): void {
         this.ioServer.to(this.connections[socket.id].gameRoomName).emit(SocketEvents.Message, message);
-        if (message.extraMessageInfo && message.extraMessageInfo.game) {            
+        socket.leave(this.connections[socket.id].gameRoomName);
+
+        if (message.extraMessageInfo && message.extraMessageInfo.game) {
             this.unindexLobbies(message.extraMessageInfo.game.gameId);
         }
         this.connections[socket.id].reset();
