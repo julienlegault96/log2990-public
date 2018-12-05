@@ -144,7 +144,7 @@ export class SocketManager {
                 timestamp: Date.now(),
                 extraMessageInfo: {
                     game: {
-                        gameId: this.extractGameName(this.connections[socket.id].gameRoomName),
+                        gameId: this.extractGameId(this.connections[socket.id].gameRoomName),
                         mode: GamePartyMode.Multiplayer,
                         roomName: this.connections[socket.id].gameRoomName
                     }
@@ -152,7 +152,7 @@ export class SocketManager {
             };
             this.ioServer.sockets.emit(SocketEvents.Message, leaveMessage);
             socket.leave(this.connections[socket.id].gameRoomName);
-            this.unindexLobbies(this.extractGameName(this.connections[socket.id].gameRoomName));
+            this.unindexLobbies(this.extractGameId(this.connections[socket.id].gameRoomName));
         }        
         const message: SocketMessage = {
             userId: userId,
@@ -169,7 +169,7 @@ export class SocketManager {
         return gameId + this.LOBBY_SEPARATION_CHAR + lobbyCount;
     }
 
-    private extractGameName(lobbyName: string): string {
+    private extractGameId(lobbyName: string): string {
         const index: number = lobbyName.indexOf(this.LOBBY_SEPARATION_CHAR);
         return lobbyName.substring(0, index);
     }
