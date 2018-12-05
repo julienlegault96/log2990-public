@@ -18,6 +18,7 @@ import { Routing, RoutingGameMatchId } from "src/app/routing";
 
 export class WaitingViewComponent implements AfterViewInit {
     private waitingGameId: string;
+    private exited: boolean;
 
     public constructor(
         private activatedRoute: ActivatedRoute,
@@ -26,10 +27,11 @@ export class WaitingViewComponent implements AfterViewInit {
         private router: Router,
     ) {
         this.socketService.registerFunction(SocketEvents.Message, this.retrieveMessages.bind(this));
+        this.exited = false;
     }
 
     public retrieveMessages(message: SocketMessage): void {
-        if (message.type === SocketMessageType.StartedGame &&
+        if (!this.exited && message.type === SocketMessageType.StartedGame &&
             message.extraMessageInfo && message.extraMessageInfo.game) {
             const socketGame: SocketGame = message.extraMessageInfo.game;
             if (socketGame.gameId === this.waitingGameId) {
@@ -45,9 +47,9 @@ export class WaitingViewComponent implements AfterViewInit {
     }
 
     public cancelGameCreation(): void {
+        this.exited = true;
         const messageGame: SocketGame = {
             gameId : this.waitingGameId,
-            name: this.userService.loggedUser._id,
             mode: GamePartyMode.Multiplayer
         };
 

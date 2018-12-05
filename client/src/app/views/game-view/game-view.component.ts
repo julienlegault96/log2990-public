@@ -84,7 +84,6 @@ export class GameViewComponent implements AfterContentInit {
             extraMessageInfo: {
                 game: {
                     gameId: this.game._id,
-                    name: this.game.title,
                     mode: mode
                 }
             }
@@ -94,7 +93,6 @@ export class GameViewComponent implements AfterContentInit {
     private emitMessage(messageType: SocketMessageType, errorLocation?: ErrorLocation): void {
         const socketGame: SocketGame = {
             gameId: this.game._id,
-            name: this.game.title,
             mode: (this.playerIds.length === 1) ? GamePartyMode.Solo : GamePartyMode.Multiplayer
         };
 
