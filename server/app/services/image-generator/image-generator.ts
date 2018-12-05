@@ -135,7 +135,7 @@ export class ImageGenerator {
             parameters.quantity.toString(),
             modificationsParameter,
             this.outputPrefix]
-        ).catch(console.log);
+        );
     }
 
     private isValidDifferenceImages(images: string[]): boolean {

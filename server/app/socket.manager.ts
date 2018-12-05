@@ -109,7 +109,7 @@ export class SocketManager {
 
     private extractLastSocketId( room: SocketIO.Room): string | undefined {
         let socketId: string | undefined;
-        for (const id in room.sockets){
+        for (const id in room.sockets) {
             if ( room.sockets.hasOwnProperty(id)) {
                 socketId = id;
             }
@@ -214,11 +214,9 @@ export class SocketManager {
             }
             const lobbyCount: number = this.gameLobbies[gameId].length;
             const roomSize: number = 2;
-            let currentRoom: string = "";
             if (lobbyCount === 0 || this.gameLobbies[gameId][lobbyCount - 1].length >= roomSize) {
                 this.addUserToRoom(gameId, lobbyCount , socket);
                 this.indexLobby(gameId, lobbyCount);
-                currentRoom = this.generateLobbyName(gameId, lobbyCount);
             } else {
                 this.addUserToRoom(gameId, lobbyCount - 1, socket);
                 this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, message);
@@ -231,14 +229,13 @@ export class SocketManager {
                             game: {
                                 gameId: gameId,
                                 mode: GamePartyMode.Multiplayer,
-                                roomName: currentRoom
+                                roomName: this.generateLobbyName(gameId, lobbyCount)
                             }
                         }
                     };
                     this.ioServer.to(this.connections[socket.id].currentRoom).emit(SocketEvents.Message, startMessage);
                 }
             }
-            this.connections[socket.id].currentRoom = currentRoom;
         }
     }
 }
